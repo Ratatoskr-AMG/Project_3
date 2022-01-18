@@ -29,21 +29,27 @@ class MainActivity : ComponentActivity() {
         }
 
         GlobalScope.launch(Dispatchers.IO) {
+
             val Heroes = client.get<List<Hero>>("https://api.opendota.com/api/heroStats/")
+            var log = "";
+
             for (Hero in Heroes) {
-                var log = Hero.getLocalizedName()+":"+Hero.get1Pick()
-                Log.i("TOHA", log)
+                log += Hero.getLocalizedName() + ":" + Hero.get1Pick()
+
             }
+
+            Log.i("TOHA", log)
         }
 
         setContent {
             Project_3Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("simpleCase1")
+                    Greeting("Hello")
                 }
             }
         }
+
     }
 }
 

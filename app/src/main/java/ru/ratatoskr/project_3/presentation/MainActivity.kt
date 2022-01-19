@@ -1,155 +1,83 @@
 package ru.ratatoskr.project_3.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.features.json.*
-import io.ktor.client.request.*
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.theme.Project_3Theme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val client = HttpClient(Android) {
-            install(JsonFeature) {
-                serializer = GsonSerializer()
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.HeroesList.observe(this) {
+
+            if (viewModel.HeroesList.value != null) {
+                setContent {
+                    var heroesList: List<Hero> = remember { viewModel.HeroesList.value!! }
+                    Wrapper { Heroes(heroesList) }
+                }
             }
+
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-
-            val Heroes = client.get<List<Hero>>("https://api.opendota.com/api/heroStats/")
-            var log = "";
-
-            for (Hero in Heroes) {
-                log += Hero.getLocalizedName() + ":" + Hero.get1Pick()
-
-            }
-
-            Log.i("TOHA", log)
+            viewModel.getAllHeroesList()
         }
 
         setContent {
-            Project_3Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Hello")
-                }
+            Wrapper { w8() }
+        }
+
+    }
+
+}
+
+@Composable
+fun Wrapper(inner: @Composable() () -> Unit) {
+    Project_3Theme {
+        Surface(color = MaterialTheme.colors.background) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 26.dp, end = 26.dp)
+                    .verticalScroll(state = ScrollState(0), enabled = true),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                inner()
+
             }
         }
-
     }
 }
-
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun Heroes(heroesList: List<Hero>) {
+    for (Hero in heroesList) {
+        Text(Hero.localizedName!!);
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    Project_3Theme {
-        Greeting("Android")
-    }
+fun w8() {
+    Text("w8");
 }
-
-/*
-fun simpleCase() {
-
-    val BASE_URL = "https://httpbin.org"
-    val GET_UUID = "$BASE_URL/uuid"
-    val client = HttpClient()
-
-    GlobalScope.launch(Dispatchers.IO) {
-        //val data = client.get<String>(GET_UUID)
-        //Log.i("TOHA", data)
-
-    }
-}
-
- */
-
-/*
-suspend fun getAndPrintWeather() {
-
-    val client = HttpClient(Android) {
-        install(JsonFeature) {
-            serializer = GsonSerializer()
-        }
-    }
-
-    val Heroes = client.get<List<Hero>>(DOTA_URL)
-    for(Hero in Heroes){
-        Log.i("TOHA", Hero.getHeroName().replace("npc_dota_hero_", ""))
-    }
-}
-
- */
-
-/*
-data class Weather(
-    val consolidated_weather: List<ConsolidatedWeather>,
-    val time: String,
-    val sun_rise: String,
-    val sun_set: String,
-    val timezone_name: String,
-    val parent: Parent,
-    val sources: List<Source>,
-    val title: String,
-    val location_type: String,
-    val woeid: Int,
-    val latt_long: String,
-    val timezone: String
-)
-
-data class Source(
-    val title: String,
-    val slug: String,
-    val url: String,
-    val crawl_rate: Int
-)
-
-data class ConsolidatedWeather(
-    val id: Long,
-    val weather_state_name: String,
-    val weather_state_abbr: String,
-    val wind_direction_compass: String,
-    val created: String,
-    val applicable_date: String,
-    val min_temp: Double,
-    val max_temp: Double,
-    val the_temp: Double,
-    val wind_speed: Double,
-    val wind_direction: Double,
-    val air_pressure: Double,
-    val humidity: Int,
-    val visibility: Double,
-    val predictability: Int
-)
-
-data class Parent(
-    val title: String,
-    val location_type: String,
-    val woeid: Int,
-    val latt_long: String
-)
-
-private const val SF_WEATHER_URL = "https://www.metaweather.com/api/location/2487956/"
-private const val DOTA_URL = "https://api.opendota.com/api/heroStats/"
-
-
- */

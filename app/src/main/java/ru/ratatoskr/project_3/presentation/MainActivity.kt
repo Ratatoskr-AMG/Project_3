@@ -1,6 +1,7 @@
 package ru.ratatoskr.project_3.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ScrollState
@@ -39,12 +40,22 @@ class MainActivity : ComponentActivity() {
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-            viewModel.getAllHeroesList()
+            try {
+                viewModel.getAllHeroesList()
+            } catch (exception: Exception) {
+                Toast.makeText(applicationContext,"viewModel.getAllHeroesList() error", Toast.LENGTH_LONG)
+            }
+
         }
 
         setContent {
             Wrapper { w8() }
         }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
 
     }
 

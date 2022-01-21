@@ -6,107 +6,107 @@ import com.google.gson.annotations.SerializedName
 class Hero {
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    private var id: Int? = null
 
     @SerializedName("name")
     @Expose
-    var name: String? = null
+    private var name: String? = null
 
     @SerializedName("localized_name")
     @Expose
-    var localizedName: String? = null
+    private var localizedName: String? = null
 
     @SerializedName("primary_attr")
     @Expose
-    var primaryAttr: String? = null
+    private var primaryAttr: String? = null
 
     @SerializedName("attack_type")
     @Expose
-    var attackType: String? = null
+    private var attackType: String? = null
 
     @SerializedName("roles")
     @Expose
-    var roles: List<String>? = null
+    private var roles: List<String>? = null
 
     @SerializedName("img")
     @Expose
-    var img: String? = null
+    private var img: String? = null
 
     @SerializedName("icon")
     @Expose
-    var icon: String? = null
+    private var icon: String? = null
 
     @SerializedName("base_health")
     @Expose
-    var baseHealth: Double? = null
+    private var baseHealth: Int? = null
 
     @SerializedName("base_health_regen")
     @Expose
-    var baseHealthRegen: Double? = null
+    private var baseHealthRegen: Double? = null
 
     @SerializedName("base_mana")
     @Expose
-    var baseMana: Int? = null
+    private var baseMana: Int? = null
 
     @SerializedName("base_mana_regen")
     @Expose
-    var baseManaRegen: Double? = null
+    private var baseManaRegen: Double? = null
 
     @SerializedName("base_armor")
     @Expose
-    var baseArmor: Double? = null
+    private var baseArmor: Double? = null
 
     @SerializedName("base_mr")
     @Expose
-    var baseMr: Int? = null
+    private var baseMr: Int? = null
 
     @SerializedName("base_attack_min")
     @Expose
-    var baseAttackMin: Int? = null
+    private var baseAttackMin: Int? = null
 
     @SerializedName("base_attack_max")
     @Expose
-    var baseAttackMax: Int? = null
+    private var baseAttackMax: Int? = null
 
     @SerializedName("base_str")
     @Expose
-    var baseStr: Int? = null
+    private var baseStr: Int? = null
 
     @SerializedName("base_agi")
     @Expose
-    var baseAgi: Int? = null
+    private var baseAgi: Int? = null
 
     @SerializedName("base_int")
     @Expose
-    var baseInt: Int? = null
+    private var baseInt: Int? = null
 
     @SerializedName("str_gain")
     @Expose
-    var strGain: Double? = null
+    private var strGain: Double? = null
 
     @SerializedName("agi_gain")
     @Expose
-    var agiGain: Double? = null
+    private var agiGain: Double? = null
 
     @SerializedName("int_gain")
     @Expose
-    var intGain: Double? = null
+    private var intGain: Double? = null
 
     @SerializedName("attack_range")
     @Expose
-    var attackRange: Int? = null
+    private var attackRange: Int? = null
 
     @SerializedName("projectile_speed")
     @Expose
-    var projectileSpeed: Int? = null
+    private var projectileSpeed: Int? = null
 
     @SerializedName("attack_rate")
     @Expose
-    var attackRate: Double? = null
+    private var attackRate: Double? = null
 
     @SerializedName("move_speed")
     @Expose
-    var moveSpeed: Int? = null
+    private var moveSpeed: Int? = null
 
     @SerializedName("turn_rate")
     @Expose
@@ -114,35 +114,35 @@ class Hero {
 
     @SerializedName("cm_enabled")
     @Expose
-    var cmEnabled: Boolean? = null
+    private var cmEnabled: String? = null
 
     @SerializedName("legs")
     @Expose
-    var legs: Int? = null
+    private var legs: Int? = null
 
     @SerializedName("hero_id")
     @Expose
-    var heroId: Int? = null
+    private var heroId: Int? = null
 
     @SerializedName("turbo_picks")
     @Expose
-    var turboPicks: Int? = null
+    private var turboPicks: Int? = null
 
     @SerializedName("turbo_wins")
     @Expose
-    var turboWins: Int? = null
+    private var turboWins: Int? = null
 
     @SerializedName("pro_ban")
     @Expose
-    var proBan: Int? = null
+    private var proBan: Int? = null
 
     @SerializedName("pro_win")
     @Expose
-    var proWin: Int? = null
+    private var proWin: Int? = null
 
     @SerializedName("pro_pick")
     @Expose
-    var proPick: Int? = null
+    private var proPick: Int? = null
 
     @SerializedName("1_pick")
     private var _1Pick: Int? = null
@@ -209,18 +209,255 @@ class Hero {
 
     @SerializedName("null_pick")
     @Expose
-    var nullPick: Int? = null
+    private var nullPick: Int? = null
 
     @SerializedName("null_win")
     @Expose
     var nullWin: Int? = null
 
-    fun getTurnRate(): Any? {
+    constructor(
+        name: String?,
+        localizedName: String?,
+        primaryAttr: String?,
+        attackType: String?,
+        roles: String?,
+        img: String?,
+        icon: String?,
+        baseHealth: Int?,
+        baseHealthRegen: Double?,
+        baseMana: Int?,
+        baseManaRegen: Double?,
+        baseArmor: Double?,
+        baseMr: Int?,
+        baseAttackMin: Int?,
+        baseAttackMax: Int?,
+        baseStr: Int?,
+        baseAgi: Int?,
+        baseInt: Int?,
+        strGain: Double?,
+        agiGain: Double?,
+        intGain: Double?,
+        attackRange: Int?,
+        projectileSpeed: Int?,
+        attackRate: Double?,
+        moveSpeed: Int?,
+        turnRate: Double?,
+        cmEnabled: String?,
+        legs: Int?,
+        heroId: Int?,
+        turboPicks: Int?,
+        turboWins: Int?,
+        proBan: Int?,
+        proWin: Int?,
+        proPick: Int?,
+        _1Pick: Int?,
+        _1Win: Int?,
+        _2Pick: Int?,
+        _2Win: Int?,
+        _3Pick: Int?,
+        _3Win: Int?,
+        _4Pick: Int?,
+        _4Win: Int?,
+        _5Pick: Int?,
+        _5Win: Int?,
+        _6Pick: Int?,
+        _6Win: Int?,
+        _7Pick: Int?,
+        _7Win: Int?,
+        _8Pick: Int?,
+        _8Win: Int?,
+        nullPick: Int?,
+        nullWin: Int?
+    ) {
+        val heroRoles: List<String> = roles!!.split(",").map { it.trim() }
+        this.name = name
+        this.localizedName = localizedName
+        this.primaryAttr = primaryAttr
+        this.attackType = attackType
+        this.roles = heroRoles
+        this.img = img
+        this.icon = icon
+        this.baseHealth = baseHealth
+        this.baseHealthRegen = baseHealthRegen
+        this.baseMana = baseMana
+        this.baseManaRegen = baseManaRegen
+        this.baseArmor = baseArmor
+        this.baseMr = baseMr
+        this.baseAttackMin = baseAttackMin
+        this.baseAttackMax = baseAttackMax
+        this.baseStr = baseStr
+        this.baseAgi = baseAgi
+        this.baseInt = baseInt
+        this.strGain = strGain
+        this.agiGain = agiGain
+        this.intGain = intGain
+        this.attackRange = attackRange
+        this.projectileSpeed = projectileSpeed
+        this.attackRate = attackRate
+        this.moveSpeed = moveSpeed
+        this.turnRate = turnRate
+        this.cmEnabled = cmEnabled
+        this.legs = legs
+        this.heroId = heroId
+        this.turboPicks = turboPicks
+        this.turboWins = turboWins
+        this.proBan = proBan
+        this.proWin = proWin
+        this.proPick = proPick
+        this._1Pick = _1Pick
+        this._1Win = _1Win
+        this._2Pick = _2Pick
+        this._2Win = _2Win
+        this._3Pick = _3Pick
+        this._3Win = _3Win
+        this._4Pick = _4Pick
+        this._4Win = _4Win
+        this._5Pick = _5Pick
+        this._5Win = _5Win
+        this._6Pick = _6Pick
+        this._6Win = _6Win
+        this._7Pick = _7Pick
+        this._7Win = _7Win
+        this._8Pick = _8Pick
+        this._8Win = _8Win
+        this.nullPick = nullPick
+        this.nullWin = nullWin
+    }
+
+    fun getName(): String? {
+        return name
+    }
+
+    fun getLocalizedName(): String? {
+        return localizedName
+    }
+
+    fun getPrimaryAttr(): String? {
+        return primaryAttr
+    }
+
+    fun getAttackType(): String? {
+        return attackType
+    }
+
+    fun getRoles(): List<String>? {
+        return roles
+    }
+
+    fun getImg(): String? {
+        return img
+    }
+
+    fun getIcon(): String? {
+        return icon
+    }
+
+    fun getBaseHealth(): Int? {
+        return baseHealth
+    }
+
+    fun getBaseHealthRegen(): Double? {
+        return baseHealthRegen
+    }
+
+    fun getBaseMana(): Int? {
+        return baseMana
+    }
+
+    fun getBaseManaRegen(): Double? {
+        return baseManaRegen
+    }
+
+    fun getBaseArmor(): Double? {
+        return baseArmor
+    }
+
+    fun getBaseMr(): Int? {
+        return baseMr
+    }
+
+    fun getBaseAttackMin(): Int? {
+        return baseAttackMin
+    }
+
+    fun getBaseAttackMax(): Int? {
+        return baseAttackMax
+    }
+
+    fun getBaseStr(): Int? {
+        return baseStr
+    }
+
+    fun getBaseAgi(): Int? {
+        return baseAgi
+    }
+
+    fun getBaseInt(): Int? {
+        return baseInt
+    }
+
+    fun getStrGain(): Double? {
+        return strGain
+    }
+
+    fun getAgiGain(): Double? {
+        return agiGain
+    }
+
+    fun getIntGain(): Double? {
+        return intGain
+    }
+
+    fun getAttackRange(): Int? {
+        return attackRange
+    }
+
+    fun getProjectileSpeed(): Int? {
+        return projectileSpeed
+    }
+
+    fun getAttackRate(): Double? {
+        return attackRate
+    }
+
+    fun getMoveSpeed(): Int? {
+        return moveSpeed
+    }
+
+    fun getTurnRate(): Double? {
         return turnRate
     }
 
-    fun setTurnRate(turnRate: Double?) {
-        this.turnRate = turnRate
+    fun getLegs(): Int? {
+        return legs
+    }
+
+    fun getHeroId(): Int? {
+        return heroId
+    }
+
+    fun getTurboPicks(): Int? {
+        return turboPicks
+    }
+
+    fun getCmEnabled(): String? {
+        return cmEnabled
+    }
+
+    fun getTurboWins(): Int? {
+        return turboWins
+    }
+
+    fun getProBan(): Int? {
+        return proBan
+    }
+
+    fun getProWin(): Int? {
+        return proWin
+    }
+
+    fun getProPick(): Int? {
+        return proPick
     }
 
     fun get1Pick(): Int? {
@@ -349,6 +586,14 @@ class Hero {
 
     fun set8Win(_8Win: Int?) {
         this._8Win = _8Win
+    }
+
+    fun getNullPick(): Int? {
+        return nullPick
+    }
+
+    fun getNUllWin(): Int? {
+        return nullWin
     }
 
 

@@ -114,7 +114,7 @@ class Hero {
 
     @SerializedName("cm_enabled")
     @Expose
-    private var cmEnabled: Boolean? = null
+    private var cmEnabled: String? = null
 
     @SerializedName("legs")
     @Expose
@@ -209,22 +209,255 @@ class Hero {
 
     @SerializedName("null_pick")
     @Expose
-    var nullPick: Int? = null
+    private var nullPick: Int? = null
 
     @SerializedName("null_win")
     @Expose
     var nullWin: Int? = null
 
+    constructor(
+        name: String?,
+        localizedName: String?,
+        primaryAttr: String?,
+        attackType: String?,
+        roles: String?,
+        img: String?,
+        icon: String?,
+        baseHealth: Int?,
+        baseHealthRegen: Double?,
+        baseMana: Int?,
+        baseManaRegen: Double?,
+        baseArmor: Double?,
+        baseMr: Int?,
+        baseAttackMin: Int?,
+        baseAttackMax: Int?,
+        baseStr: Int?,
+        baseAgi: Int?,
+        baseInt: Int?,
+        strGain: Double?,
+        agiGain: Double?,
+        intGain: Double?,
+        attackRange: Int?,
+        projectileSpeed: Int?,
+        attackRate: Double?,
+        moveSpeed: Int?,
+        turnRate: Double?,
+        cmEnabled: String?,
+        legs: Int?,
+        heroId: Int?,
+        turboPicks: Int?,
+        turboWins: Int?,
+        proBan: Int?,
+        proWin: Int?,
+        proPick: Int?,
+        _1Pick: Int?,
+        _1Win: Int?,
+        _2Pick: Int?,
+        _2Win: Int?,
+        _3Pick: Int?,
+        _3Win: Int?,
+        _4Pick: Int?,
+        _4Win: Int?,
+        _5Pick: Int?,
+        _5Win: Int?,
+        _6Pick: Int?,
+        _6Win: Int?,
+        _7Pick: Int?,
+        _7Win: Int?,
+        _8Pick: Int?,
+        _8Win: Int?,
+        nullPick: Int?,
+        nullWin: Int?
+    ) {
+        val heroRoles: List<String> = roles!!.split(",").map { it.trim() }
+        this.name = name
+        this.localizedName = localizedName
+        this.primaryAttr = primaryAttr
+        this.attackType = attackType
+        this.roles = heroRoles
+        this.img = img
+        this.icon = icon
+        this.baseHealth = baseHealth
+        this.baseHealthRegen = baseHealthRegen
+        this.baseMana = baseMana
+        this.baseManaRegen = baseManaRegen
+        this.baseArmor = baseArmor
+        this.baseMr = baseMr
+        this.baseAttackMin = baseAttackMin
+        this.baseAttackMax = baseAttackMax
+        this.baseStr = baseStr
+        this.baseAgi = baseAgi
+        this.baseInt = baseInt
+        this.strGain = strGain
+        this.agiGain = agiGain
+        this.intGain = intGain
+        this.attackRange = attackRange
+        this.projectileSpeed = projectileSpeed
+        this.attackRate = attackRate
+        this.moveSpeed = moveSpeed
+        this.turnRate = turnRate
+        this.cmEnabled = cmEnabled
+        this.legs = legs
+        this.heroId = heroId
+        this.turboPicks = turboPicks
+        this.turboWins = turboWins
+        this.proBan = proBan
+        this.proWin = proWin
+        this.proPick = proPick
+        this._1Pick = _1Pick
+        this._1Win = _1Win
+        this._2Pick = _2Pick
+        this._2Win = _2Win
+        this._3Pick = _3Pick
+        this._3Win = _3Win
+        this._4Pick = _4Pick
+        this._4Win = _4Win
+        this._5Pick = _5Pick
+        this._5Win = _5Win
+        this._6Pick = _6Pick
+        this._6Win = _6Win
+        this._7Pick = _7Pick
+        this._7Win = _7Win
+        this._8Pick = _8Pick
+        this._8Win = _8Win
+        this.nullPick = nullPick
+        this.nullWin = nullWin
+    }
+
+    fun getName(): String? {
+        return name
+    }
+
     fun getLocalizedName(): String? {
         return localizedName
     }
 
-    fun getCmEnabled(): Boolean? {
+    fun getPrimaryAttr(): String? {
+        return primaryAttr
+    }
+
+    fun getAttackType(): String? {
+        return attackType
+    }
+
+    fun getRoles(): List<String>? {
+        return roles
+    }
+
+    fun getImg(): String? {
+        return img
+    }
+
+    fun getIcon(): String? {
+        return icon
+    }
+
+    fun getBaseHealth(): Int? {
+        return baseHealth
+    }
+
+    fun getBaseHealthRegen(): Double? {
+        return baseHealthRegen
+    }
+
+    fun getBaseMana(): Int? {
+        return baseMana
+    }
+
+    fun getBaseManaRegen(): Double? {
+        return baseManaRegen
+    }
+
+    fun getBaseArmor(): Double? {
+        return baseArmor
+    }
+
+    fun getBaseMr(): Int? {
+        return baseMr
+    }
+
+    fun getBaseAttackMin(): Int? {
+        return baseAttackMin
+    }
+
+    fun getBaseAttackMax(): Int? {
+        return baseAttackMax
+    }
+
+    fun getBaseStr(): Int? {
+        return baseStr
+    }
+
+    fun getBaseAgi(): Int? {
+        return baseAgi
+    }
+
+    fun getBaseInt(): Int? {
+        return baseInt
+    }
+
+    fun getStrGain(): Double? {
+        return strGain
+    }
+
+    fun getAgiGain(): Double? {
+        return agiGain
+    }
+
+    fun getIntGain(): Double? {
+        return intGain
+    }
+
+    fun getAttackRange(): Int? {
+        return attackRange
+    }
+
+    fun getProjectileSpeed(): Int? {
+        return projectileSpeed
+    }
+
+    fun getAttackRate(): Double? {
+        return attackRate
+    }
+
+    fun getMoveSpeed(): Int? {
+        return moveSpeed
+    }
+
+    fun getTurnRate(): Double? {
+        return turnRate
+    }
+
+    fun getLegs(): Int? {
+        return legs
+    }
+
+    fun getHeroId(): Int? {
+        return heroId
+    }
+
+    fun getTurboPicks(): Int? {
+        return turboPicks
+    }
+
+    fun getCmEnabled(): String? {
         return cmEnabled
     }
 
-    fun setTurnRate(turnRate: Double?) {
-        this.turnRate = turnRate
+    fun getTurboWins(): Int? {
+        return turboWins
+    }
+
+    fun getProBan(): Int? {
+        return proBan
+    }
+
+    fun getProWin(): Int? {
+        return proWin
+    }
+
+    fun getProPick(): Int? {
+        return proPick
     }
 
     fun get1Pick(): Int? {
@@ -353,6 +586,14 @@ class Hero {
 
     fun set8Win(_8Win: Int?) {
         this._8Win = _8Win
+    }
+
+    fun getNullPick(): Int? {
+        return nullPick
+    }
+
+    fun getNUllWin(): Int? {
+        return nullWin
     }
 
 

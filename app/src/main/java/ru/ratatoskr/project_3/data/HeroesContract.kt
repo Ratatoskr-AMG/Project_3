@@ -4,7 +4,7 @@ import android.provider.BaseColumns
 
 public class HeroesContract {
     companion object HeroesEntries : BaseColumns {
-        const val TABLE_NAME = "heroes"
+        const val HEROES_TABLE_NAME = "heroes"
         const val COLUMN_ID = "id"
         const val COLUMN_NAME = "name"
         const val COLUMN_LOCALIZED_NAME = "localized_name"
@@ -40,32 +40,31 @@ public class HeroesContract {
         const val COLUMN_PRO_BAN = "pro_ban"
         const val COLUMN_PRO_WIN = "pro_win"
         const val COLUMN_PRO_PICK = "pro_pick"
-        const val COLUMN_1_PICK = "1_pick"
-        const val COLUMN_1_WIN = "1_win"
-        const val COLUMN_2_PICK = "2_pick"
-        const val COLUMN_2_WIN = "2_win"
-        const val COLUMN_3_PICK = "3_pick"
-        const val COLUMN_3_WIN = "3_win"
-        const val COLUMN_4_PICK = "4_pick"
-        const val COLUMN_4_WIN = "4_win"
-        const val COLUMN_5_PICK = "5_pick"
-        const val COLUMN_5_WIN = "5_win"
-        const val COLUMN_6_PICK = "6_pick"
-        const val COLUMN_6_WIN = "6_win"
-        const val COLUMN_7_PICK = "7_pick"
-        const val COLUMN_7_WIN = "7_win"
-        const val COLUMN_8_PICK = "8_pick"
-        const val COLUMN_8_WIN = "8_win"
+        const val COLUMN_1_PICK = "_1_pick"
+        const val COLUMN_1_WIN = "_1_win"
+        const val COLUMN_2_PICK = "_2_pick"
+        const val COLUMN_2_WIN = "_2_win"
+        const val COLUMN_3_PICK = "_3_pick"
+        const val COLUMN_3_WIN = "_3_win"
+        const val COLUMN_4_PICK = "_4_pick"
+        const val COLUMN_4_WIN = "_4_win"
+        const val COLUMN_5_PICK = "_5_pick"
+        const val COLUMN_5_WIN = "_5_win"
+        const val COLUMN_6_PICK = "_6_pick"
+        const val COLUMN_6_WIN = "_6_win"
+        const val COLUMN_7_PICK = "_7_pick"
+        const val COLUMN_7_WIN = "_7_win"
+        const val COLUMN_8_PICK = "_8_pick"
+        const val COLUMN_8_WIN = "_8_win"
         const val COLUMN_NULL_PICK = "null_pick"
         const val COLUMN_NULL_WIN = "null_win"
         const val TYPE_TEXT = "TEXT"
         const val TYPE_INTEGER = "INTEGER"
         const val TYPE_REAL = "REAL"
-        const val DROP_COMMAND = "DROP TABLE IF EXIST "+ TABLE_NAME
+        const val DROP_COMMAND = "DROP TABLE IF EXISTS "+ HEROES_TABLE_NAME
         const val CREATE_COMMAND =
-            "CREATE TABLE IF NOT EXIST $TABLE_NAME ($COLUMN_ID $TYPE_INTEGER PRIMARY KEY AUTOICREMENT, " +
+            "CREATE TABLE IF NOT EXISTS $HEROES_TABLE_NAME ($COLUMN_ID $TYPE_INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_NAME $TYPE_TEXT, " +
-                    "$COLUMN_LOCALIZED_NAME $TYPE_TEXT, " +
                     "$COLUMN_LOCALIZED_NAME $TYPE_TEXT, " +
                     "$COLUMN_PRIMARY_ATTR $TYPE_TEXT, " +
                     "$COLUMN_ATTACK_TYPE $TYPE_TEXT, " +
@@ -98,7 +97,6 @@ public class HeroesContract {
                     "$COLUMN_TURBO_WINS $TYPE_INTEGER, " +
                     "$COLUMN_PRO_BAN $TYPE_INTEGER, " +
                     "$COLUMN_PRO_WIN $TYPE_INTEGER, " +
-                    "$COLUMN_PRO_PICK $TYPE_INTEGER, " +
                     "$COLUMN_PRO_PICK $TYPE_INTEGER, " +
                     "$COLUMN_1_PICK $TYPE_INTEGER, " +
                     "$COLUMN_1_WIN $TYPE_INTEGER, " +

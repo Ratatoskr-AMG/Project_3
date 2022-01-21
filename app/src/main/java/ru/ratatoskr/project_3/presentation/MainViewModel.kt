@@ -12,8 +12,8 @@ class MainViewModel : ViewModel() {
 
     val HeroesList=MutableLiveData<List<Hero>>()
 
-    suspend fun getAllHeroesList(context: Context){
-          val list = repository.getAllHeroesList(context);
+    suspend fun getAllHeroesList(){
+          val list = repository.getAllHeroesList();
           HeroesList.postValue(list)
     }
 

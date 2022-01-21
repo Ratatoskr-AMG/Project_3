@@ -12,7 +12,7 @@ import ru.ratatoskr.project_3.domain.model.Hero
 
 object HeroesRepoImpl : HeroesRepo{
 
-    override suspend fun getAllHeroesList(context: Context): List<Hero> {
+    override suspend fun getAllHeroesList(): List<Hero> {
 
         val URL ="https://api.opendota.com/api/heroStats/";
 

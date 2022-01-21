@@ -14,8 +14,6 @@ class HeroesDBHelper(
     openParams: SQLiteDatabase.OpenParams
 ) : SQLiteOpenHelper(context, name, version, openParams) {
 
-
-
     override fun onCreate(p0: SQLiteDatabase?) {
         p0!!.execSQL(HeroesContract.CREATE_COMMAND)
     }

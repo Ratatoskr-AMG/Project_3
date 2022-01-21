@@ -1,7 +1,7 @@
 package ru.ratatoskr.project_3.presentation
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ScrollState
@@ -17,8 +17,13 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import ru.ratatoskr.project_3.data.HeroesDBHelper
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.theme.Project_3Theme
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabase.OpenParams
+import io.ktor.client.request.*
+
 
 class MainActivity : ComponentActivity() {
 
@@ -31,6 +36,9 @@ class MainActivity : ComponentActivity() {
         viewModel.HeroesList.observe(this) {
 
             if (viewModel.HeroesList.value != null) {
+
+
+
                 setContent {
                     var heroesList: List<Hero> = remember { viewModel.HeroesList.value!! }
                     Wrapper { Heroes(heroesList) }
@@ -41,9 +49,10 @@ class MainActivity : ComponentActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                viewModel.getAllHeroesList()
+                viewModel.getAllHeroesList(MainActivity())
             } catch (exception: Exception) {
-                Toast.makeText(applicationContext,"viewModel.getAllHeroesList() error", Toast.LENGTH_LONG)
+                Log.d("TOHA","exception:"+exception.toString())
+                //Toast.makeText(applicationContext,"viewModel.getAllHeroesList() error", Toast.LENGTH_LONG)
             }
 
         }
@@ -56,7 +65,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
     }
 
 }
@@ -84,7 +92,8 @@ fun Wrapper(inner: @Composable() () -> Unit) {
 @Composable
 fun Heroes(heroesList: List<Hero>) {
     for (Hero in heroesList) {
-        Text(Hero.localizedName!!);
+        Log.d("TOHA",Hero.toString())
+        Text(Hero.getLocalizedName()!!+":"+Hero.getCmEnabled()!!);
     }
 }
 

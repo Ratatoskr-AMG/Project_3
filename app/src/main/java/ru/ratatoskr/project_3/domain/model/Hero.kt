@@ -6,107 +6,107 @@ import com.google.gson.annotations.SerializedName
 class Hero {
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    private var id: Int? = null
 
     @SerializedName("name")
     @Expose
-    var name: String? = null
+    private var name: String? = null
 
     @SerializedName("localized_name")
     @Expose
-    var localizedName: String? = null
+    private var localizedName: String? = null
 
     @SerializedName("primary_attr")
     @Expose
-    var primaryAttr: String? = null
+    private var primaryAttr: String? = null
 
     @SerializedName("attack_type")
     @Expose
-    var attackType: String? = null
+    private var attackType: String? = null
 
     @SerializedName("roles")
     @Expose
-    var roles: List<String>? = null
+    private var roles: List<String>? = null
 
     @SerializedName("img")
     @Expose
-    var img: String? = null
+    private var img: String? = null
 
     @SerializedName("icon")
     @Expose
-    var icon: String? = null
+    private var icon: String? = null
 
     @SerializedName("base_health")
     @Expose
-    var baseHealth: Double? = null
+    private var baseHealth: Int? = null
 
     @SerializedName("base_health_regen")
     @Expose
-    var baseHealthRegen: Double? = null
+    private var baseHealthRegen: Double? = null
 
     @SerializedName("base_mana")
     @Expose
-    var baseMana: Int? = null
+    private var baseMana: Int? = null
 
     @SerializedName("base_mana_regen")
     @Expose
-    var baseManaRegen: Double? = null
+    private var baseManaRegen: Double? = null
 
     @SerializedName("base_armor")
     @Expose
-    var baseArmor: Double? = null
+    private var baseArmor: Double? = null
 
     @SerializedName("base_mr")
     @Expose
-    var baseMr: Int? = null
+    private var baseMr: Int? = null
 
     @SerializedName("base_attack_min")
     @Expose
-    var baseAttackMin: Int? = null
+    private var baseAttackMin: Int? = null
 
     @SerializedName("base_attack_max")
     @Expose
-    var baseAttackMax: Int? = null
+    private var baseAttackMax: Int? = null
 
     @SerializedName("base_str")
     @Expose
-    var baseStr: Int? = null
+    private var baseStr: Int? = null
 
     @SerializedName("base_agi")
     @Expose
-    var baseAgi: Int? = null
+    private var baseAgi: Int? = null
 
     @SerializedName("base_int")
     @Expose
-    var baseInt: Int? = null
+    private var baseInt: Int? = null
 
     @SerializedName("str_gain")
     @Expose
-    var strGain: Double? = null
+    private var strGain: Double? = null
 
     @SerializedName("agi_gain")
     @Expose
-    var agiGain: Double? = null
+    private var agiGain: Double? = null
 
     @SerializedName("int_gain")
     @Expose
-    var intGain: Double? = null
+    private var intGain: Double? = null
 
     @SerializedName("attack_range")
     @Expose
-    var attackRange: Int? = null
+    private var attackRange: Int? = null
 
     @SerializedName("projectile_speed")
     @Expose
-    var projectileSpeed: Int? = null
+    private var projectileSpeed: Int? = null
 
     @SerializedName("attack_rate")
     @Expose
-    var attackRate: Double? = null
+    private var attackRate: Double? = null
 
     @SerializedName("move_speed")
     @Expose
-    var moveSpeed: Int? = null
+    private var moveSpeed: Int? = null
 
     @SerializedName("turn_rate")
     @Expose
@@ -114,35 +114,35 @@ class Hero {
 
     @SerializedName("cm_enabled")
     @Expose
-    var cmEnabled: Boolean? = null
+    private var cmEnabled: Boolean? = null
 
     @SerializedName("legs")
     @Expose
-    var legs: Int? = null
+    private var legs: Int? = null
 
     @SerializedName("hero_id")
     @Expose
-    var heroId: Int? = null
+    private var heroId: Int? = null
 
     @SerializedName("turbo_picks")
     @Expose
-    var turboPicks: Int? = null
+    private var turboPicks: Int? = null
 
     @SerializedName("turbo_wins")
     @Expose
-    var turboWins: Int? = null
+    private var turboWins: Int? = null
 
     @SerializedName("pro_ban")
     @Expose
-    var proBan: Int? = null
+    private var proBan: Int? = null
 
     @SerializedName("pro_win")
     @Expose
-    var proWin: Int? = null
+    private var proWin: Int? = null
 
     @SerializedName("pro_pick")
     @Expose
-    var proPick: Int? = null
+    private var proPick: Int? = null
 
     @SerializedName("1_pick")
     private var _1Pick: Int? = null
@@ -215,8 +215,12 @@ class Hero {
     @Expose
     var nullWin: Int? = null
 
-    fun getTurnRate(): Any? {
-        return turnRate
+    fun getLocalizedName(): String? {
+        return localizedName
+    }
+
+    fun getCmEnabled(): Boolean? {
+        return cmEnabled
     }
 
     fun setTurnRate(turnRate: Double?) {

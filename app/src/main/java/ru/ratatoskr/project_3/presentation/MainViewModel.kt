@@ -1,6 +1,5 @@
 package ru.ratatoskr.project_3.presentation
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
@@ -13,7 +12,7 @@ class MainViewModel : ViewModel() {
     val HeroesList=MutableLiveData<List<Hero>>()
 
     suspend fun getAllHeroesList(){
-          val list = repository.getAllHeroesList();
+          val list = repository.getAllHeroesListFromAPI();
           HeroesList.postValue(list)
     }
 

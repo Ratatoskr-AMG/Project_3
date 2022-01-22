@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation
+package ru.ratatoskr.project_3.presentation.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData

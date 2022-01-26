@@ -1,9 +1,11 @@
-package ru.ratatoskr.project_3.data
+package ru.ratatoskr.project_3.data.contracts
 
 import android.provider.BaseColumns
 
 public class HeroesContract {
     companion object HeroesEntries : BaseColumns {
+        const val databaseApp = "heroes"
+        const val fetch = "SELECT * FROM "+ HeroesContract.HEROES_TABLE_NAME
         const val HEROES_TABLE_NAME = "heroes"
         const val COLUMN_ID = "id"
         const val COLUMN_NAME = "name"

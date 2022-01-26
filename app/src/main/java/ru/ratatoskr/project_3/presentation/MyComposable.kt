@@ -57,7 +57,7 @@ class MyComposable {
                         Image(
 
                             painter = rememberImagePainter(
-                                data = "https://cdn.dota2.com" + heroes[index].getImg(),
+                                data = "https://cdn.dota2.com" + heroes[index].img,
                                 builder = {
                                     crossfade(true)
                                 }
@@ -95,7 +95,7 @@ class MyComposable {
     }
 
     @Composable
-    fun w8() {
+    fun WaitScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()

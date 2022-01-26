@@ -25,7 +25,8 @@ class MainActivity : ComponentActivity() {
             if (viewModel.HeroesList.value != null) {
                 setContent {
                     var heroesList: List<Hero> = remember { viewModel.HeroesList.value!! }
-                    myComposable.Wrapper {myComposable.Heroes(heroesList)
+                    myComposable.Wrapper {
+                        myComposable.Heroes(heroesList)
                     }
                 }
             }

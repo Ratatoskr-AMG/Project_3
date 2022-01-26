@@ -8,14 +8,15 @@ import ru.ratatoskr.project_3.domain.model.Hero
 
 @Database(entities = [Hero::class], version = 2)
 @TypeConverters(HeroesConverterImpl::class)
-abstract class RoomAppDatabase: RoomDatabase() {
+abstract class RoomAppDatabase : RoomDatabase() {
 
     abstract fun heroesDao(): HeroesDao
 
     companion object {
 
         fun buildDataSource(context: Context): RoomAppDatabase = Room.databaseBuilder(
-            context, RoomAppDatabase::class.java, HeroesContract.databaseApp)
+            context, RoomAppDatabase::class.java, HeroesContract.databaseApp
+        )
             .fallbackToDestructiveMigration()
             .build()
     }

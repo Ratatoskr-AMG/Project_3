@@ -7,7 +7,6 @@ import androidx.room.Query
 import ru.ratatoskr.project_3.data.contracts.HeroesContract
 import ru.ratatoskr.project_3.domain.model.Hero
 
-
 @Dao
 interface HeroesDao {
     @get:Query(HeroesContract.fetch)

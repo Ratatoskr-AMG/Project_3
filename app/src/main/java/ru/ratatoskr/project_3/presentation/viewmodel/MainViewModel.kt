@@ -17,25 +17,29 @@ class MainViewModel(val repository: HeroesRepoImpl) : ViewModel() {
     private var _heroesList = MutableLiveData<List<Hero>>()
     val HeroesList = _heroesList as LiveData<List<Hero>>
 
-    suspend fun getAllHeroesList(context:Context){
+    suspend fun getAllHeroesList(context: Context) {
 
         var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
-        updateAllHeroesTable(roomAppDatabase,context, repository.getAllHeroesListFromAPI())
+        updateAllHeroesTable(roomAppDatabase, context, repository.getAllHeroesListFromAPI())
 
         _heroesList.postValue(getListHeroesFromDB(context))
     }
 
-    fun getListHeroesFromDB(context:Context) : List<Hero>{
+    fun getListHeroesFromDB(context: Context): List<Hero> {
 
         var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
         return repository.getAllHeroesListFromDB(roomAppDatabase);
     }
 
-    fun updateAllHeroesTable(roomAppDatabase: RoomAppDatabase, context: Context, Heroes: List<Hero>){
-        repository.updateAllHeroesTable(roomAppDatabase,context,Heroes);
+    fun updateAllHeroesTable(
+        roomAppDatabase: RoomAppDatabase,
+        context: Context,
+        Heroes: List<Hero>
+    ) {
+        repository.updateAllHeroesTable(roomAppDatabase, context, Heroes);
     }
 
-    fun getListHeroesFromAPI(context:Context){
+    fun getListHeroesFromAPI(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAllHeroesList(context)

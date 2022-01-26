@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import ru.ratatoskr.project_3.data.contracts.HeroesContract
 
 @Entity(tableName = HeroesContract.HEROES_TABLE_NAME)
-data class Hero (
+data class Hero(
     @PrimaryKey
     @SerializedName("id")
     @Expose

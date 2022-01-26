@@ -27,13 +27,18 @@ class HeroesRepoImpl : HeroesRepo {
         return result
 
     }
-    override fun getAllHeroesListFromDB(roomAppDatabase: RoomAppDatabase): List<Hero>{
+
+    override fun getAllHeroesListFromDB(roomAppDatabase: RoomAppDatabase): List<Hero> {
         return roomAppDatabase.heroesDao().all
     }
 
-    override fun updateAllHeroesTable(roomAppDatabase: RoomAppDatabase, context: Context, Heroes: List<Hero>) {
+    override fun updateAllHeroesTable(
+        roomAppDatabase: RoomAppDatabase,
+        context: Context,
+        Heroes: List<Hero>
+    ) {
         for (Hero in Heroes) {
-            Log.d("TOHA",Hero.name);
+            Log.d("TOHA", Hero.name);
             roomAppDatabase.heroesDao().insertHero(Hero)
         }
     }

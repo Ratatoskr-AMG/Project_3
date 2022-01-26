@@ -2,10 +2,10 @@ package ru.ratatoskr.project_3.data.contracts
 
 import android.provider.BaseColumns
 
-public class HeroesContract {
+class HeroesContract {
     companion object HeroesEntries : BaseColumns {
         const val databaseApp = "heroes"
-        const val fetch = "SELECT * FROM "+ HeroesContract.HEROES_TABLE_NAME
+        const val fetch = "SELECT * FROM " + HeroesContract.HEROES_TABLE_NAME
         const val HEROES_TABLE_NAME = "heroes"
         const val COLUMN_ID = "id"
         const val COLUMN_NAME = "name"
@@ -63,7 +63,7 @@ public class HeroesContract {
         const val TYPE_TEXT = "TEXT"
         const val TYPE_INTEGER = "INTEGER"
         const val TYPE_REAL = "REAL"
-        const val DROP_COMMAND = "DROP TABLE IF EXISTS "+ HEROES_TABLE_NAME
+        const val DROP_COMMAND = "DROP TABLE IF EXISTS " + HEROES_TABLE_NAME
         const val CREATE_COMMAND =
             "CREATE TABLE IF NOT EXISTS $HEROES_TABLE_NAME ($COLUMN_ID $TYPE_INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_NAME $TYPE_TEXT, " +

@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
@@ -11,8 +12,10 @@ import io.ktor.client.request.*
 import ru.ratatoskr.project_3.data.HeroesContract
 import ru.ratatoskr.project_3.data.HeroesDBHelper
 import ru.ratatoskr.project_3.data.HeroesRepo
+import ru.ratatoskr.project_3.data.converters.HeroesConverterImpl
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import java.util.stream.Collectors
 
 
 class HeroesRepoImpl : HeroesRepo {
@@ -47,6 +50,9 @@ class HeroesRepoImpl : HeroesRepo {
             db.query(HeroesContract.HEROES_TABLE_NAME, null, null, null, null, null, null)
         while (cursor.moveToNext()) {
 
+            var roles = listOf(cursor.getString(
+                cursor.getColumnIndexOrThrow(HeroesContract.COLUMN_ROLES)
+            ).split(",").toString())
 
             var Hero = Hero(
                 cursor.position,
@@ -62,9 +68,7 @@ class HeroesRepoImpl : HeroesRepo {
                 cursor.getString(
                     cursor.getColumnIndexOrThrow(HeroesContract.COLUMN_ATTACK_TYPE)
                 ),
-                cursor.getString(
-                    cursor.getColumnIndexOrThrow(HeroesContract.COLUMN_ROLES)
-                ),
+                roles,
                 cursor.getString(
                     cursor.getColumnIndexOrThrow(HeroesContract.COLUMN_IMG)
                 ),
@@ -299,6 +303,7 @@ class HeroesRepoImpl : HeroesRepo {
 
     override fun updateAllHeroesTable(roomAppDatabase: RoomAppDatabase, context: Context, Heroes: List<Hero>) {
         for (Hero in Heroes) {
+            Log.d("TOHA",Hero.name);
             roomAppDatabase.heroesDao().insertHero(Hero)
         }
     }

@@ -2,9 +2,12 @@ package ru.ratatoskr.project_3.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.ratatoskr.project_3.data.HeroesContract
+import ru.ratatoskr.project_3.data.converters.HeroesConverterImpl
 
 @Entity(tableName = HeroesContract.HEROES_TABLE_NAME)
 data class Hero (
@@ -31,7 +34,7 @@ data class Hero (
 
     @SerializedName("roles")
     @Expose
-    var roles: String,
+    var roles: List<String>,
 
     @SerializedName("img")
     @Expose

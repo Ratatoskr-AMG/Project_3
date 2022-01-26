@@ -19,19 +19,21 @@ class MainViewModel(val repository: HeroesRepoImpl) : ViewModel() {
     private var _heroesList = MutableLiveData<List<Hero>>()
     val HeroesList = _heroesList as LiveData<List<Hero>>
 
-    suspend fun getAllHeroesList(){
+    suspend fun getAllHeroesList(context:Context){
          val list = repository.getAllHeroesListFromAPI();
         _heroesList.postValue(list)
+        var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
+        updateAllHeroesTable(roomAppDatabase,context, HeroesList.value!!)
     }
 
     fun updateAllHeroesTable(roomAppDatabase: RoomAppDatabase, context: Context, Heroes: List<Hero>){
         repository.updateAllHeroesTable(roomAppDatabase,context,Heroes);
     }
 
-    fun getListHeroesFromAPI(){
+    fun getListHeroesFromAPI(context:Context){
         viewModelScope.launch {
             try {
-                getAllHeroesList()
+                getAllHeroesList(context)
             } catch (exception: Exception) {
                 Log.d("TOHA", "exception:" + exception.toString())
             }

@@ -1,19 +1,14 @@
 package ru.ratatoskr.project_3.data.storage
 
 import android.content.Context
-<<<<<<< HEAD
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.Database
-=======
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
->>>>>>> origin/master
+import androidx.room.*
+import ru.ratatoskr.project_3.data.converters.HeroesConverter
+import ru.ratatoskr.project_3.data.converters.HeroesConverterImpl
 import ru.ratatoskr.project_3.data.storage.contracts.RoomContract
 import ru.ratatoskr.project_3.domain.model.Hero
 
-@Database(entities = [Hero::class], version = 1)
+@Database(entities = [Hero::class], version = 2)
+@TypeConverters(HeroesConverterImpl::class)
 abstract class RoomAppDatabase: RoomDatabase() {
 
     abstract fun heroesDao(): HeroesDao
@@ -22,6 +17,7 @@ abstract class RoomAppDatabase: RoomDatabase() {
 
         fun buildDataSource(context: Context): RoomAppDatabase = Room.databaseBuilder(
             context, RoomAppDatabase::class.java, RoomContract.databaseApp)
+            .fallbackToDestructiveMigration()
             .build()
     }
 

@@ -20,20 +20,17 @@ import ru.ratatoskr.project_3.presentation.viewmodel.MainViewModel
 class MainActivity : ComponentActivity() {
 
     private val viewModel = MainViewModel(repository = HeroesRepoImpl())
-    lateinit var roomAppDatabase: RoomAppDatabase
-    //private val heroesConverter: HeroesConverter = HeroesConverterImpl()
+    var myComposable = MyComposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var myComposable = MyComposable()
         setContent {
             myComposable.Wrapper { myComposable.WaitScreen() }
         }
+
         viewModel.HeroesList.observe(this) {
             if (viewModel.HeroesList.value != null) {
-               // roomAppDatabase = RoomAppDatabase.buildDataSource(context = applicationContext)
-                //viewModel.updateAllHeroesTable(roomAppDatabase,this, viewModel.HeroesList.value!!)
                 setContent {
                     var heroesList: List<Hero> = remember { viewModel.HeroesList.value!! }
                     myComposable.Wrapper {myComposable.Heroes(heroesList)
@@ -41,13 +38,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        //viewModel.getListHeroesFromAPI()
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                viewModel.getAllHeroesList()
-            } catch (exception: Exception) {
-                Log.d("TOHA", "exception:" + exception.toString())
-            }
-        }
+        viewModel.getListHeroesFromAPI(this)
+
     }
 }

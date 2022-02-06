@@ -25,7 +25,6 @@ class MyComposable {
     fun HeroesScreen(heroes: List<Hero>,navController: NavController) {
 
         LazyVerticalGrid(
-
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 0.dp, end = 0.dp)
@@ -38,13 +37,7 @@ class MyComposable {
                     )
                 ),
             cells = GridCells.Adaptive(128.dp),
-
-            contentPadding = PaddingValues(
-                start = 0.dp,
-                top = 0.dp,
-                end = 0.dp,
-                bottom = 0.dp
-            ),
+            contentPadding = PaddingValues(0.dp),
             content = {
                 items(heroes.size) { index ->
                     Card(

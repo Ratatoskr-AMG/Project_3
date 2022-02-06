@@ -12,6 +12,8 @@ import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 
 class HeroesRepoImpl : HeroesRepo {
 
+
+
     override suspend fun getAllHeroesListFromAPI(): List<Hero> {
 
         val URL = "https://api.opendota.com/api/heroStats/";

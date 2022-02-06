@@ -20,6 +20,8 @@ import ru.ratatoskr.project_3.presentation.theme.Project_3Theme
 
 class MyComposable {
 
+    val CDN_ADDR = "https://cdn.dota2.com"
+
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun HeroesScreen(heroes: List<Hero>,navController: NavController) {
@@ -54,7 +56,7 @@ class MyComposable {
                         Image(
 
                             painter = rememberImagePainter(
-                                data = "https://cdn.dota2.com" + heroes[index].img,
+                                data = CDN_ADDR + heroes[index].img,
                                 builder = {
                                     crossfade(true)
                                 }

@@ -1,6 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id('kotlin-kapt')
+    id('dagger.hilt.android.plugin')
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 android {
@@ -51,6 +58,8 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
+    implementation("com.google.dagger:hilt-android:2.38.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
     implementation("androidx.navigation:navigation-compose:2.5.0-alpha01")
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"

@@ -1,20 +1,22 @@
 package ru.ratatoskr.project_3.data.impl
 
-import android.content.Context
 import android.util.Log
+import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
-import ru.ratatoskr.project_3.data.HeroesRepo
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HeroesRepoImpl : HeroesRepo {
 
+class HeroesRepoImpl {
 
+    @Inject lateinit var roomAppDatabase: RoomAppDatabase
 
-    override suspend fun getAllHeroesListFromAPI(): List<Hero> {
+    suspend fun getAllHeroesListFromAPI(): List<Hero> {
 
         val URL = "https://api.opendota.com/api/heroStats/";
 
@@ -30,13 +32,11 @@ class HeroesRepoImpl : HeroesRepo {
 
     }
 
-    override fun getAllHeroesListFromDB(roomAppDatabase: RoomAppDatabase): List<Hero> {
+    fun getAllHeroesListFromDB(): List<Hero> {
         return roomAppDatabase.heroesDao().all
     }
 
-    override fun updateAllHeroesTable(
-        roomAppDatabase: RoomAppDatabase,
-        context: Context,
+    fun updateAllHeroesTable(
         Heroes: List<Hero>
     ) {
         for (Hero in Heroes) {

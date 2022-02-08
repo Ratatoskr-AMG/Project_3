@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.composable.MyComposable
@@ -18,7 +19,7 @@ sealed class Routes(val route: String) {
     object Hero : Routes("Hero")
     object WaitScreen : Routes("WaitScreen")
 }
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel = MainViewModel(repository = HeroesRepoImpl())
@@ -26,8 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         setContent {
             myComposable.Wrapper { myComposable.WaitScreen() }
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getListHeroesFromAPI(this)
+        viewModel.getListHeroesFromAPI()
 
     }
 }

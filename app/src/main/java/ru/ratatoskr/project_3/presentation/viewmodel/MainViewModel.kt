@@ -2,47 +2,49 @@ package ru.ratatoskr.project_3.presentation.viewmodel
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Hero
+import javax.inject.Inject
 
-class MainViewModel(val repository: HeroesRepoImpl) : ViewModel() {
+
+class MainViewModel (val repository: HeroesRepoImpl) : ViewModel() {
+
+    @Inject
+    lateinit var roomAppDatabase: RoomAppDatabase
 
     private var _heroesList = MutableLiveData<List<Hero>>()
     val HeroesList = _heroesList as LiveData<List<Hero>>
 
-    suspend fun getAllHeroesList(context: Context) {
+    suspend fun getAllHeroesList() {
 
-        var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
-        updateAllHeroesTable(roomAppDatabase, context, repository.getAllHeroesListFromAPI())
+       // var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
 
-        _heroesList.postValue(getListHeroesFromDB(context))
+        updateAllHeroesTable(repository.getAllHeroesListFromAPI())
+        _heroesList.postValue(getListHeroesFromDB())
     }
 
-    fun getListHeroesFromDB(context: Context): List<Hero> {
+    fun getListHeroesFromDB(): List<Hero> {
 
-        var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
-        return repository.getAllHeroesListFromDB(roomAppDatabase);
+       // var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
+        return repository.getAllHeroesListFromDB();
     }
 
     fun updateAllHeroesTable(
-        roomAppDatabase: RoomAppDatabase,
-        context: Context,
         Heroes: List<Hero>
     ) {
-        repository.updateAllHeroesTable(roomAppDatabase, context, Heroes);
+        repository.updateAllHeroesTable(Heroes);
     }
 
-    fun getListHeroesFromAPI(context: Context) {
+    fun getListHeroesFromAPI() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                getAllHeroesList(context)
+                getAllHeroesList()
             } catch (exception: Exception) {
                 Log.d("TOHA", "exception:" + exception.toString())
             }

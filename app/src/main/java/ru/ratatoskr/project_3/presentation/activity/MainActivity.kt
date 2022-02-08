@@ -22,12 +22,13 @@ sealed class Routes(val route: String) {
 class MainActivity : AppCompatActivity() {
 
     private val viewModel = MainViewModel(repository = HeroesRepoImpl())
+
+    //TODO ViewModels Factory :D
+
     var myComposable = MyComposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         setContent {
             myComposable.Wrapper { myComposable.WaitScreen() }

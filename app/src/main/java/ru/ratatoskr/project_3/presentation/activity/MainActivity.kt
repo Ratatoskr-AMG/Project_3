@@ -1,6 +1,7 @@
 package ru.ratatoskr.project_3.presentation.activity
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
@@ -20,7 +21,7 @@ sealed class Routes(val route: String) {
     object WaitScreen : Routes("WaitScreen")
 }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     lateinit var viewModel: MainViewModel
 

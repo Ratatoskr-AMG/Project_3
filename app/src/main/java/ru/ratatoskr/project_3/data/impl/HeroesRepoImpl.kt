@@ -6,15 +6,13 @@ import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
-import ru.ratatoskr.project_3.data.HeroesRepo
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import javax.inject.Inject
 
-class HeroesRepoImpl : HeroesRepo {
-
-
-
-    override suspend fun getAllHeroesListFromAPI(): List<Hero> {
+class HeroesRepoImpl @Inject constructor(private val roomAppDatabase: RoomAppDatabase) {
+/*
+    suspend fun getAllHeroesListFromAPI(): List<Hero> {
 
         val URL = "https://api.opendota.com/api/heroStats/";
 
@@ -29,14 +27,12 @@ class HeroesRepoImpl : HeroesRepo {
         return result
 
     }
-
-    override fun getAllHeroesListFromDB(roomAppDatabase: RoomAppDatabase): List<Hero> {
+*/
+    fun getAllHeroesListFromDB(): List<Hero> {
         return roomAppDatabase.heroesDao().all
     }
 
-    override fun updateAllHeroesTable(
-        roomAppDatabase: RoomAppDatabase,
-        context: Context,
+    fun updateAllHeroesTable(
         Heroes: List<Hero>
     ) {
         for (Hero in Heroes) {

@@ -1,7 +1,6 @@
 package ru.ratatoskr.project_3.presentation.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
@@ -11,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.composable.MyComposable
-import ru.ratatoskr.project_3.presentation.viewmodel.MainViewModel
+import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 sealed class Routes(val route: String) {
     object HeroesList : Routes("HeroesList")
@@ -21,7 +20,7 @@ sealed class Routes(val route: String) {
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel = MainViewModel(repository = HeroesRepoImpl())
+    private val viewModel = HeroesListViewModel(repository = HeroesRepoImpl())
     var myComposable = MyComposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {

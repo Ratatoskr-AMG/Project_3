@@ -12,10 +12,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.activity.Routes
+import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.theme.Project_3Theme
 
 class MyComposable {
@@ -50,7 +49,7 @@ class MyComposable {
                             .fillMaxWidth(),
                         elevation = 0.dp,
                     ) {
-                        Button({ navController.navigate(Routes.Hero.route+"/"+heroes[index]) }){
+                        Button({ navController.navigate(Screens.Hero.route+"/"+heroes[index]) }){
                             Text(text = heroes[index].name)
                         }
                         Image(

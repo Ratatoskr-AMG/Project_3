@@ -20,7 +20,7 @@ sealed class Routes(val route: String) {
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel = HeroesListViewModel(repository = HeroesRepoImpl())
+    //private val viewModel = HeroesListViewModel(repository = HeroesRepoImpl())
     var myComposable = MyComposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             myComposable.Wrapper { myComposable.WaitScreen() }
         }
-
+/*
         viewModel.HeroesList.observe(this) {
             if (viewModel.HeroesList.value != null) {
                 setContent {
@@ -58,6 +58,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.getListHeroesFromAPI(this)
-
+*/
     }
 }

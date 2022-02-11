@@ -12,33 +12,33 @@ import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Hero
+import javax.inject.Inject
 
 @HiltViewModel
-class HeroesListViewModel(val repository: HeroesRepoImpl) : ViewModel() {
+class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl, val roomAppDatabase: RoomAppDatabase) : ViewModel() {
 
     private var _heroesList = MutableLiveData<List<Hero>>()
     val HeroesList = _heroesList as LiveData<List<Hero>>
 
     suspend fun getAllHeroesList(context: Context) {
 
-        var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
-        updateAllHeroesTable(roomAppDatabase, context, repository.getAllHeroesListFromAPI())
+        //var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
+        updateAllHeroesTable(repository.getAllHeroesListFromAPI())
 
         _heroesList.postValue(getListHeroesFromDB(context))
     }
 
     fun getListHeroesFromDB(context: Context): List<Hero> {
 
-        var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
+       // var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
         return repository.getAllHeroesListFromDB(roomAppDatabase);
     }
 
     fun updateAllHeroesTable(
-        roomAppDatabase: RoomAppDatabase,
-        context: Context,
+        //roomAppDatabase: RoomAppDatabase,
         Heroes: List<Hero>
     ) {
-        repository.updateAllHeroesTable(roomAppDatabase, context, Heroes);
+        repository.updateAllHeroesTable(roomAppDatabase, Heroes);
     }
 
     fun getListHeroesFromAPI(context: Context) {

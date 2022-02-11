@@ -1,4 +1,4 @@
-package com.agladkov.dotabook.extensions
+package ru.ratatoskr.project_3.domain.extensions
 
 import androidx.lifecycle.MutableLiveData
 

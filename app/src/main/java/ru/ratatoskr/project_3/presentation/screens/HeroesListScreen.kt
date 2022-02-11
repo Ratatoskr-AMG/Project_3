@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.agladkov.dotabook.helpers.State
+
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
@@ -67,7 +68,7 @@ fun LoadingHeroesView() {
     Box(modifier = Modifier.fillMaxSize()) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
-            color = Color.Green
+            color = Color.Black
         )
     }
 }

@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.model.Hero
@@ -35,48 +36,23 @@ sealed class Routes(val route: String) {
     object Hero : Routes("Hero")
     object WaitScreen : Routes("WaitScreen")
 }
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     //private val viewModel = HeroesListViewModel(repository = HeroesRepoImpl())
-    var myComposable = MyComposable()
+    //var myComposable = MyComposable()
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            myComposable.Wrapper { myComposable.WaitScreen() }
-        }
-/*
-        viewModel.HeroesList.observe(this) {
-            if (viewModel.HeroesList.value != null) {
-                setContent {
-                    val navController = rememberNavController()
-                    var heroesList: List<Hero> = remember { viewModel.HeroesList.value!! }
-                    NavHost(navController, startDestination = Routes.HeroesList.route){
-                        composable(Routes.HeroesList.route){
-                            myComposable.Wrapper {
-                                myComposable.HeroesScreen(heroesList,navController)
-                            }
-                        }
-                        composable(Routes.WaitScreen.route){
-                            myComposable.Wrapper {
-                                myComposable.WaitScreen()
-                            }
-                        }
-                        composable(Routes.Hero.route+"/{id}"){ navBackStack ->
-                            val id = navBackStack.arguments?.getString("id").toString()
-                            myComposable.Wrapper {
-                                myComposable.HeroScreen(id)
-                            }
-                        }
-                    }
-                }
+            val navController = rememberNavController()
+
+            NavHost(navController = navController, startDestination = "main") {
+                composable("main") { MainScreen(navController) }
             }
         }
-
-        viewModel.getListHeroesFromAPI(this)
-*/
     }
 }
 

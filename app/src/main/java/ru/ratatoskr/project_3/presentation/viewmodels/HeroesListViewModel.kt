@@ -6,14 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.agladkov.dotabook.extensions.set
-import com.agladkov.dotabook.helpers.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import ru.ratatoskr.project_3.domain.extensions.set
+import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Hero
 import javax.inject.Inject
 
@@ -21,14 +21,14 @@ import javax.inject.Inject
 class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl, val roomAppDatabase: RoomAppDatabase) : ViewModel() {
     val state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
 
-    private var _heroesList = MutableLiveData<List<Hero>>()
-    val HeroesList = _heroesList as LiveData<List<Hero>>
+    //private var _heroesList = MutableLiveData<List<Hero>>()
+    //val HeroesList = _heroesList as LiveData<List<Hero>>
 
     fun fetchCarries() {
         state.set(newValue = State.LoadingState())
         viewModelScope.launch {
             try {
-                val heroes = repository.getAllHeroesListFromDB()
+                val heroes = repository.getAllHeroesListFromAPI()
                 if (heroes.isEmpty()) {
                     withContext(Dispatchers.Main) {
                         state.set(newValue = State.NoItemsState())
@@ -49,7 +49,7 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl, va
         //var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
         updateAllHeroesTable(repository.getAllHeroesListFromAPI())
 
-        _heroesList.postValue(getListHeroesFromDB(context))
+        //_heroesList.postValue(getListHeroesFromDB(context))
     }
 
     fun getListHeroesFromDB(context: Context): List<Hero> {

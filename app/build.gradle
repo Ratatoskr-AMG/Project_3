@@ -7,7 +7,7 @@ apply plugin: 'kotlinx-serialization'
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "com.agladkov.dotabook"
+        applicationId "ru.ratatoskr.project_3"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1

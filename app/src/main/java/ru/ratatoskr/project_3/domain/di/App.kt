@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.model.di
+package ru.ratatoskr.project_3.domain.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

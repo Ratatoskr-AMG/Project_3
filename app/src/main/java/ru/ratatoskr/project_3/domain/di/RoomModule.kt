@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.model.di
+package ru.ratatoskr.project_3.domain.di
 
 import android.content.Context
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase

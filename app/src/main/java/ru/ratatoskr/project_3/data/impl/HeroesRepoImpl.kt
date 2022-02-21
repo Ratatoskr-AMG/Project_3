@@ -17,7 +17,6 @@ class HeroesRepoImpl @Inject constructor(private val roomAppDatabase: RoomAppDat
 
     suspend fun getAllHeroesListFromAPI(): List<Hero> {
 
-
         val URL = "https://api.opendota.com/api/heroStats/";
 
         return client.get<List<Hero>>(URL).map {

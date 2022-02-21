@@ -14,7 +14,9 @@ import javax.inject.Inject
 
 class HeroesRepoImpl @Inject constructor(private val roomAppDatabase: RoomAppDatabase, private val client:HttpClient) {
 
+
     suspend fun getAllHeroesListFromAPI(): List<Hero> {
+
 
         val URL = "https://api.opendota.com/api/heroStats/";
 

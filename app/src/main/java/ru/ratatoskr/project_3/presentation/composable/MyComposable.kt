@@ -20,12 +20,13 @@ import ru.ratatoskr.project_3.presentation.theme.Project_3Theme
 
 class MyComposable {
 
+    val CDN_ADDR = "https://cdn.dota2.com"
+
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun HeroesScreen(heroes: List<Hero>,navController: NavController) {
 
         LazyVerticalGrid(
-
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 0.dp, end = 0.dp)
@@ -38,13 +39,7 @@ class MyComposable {
                     )
                 ),
             cells = GridCells.Adaptive(128.dp),
-
-            contentPadding = PaddingValues(
-                start = 0.dp,
-                top = 0.dp,
-                end = 0.dp,
-                bottom = 0.dp
-            ),
+            contentPadding = PaddingValues(0.dp),
             content = {
                 items(heroes.size) { index ->
                     Card(
@@ -61,7 +56,7 @@ class MyComposable {
                         Image(
 
                             painter = rememberImagePainter(
-                                data = "https://cdn.dota2.com" + heroes[index].img,
+                                data = CDN_ADDR + heroes[index].img,
                                 builder = {
                                     crossfade(true)
                                 }

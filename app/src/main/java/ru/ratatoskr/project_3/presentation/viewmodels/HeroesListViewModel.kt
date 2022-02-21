@@ -16,9 +16,10 @@ import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Hero
 import javax.inject.Inject
+//Dagger - viewModelStore
 
 @HiltViewModel
-class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl, val roomAppDatabase: RoomAppDatabase) : ViewModel() {
+class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : ViewModel() {
     val state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
 
     //private var _heroesList = MutableLiveData<List<Hero>>()

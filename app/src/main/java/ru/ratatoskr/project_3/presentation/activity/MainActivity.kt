@@ -1,5 +1,13 @@
 package ru.ratatoskr.project_3.presentation.activity
-
+/*
+Модуль клиент +
+Карточка героя
+Размер картинок
+Карточка атрибута
+Теория(?)
+Карьера программиста крэкинг зэ пот
+Java Concurrency in Practiсe
+ */
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity

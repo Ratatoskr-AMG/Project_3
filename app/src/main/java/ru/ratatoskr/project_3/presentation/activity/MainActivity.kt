@@ -36,6 +36,7 @@ import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.composable.MyComposable
+import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
 
 sealed class Screens(val route: String, val stringId: Int) {
     object Home: Screens("home", R.string.title_home)
+    object Hero: Screens("hero", R.string.title_home)
     object Dashboard: Screens("dashboard", R.string.title_home)
     object Notifications: Screens("notifications", R.string.title_home)
 }
@@ -109,7 +111,10 @@ fun MainScreen(parentNavController: NavController) {
                 val viewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(viewModel = viewModel, navController = navController)
             }
-
+            composable(Routes.Hero.route+"/{id}"){ navBackStack ->
+                val id = navBackStack.arguments?.getString("id").toString()
+                   HeroScreen(id)
+            }
             composable(Screens.Dashboard.route) { Text("Dashboard") }
             composable(Screens.Notifications.route) { Text("Notifications") }
         }

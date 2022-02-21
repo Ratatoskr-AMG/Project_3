@@ -26,6 +26,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 
@@ -38,7 +39,7 @@ fun HeroesListScreen(
     val viewState = viewModel.state.observeAsState()
 
     when (val state = viewState.value) {
-        is State.LoadedState<*> -> HeroesListView(state.data) {
+        is State.LoadedState<*> -> HeroesListView(state.data,navController) {
             val json = Json {
                 ignoreUnknownKeys = true
             }
@@ -75,7 +76,7 @@ fun LoadingHeroesView() {
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
+fun HeroesListView(data: List<Any?>, navController: NavController, onHeroClick: (Hero) -> Unit) {
     val heroes = data.mapNotNull { it as? Hero }
     Log.e("TOHA", "HeroesListView $heroes");
 /*
@@ -112,11 +113,13 @@ fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
                     Box(modifier = Modifier
                         .clickable {
                             onHeroClick.invoke(it)
+                            navController.navigate(Screens.Hero.route+"/"+it.id)
                         }
                         .padding(10.dp)
                         .width(100.dp)
                         .height(60.dp)) {
                         Image(
+
                             modifier = Modifier.width(100.dp).height(60.dp),
                             painter = rememberImagePainter(it.img),
                             contentDescription = it.name

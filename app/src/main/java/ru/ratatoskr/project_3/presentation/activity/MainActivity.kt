@@ -1,6 +1,6 @@
 package ru.ratatoskr.project_3.presentation.activity
 /*
-Модуль клиент +
+Модуль клиент+
 Карточка героя
 Размер картинок
 Карточка атрибута

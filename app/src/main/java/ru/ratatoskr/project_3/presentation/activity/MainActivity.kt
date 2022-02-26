@@ -1,17 +1,19 @@
 package ru.ratatoskr.project_3.presentation.activity
 /*
 Модуль клиент +
-Карточка героя
-Размер картинок
+Карточка героя +
+Размер картинок +
 Карточка атрибута
-Теория(?)
-Карьера программиста крэкинг зэ пот
-Java Concurrency in Practiсe
+> Теория(?)
+> Карьера программиста крэкинг зэ пот
+> Java Concurrency in Practiсe
  */
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -23,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -48,9 +52,6 @@ sealed class Routes(val route: String) {
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    //private val viewModel = HeroesListViewModel(repository = HeroesRepoImpl())
-    //var myComposable = MyComposable()
-
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +68,9 @@ class MainActivity : AppCompatActivity() {
 
 sealed class Screens(val route: String, val stringId: Int) {
     object Home: Screens("home", R.string.title_home)
-    object Hero: Screens("hero", R.string.title_home)
-    object Dashboard: Screens("dashboard", R.string.title_home)
-    object Notifications: Screens("notifications", R.string.title_home)
+    object Hero: Screens("hero", R.string.title_hero)
+    object Dashboard: Screens("dashboard", R.string.title_dashboard)
+    object Notifications: Screens("notifications", R.string.title_notifications)
 }
 
 @ExperimentalFoundationApi
@@ -81,6 +82,7 @@ fun MainScreen(parentNavController: NavController) {
     Scaffold(
         bottomBar = {
             BottomNavigation(
+                modifier = Modifier.background(Color.Gray).height(35.dp),
                 backgroundColor = Color.White
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -100,7 +102,9 @@ fun MainScreen(parentNavController: NavController) {
                     }, icon = {
 
                     }, label = {
-                        Text(stringResource(id = value.stringId), color = if (isSelected) Color.Black else Color.LightGray)
+                        Text(lineHeight = 20.sp,
+                            text = stringResource(id = value.stringId),
+                            color = if (isSelected) Color.Gray else Color.Black)
                     })
                 }
             }
@@ -112,8 +116,9 @@ fun MainScreen(parentNavController: NavController) {
                 HeroesListScreen(viewModel = viewModel, navController = navController)
             }
             composable(Routes.Hero.route+"/{id}"){ navBackStack ->
+                val viewModel = hiltViewModel<HeroesListViewModel>()
                 val id = navBackStack.arguments?.getString("id").toString()
-                   HeroScreen(id)
+                   HeroScreen(id,viewModel,navController)
             }
             composable(Screens.Dashboard.route) { Text("Dashboard") }
             composable(Screens.Notifications.route) { Text("Notifications") }

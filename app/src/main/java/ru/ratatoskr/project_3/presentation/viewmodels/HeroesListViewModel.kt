@@ -16,64 +16,61 @@ import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Hero
 import javax.inject.Inject
+
 //Dagger - viewModelStore
 
 @HiltViewModel
 class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : ViewModel() {
     val state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
 
-    //private var _heroesList = MutableLiveData<List<Hero>>()
-    //val HeroesList = _heroesList as LiveData<List<Hero>>
-
-    fun fetchCarries() {
+    suspend fun getAllHeroes() {
         state.set(newValue = State.LoadingState())
         viewModelScope.launch {
             try {
-                val heroes = repository.getAllHeroesListFromAPI()
-                if (heroes.isEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        state.set(newValue = State.NoItemsState())
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        state.set(newValue = State.LoadedState(data = heroes))
+                withContext(Dispatchers.IO) {
+                    val heroes = repository.getAllHeroesListFromDB()
+
+                    if (heroes.isEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            state.set(newValue = State.NoItemsState())
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            state.set(newValue = State.LoadedState(data = heroes))
+                        }
                     }
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
+                Log.e("TOHA", e.message.toString())
             }
         }
     }
 
-    suspend fun getAllHeroesList(context: Context) {
-
-        //var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
-        updateAllHeroesTable(repository.getAllHeroesListFromAPI())
-
-        //_heroesList.postValue(getListHeroesFromDB(context))
-    }
-
-    fun getListHeroesFromDB(context: Context): List<Hero> {
-
-       // var roomAppDatabase: RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
-        return repository.getAllHeroesListFromDB();
-    }
-
-    fun updateAllHeroesTable(
-        //roomAppDatabase: RoomAppDatabase,
-        Heroes: List<Hero>
-    ) {
-        repository.updateAllHeroesTable(Heroes);
-    }
-
-    fun getListHeroesFromAPI(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+    suspend fun getHeroById(id:String){
+        state.set(newValue = State.LoadingState())
+        viewModelScope.launch {
             try {
-                getAllHeroesList(context)
-            } catch (exception: Exception) {
-                Log.d("TOHA", "exception:" + exception.toString())
+                withContext(Dispatchers.IO) {
+                    val hero = repository.getHeroById(id)
+
+                    if (hero.id.toInt()<1) {
+                        withContext(Dispatchers.Main) {
+                            state.set(newValue = State.NoItemsState())
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            state.set(newValue = State.HeroLoadedState(data = hero))
+                        }
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                Log.e("TOHA", e.message.toString())
             }
         }
     }
+
+
 
 }

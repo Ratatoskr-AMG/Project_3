@@ -9,10 +9,12 @@ import ru.ratatoskr.project_3.domain.model.Hero
 
 @Dao
 interface HeroesDao {
-    @get:Query(HeroesContract.fetch)
+    @get:Query(HeroesContract.fetchHeroes)
     val all: List<Hero>
 
     @Insert(entity = Hero::class, onConflict = OnConflictStrategy.REPLACE)
-    fun insertHero(hero: Hero)
+    suspend fun insertHero(hero: Hero)
 
+    @Query(HeroesContract.fetchHero)
+    suspend fun fetchHero(heroId: Int): Hero
 }

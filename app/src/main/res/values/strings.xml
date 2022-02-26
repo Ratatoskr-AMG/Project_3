@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Project_3</string>
-    <string name="title_home">home</string>
+    <string name="title_home">Heroes</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_hero">Hero</string>
 </resources>

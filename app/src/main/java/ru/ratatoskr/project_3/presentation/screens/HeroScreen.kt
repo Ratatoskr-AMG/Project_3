@@ -58,6 +58,11 @@ fun HeroView(hero: Hero) {
     val intManaRegenMultiplier = 0.05;
     val agiArmorMultiplier = 0.167;
 
+    /*
+    Создать новый репозиторий
+    UseCase, который объединяет два репозитория
+     */
+
     val mathContext = MathContext(200, RoundingMode.HALF_DOWN)
     var healthRegen =
         BigDecimal(((hero.baseStr) * strHealhRegenMultiplier) + hero.baseHealthRegen, mathContext)
@@ -168,7 +173,7 @@ fun HeroView(hero: Hero) {
         }
         //item { attributeRow("Health Regen", "+"+healthRegen.toString()) } не всегда совпадает с оригиналом
         //item { attributeRow("Mana Regen", "+"+manaRegen.toString()) } не всегда совпадает с оригиналом
-        item { attributeRow("Mana Resistance", hero.baseMr.toString()+"%")}
+        item { attributeRow("Magic Resistance", hero.baseMr.toString()+"%")}
         item { attributeRow("Armor", armor.toString()) }
         /*
         item { attributeRow("baseAttackMin", hero.baseAttackMin.toString()) }

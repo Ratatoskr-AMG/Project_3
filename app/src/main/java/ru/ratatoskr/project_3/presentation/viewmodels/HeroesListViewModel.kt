@@ -25,21 +25,21 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : 
 
     suspend fun getAllHeroes() {
         state.set(newValue = State.LoadingState())
-        viewModelScope.launch {
+        //запуск корутины в мейн диспетчере
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                withContext(Dispatchers.IO) {
+                //withContext() {
                     val heroes = repository.getAllHeroesListFromDB()
-
                     if (heroes.isEmpty()) {
-                        withContext(Dispatchers.Main) {
-                            state.set(newValue = State.NoItemsState())
-                        }
+                        //withContext(Dispatchers.Main) {
+                            state.postValue(State.NoItemsState())
+                       //}
                     } else {
-                        withContext(Dispatchers.Main) {
-                            state.set(newValue = State.LoadedState(data = heroes))
-                        }
+                        //withContext(Dispatchers.Main) {
+                            state.postValue(State.LoadedState(data = heroes))
+                        //}
                     }
-                }
+                //}
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 Log.e("TOHA", e.message.toString())

@@ -18,12 +18,18 @@ class HeroesRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
     private val client: HttpClient
 ) {
-
+    /*
+    Многопоточность
+    Параллельность
+    Асинхронность
+    3 основных ошибки конкурентности
+    16.6 мс
+    В скоуп передается диспетчер, это SuperVisorJob
+    */
 
     suspend fun getAllHeroesListFromAPI(): List<Hero> {
 
         val URL = "https://api.opendota.com/api/heroStats/";
-
 
         return try {
             val heroes = client.get<List<Hero>>(URL)

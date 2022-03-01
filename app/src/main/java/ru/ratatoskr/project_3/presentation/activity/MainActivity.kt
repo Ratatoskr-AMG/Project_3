@@ -1,14 +1,22 @@
-package ru.ratatoskr.project_3.presentation.activity
 /*
 Модуль клиент +
 Карточка героя +
 Размер картинок +
 Карточка атрибута
-> Теория(?)
+"Двойное нажатие" в навигации
+Перенос расчётов артибутов
+Избранные герои вместо Dashboard
+Профиль вместо Notifications
+> Архитектура (репозитории юзкейсы и тд)
 > Карьера программиста крэкинг зэ пот
 > Java Concurrency in Practiсe
- */
+> Дизайн
+*/
+
+package ru.ratatoskr.project_3.presentation.activity
+
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -49,6 +57,7 @@ sealed class Routes(val route: String) {
     object Hero : Routes("Hero")
     object WaitScreen : Routes("WaitScreen")
 }
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -67,10 +76,10 @@ class MainActivity : AppCompatActivity() {
 }
 
 sealed class Screens(val route: String, val stringId: Int) {
-    object Home: Screens("home", R.string.title_home)
-    object Hero: Screens("hero", R.string.title_hero)
-    object Dashboard: Screens("dashboard", R.string.title_dashboard)
-    object Notifications: Screens("notifications", R.string.title_notifications)
+    object Home : Screens("home", R.string.title_home)
+    object Hero : Screens("hero", R.string.title_hero)
+    object Dashboard : Screens("dashboard", R.string.title_dashboard)
+    object Notifications : Screens("notifications", R.string.title_notifications)
 }
 
 @ExperimentalFoundationApi
@@ -82,43 +91,88 @@ fun MainScreen(parentNavController: NavController) {
     Scaffold(
         bottomBar = {
             BottomNavigation(
-                modifier = Modifier.background(Color.Gray).height(35.dp),
+                modifier = Modifier
+                    .background(Color.Gray)
+                    .height(35.dp),
                 backgroundColor = Color.White
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
+
                 items.forEach { value ->
-                    val isSelected = currentDestination?.hierarchy?.any { it.route == value.route } == true
+                    val isSelected =
+                        currentDestination?.hierarchy?.any { it.route == value.route } == true
 
                     BottomNavigationItem(selected = isSelected, onClick = {
-                        navController.navigate(value.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
 
-                            launchSingleTop = true
-                            restoreState = true
+                        if (value.route == "home") {
+                            navController.navigate(Screens.Home.route)
+                        } else {
+                            navController.navigate(value.route) {
+
+                                /*
+                                Всплывающее окно с заданным пунктом назначения перед навигацией.
+                                Это удаляет все несоответствующие пункты назначения из заднего стека
+                                до тех пор, пока это место назначения не будет найдено.
+                                 */
+                                //popUpTo(navController.graph.findStartDestination().id) {
+
+                                    /*
+                                    Следует ли сохранять обратный стек и состояние всех пунктов
+                                    назначения между текущим пунктом назначения и идентификатором
+                                    NavOptionsBuilder.popupto для последующего восстановления с помощью
+                                    NavOptionsBuilder.restoreState или атрибута restoreState с использованием того
+                                    же идентификатора NavOptionsBuilder.popupto (примечание: этот соответствующий идентификатор
+                                    имеет значение true независимо от того, является ли значение true или false).
+                                     */
+                                    //saveState = true
+                                //}
+
+                                /*
+                                Должно ли это действие навигации запускаться как одиночное верхнее
+                                (т.е. в верхней части заднего стека будет не более одной копии
+                                данного пункта назначения). Это работает аналогично тому,
+                                как работает android.content.Намерение.FLAG_ACTIVITY_SINGLE_TOP
+                                работает с действиями.
+                                 */
+                                //launchSingleTop = true
+
+                                /*
+                                Должно ли это действие навигации восстанавливать какое-либо состояние,
+                                ранее сохраненное с помощью всплывающего окна Builder.savestate или
+                                атрибута popUpToSaveState. Если ранее ни одно состояние не было сохранено
+                                с переходом по идентификатору назначения, это не имеет никакого эффекта.
+                                 */
+                                //restoreState = true
+                            }
                         }
+
                     }, icon = {
 
                     }, label = {
-                        Text(lineHeight = 20.sp,
+                        Text(
+                            lineHeight = 20.sp,
                             text = stringResource(id = value.stringId),
-                            color = if (isSelected) Color.Gray else Color.Black)
+                            color = if (isSelected) Color.Gray else Color.Black
+                        )
                     })
                 }
             }
         }
     ) {
-        NavHost(navController = navController, startDestination = Screens.Home.route, modifier = Modifier.padding(it)) {
+        NavHost(
+            navController = navController,
+            startDestination = Screens.Home.route,
+            modifier = Modifier.padding(it)
+        ) {
             composable(Screens.Home.route) {
                 val viewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(viewModel = viewModel, navController = navController)
             }
-            composable(Routes.Hero.route+"/{id}"){ navBackStack ->
+            composable(Routes.Hero.route + "/{id}") { navBackStack ->
                 val viewModel = hiltViewModel<HeroesListViewModel>()
                 val id = navBackStack.arguments?.getString("id").toString()
-                   HeroScreen(id,viewModel,navController)
+                HeroScreen(id, viewModel, navController)
             }
             composable(Screens.Dashboard.route) { Text("Dashboard") }
             composable(Screens.Notifications.route) { Text("Notifications") }

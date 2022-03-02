@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
 sealed class Screens(val route: String, val stringId: Int) {
     object Home : Screens("home", R.string.title_home)
     object Hero : Screens("hero", R.string.title_hero)
+    object Attr : Screens("hero", R.string.title_hero)
     object Dashboard : Screens("dashboard", R.string.title_dashboard)
     object Notifications : Screens("notifications", R.string.title_notifications)
 }

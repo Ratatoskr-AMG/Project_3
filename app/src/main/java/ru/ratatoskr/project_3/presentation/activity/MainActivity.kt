@@ -1,16 +1,19 @@
 /*
-Модуль клиент +
-Карточка героя +
-Размер картинок +
-Карточка атрибута
-"Двойное нажатие" в навигации
-Перенос расчётов артибутов
-Избранные герои вместо Dashboard
-Профиль вместо Notifications
-> Архитектура (репозитории юзкейсы и тд)
-> Карьера программиста крэкинг зэ пот
-> Java Concurrency in Practiсe
-> Дизайн
+Задачи
+    Модуль клиент +
+    Карточка героя +
+    Размер картинок +
+    "Двойное нажатие" в навигации +
+    Карточка атрибута
+    Перенос расчётов артибутов
+    Избранные герои вместо Dashboard
+    Профиль вместо Notifications
+    Дизайн
+К консультации:
+    Архитектура (репозитории, юзкейсы и т.д.)
+Книги:
+    Карьера программиста крэкинг зэ пот
+    Java Concurrency in Practiсe
 */
 
 package ru.ratatoskr.project_3.presentation.activity
@@ -78,6 +81,7 @@ class MainActivity : AppCompatActivity() {
 sealed class Screens(val route: String, val stringId: Int) {
     object Home : Screens("home", R.string.title_home)
     object Hero : Screens("hero", R.string.title_hero)
+    object Attr : Screens("hero", R.string.title_hero)
     object Dashboard : Screens("dashboard", R.string.title_dashboard)
     object Notifications : Screens("notifications", R.string.title_notifications)
 }

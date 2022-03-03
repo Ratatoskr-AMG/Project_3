@@ -1,8 +1,6 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,11 +8,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
-import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
-import ru.ratatoskr.project_3.domain.model.Hero
 import javax.inject.Inject
 
 //Dagger - viewModelStore

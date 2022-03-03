@@ -19,7 +19,6 @@
 package ru.ratatoskr.project_3.presentation.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -32,7 +31,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -41,16 +39,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
-import ru.ratatoskr.project_3.data.impl.HeroesRepoImpl
-import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.composable.MyComposable
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel

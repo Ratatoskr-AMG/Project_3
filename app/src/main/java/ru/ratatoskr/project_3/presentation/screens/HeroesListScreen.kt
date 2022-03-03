@@ -1,6 +1,5 @@
 package ru.ratatoskr.project_3.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,7 +49,7 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.getAllHeroes()
+        viewModel.getAllHeroesByName()
     })
 }
 

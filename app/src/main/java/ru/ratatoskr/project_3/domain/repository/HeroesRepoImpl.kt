@@ -1,14 +1,8 @@
-package ru.ratatoskr.project_3.data.impl
+package ru.ratatoskr.project_3.domain.repository
 
-import android.content.Context
 import android.util.Log
 import io.ktor.client.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.features.json.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import ru.ratatoskr.project_3.data.remote.implementations.HeroesProvider
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import java.lang.Exception
@@ -36,9 +30,7 @@ class HeroesRepoImpl @Inject constructor(
             heroes.map {
                 it.img = "https://cdn.dota2.com${it.img}"
                 it.icon = "https://cdn.dota2.com${it.icon}"
-                //withContext(Dispatchers.IO) {
-                    roomAppDatabase.heroesDao().insertHero(it)
-               // }
+                roomAppDatabase.heroesDao().insertHero(it)
                 it
             }
         } catch (e: Exception) {
@@ -48,7 +40,6 @@ class HeroesRepoImpl @Inject constructor(
     }
 
     fun getAllHeroesListFromDB(): List<Hero> {
-
         return roomAppDatabase.heroesDao().all
     }
 

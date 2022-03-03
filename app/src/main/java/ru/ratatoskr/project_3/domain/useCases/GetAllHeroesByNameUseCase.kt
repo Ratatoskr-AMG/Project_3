@@ -1,9 +1,10 @@
 package ru.ratatoskr.project_3.domain.useCases
 
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 
-class GetAllHeroesByNameUseCase {
-    fun getAllHeroesByName(): List<Hero>{
-        TODO()
+class GetAllHeroesByNameUseCase (private val HeroesRepository: HeroesRepoImpl) {
+    suspend fun getAllHeroesByName(): List<Hero>{
+        return HeroesRepository.getAllHeroesListFromAPI()
     }
 }

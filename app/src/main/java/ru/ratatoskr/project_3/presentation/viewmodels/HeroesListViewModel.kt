@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.useCases.GetAllHeroesByNameUseCase
 import javax.inject.Inject
 
 //Dagger - viewModelStore
@@ -25,7 +26,9 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //withContext() {
-                    val heroes = repository.getAllHeroesListFromDB()
+                    //val heroes = repository.getAllHeroesListFromDB()
+                    val heroes = GetAllHeroesByNameUseCase(repository).getAllHeroesByName()
+
                     if (heroes.isEmpty()) {
                         //withContext(Dispatchers.Main) {
                             state.postValue(State.NoItemsState())

@@ -22,7 +22,6 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : 
         state.set(State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                //val heroesAPI = GetAllHeroesFromApiUseCase(repository).getAllHeroesFromApi()
                 val heroes = GetAllHeroesByNameUseCase(repository).getAllHeroesByName()
                 if (heroes.isEmpty()) {
                     state.postValue(State.NoItemsState())
@@ -34,7 +33,6 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : 
             }
         }
     }
-
     suspend fun getAllHeroesFromApi() {
         state.set(State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
@@ -50,7 +48,7 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : 
             }
         }
     }
-    suspend fun getHeroById(id: String) {
+    fun getHeroById(id: String) {
         state.set(newValue = State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {

@@ -49,6 +49,7 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
+        //viewModel.getAllHeroesFromApi()
         viewModel.getAllHeroesByName()
     })
 }

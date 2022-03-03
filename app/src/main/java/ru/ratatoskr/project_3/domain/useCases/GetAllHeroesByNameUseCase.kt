@@ -4,7 +4,7 @@ import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 
 class GetAllHeroesByNameUseCase (private val HeroesRepository: HeroesRepoImpl) {
-    suspend fun getAllHeroesByName(): List<Hero>{
-        return HeroesRepository.getAllHeroesListFromAPI()
+    fun getAllHeroesByName(): List<Hero>{
+        return HeroesRepository.getAllHeroesListFromDB()
     }
 }

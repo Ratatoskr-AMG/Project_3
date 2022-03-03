@@ -30,9 +30,7 @@ class HeroesRepoImpl @Inject constructor(
             heroes.map {
                 it.img = "https://cdn.dota2.com${it.img}"
                 it.icon = "https://cdn.dota2.com${it.icon}"
-                //withContext(Dispatchers.IO) {
-                    roomAppDatabase.heroesDao().insertHero(it)
-               // }
+                roomAppDatabase.heroesDao().insertHero(it)
                 it
             }
         } catch (e: Exception) {
@@ -42,7 +40,6 @@ class HeroesRepoImpl @Inject constructor(
     }
 
     fun getAllHeroesListFromDB(): List<Hero> {
-
         return roomAppDatabase.heroesDao().all
     }
 

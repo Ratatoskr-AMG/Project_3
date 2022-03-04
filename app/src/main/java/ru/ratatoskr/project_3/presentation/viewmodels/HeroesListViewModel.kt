@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.model.Attributes
+import ru.ratatoskr.project_3.domain.useCases.GetAllHeroesByAttrUseCase
 import ru.ratatoskr.project_3.domain.useCases.GetAllHeroesByNameUseCase
 import ru.ratatoskr.project_3.domain.useCases.GetAllHeroesFromApiUseCase
 import ru.ratatoskr.project_3.domain.useCases.GetHeroByIdUseCase
@@ -57,6 +59,22 @@ class HeroesListViewModel @Inject constructor(val repository: HeroesRepoImpl) : 
                     state.postValue(State.NoItemsState())
                 } else {
                     state.postValue(State.HeroLoadedState(data = hero))
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getAllHeroesByAttr(attr: String) {
+        state.set(newValue = State.LoadingState())
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val heroes = GetAllHeroesByAttrUseCase(repository).getAllHeroesByAttr(attr)
+                if (heroes.isEmpty()) {
+                    state.postValue(State.NoItemsState())
+                } else {
+                    state.postValue(State.LoadedState(data = heroes))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

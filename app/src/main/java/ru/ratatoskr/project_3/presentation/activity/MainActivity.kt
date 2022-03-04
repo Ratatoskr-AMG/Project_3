@@ -1,11 +1,11 @@
 /*
-Задачи
+    ::AG
     Модуль клиент +
     Карточка героя +
     Размер картинок +
     "Двойное нажатие" в навигации +
-    Карточка атрибута
-    Перенос расчётов артибутов
+    Карточка атрибута +
+    Перенос расчётов артибутов +-
     Избранные герои вместо Dashboard
     Профиль вместо Notifications
     Дизайн
@@ -45,6 +45,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.domain.model.Attributes
+import ru.ratatoskr.project_3.presentation.screens.AttributeListView
+import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
@@ -75,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 sealed class Screens(val route: String, val stringId: Int) {
     object Home : Screens("home", R.string.title_home)
     object Hero : Screens("hero", R.string.title_hero)
-    object Attr : Screens("hero", R.string.title_hero)
+    object Attr : Screens("attr", R.string.title_hero)
     object Dashboard : Screens("dashboard", R.string.title_dashboard)
     object Notifications : Screens("notifications", R.string.title_notifications)
 }
@@ -164,10 +167,15 @@ fun MainScreen(parentNavController: NavController) {
                 val viewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(viewModel = viewModel, navController = navController)
             }
-            composable(Routes.Hero.route + "/{id}") { navBackStack ->
+            composable(Screens.Hero.route + "/{id}") { navBackStack ->
                 val viewModel = hiltViewModel<HeroesListViewModel>()
                 val id = navBackStack.arguments?.getString("id").toString()
                 HeroScreen(id, viewModel, navController)
+            }
+            composable(Screens.Attr.route + "/{attr}") { navBackStack ->
+                val viewModel = hiltViewModel<HeroesListViewModel>()
+                val attr = navBackStack.arguments?.getString("attr")
+                AttributeScreen(attr!!,viewModel, navController)
             }
             composable(Screens.Dashboard.route) { Text("Dashboard") }
             composable(Screens.Notifications.route) { Text("Notifications") }

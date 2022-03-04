@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +25,7 @@ import coil.compose.rememberImagePainter
 
 import kotlinx.serialization.json.Json
 import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.model.Attributes
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
@@ -38,7 +40,7 @@ fun HeroesListScreen(
     val viewState = viewModel.state.observeAsState()
 
     when (val state = viewState.value) {
-        is State.LoadedState<*> -> HeroesListView(state.data,navController) {
+        is State.LoadedState<*> -> HeroesListView(state.data, navController) {
             val json = Json {
                 ignoreUnknownKeys = true
             }
@@ -49,8 +51,13 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        //viewModel.getAllHeroesFromApi()
+        val downloadFirst = false
+
+        if (downloadFirst == true) {
+            viewModel.getAllHeroesFromApi()
+        }
         viewModel.getAllHeroesByName()
+
     })
 }
 
@@ -81,14 +88,16 @@ fun HeroesListView(data: List<Any?>, navController: NavController, onHeroClick: 
 
 
     LazyVerticalGrid(
-        modifier = Modifier.fillMaxSize().background(
-            brush = Brush.verticalGradient(
-                colors = listOf(
-                    Color.Black,
-                    Color.DarkGray
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
                 )
-            )
-        ),
+            ),
         cells = GridCells.Fixed(count = 4),
         content = {
             heroes.forEach {
@@ -96,13 +105,15 @@ fun HeroesListView(data: List<Any?>, navController: NavController, onHeroClick: 
                     Box(modifier = Modifier
                         .clickable {
                             onHeroClick.invoke(it)
-                            navController.navigate(Screens.Hero.route+"/"+it.id)
+                            navController.navigate(Screens.Hero.route + "/" + it.id)
                         }
                         .padding(10.dp)
                         .width(100.dp)
                         .height(60.dp)) {
                         Image(
-                            modifier = Modifier.width(100.dp).height(60.dp),
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(60.dp),
                             painter = rememberImagePainter(it.icon),
                             contentDescription = it.name
                         )
@@ -110,6 +121,5 @@ fun HeroesListView(data: List<Any?>, navController: NavController, onHeroClick: 
                 }
             }
         })
-
 
 }

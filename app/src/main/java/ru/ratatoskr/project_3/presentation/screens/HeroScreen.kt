@@ -1,8 +1,15 @@
+/*
+::AG
+Создать новый репозиторий
+UseCase, который объединяет два репозитория
+ */
+
 package ru.ratatoskr.project_3.presentation.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
@@ -20,8 +27,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import ru.ratatoskr.project_3.data.contracts.HeroesContract
 import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.model.Attributes
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import java.math.BigDecimal
 import java.math.MathContext
@@ -34,7 +44,7 @@ fun HeroScreen(id: String, viewModel: HeroesListViewModel, navController: NavCon
     val viewState = viewModel.state.observeAsState()
 
     when (val state = viewState.value) {
-        is State.HeroLoadedState<*> -> HeroView(state.data as Hero)
+        is State.HeroLoadedState<*> -> HeroView(state.data as Hero, navController)
         is State.NoItemsState -> NoHeroesView()
         is State.LoadingState -> LoadingHeroesView()
         is State.ErrorState -> NoHeroesView()
@@ -50,32 +60,7 @@ fun HeroScreen(id: String, viewModel: HeroesListViewModel, navController: NavCon
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroView(hero: Hero) {
-
-    val strHealhMultiplier = 20;
-    val strHealhRegenMultiplier = 0.1;
-    val intManaMultiplier = 12;
-    val intManaRegenMultiplier = 0.05;
-    val agiArmorMultiplier = 0.167;
-
-    /*
-    Создать новый репозиторий
-    UseCase, который объединяет два репозитория
-     */
-
-    val mathContext = MathContext(200, RoundingMode.HALF_DOWN)
-    var healthRegen =
-        BigDecimal(((hero.baseStr) * strHealhRegenMultiplier) + hero.baseHealthRegen, mathContext)
-    var manaRegen =
-        BigDecimal(((hero.baseInt) * intManaRegenMultiplier) + hero.baseManaRegen, mathContext)
-    var armor =
-        BigDecimal(((hero.baseAgi) * agiArmorMultiplier) + hero.baseArmor, mathContext)
-
-    healthRegen = healthRegen.setScale(1, BigDecimal.ROUND_HALF_DOWN)
-    manaRegen = manaRegen.setScale(1, BigDecimal.ROUND_HALF_DOWN)
-    armor = armor.setScale(1, BigDecimal.ROUND_HALF_DOWN)
-
-    //var basehealthRegen = (hero.baseHealthRegen+((hero.baseStr)*strHealhRegenMultiplier)).roundToLong()
+fun HeroView(hero: Hero, navController: NavController) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
         stickyHeader {
@@ -161,58 +146,137 @@ fun HeroView(hero: Hero) {
         }
         item {
             attributeRow(
+                "baseHealth",
                 "Health",
-                (hero.baseHealth + hero.baseStr * strHealhMultiplier).toString()
+                hero.baseHealth.toString(), navController
             )
         }
         item {
             attributeRow(
+                "baseMana",
                 "Mana",
-                (hero.baseMana + hero.baseInt * intManaMultiplier).toString()
+                hero.baseMana.toString(), navController
             )
         }
-        //item { attributeRow("Health Regen", "+"+healthRegen.toString()) } не всегда совпадает с оригиналом
-        //item { attributeRow("Mana Regen", "+"+manaRegen.toString()) } не всегда совпадает с оригиналом
-        item { attributeRow("Magic Resistance", hero.baseMr.toString()+"%")}
-        item { attributeRow("Armor", armor.toString()) }
+
+        item {
+            attributeRow(
+                "baseHealthRegen",
+                "Health Regen",
+                "+" + hero.baseHealthRegen.toString(),
+                navController
+            )
+        }
+        item { attributeRow("baseManaRegen", "Mana Regen", "+" + hero.baseManaRegen.toString(), navController) }
+        item { attributeRow("baseArmor", "Armor", hero.baseArmor.toString(), navController) }
+        item {
+            attributeRow(
+                "baseMr",
+                "Magic Resistance",
+                hero.baseMr.toString() + "%",
+                navController
+            )
+        }
+
         /*
         item { attributeRow("baseAttackMin", hero.baseAttackMin.toString()) }
         item { attributeRow("baseAttackMax", hero.baseAttackMax.toString()) }
         */
-        item { attributeRow("Base Strength", hero.baseStr.toString()) }
-        item { attributeRow("Base Agility", hero.baseAgi.toString()) }
-        item { attributeRow("Base Intelligence", hero.baseInt.toString()) }
-        item { attributeRow("Strength gain", "+"+hero.strGain.toString()) }
-        item { attributeRow("Agility gain", "+"+hero.agiGain.toString()) }
-        item { attributeRow("Intelligence gain", "+"+hero.intGain.toString()) }
-        item { attributeRow("Attack range", hero.attackRange.toString()) }
-        if(hero.projectileSpeed>0)
-        item { attributeRow("Projectile speed", hero.projectileSpeed.toString()) }
-        item { attributeRow("Attack rate", hero.attackRate.toString()) }
-        item { attributeRow("Move speed", hero.moveSpeed.toString()) }
-        item { attributeRow("Captains mode enabled", hero.cmEnabled.toString()) }
-        item { attributeRow("Legs", hero.legs.toString()) }
-        item { attributeRow("Turbo picks", hero.turboPicks.toString()) }
-        item { attributeRow("Turbo wins", hero.turboWins.toString()) }
-        item { attributeRow("Pro bans", hero.proBan.toString()) }
-        item { attributeRow("Pro wins", hero.proWin.toString()) }
-        item { attributeRow("Pro picks", hero.proPick.toString()) }
-        item { attributeRow("Herald picks", hero._1Pick.toString()) }
-        item { attributeRow("Herald wins", hero._1Win.toString()) }
-        item { attributeRow("Guardian picks", hero._2Pick.toString()) }
-        item { attributeRow("Guardian wins", hero._2Win.toString()) }
-        item { attributeRow("Crusader picks", hero._3Pick.toString()) }
-        item { attributeRow("Crusader wins", hero._3Win.toString()) }
-        item { attributeRow("Archon picks", hero._4Pick.toString()) }
-        item { attributeRow("Archon wins", hero._4Win.toString()) }
-        item { attributeRow("Legend picks", hero._5Pick.toString()) }
-        item { attributeRow("Legend wins", hero._5Win.toString()) }
-        item { attributeRow("Ancient picks", hero._6Pick.toString()) }
-        item { attributeRow("Ancient wins", hero._6Win.toString()) }
-        item { attributeRow("Divine picks", hero._7Pick.toString()) }
-        item { attributeRow("Divine wins", hero._7Win.toString()) }
-        item { attributeRow("Immortal picks", hero._8Pick.toString()) }
-        item { attributeRow("Immortal  wins", hero._8Win.toString()) }
+
+        item { attributeRow("baseStr", "Base Strength", hero.baseStr.toString(), navController) }
+        item { attributeRow("baseAgi", "Base Agility", hero.baseAgi.toString(), navController) }
+        item {
+            attributeRow(
+                "baseInt",
+                "Base Intelligence",
+                hero.baseInt.toString(),
+                navController
+            )
+        }
+        item {
+            attributeRow(
+                "strGain",
+                "Strength gain",
+                "+" + hero.strGain.toString(),
+                navController
+            )
+        }
+        item {
+            attributeRow(
+                "agiGain",
+                "Agility gain",
+                "+" + hero.agiGain.toString(),
+                navController
+            )
+        }
+        item {
+            attributeRow(
+                "intGain",
+                "Intelligence gain",
+                "+" + hero.intGain.toString(),
+                navController
+            )
+        }
+        item {
+            attributeRow(
+                "attackRange",
+                "Attack range",
+                hero.attackRange.toString(),
+                navController
+            )
+        }
+
+        if (hero.projectileSpeed > 0)
+
+            item {
+                attributeRow(
+                    "projectileSpeed",
+                    "Projectile speed",
+                    hero.projectileSpeed.toString(),
+                    navController
+                )
+            }
+
+
+        item {
+            attributeRow(
+                "attackRate",
+                "Attack rate",
+                hero.attackRate.toString(),
+                navController
+            )
+        }
+        item { attributeRow("moveSpeed", "Move speed", hero.moveSpeed.toString(), navController) }
+        item { attributeRow("cmEnabled", "Captains mode enabled", hero.cmEnabled, navController) }
+        item { attributeRow("legs", "Legs", hero.legs.toString(), navController) }
+        item {
+            attributeRow(
+                "turboPicks",
+                "Turbo picks",
+                hero.turboPicks.toString(),
+                navController
+            )
+        }
+        item { attributeRow("turboWins", "Turbo wins", hero.turboWins.toString(), navController) }
+        item { attributeRow("proBan", "Pro bans", hero.proBan.toString(), navController) }
+        item { attributeRow("proWin", "Pro wins", hero.proWin.toString(), navController) }
+        item { attributeRow("proPick", "Pro picks", hero.proPick.toString(), navController) }
+        item { attributeRow("_1Pick", "Herald picks", hero._1Pick.toString(), navController) }
+        item { attributeRow("_1Win", "Herald wins", hero._1Win.toString(), navController) }
+        item { attributeRow("_2Pick", "Guardian picks", hero._2Pick.toString(), navController) }
+        item { attributeRow("_2Win", "Guardian wins", hero._2Win.toString(), navController) }
+        item { attributeRow("_3Pick", "Crusader picks", hero._3Pick.toString(), navController) }
+        item { attributeRow("_3Win", "Crusader wins", hero._3Win.toString(), navController) }
+        item { attributeRow("_4Pick", "Archon picks", hero._4Pick.toString(), navController) }
+        item { attributeRow("_4Win", "Archon wins", hero._4Win.toString(), navController) }
+        item { attributeRow("_5Pick", "Legend picks", hero._5Pick.toString(), navController) }
+        item { attributeRow("_5Win", "Legend wins", hero._5Win.toString(), navController) }
+        item { attributeRow("_6Pick", "Ancient picks", hero._6Pick.toString(), navController) }
+        item { attributeRow("_6Win", "Ancient wins", hero._6Win.toString(), navController) }
+        item { attributeRow("_7Pick", "Divine picks", hero._7Pick.toString(), navController) }
+        item { attributeRow("_7Win", "Divine wins", hero._7Win.toString(), navController) }
+        item { attributeRow("_8Pick", "Immortal picks", hero._8Pick.toString(), navController) }
+        item { attributeRow("_8Win", "Immortal  wins", hero._8Win.toString(), navController) }
 
     }
 
@@ -220,7 +284,7 @@ fun HeroView(hero: Hero) {
 
 
 @Composable
-fun attributeRow(name: String, value: String) {
+fun attributeRow(column: String, name: String, value: String, navController: NavController) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -228,6 +292,9 @@ fun attributeRow(name: String, value: String) {
             .height(40.dp)
             .padding(10.dp)
             .background(Color.Black)
+            .clickable {
+                navController.navigate(Screens.Attr.route + "/" + column)
+            }
     ) {
         Text(color = Color.White, text = name)
         Text(color = Color.White, text = value)

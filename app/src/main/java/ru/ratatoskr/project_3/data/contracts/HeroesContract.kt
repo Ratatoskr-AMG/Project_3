@@ -7,9 +7,6 @@ class HeroesContract {
         const val databaseApp = "heroes"
         const val COLUMN_LOCALIZED_NAME = "localizedName"
         const val HEROES_TABLE_NAME = "heroes"
-        const val fetchHeroes = "SELECT * FROM " + HEROES_TABLE_NAME + " ORDER BY "+COLUMN_LOCALIZED_NAME+" ASC"
-        const val fetchHero =
-            "SELECT * FROM " + HEROES_TABLE_NAME + " WHERE id = :heroId"
         const val COLUMN_ID = "id"
         const val COLUMN_NAME = "name"
         const val COLUMN_PRIMARY_ATTR = "primaryAttr"
@@ -65,7 +62,11 @@ class HeroesContract {
         const val TYPE_TEXT = "TEXT"
         const val TYPE_INTEGER = "INTEGER"
         const val TYPE_REAL = "REAL"
-        const val DROP_COMMAND = "DROP TABLE IF EXISTS " + HEROES_TABLE_NAME
+        const val fetchHeroes =
+            "SELECT * FROM $HEROES_TABLE_NAME ORDER BY $COLUMN_LOCALIZED_NAME ASC"
+        const val fetchHero = "SELECT * FROM $HEROES_TABLE_NAME WHERE id = :heroId"
+        const val fetchHeroesByAttr = "SELECT * FROM $HEROES_TABLE_NAME ORDER BY :attr DESC"
+        const val DROP_COMMAND = "DROP TABLE IF EXISTS $HEROES_TABLE_NAME"
         const val CREATE_COMMAND =
             "CREATE TABLE IF NOT EXISTS $HEROES_TABLE_NAME ($COLUMN_ID $TYPE_INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_NAME $TYPE_TEXT, " +

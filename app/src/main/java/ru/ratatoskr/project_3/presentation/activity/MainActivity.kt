@@ -1,7 +1,3 @@
-/*
-
-*/
-
 package ru.ratatoskr.project_3.presentation.activity
 
 import android.os.Bundle
@@ -59,8 +55,8 @@ sealed class Screens(val route: String, val stringId: Int) {
     object Home : Screens("home", R.string.title_home)
     object Hero : Screens("hero", R.string.title_hero)
     object Attr : Screens("attr", R.string.title_hero)
-    object Dashboard : Screens("dashboard", R.string.title_dashboard)
-    object Notifications : Screens("notifications", R.string.title_notifications)
+    object Dashboard : Screens("favorites", R.string.title_favorites)
+    object Notifications : Screens("profile", R.string.title_profile)
 }
 
 @ExperimentalFoundationApi

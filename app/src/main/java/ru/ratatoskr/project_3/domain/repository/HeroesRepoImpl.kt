@@ -59,7 +59,7 @@ class HeroesRepoImpl @Inject constructor(
                     mathContext
                 ).setScale(1, BigDecimal.ROUND_HALF_DOWN).toDouble()
 
-                roomAppDatabase.heroesDao().insertHero(it)
+                //roomAppDatabase.heroesDao().insertHero(it)
                 it
             }
         } catch (e: Exception) {

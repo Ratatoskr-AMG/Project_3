@@ -3,6 +3,7 @@ package ru.ratatoskr.project_3.presentation.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -21,6 +22,7 @@ import coil.compose.rememberImagePainter
 import kotlinx.serialization.json.Json
 import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @ExperimentalFoundationApi
@@ -130,6 +132,10 @@ fun AttributeListView(
                                 .height(60.dp)
                                 .padding(1.dp)
                                 .background(Color.Black)
+                                .clickable {
+                                    onHeroClick.invoke(it)
+                                    navController.navigate(Screens.Hero.route + "/" + it.id)
+                                }
                         ) {
                             Image(
                                 modifier = Modifier

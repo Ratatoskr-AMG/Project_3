@@ -11,6 +11,7 @@ import ru.ratatoskr.project_3.domain.model.Hero
 abstract class RoomAppDatabase : RoomDatabase() {
 
     abstract fun heroesDao(): HeroesDao
+    abstract fun favoritesDao(): FavoritesDao
 
     companion object {
 

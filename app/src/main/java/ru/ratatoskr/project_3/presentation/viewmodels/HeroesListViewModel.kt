@@ -45,7 +45,6 @@ class HeroesListViewModel @Inject constructor(
         state.set(State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                //val heroes = GetAllHeroesFromOpendotaUseCase(opendotaRepoImpl).getAllHeroesFromApi()
                 val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
                 if (heroes.isEmpty()) {
                     state.postValue(State.NoItemsState())

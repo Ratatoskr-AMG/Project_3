@@ -18,8 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeroesListViewModel @Inject constructor(
-    val localRepoImpl: HeroesSqliteRepoImpl,
-    val opendotaRepoImpl: HeroesOpendotaRepoImpl,
+    val getAllHeroesByNameUseCase: GetAllHeroesByNameUseCase,
+    val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
+    val getHeroByIdUseCase: GetHeroByIdUseCase,
+    val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
 ) : ViewModel() {
     val state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
 
@@ -27,7 +29,7 @@ class HeroesListViewModel @Inject constructor(
         state.set(State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = GetAllHeroesByNameUseCase(localRepoImpl).getAllHeroesByName()
+                val heroes = getAllHeroesByNameUseCase.getAllHeroesByName()
                 if (heroes.isEmpty()) {
                     state.postValue(State.NoItemsState())
                 } else {
@@ -38,11 +40,12 @@ class HeroesListViewModel @Inject constructor(
             }
         }
     }
+
     suspend fun getAllHeroesFromApi() {
         state.set(State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = GetAllHeroesFromOpendotaUseCase(opendotaRepoImpl).getAllHeroesFromApi()
+                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
                 if (heroes.isEmpty()) {
                     state.postValue(State.NoItemsState())
                 } else {
@@ -57,7 +60,7 @@ class HeroesListViewModel @Inject constructor(
         state.set(newValue = State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val hero = GetHeroByIdUseCase(localRepoImpl).GetHeroById(id)
+                val hero = getHeroByIdUseCase.GetHeroById(id)
                 if (hero.id < 1) {
                     state.postValue(State.NoItemsState())
                 } else {
@@ -73,7 +76,7 @@ class HeroesListViewModel @Inject constructor(
         state.set(newValue = State.LoadingState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = GetAllHeroesByAttrUseCase(localRepoImpl).getAllHeroesByAttr(attr)
+                val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr)
                 if (heroes.isEmpty()) {
                     state.postValue(State.NoItemsState())
                 } else {

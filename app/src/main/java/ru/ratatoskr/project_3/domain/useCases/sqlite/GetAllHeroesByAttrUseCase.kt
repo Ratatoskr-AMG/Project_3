@@ -4,12 +4,15 @@ import android.util.Log
 import ru.ratatoskr.project_3.domain.extensions.toArrayList
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.repository.heroes.HeroesSqliteRepoImpl
+import javax.inject.Inject
 import kotlin.reflect.full.memberProperties
 
 
-class GetAllHeroesByAttrUseCase(private val heroesRepository: HeroesSqliteRepoImpl) {
+class GetAllHeroesByAttrUseCase @Inject constructor(
+    val localRepoImpl: HeroesSqliteRepoImpl
+) {
     fun getAllHeroesByAttr(attr: String): List<Hero> {
-        var heroes = heroesRepository.getAllHeroesListFromDB().toArrayList()
+        var heroes = localRepoImpl.getAllHeroesListFromDB().toArrayList()
 
         return when (attr) {
             "legs" -> heroes.sortedByDescending { it.legs }

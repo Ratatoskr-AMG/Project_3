@@ -12,7 +12,7 @@ package ru.ratatoskr.project_3.domain
     Карточка атрибута +
     Перенос расчётов артибутов +-
     Расчёты в UseCase +
-    Репозиторий во viewModel через UseCase
+    Репозиторий во viewModel через UseCase +
     Избранные герои вместо Dashboard
     Профиль вместо Notifications
     Дизайн

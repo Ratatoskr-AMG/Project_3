@@ -9,7 +9,6 @@ import javax.inject.Inject
 
 class HeroesSqliteRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
-    private val client: HttpClient
 ) {
 
     fun getAllHeroesListFromDB(): List<Hero> {

@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
-import ru.ratatoskr.project_3.domain.repository.heroes.HeroesLocalRepoImpl
+import ru.ratatoskr.project_3.domain.repository.heroes.HeroesSqliteRepoImpl
 import ru.ratatoskr.project_3.domain.repository.heroes.HeroesOpendotaRepoImpl
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByAttrUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByNameUseCase
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeroesListViewModel @Inject constructor(
-    val localRepoImpl: HeroesLocalRepoImpl,
+    val localRepoImpl: HeroesSqliteRepoImpl,
     val opendotaRepoImpl: HeroesOpendotaRepoImpl,
 ) : ViewModel() {
     val state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())

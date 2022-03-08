@@ -18,14 +18,10 @@ import ru.ratatoskr.project_3.domain.useCases.calculations.BasicIndicatorsUseCas
 import java.lang.Exception
 import javax.inject.Inject
 
-/* Отдел по работе с нашими западными партнёрами (НЗП) */
-
 class HeroesOpendotaRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
     private val client: HttpClient
 ) {
-
-    /* Колцентр (HttpClient) */
 
     suspend fun getAllHeroesListFromAPI(): List<Hero> {
 

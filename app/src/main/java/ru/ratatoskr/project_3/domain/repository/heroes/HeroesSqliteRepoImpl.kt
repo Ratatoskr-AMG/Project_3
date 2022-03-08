@@ -7,8 +7,6 @@ import ru.ratatoskr.project_3.domain.model.Hero
 import java.lang.Exception
 import javax.inject.Inject
 
-/* Отдел по работе с резидентами */
-
 class HeroesSqliteRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
     private val client: HttpClient

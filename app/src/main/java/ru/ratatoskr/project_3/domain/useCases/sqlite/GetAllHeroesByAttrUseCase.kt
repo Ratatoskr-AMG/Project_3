@@ -1,15 +1,15 @@
-package ru.ratatoskr.project_3.domain.useCases
+package ru.ratatoskr.project_3.domain.useCases.sqlite
 
 import android.util.Log
 import ru.ratatoskr.project_3.domain.extensions.toArrayList
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
+import ru.ratatoskr.project_3.domain.repository.heroes.HeroesLocalRepoImpl
 import kotlin.reflect.full.memberProperties
 
 
-class GetAllHeroesByAttrUseCase(private val HeroesRepository: HeroesRepoImpl) {
+class GetAllHeroesByAttrUseCase(private val heroesRepository: HeroesLocalRepoImpl) {
     fun getAllHeroesByAttr(attr: String): List<Hero> {
-        var heroes = HeroesRepository.getAllHeroesListFromDB().toArrayList()
+        var heroes = heroesRepository.getAllHeroesListFromDB().toArrayList()
 
             Log.e("TOHA",attr)
 

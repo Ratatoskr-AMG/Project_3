@@ -16,7 +16,12 @@ package ru.ratatoskr.project_3.domain
     Избранные герои вместо Dashboard
     Профиль вместо Notifications
     Дизайн
-
+    чувствительные данные (пароль)
+    как передавать пароль (md5 не вариант)
+    как обойти кражу мобилы
+    как обойти снифферы (трафик может быть прослушан)
+    UseCase может объединять два репозитория
+*
     https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
     https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
 

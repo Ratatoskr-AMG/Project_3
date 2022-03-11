@@ -32,6 +32,8 @@ import ru.ratatoskr.project_3.presentation.screens.AttributeListView
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
+import ru.ratatoskr.project_3.presentation.viewmodels.FavoriteEvent
+import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @AndroidEntryPoint
@@ -144,14 +146,27 @@ fun MainScreen(parentNavController: NavController) {
                 HeroesListScreen(viewModel = viewModel, navController = navController)
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
-                val viewModel = hiltViewModel<HeroesListViewModel>()
+                val viewModel = hiltViewModel<HeroViewModel>()
                 val id = navBackStack.arguments?.getString("id").toString()
-                HeroScreen(id, viewModel, navController)
+                HeroScreen(
+                    id,
+                    viewModel,
+                    navController,
+                    onCheckedChange = { id,
+                                        isChecked ->
+                        viewModel.obtainEvent(
+                            FavoriteEvent.OnHabitClick(
+                                id,
+                                false
+                            )
+                        )
+
+                    })
             }
             composable(Screens.Attr.route + "/{attr}") { navBackStack ->
                 val viewModel = hiltViewModel<HeroesListViewModel>()
                 val attr = navBackStack.arguments?.getString("attr")
-                AttributeScreen(attr!!,viewModel, navController)
+                AttributeScreen(attr!!, viewModel, navController)
             }
             composable(Screens.Dashboard.route) { Text("Dashboard") }
             composable(Screens.Notifications.route) { Text("Notifications") }

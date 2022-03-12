@@ -20,17 +20,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import ru.ratatoskr.project_3.data.contracts.HeroesContract
+import ru.ratatoskr.project_3.domain.helpers.FavoriteState
 import ru.ratatoskr.project_3.domain.helpers.State
-import ru.ratatoskr.project_3.domain.model.Attributes
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.FavoriteEvent
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
+
 
 @ExperimentalFoundationApi
 @Composable
@@ -47,8 +42,13 @@ fun HeroScreen(
         is State.HeroLoadedState<*> -> HeroView(
             state.data as Hero,
             navController,
-            HeroCardModel(state.data.id, true),
-            onFavoriteChange = { onCheckedChange(state.data.id, true) }
+            viewModel,
+            onFavoriteChange = {
+                onCheckedChange(
+                    state.data.id,
+                    state.isFavorite
+                )
+            }
         )
         is State.NoItemsState -> NoHeroesView()
         is State.LoadingState -> LoadingHeroesView()
@@ -73,10 +73,12 @@ data class HeroCardModel(
 fun HeroView(
     hero: Hero,
     navController: NavController,
-    model: HeroCardModel,
-    onFavoriteChange: ((Boolean) -> Unit)? = null) {
+    model: HeroViewModel,
+    onFavoriteChange: ((Boolean) -> Unit)? = null
+) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
+
         stickyHeader {
             Box(
                 modifier = Modifier
@@ -159,9 +161,15 @@ fun HeroView(
 
         }
 
+        var isChecked =false
+
+        if(model.favorite_state.equals(FavoriteState.Yes())){
+            isChecked=true
+        }
+
         item {
             Checkbox(
-                checked = model.isChecked,
+                checked = isChecked,
                 onCheckedChange = onFavoriteChange,
                 colors = CheckboxDefaults.colors(
                     checkedColor = Color.Blue,

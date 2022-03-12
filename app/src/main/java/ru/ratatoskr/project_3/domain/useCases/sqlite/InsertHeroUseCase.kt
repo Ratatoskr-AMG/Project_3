@@ -13,19 +13,4 @@ class InsertHeroesUseCase @Inject constructor(private val localRepoImpl: HeroesS
         return localRepoImpl.updateSqliteTable(heroes)
     }
 
-    /*
-    suspend fun insert(heroes:List<Hero>) {
-        heroes.map()
-        {
-            Hero ->
-            try {
-                roomAppDatabase.heroesDao().insertHero(Hero)
-            } catch (e: Exception) {
-                Log.e("TOHA", e.message.toString())
-            }
-        }
-    }
-
-     */
-
 }

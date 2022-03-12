@@ -37,10 +37,5 @@ class HeroesOpendotaRepoImpl @Inject constructor(
 
     }
 
-
-    suspend fun getAllHeroesByAttr(attr: String): List<Hero> {
-        Log.e("TOHA", "attr:" + attr)
-        return roomAppDatabase.heroesDao().fetchHeroesByAttr3(attr)
-    }
 }
 

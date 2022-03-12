@@ -26,10 +26,7 @@ class HeroViewModel @Inject constructor(
     override fun obtainEvent(event: FavoriteEvent) {
 
         when (val currentState = _hero_state.value) {
-            is HeroState.Loading -> reduce(event, currentState)
-            is DailyViewState.Display -> reduce(event, currentState)
-            is DailyViewState.Error -> reduce(event, currentState)
-            is DailyViewState.NoItems -> reduce(event, currentState)
+
         }
         Log.e("TOHA","testeg")
     }

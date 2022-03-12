@@ -8,9 +8,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class FavoritesSqliteRepoImpl  @Inject constructor(
-    private val roomAppDatabase: RoomAppDatabase) {
+    ) {
 
-    suspend fun getFavorites(): List<Hero> {
-        return roomAppDatabase.heroesDao().all
-    }
+
 }

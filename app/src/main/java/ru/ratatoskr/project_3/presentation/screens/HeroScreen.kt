@@ -1,9 +1,3 @@
-/*
-::AG
-Создать новый репозиторий
-UseCase, который объединяет два репозитория
- */
-
 package ru.ratatoskr.project_3.presentation.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -12,8 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,6 +25,8 @@ import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.model.Attributes
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
+import ru.ratatoskr.project_3.presentation.viewmodels.FavoriteEvent
+import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import java.math.BigDecimal
 import java.math.MathContext
@@ -39,12 +34,22 @@ import java.math.RoundingMode
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroScreen(id: String, viewModel: HeroesListViewModel, navController: NavController) {
+fun HeroScreen(
+    id: String,
+    viewModel: HeroViewModel,
+    navController: NavController,
+    onCheckedChange: (Int, Boolean) -> Unit
+) {
 
     val viewState = viewModel.state.observeAsState()
 
     when (val state = viewState.value) {
-        is State.HeroLoadedState<*> -> HeroView(state.data as Hero, navController)
+        is State.HeroLoadedState<*> -> HeroView(
+            state.data as Hero,
+            navController,
+            HeroCardModel(state.data.id, true),
+            onFavoriteChange = { onCheckedChange(state.data.id, true) }
+        )
         is State.NoItemsState -> NoHeroesView()
         is State.LoadingState -> LoadingHeroesView()
         is State.ErrorState -> NoHeroesView()
@@ -58,9 +63,18 @@ fun HeroScreen(id: String, viewModel: HeroesListViewModel, navController: NavCon
 
 }
 
+data class HeroCardModel(
+    val heroId: Int,
+    val isChecked: Boolean
+)
+
 @ExperimentalFoundationApi
 @Composable
-fun HeroView(hero: Hero, navController: NavController) {
+fun HeroView(
+    hero: Hero,
+    navController: NavController,
+    model: HeroCardModel,
+    onFavoriteChange: ((Boolean) -> Unit)? = null) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
         stickyHeader {
@@ -144,6 +158,18 @@ fun HeroView(hero: Hero, navController: NavController) {
             }
 
         }
+
+        item {
+            Checkbox(
+                checked = model.isChecked,
+                onCheckedChange = onFavoriteChange,
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Color.Blue,
+                    uncheckedColor = Color.Red
+                )
+            )
+
+        }
         item {
             attributeRow(
                 "baseHealth",
@@ -167,7 +193,14 @@ fun HeroView(hero: Hero, navController: NavController) {
                 navController
             )
         }
-        item { attributeRow("baseManaRegen", "Mana Regen", "+" + hero.baseManaRegen.toString(), navController) }
+        item {
+            attributeRow(
+                "baseManaRegen",
+                "Mana Regen",
+                "+" + hero.baseManaRegen.toString(),
+                navController
+            )
+        }
         item { attributeRow("baseArmor", "Armor", hero.baseArmor.toString(), navController) }
         item {
             attributeRow(

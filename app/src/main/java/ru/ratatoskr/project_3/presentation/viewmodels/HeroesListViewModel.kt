@@ -1,7 +1,5 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
-import android.util.Log
-import androidx.compose.compiler.plugins.kotlin.lower.forEachWith
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,12 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
-import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.helpers.HeroesListState
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByAttrUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByNameUseCase
 import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.AddHeroesUserCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
 import javax.inject.Inject
 
 sealed class FavoriteEvent {
@@ -38,28 +36,23 @@ sealed class FavoriteViewState {
 class HeroesListViewModel @Inject constructor(
     val getAllHeroesByNameUseCase: GetAllHeroesByNameUseCase,
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
-    val addHeroesUserCase: AddHeroesUserCase,
     val getHeroByIdUseCase: GetHeroByIdUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
-) : ViewModel() , EventHandler<FavoriteEvent> {
+    val InsertHeroesUseCase: InsertHeroesUseCase,
+) : ViewModel() {
 
-    val _state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
-    val state: LiveData<State> = _state
+    val _HeroesList_state: MutableLiveData<HeroesListState> = MutableLiveData<HeroesListState>(HeroesListState.LoadingHeroesListState())
+    val heroesListState: LiveData<HeroesListState> = _HeroesList_state
 
-    override fun obtainEvent(event: FavoriteEvent) {
-
-        Log.e("TOHA","testeg")
-    }
-
-    fun getAllHeroesByName() {
-        _state.set(State.LoadingState())
+    fun getAllHeroesByName(){
+        _HeroesList_state.set(HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByNameUseCase.getAllHeroesByName()
                 if (heroes.isEmpty()) {
-                    _state.postValue(State.NoItemsState())
+                    getAllHeroesFromApi()
                 } else {
-                    _state.postValue(State.LoadedState(data = heroes))
+                    _HeroesList_state.postValue(HeroesListState.LoadedHeroesListState(data = heroes))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -68,17 +61,18 @@ class HeroesListViewModel @Inject constructor(
     }
 
     suspend fun getAllHeroesFromApi() {
-        _state.set(State.LoadingState())
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
-                addHeroesUserCase.addHeroes(heroes)
-                if (heroes.isEmpty()) {
-                    _state.postValue(State.NoItemsState())
-                } else {
-                    _state.postValue(State.LoadedState(data = heroes))
+                var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
 
+                if (heroes.isEmpty()) {
+                    _HeroesList_state.postValue(HeroesListState.NoHeroesListState())
+                } else {
+                    InsertHeroesUseCase.InsertHeroesToDB(heroes)
+                    _HeroesList_state.postValue(HeroesListState.LoadedHeroesListState(data = heroes.sortedBy { it.localizedName }))
                 }
+
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
@@ -86,14 +80,14 @@ class HeroesListViewModel @Inject constructor(
     }
 
     fun getHeroById(id: String) {
-        _state.set(newValue = State.LoadingState())
+        _HeroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
                 if (hero.id < 1) {
-                    _state.postValue(State.NoItemsState())
+                    _HeroesList_state.postValue(HeroesListState.NoHeroesListState())
                 } else {
-                    _state.postValue(State.HeroLoadedState(data = hero))
+                    _HeroesList_state.postValue(HeroesListState.HeroLoadedHeroesListState(data = hero))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -102,14 +96,14 @@ class HeroesListViewModel @Inject constructor(
     }
 
     fun getAllHeroesByAttr(attr: String) {
-        _state.set(newValue = State.LoadingState())
+        _HeroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr)
                 if (heroes.isEmpty()) {
-                    _state.postValue(State.NoItemsState())
+                    _HeroesList_state.postValue(HeroesListState.NoHeroesListState())
                 } else {
-                    _state.postValue(State.LoadedState(data = heroes))
+                    _HeroesList_state.postValue(HeroesListState.LoadedHeroesListState(data = heroes))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

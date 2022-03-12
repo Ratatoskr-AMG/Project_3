@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
-import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.helpers.HeroesListState
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
 import javax.inject.Inject
 
@@ -18,25 +18,24 @@ import javax.inject.Inject
 @HiltViewModel
 class HeroViewModel @Inject constructor(
     val getHeroByIdUseCase: GetHeroByIdUseCase
-) : ViewModel() , EventHandler<FavoriteEvent> {
+) : ViewModel(), EventHandler<FavoriteEvent> {
 
-    val _state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
-    val state: LiveData<State> = _state
+    val _hero_state: MutableLiveData<HeroesListState> = MutableLiveData<HeroesListState>(HeroesListState.LoadingHeroesListState())
+    val heroesListState: LiveData<HeroesListState> = _hero_state
 
     override fun obtainEvent(event: FavoriteEvent) {
-
         Log.e("TOHA","testeg")
     }
 
     fun getHeroById(id: String) {
-        _state.set(newValue = State.LoadingState())
+        _hero_state.set(newValue = HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
                 if (hero.id < 1) {
-                    _state.postValue(State.NoItemsState())
+                    _hero_state.postValue(HeroesListState.NoHeroesListState())
                 } else {
-                    _state.postValue(State.HeroLoadedState(data = hero))
+                    _hero_state.postValue(HeroesListState.HeroLoadedHeroesListState(data = hero))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

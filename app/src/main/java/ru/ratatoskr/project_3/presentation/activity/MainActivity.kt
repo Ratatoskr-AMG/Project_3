@@ -12,6 +12,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,8 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
-import ru.ratatoskr.project_3.domain.model.Attributes
-import ru.ratatoskr.project_3.presentation.screens.AttributeListView
+import ru.ratatoskr.project_3.domain.ReadMe
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val navController = rememberNavController()
-
             NavHost(navController = navController, startDestination = "main") {
                 composable("main") { MainScreen(navController) }
             }
@@ -66,7 +65,8 @@ sealed class Screens(val route: String, val stringId: Int) {
 fun MainScreen(parentNavController: NavController) {
     val navController = rememberNavController()
     val items = listOf(Screens.Home, Screens.Dashboard, Screens.Notifications)
-
+    val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
+    val heroViewModel = hiltViewModel<HeroViewModel>()
     Scaffold(
         bottomBar = {
             BottomNavigation(
@@ -142,19 +142,21 @@ fun MainScreen(parentNavController: NavController) {
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
-                val viewModel = hiltViewModel<HeroesListViewModel>()
-                HeroesListScreen(viewModel = viewModel, navController = navController)
+                HeroesListScreen(
+                    heroesListviewModel = heroesListviewModel,
+                    navController = navController
+                )
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
-                val viewModel = hiltViewModel<HeroViewModel>()
+
                 val id = navBackStack.arguments?.getString("id").toString()
                 HeroScreen(
                     id,
-                    viewModel,
+                    heroViewModel,
                     navController,
                     onCheckedChange = { id,
                                         isChecked ->
-                        viewModel.obtainEvent(
+                        heroViewModel.obtainEvent(
                             FavoriteEvent.OnHabitClick(
                                 id,
                                 false
@@ -172,4 +174,5 @@ fun MainScreen(parentNavController: NavController) {
             composable(Screens.Notifications.route) { Text("Notifications") }
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
 import android.util.Log
+import androidx.compose.compiler.plugins.kotlin.lower.forEachWith
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import ru.ratatoskr.project_3.domain.helpers.State
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByAttrUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByNameUseCase
 import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.AddHeroesUserCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
 import javax.inject.Inject
 
@@ -30,6 +32,7 @@ sealed class FavoriteViewState {
 class HeroesListViewModel @Inject constructor(
     val getAllHeroesByNameUseCase: GetAllHeroesByNameUseCase,
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
+    val addHeroesUserCase: AddHeroesUserCase,
     val getHeroByIdUseCase: GetHeroByIdUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
 ) : ViewModel(){
@@ -59,10 +62,12 @@ class HeroesListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
+                addHeroesUserCase.addHeroes(heroes)
                 if (heroes.isEmpty()) {
                     _state.postValue(State.NoItemsState())
                 } else {
                     _state.postValue(State.LoadedState(data = heroes))
+
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

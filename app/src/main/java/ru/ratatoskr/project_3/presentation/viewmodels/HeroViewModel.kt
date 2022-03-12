@@ -25,9 +25,6 @@ class HeroViewModel @Inject constructor(
 
     override fun obtainEvent(event: FavoriteEvent) {
 
-        when (val currentState = _hero_state.value) {
-
-        }
         Log.e("TOHA","testeg")
     }
 

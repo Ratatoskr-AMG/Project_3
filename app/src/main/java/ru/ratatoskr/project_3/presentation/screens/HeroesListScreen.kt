@@ -51,7 +51,7 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        val downloadFirst = false
+        val downloadFirst = true
 
         if (downloadFirst == true) {
             viewModel.getAllHeroesFromApi()

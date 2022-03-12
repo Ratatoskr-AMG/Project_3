@@ -1,9 +1,11 @@
 package ru.ratatoskr.project_3.domain
 
 /*
-*
-    ::AG
-    enum
+
+Вопросы:
+    ошибки в e-логе
+
+    2022-03-12 15:47:40.333 207-210/? E/android.system.suspend@1.0-service: Error opening kernel wakelock stats for: wakeup35: Permission denied
 
     Модуль клиент +
     Карточка героя +

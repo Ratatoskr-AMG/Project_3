@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import kotlinx.serialization.json.Json
-import ru.ratatoskr.project_3.domain.helpers.State
+import ru.ratatoskr.project_3.domain.helpers.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
@@ -32,17 +32,17 @@ fun AttributeScreen(
     viewModel: HeroesListViewModel,
     navController: NavController
 ) {
-    val viewState = viewModel.state.observeAsState()
+    val viewState = viewModel.heroesListState.observeAsState()
 
     when (val state = viewState.value) {
-        is State.LoadedState<*> -> AttributeListView(attr, state.data, navController) {
+        is HeroesListState.LoadedHeroesListState<*> -> AttributeListView(attr, state.data, navController) {
             val json = Json {
                 ignoreUnknownKeys = true
             }
         }
-        is State.NoItemsState -> NoHeroesView()
-        is State.LoadingState -> LoadingHeroesView()
-        is State.ErrorState -> NoHeroesView()
+        is HeroesListState.NoHeroesListState -> NoHeroesView()
+        is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
+        is HeroesListState.ErrorHeroesListState -> NoHeroesView()
     }
 
     LaunchedEffect(key1 = Unit, block = {

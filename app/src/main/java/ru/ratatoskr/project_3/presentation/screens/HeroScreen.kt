@@ -20,17 +20,10 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import ru.ratatoskr.project_3.data.contracts.HeroesContract
-import ru.ratatoskr.project_3.domain.helpers.State
-import ru.ratatoskr.project_3.domain.model.Attributes
+import ru.ratatoskr.project_3.domain.helpers.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.FavoriteEvent
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
 
 @ExperimentalFoundationApi
 @Composable
@@ -41,18 +34,18 @@ fun HeroScreen(
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
 
-    val viewState = viewModel.state.observeAsState()
+    val viewState = viewModel.heroesListState.observeAsState()
 
     when (val state = viewState.value) {
-        is State.HeroLoadedState<*> -> HeroView(
+        is HeroesListState.HeroLoadedHeroesListState<*> -> HeroView(
             state.data as Hero,
             navController,
             HeroCardModel(state.data.id, true),
             onFavoriteChange = { onCheckedChange(state.data.id, true) }
         )
-        is State.NoItemsState -> NoHeroesView()
-        is State.LoadingState -> LoadingHeroesView()
-        is State.ErrorState -> NoHeroesView()
+        is HeroesListState.NoHeroesListState -> NoHeroesView()
+        is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
+        is HeroesListState.ErrorHeroesListState -> NoHeroesView()
 
     }
 

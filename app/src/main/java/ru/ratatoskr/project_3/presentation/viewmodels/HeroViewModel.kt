@@ -24,7 +24,9 @@ class HeroViewModel @Inject constructor(
     val heroesListState: LiveData<HeroesListState> = _hero_state
 
     override fun obtainEvent(event: FavoriteEvent) {
+
         Log.e("TOHA","testeg")
+
     }
 
     fun getHeroById(id: String) {

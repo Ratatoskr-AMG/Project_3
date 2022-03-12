@@ -11,9 +11,6 @@ import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.State
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByAttrUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByNameUseCase
-import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
 import javax.inject.Inject
 

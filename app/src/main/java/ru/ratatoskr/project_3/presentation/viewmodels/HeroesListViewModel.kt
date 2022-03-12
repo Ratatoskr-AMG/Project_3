@@ -17,13 +17,7 @@ import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaU
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
 import javax.inject.Inject
 
-sealed class FavoriteEvent {
-    object EnterScreen : FavoriteEvent()
-    object ReloadScreen : FavoriteEvent()
-    object PreviousDayClicked : FavoriteEvent()
-    object NextDayClicked : FavoriteEvent()
-    data class OnHabitClick(val habitId: Int, val newValue: Boolean) : FavoriteEvent()
-}
+
 
 sealed class FavoriteViewState {
     object Loading : FavoriteViewState()
@@ -38,15 +32,11 @@ class HeroesListViewModel @Inject constructor(
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
     val getHeroByIdUseCase: GetHeroByIdUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
-) : ViewModel() , EventHandler<FavoriteEvent> {
+) : ViewModel(){
 
     val _state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
     val state: LiveData<State> = _state
 
-    override fun obtainEvent(event: FavoriteEvent) {
-
-        Log.e("TOHA","testeg")
-    }
 
     fun getAllHeroesByName() {
         _state.set(State.LoadingState())
@@ -88,7 +78,7 @@ class HeroesListViewModel @Inject constructor(
                 if (hero.id < 1) {
                     _state.postValue(State.NoItemsState())
                 } else {
-                    _state.postValue(State.HeroLoadedState(data = hero))
+                    _state.postValue(State.HeroLoadedState(data = hero,false))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

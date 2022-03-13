@@ -1,12 +1,17 @@
 package ru.ratatoskr.project_3.presentation.activity
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
@@ -18,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -44,8 +50,9 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val context = this
             NavHost(navController = navController, startDestination = "main") {
-                composable("main") { MainScreen(navController) }
+                composable("main") { MainScreen(navController, context) }
             }
         }
     }
@@ -56,14 +63,14 @@ sealed class Screens(val route: String, val stringId: Int) {
     object Hero : Screens("hero", R.string.title_hero)
     object Attr : Screens("attr", R.string.title_hero)
     object Favorites : Screens("favorites", R.string.title_favorites)
-    object Notifications : Screens("profile", R.string.title_profile)
+    object Profile : Screens("profile", R.string.title_profile)
 }
 
 @ExperimentalFoundationApi
 @Composable
-fun MainScreen(parentNavController: NavController) {
+fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
     val navController = rememberNavController()
-    val items = listOf(Screens.Home, Screens.Favorites, Screens.Notifications)
+    val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
     Scaffold(
@@ -169,10 +176,73 @@ fun MainScreen(parentNavController: NavController) {
                 AttributeScreen(attr!!, heroesListviewModel, navController)
             }
             composable(Screens.Favorites.route) {
-                FavoritesScreen(heroesListviewModel,navController)
+                FavoritesScreen(heroesListviewModel, navController)
             }
-            composable(Screens.Notifications.route) { Text("Notifications") }
+            composable(Screens.Profile.route) {
+
+                @Composable
+                fun loadSuceed(id: String) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+                    Text(id)
+                    }
+
+                }
+                @Composable
+                fun loadWebUrl(url: String) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+                        AndroidView(factory = {
+                            WebView(context).apply {
+
+                                webViewClient = object : WebViewClient() {
+                                    override fun onPageStarted(view:WebView?, url:String?, favicon: Bitmap?){
+                                        val Url: Uri = Uri.parse(url)
+                                        if(Url.authority.equals("ratatoskr.ru")){
+                                            val userAccountUrl =
+                                                Uri.parse(Url.getQueryParameter("openid.identity"))
+                                            val userId = userAccountUrl.lastPathSegment
+                                            Toast.makeText(context, "Your userId is: "+userId, Toast.LENGTH_LONG).show()
+
+                                        }
+                                    }
+
+                                }
+                                settings.javaScriptEnabled = true
+                                loadUrl(url)
+
+                            }
+
+                        }, modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight())
+                    }
+                }
+
+                val url = "https://steamcommunity.com/openid/login?" +
+                        "openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&" +
+                        "openid.identity=http://specs.openid.net/auth/2.0/identifier_select&" +
+                        "openid.mode=checkid_setup&" +
+                        "openid.ns=http://specs.openid.net/auth/2.0&" +
+                        "openid.realm=http://ratatoskr.ru&" +
+                        "openid.return_to=http://ratatoskr.ru/steam_success"
+
+                loadWebUrl(url)
+
+
+            }
+
+
         }
+
+
     }
+
 
 }

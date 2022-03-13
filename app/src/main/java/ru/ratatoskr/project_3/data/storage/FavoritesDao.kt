@@ -23,8 +23,6 @@ interface FavoritesDao {
     suspend fun fetchHeroId(heroId: Int): Favorites
 
     @Query("DELETE FROM ${FavoritesContract.FAVORITES_TABLE_NAME} WHERE ${FavoritesContract.COLUMN_HERO_ID} = :heroId")
-    suspend fun dropHero(heroId: Int)
-
-
+    suspend fun dropFavorite(heroId: Int)
 
 }

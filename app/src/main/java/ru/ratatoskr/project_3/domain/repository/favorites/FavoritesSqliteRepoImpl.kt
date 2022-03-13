@@ -1,11 +1,8 @@
 package ru.ratatoskr.project_3.domain.repository.favorites
 
 import android.util.Log
-import io.ktor.client.request.*
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Favorites
-import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.useCases.calculations.BasicIndicatorsUseCase
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -15,7 +12,7 @@ class FavoritesSqliteRepoImpl @Inject constructor(
 
     suspend fun DropHeroFromFavorites(heroId: Int){
 
-        roomAppDatabase.favoritesDao().dropHero(heroId!!)
+        roomAppDatabase.favoritesDao().dropFavorite(heroId!!)
     }
 
     suspend fun addHeroToFavoritesById(heroId: Int) {

@@ -26,7 +26,7 @@ class HeroesOpendotaRepoImpl @Inject constructor(
     suspend fun getAllHeroesListFromAPI(): List<Hero> {
 
         val URL = "https://api.opendota.com/api/heroStats/";
-
+        Log.e("TOHA","getAllHeroesListFromAPI")
         return try {
 
             BasicIndicatorsUseCase().calculate(client.get(URL))

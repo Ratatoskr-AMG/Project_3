@@ -6,7 +6,7 @@ import ru.ratatoskr.project_3.domain.repository.heroes.HeroesOpendotaRepoImpl
 import ru.ratatoskr.project_3.domain.repository.heroes.HeroesSqliteRepoImpl
 import javax.inject.Inject
 
-class GetHeroByIdUseCase @Inject constructor(val localRepoImpl: HeroesSqliteRepoImpl) {
+class GetHeroByIdUseCase @Inject constructor(val localRepoImpl: HeroesSqliteRepoImpl, ) {
     suspend fun GetHeroById(id: String): Hero {
         return localRepoImpl.getHeroById(id)
     }

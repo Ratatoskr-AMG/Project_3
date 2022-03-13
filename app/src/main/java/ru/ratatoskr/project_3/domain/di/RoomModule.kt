@@ -38,7 +38,7 @@ val MIGRATION_1_2: Migration = object : Migration(1, 2) {
     // From version 1 to version 2
     override fun migrate(database: SupportSQLiteDatabase) {
         // Remove the table
-        database.execSQL(HeroesContract.DROP_COMMAND) // Use the right table name
+       // database.execSQL(HeroesContract.DROP_COMMAND) // Use the right table name
 
         // OR: We could update it, by using an ALTER query
 

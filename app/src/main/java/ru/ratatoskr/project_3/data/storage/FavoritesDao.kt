@@ -16,17 +16,13 @@ interface FavoritesDao {
     @Insert(entity = Favorites::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHero(heroId: Int)
 
-    //@Query(FavoritesContract.fetchHero)
-    //suspend fun fetchHeroId(heroId: Int): Favorites
-
-    @Query("SELECT * FROM ${FavoritesContract.FAVORITES_TABLE_NAME} WHERE ${FavoritesContract.COLUMN_HERO_ID} = :heroId")
+    @Query(FavoritesContract.fetchHero)
     suspend fun fetchHeroId(heroId: Int): Favorites
 
     @Query(FavoritesContract.dropHero)
-   suspend fun dropHero(heroId: Int)
+    suspend fun dropHero(heroId: Int)
 
-   //@Query("DELETE FROM "+ FavoritesContract.FAVORITES_TABLE_NAME+" WHERE "+ FavoritesContract.COLUMN_HERO_ID+" = :heroId")
-   // fun dropHero(heroId: Int)
+
 
 
 }

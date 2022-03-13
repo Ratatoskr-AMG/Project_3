@@ -7,7 +7,7 @@ import ru.ratatoskr.project_3.data.converters.HeroesConverterImpl
 import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
 
-@Database(entities = [Hero::class,Favorites::class], version = 3)
+@Database(entities = [Hero::class,Favorites::class], version = 4)
 @TypeConverters(HeroesConverterImpl::class)
 abstract class RoomAppDatabase : RoomDatabase() {
 

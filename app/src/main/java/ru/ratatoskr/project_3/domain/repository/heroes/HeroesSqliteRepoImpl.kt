@@ -2,6 +2,7 @@ package ru.ratatoskr.project_3.domain.repository.heroes
 
 import android.util.Log
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
 import java.lang.Exception
 import javax.inject.Inject
@@ -22,13 +23,19 @@ class HeroesSqliteRepoImpl @Inject constructor(
     ) {
         Heroes.map { Hero ->
             try {
-                Log.e("TOHA", "updateSqliteTable")
+
                 roomAppDatabase.heroesDao().insertHero(Hero)
             } catch (e: Exception) {
                 Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+            }finally{
+                Log.e("TOHA", "updateSqliteTable")
             }
         }
 
+
+    }
+
+    suspend fun getFavoriteHeroes(favorites:List<Favorites>){
 
     }
 }

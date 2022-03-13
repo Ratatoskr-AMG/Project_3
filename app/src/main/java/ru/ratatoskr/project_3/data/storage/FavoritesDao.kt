@@ -13,14 +13,18 @@ import ru.ratatoskr.project_3.domain.model.Hero
 @Dao
 interface FavoritesDao {
 
+    @get:Query("SELECT * FROM ${FavoritesContract.FAVORITES_TABLE_NAME}")
+    val all: List<Favorites>
+
     @Insert(entity = Favorites::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHero(heroId: Int)
+    suspend fun insertFavorites(favorites: Favorites)
 
     @Query("SELECT * FROM ${FavoritesContract.FAVORITES_TABLE_NAME} WHERE ${FavoritesContract.COLUMN_HERO_ID} = :heroId")
     suspend fun fetchHeroId(heroId: Int): Favorites
 
     @Query("DELETE FROM ${FavoritesContract.FAVORITES_TABLE_NAME} WHERE ${FavoritesContract.COLUMN_HERO_ID} = :heroId")
     suspend fun dropHero(heroId: Int)
+
 
 
 }

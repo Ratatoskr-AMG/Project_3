@@ -3,6 +3,7 @@ package ru.ratatoskr.project_3.domain.repository.favorites
 import android.util.Log
 import io.ktor.client.request.*
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.useCases.calculations.BasicIndicatorsUseCase
 import java.lang.Exception
@@ -20,7 +21,8 @@ class FavoritesSqliteRepoImpl @Inject constructor(
     suspend fun addHeroToFavoritesById(heroId: Int) {
         try {
             Log.e("TOHA", "addHeroToFavoritesById " + heroId)
-            roomAppDatabase.favoritesDao().insertHero(heroId)
+            roomAppDatabase.favoritesDao().insertFavorites(Favorites(null,heroId))
+
         } catch (e: Exception) {
             Log.e(
                 "TOHA",
@@ -29,10 +31,15 @@ class FavoritesSqliteRepoImpl @Inject constructor(
         }
     }
 
+    suspend fun getAllFavorites(): List<Favorites> {
+
+        return roomAppDatabase.favoritesDao().all
+
+    }
+
     suspend fun getIfHeroIsFavoriteById(heroId: Int): Boolean {
 
-        val favorites = roomAppDatabase.favoritesDao().fetchHeroId(heroId)
-        return favorites.heroId > 0
+        return roomAppDatabase.favoritesDao().fetchHeroId(heroId)!=null
 
     }
 }

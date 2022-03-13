@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
+import ru.ratatoskr.project_3.presentation.screens.FavoritesScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroEvent
@@ -54,7 +55,7 @@ sealed class Screens(val route: String, val stringId: Int) {
     object Home : Screens("home", R.string.title_home)
     object Hero : Screens("hero", R.string.title_hero)
     object Attr : Screens("attr", R.string.title_hero)
-    object Dashboard : Screens("favorites", R.string.title_favorites)
+    object Favorites : Screens("favorites", R.string.title_favorites)
     object Notifications : Screens("profile", R.string.title_profile)
 }
 
@@ -62,7 +63,7 @@ sealed class Screens(val route: String, val stringId: Int) {
 @Composable
 fun MainScreen(parentNavController: NavController) {
     val navController = rememberNavController()
-    val items = listOf(Screens.Home, Screens.Dashboard, Screens.Notifications)
+    val items = listOf(Screens.Home, Screens.Favorites, Screens.Notifications)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
     Scaffold(
@@ -164,11 +165,12 @@ fun MainScreen(parentNavController: NavController) {
                     })
             }
             composable(Screens.Attr.route + "/{attr}") { navBackStack ->
-                val viewModel = hiltViewModel<HeroesListViewModel>()
                 val attr = navBackStack.arguments?.getString("attr")
-                AttributeScreen(attr!!, viewModel, navController)
+                AttributeScreen(attr!!, heroesListviewModel, navController)
             }
-            composable(Screens.Dashboard.route) { Text("Dashboard") }
+            composable(Screens.Favorites.route) {
+                FavoritesScreen(heroesListviewModel,navController)
+            }
             composable(Screens.Notifications.route) { Text("Notifications") }
         }
     }

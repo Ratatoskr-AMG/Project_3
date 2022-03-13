@@ -39,7 +39,7 @@ class HeroViewModel @Inject constructor(
     private val insertHeroesUseCase: InsertHeroesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
-    var isFavorite = false
+    var isHeroFavorite = false
     val _hero_state: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
     val hero_state: LiveData<HeroState> = _hero_state
 
@@ -76,6 +76,8 @@ class HeroViewModel @Inject constructor(
                             isFavorite = false
                         )
                     )
+                    isHeroFavorite=false
+
                 } catch (e: Exception) {
                     _hero_state.postValue(HeroState.ErrorHeroState())
                 }
@@ -88,6 +90,7 @@ class HeroViewModel @Inject constructor(
                             isFavorite = true
                         )
                     )
+                    isHeroFavorite=true
                 } catch (e: Exception) {
                     _hero_state.postValue(HeroState.ErrorHeroState())
                 }
@@ -98,12 +101,14 @@ class HeroViewModel @Inject constructor(
 
 
     fun getHeroById(id: String) {
+        Log.e("TOHA","getHeroById");
         _hero_state.set(newValue = HeroState.LoadingHeroState())
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
-                val isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
+                var isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
+                isHeroFavorite = isFavorite
                 if (hero.id < 1) {
                     _hero_state.postValue(HeroState.NoHeroState())
                 } else {
@@ -115,6 +120,7 @@ class HeroViewModel @Inject constructor(
                     )
                 }
             } catch (e: java.lang.Exception) {
+                Log.e("TOHA","e:"+e.toString());
                 e.printStackTrace()
             }
         }

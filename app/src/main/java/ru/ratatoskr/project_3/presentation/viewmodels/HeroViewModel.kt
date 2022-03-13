@@ -10,13 +10,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
-import ru.ratatoskr.project_3.domain.helpers.HeroState
-import ru.ratatoskr.project_3.domain.helpers.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.domain.useCases.sqlite.DropHeroFromFavorites
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.GetIfHeroIsFavoriteUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
 import javax.inject.Inject
 
-
+sealed class HeroState {
+    class NoHeroState : HeroState()
+    class LoadingHeroState : HeroState()
+    class ErrorHeroState : HeroState()
+    data class HeroLoadedState(
+        val hero: Hero,
+        val isFavorite: Boolean,
+    ) : HeroState()
+}
 
 sealed class HeroEvent {
     data class OnFavoriteCLick(val heroId: Int, val newValue: Boolean) : HeroEvent()
@@ -24,7 +33,10 @@ sealed class HeroEvent {
 
 @HiltViewModel
 class HeroViewModel @Inject constructor(
-    val getHeroByIdUseCase: GetHeroByIdUseCase
+    private val getHeroByIdUseCase: GetHeroByIdUseCase,
+    private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
+    private val dropHeroFromFavorites: DropHeroFromFavorites,
+    private val insertHeroesUseCase: InsertHeroesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
     var isFavorite = false
@@ -34,61 +46,54 @@ class HeroViewModel @Inject constructor(
     override fun obtainEvent(event: HeroEvent) {
 
         when (val currentState = _hero_state.value) {
-            is HeroState.Display -> reduce(event, currentState)
+            is HeroState.HeroLoadedState -> reduce(event, currentState)
         }
 
     }
 
-    private fun reduce(event: HeroEvent, currentState: HeroState.Display) {
+    private fun reduce(event: HeroEvent, currentState: HeroState.HeroLoadedState) {
 
-        Log.e("TOHA","reduce")
+        Log.e("TOHA", "reduce")
 
         when (event) {
-            HeroEvent.OnFavoriteCLick() -> isFavoriteSwitch(currentState.isFavorite)
+            is HeroEvent.OnFavoriteCLick -> isFavoriteSwitch(
+                currentState.hero,
+                currentState.isFavorite
+            )
         }
     }
 
-    private fun isFavoriteSwitch(isFavorite: Boolean = false) {
+    private fun isFavoriteSwitch(hero: Hero, isFavorite: Boolean = false) {
 
         viewModelScope.launch {
-            try {
 
-                if (habbits.isEmpty()) {
-                    _dailyViewState.postValue(DailyViewState.NoItems)
-                } else {
-                    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-                    val diaryResponse = dailyRepository.fetchDiary()
-                    Log.e("TAG", "response -> $diaryResponse")
-                    val dailyActivities = diaryResponse
-                        .filter { it.date == dateFormat.format(currentDate) }.firstOrNull()
-
-                    val cardItems: List<HabitCardItemModel> = habbits.map { habbitEntity ->
-                        HabitCardItemModel(
-                            habitId = habbitEntity.itemId,
-                            title = habbitEntity.title,
-                            isChecked = if (dailyActivities != null) {
-                                val dailyItem = dailyActivities.habits.firstOrNull { it.habbitId == habbitEntity.itemId }
-                                dailyItem?.value ?: false
-                            } else {
-                                false
-                            }
-                        )
-                    }
-
-
-
+            if (isFavorite) {
+                try {
+                    dropHeroFromFavorites.dropHeroFromFavorites(hero.id)
                     _hero_state.postValue(
-                        HeroState.Display(
+                        HeroState.HeroLoadedState(
                             hero = hero,
-                            hasNextDay = setHasNextDay,
-                            title = getTitleForADay()
+                            isFavorite = false
                         )
                     )
+                } catch (e: Exception) {
+                    _hero_state.postValue(HeroState.ErrorHeroState())
                 }
-            } catch (e: Exception) {
-                _dailyViewState.postValue(DailyViewState.Error)
+            }else{
+                try {
+                    insertHeroesUseCase.insertHeroToFavorites(hero.id)
+                    _hero_state.postValue(
+                        HeroState.HeroLoadedState(
+                            hero = hero,
+                            isFavorite = true
+                        )
+                    )
+                } catch (e: Exception) {
+                    _hero_state.postValue(HeroState.ErrorHeroState())
+                }
             }
         }
+
     }
 
 
@@ -98,10 +103,16 @@ class HeroViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
+                val isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
                 if (hero.id < 1) {
                     _hero_state.postValue(HeroState.NoHeroState())
                 } else {
-                    _hero_state.postValue(HeroState.HeroLoadedState(hero = hero))
+                    _hero_state.postValue(
+                        HeroState.HeroLoadedState(
+                            hero = hero,
+                            isFavorite = isFavorite
+                        )
+                    )
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

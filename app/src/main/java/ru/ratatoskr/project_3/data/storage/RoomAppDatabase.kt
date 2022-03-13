@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.*
 import ru.ratatoskr.project_3.data.contracts.HeroesContract
 import ru.ratatoskr.project_3.data.converters.HeroesConverterImpl
+import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
 
-@Database(entities = [Hero::class], version = 2)
+@Database(entities = [Hero::class,Favorites::class], version = 3)
 @TypeConverters(HeroesConverterImpl::class)
 abstract class RoomAppDatabase : RoomDatabase() {
 

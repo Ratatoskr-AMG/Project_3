@@ -7,14 +7,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.HeroesListState
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByAttrUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetAllHeroesByNameUseCase
 import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.*
 import javax.inject.Inject
 
 
@@ -24,6 +20,7 @@ class HeroesListViewModel @Inject constructor(
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
     val getHeroByIdUseCase: GetHeroByIdUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
+    val addHeroesUserCase: AddHeroesUserCase,
     val InsertHeroesUseCase: InsertHeroesUseCase,
 ) : ViewModel() {
 
@@ -55,7 +52,7 @@ class HeroesListViewModel @Inject constructor(
                 if (heroes.isEmpty()) {
                     _HeroesList_state.postValue(HeroesListState.NoHeroesListState())
                 } else {
-                    InsertHeroesUseCase.InsertHeroesToDB(heroes)
+                    addHeroesUserCase.addHeroes(heroes)
                     _HeroesList_state.postValue(HeroesListState.LoadedHeroesListState(data = heroes.sortedBy { it.localizedName }))
                 }
 

@@ -5,34 +5,28 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import ru.ratatoskr.project_3.data.contracts.FavoritesContract
 import ru.ratatoskr.project_3.data.contracts.HeroesContract
+import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
 
 @Dao
 interface FavoritesDao {
-    @get:Query(HeroesContract.fetchHeroes)
-    val all: List<Hero>
-/*
-    @Query(HeroesContract.DROP_COMMAND)
-    fun drop()
 
-    @Query(HeroesContract.CREATE_COMMAND)
-    fun create()
- */
+    @Insert(entity = Favorites::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHero(heroId: Int)
+
+    //@Query(FavoritesContract.fetchHero)
+    //suspend fun fetchHeroId(heroId: Int): Favorites
+
+    @Query("SELECT * FROM ${FavoritesContract.FAVORITES_TABLE_NAME} WHERE ${FavoritesContract.COLUMN_HERO_ID} = :heroId")
+    suspend fun fetchHeroId(heroId: Int): Favorites
+
+    @Query(FavoritesContract.dropHero)
+   suspend fun dropHero(heroId: Int)
+
+   //@Query("DELETE FROM "+ FavoritesContract.FAVORITES_TABLE_NAME+" WHERE "+ FavoritesContract.COLUMN_HERO_ID+" = :heroId")
+   // fun dropHero(heroId: Int)
 
 
-    @Insert(entity = Hero::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHero(hero: Hero)
-
-    @Query(HeroesContract.fetchHero)
-    suspend fun fetchHero(heroId: Int): Hero
-
-    @Query("SELECT * FROM " + HeroesContract.HEROES_TABLE_NAME + " ORDER BY " + HeroesContract.COLUMN_LEGS + " DESC")
-    suspend fun fetchHeroesByAttr(): List<Hero>
-
-    @Query(HeroesContract.fetchHeroesByAttr)
-    suspend fun fetchHeroesByAttr2(attr: String): List<Hero>
-
-    @Query("SELECT * FROM " + HeroesContract.HEROES_TABLE_NAME + " ORDER BY :attr DESC")
-    suspend fun fetchHeroesByAttr3(attr: String): List<Hero>
 }

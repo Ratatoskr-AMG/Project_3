@@ -1,6 +1,5 @@
 package ru.ratatoskr.project_3.domain.useCases.sqlite
 
-import android.util.Log
 import ru.ratatoskr.project_3.domain.extensions.toArrayList
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.repository.heroes.HeroesSqliteRepoImpl
@@ -12,7 +11,7 @@ class GetAllHeroesByAttrUseCase @Inject constructor(
     val localRepoImpl: HeroesSqliteRepoImpl
 ) {
     fun getAllHeroesByAttr(attr: String): List<Hero> {
-        var heroes = localRepoImpl.getAllHeroesListFromDB().toArrayList()
+        var heroes = localRepoImpl.getAllHeroesList().toArrayList()
 
         return when (attr) {
             "legs" -> heroes.sortedByDescending { it.legs }

@@ -12,7 +12,6 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,11 +27,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
-import ru.ratatoskr.project_3.domain.ReadMe
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
-import ru.ratatoskr.project_3.presentation.viewmodels.FavoriteEvent
+import ru.ratatoskr.project_3.presentation.viewmodels.HeroEvent
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
@@ -157,7 +155,7 @@ fun MainScreen(parentNavController: NavController) {
                     onCheckedChange = { id,
                                         isChecked ->
                         heroViewModel.obtainEvent(
-                            FavoriteEvent.OnHabitClick(
+                            HeroEvent.OnFavoriteCLick(
                                 id,
                                 false
                             )

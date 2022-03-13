@@ -17,20 +17,6 @@ import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
 import javax.inject.Inject
 
-sealed class FavoriteEvent {
-    object EnterScreen : FavoriteEvent()
-    object ReloadScreen : FavoriteEvent()
-    object PreviousDayClicked : FavoriteEvent()
-    object NextDayClicked : FavoriteEvent()
-    data class OnHabitClick(val habitId: Int, val newValue: Boolean) : FavoriteEvent()
-}
-
-sealed class FavoriteViewState {
-    object Loading : FavoriteViewState()
-    object Error : FavoriteViewState()
-    data class Display(val isAdded: Boolean) : FavoriteViewState()
-    object NoItems: FavoriteViewState()
-}
 
 @HiltViewModel
 class HeroesListViewModel @Inject constructor(

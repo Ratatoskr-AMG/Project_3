@@ -20,7 +20,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import ru.ratatoskr.project_3.domain.helpers.HeroesListState
+import ru.ratatoskr.project_3.domain.helpers.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
@@ -34,18 +34,18 @@ fun HeroScreen(
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
 
-    val viewState = viewModel.heroesListState.observeAsState()
+    val viewState = viewModel.hero_state.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroesListState.HeroLoadedHeroesListState<*> -> HeroView(
+        is HeroState.HeroLoadedState<*> -> HeroView(
             state.data as Hero,
             navController,
-            HeroCardModel(state.data.id, true),
-            onFavoriteChange = { onCheckedChange(state.data.id, true) }
+            viewModel,
+            onFavoriteChange = { onCheckedChange(state.data.id, viewModel.isFavorite) }
         )
-        is HeroesListState.NoHeroesListState -> NoHeroesView()
-        is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
-        is HeroesListState.ErrorHeroesListState -> NoHeroesView()
+        is HeroState.NoHeroState -> NoHeroesView()
+        is HeroState.LoadingHeroState -> LoadingHeroesView()
+        is HeroState.ErrorHeroState -> NoHeroesView()
 
     }
 
@@ -56,17 +56,12 @@ fun HeroScreen(
 
 }
 
-data class HeroCardModel(
-    val heroId: Int,
-    val isChecked: Boolean
-)
-
 @ExperimentalFoundationApi
 @Composable
 fun HeroView(
     hero: Hero,
     navController: NavController,
-    model: HeroCardModel,
+    heroViewModel: HeroViewModel,
     onFavoriteChange: ((Boolean) -> Unit)? = null) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
@@ -154,7 +149,7 @@ fun HeroView(
 
         item {
             Checkbox(
-                checked = model.isChecked,
+                checked = heroViewModel.isFavorite,
                 onCheckedChange = onFavoriteChange,
                 colors = CheckboxDefaults.colors(
                     checkedColor = Color.Blue,

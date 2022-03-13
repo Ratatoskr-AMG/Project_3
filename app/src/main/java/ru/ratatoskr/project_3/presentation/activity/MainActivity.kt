@@ -209,7 +209,10 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
                                                 Uri.parse(Url.getQueryParameter("openid.identity"))
                                             val userId = userAccountUrl.lastPathSegment
                                             Toast.makeText(context, "Your userId is: "+userId, Toast.LENGTH_LONG).show()
-
+                                            Log.e("TOHA","userId:"+userId)
+                                            /*
+                                            http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
+                                             */
                                         }
                                     }
 

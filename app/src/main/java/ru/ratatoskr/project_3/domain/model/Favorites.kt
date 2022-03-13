@@ -12,5 +12,4 @@ class Favorites(
     @PrimaryKey
     var id: Int,
     var heroId: Int,
-
 )

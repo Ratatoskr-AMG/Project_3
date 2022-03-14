@@ -19,10 +19,11 @@ import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
 import javax.inject.Inject
 
 sealed class ProfileState {
-    object IndefiniteState : ProfileState()
+    object IndefinedState : ProfileState()
+    object LoadingState : ProfileState()
     object ErrorProfileState : ProfileState()
     data class LoggedIntoSteam(
-        val steam_user_id: Boolean,
+        val steam_user_id: Int,
     ) : ProfileState()
 }
 
@@ -32,98 +33,40 @@ sealed class ProfileEvent {
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getHeroByIdUseCase: GetHeroByIdUseCase,
-    private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
-    private val dropHeroFromFavorites: DropHeroFromFavorites,
-    private val insertHeroesUseCase: InsertHeroesUseCase
-) : ViewModel(), EventHandler<HeroEvent> {
 
-    //var isHeroFavorite = false
-    val _hero_state: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
-    val hero_state: LiveData<HeroState> = _hero_state
+) : ViewModel() {
 
-    override fun obtainEvent(event: HeroEvent) {
+    val _profile_state: MutableLiveData<ProfileState> =
+        MutableLiveData<ProfileState>(ProfileState.IndefinedState)
+    val profile_state: LiveData<ProfileState> = _profile_state
 
-        when (val currentState = _hero_state.value) {
-            is HeroState.HeroLoadedState -> reduce(event, currentState)
-        }
-
-    }
-
-    private fun reduce(event: HeroEvent, currentState: HeroState.HeroLoadedState) {
-
-        Log.e("TOHA", "reduce")
-
-        when (event) {
-            is HeroEvent.OnFavoriteCLick -> isFavoriteSwitch(
-                currentState.hero,
-                currentState.isFavorite
-            )
-        }
-    }
-
-    private fun isFavoriteSwitch(hero: Hero, isFavorite: Boolean = false) {
+    fun isSteamLoggedSwitch(user_id: Int) {
 
         viewModelScope.launch {
 
-            if (isFavorite) {
-                try {
-                    dropHeroFromFavorites.dropHeroFromFavorites(hero.id)
-                    _hero_state.postValue(
-                        HeroState.HeroLoadedState(
-                            hero = hero,
-                            isFavorite = false
-                        )
-                    )
-                    //isHeroFavorite=false
-
-                } catch (e: Exception) {
-                    _hero_state.postValue(HeroState.ErrorHeroState())
-                }
-            }else{
-                try {
-                    insertHeroesUseCase.insertHeroToFavorites(hero.id)
-                    _hero_state.postValue(
-                        HeroState.HeroLoadedState(
-                            hero = hero,
-                            isFavorite = true
-                        )
-                    )
-                    //isHeroFavorite=true
-                } catch (e: Exception) {
-                    _hero_state.postValue(HeroState.ErrorHeroState())
-                }
-            }
-        }
-
-    }
-
-
-    fun getHeroById(id: String) {
-        Log.e("TOHA","getHeroById");
-        _hero_state.set(newValue = HeroState.LoadingHeroState())
-
-        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val hero = getHeroByIdUseCase.GetHeroById(id)
-                var isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
-                //isHeroFavorite = isFavorite
-                if (hero.id < 1) {
-                    _hero_state.postValue(HeroState.NoHeroState())
+                if (user_id > 0) {
+                    _profile_state.postValue(
+                        ProfileState.LoadingState
+
+                        /*
+                        ProfileState.LoadingState(user_id)
+                         */
+
+                    )
                 } else {
-                    _hero_state.postValue(
-                        HeroState.HeroLoadedState(
-                            hero = hero,
-                            isFavorite = isFavorite
-                        )
+                    _profile_state.postValue(
+                        ProfileState.IndefinedState
                     )
                 }
-            } catch (e: java.lang.Exception) {
-                Log.e("TOHA","e:"+e.toString());
-                e.printStackTrace()
+            } catch (e: Exception) {
+                _profile_state.postValue(ProfileState.ErrorProfileState)
             }
+
         }
+
     }
+
 
 
 }

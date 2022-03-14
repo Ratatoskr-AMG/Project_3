@@ -36,10 +36,12 @@ import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.FavoritesScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
+import ru.ratatoskr.project_3.presentation.screens.ProfileScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroEvent
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
+import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -73,6 +75,7 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
     val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
     Scaffold(
         bottomBar = {
             BottomNavigation(
@@ -148,10 +151,14 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
+                ProfileScreen(profileViewModel, context)
+            /*
                 HeroesListScreen(
                     heroesListviewModel = heroesListviewModel,
                     navController = navController
                 )
+
+                 */
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
 
@@ -180,63 +187,7 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
             }
             composable(Screens.Profile.route) {
 
-                @Composable
-                fun loadSuceed(id: String) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                    ) {
-                    Text(id)
-                    }
-
-                }
-                @Composable
-                fun loadWebUrl(url: String) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                    ) {
-                        AndroidView(factory = {
-                            WebView(context).apply {
-
-                                webViewClient = object : WebViewClient() {
-                                    override fun onPageStarted(view:WebView?, url:String?, favicon: Bitmap?){
-                                        val Url: Uri = Uri.parse(url)
-                                        if(Url.authority.equals("ratatoskr.ru")){
-                                            val userAccountUrl =
-                                                Uri.parse(Url.getQueryParameter("openid.identity"))
-                                            val userId = userAccountUrl.lastPathSegment
-                                            Toast.makeText(context, "Your userId is: "+userId, Toast.LENGTH_LONG).show()
-                                            Log.e("TOHA","userId:"+userId)
-                                            /*
-                                            http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
-                                             */
-                                        }
-                                    }
-
-                                }
-                                settings.javaScriptEnabled = true
-                                loadUrl(url)
-
-                            }
-
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight())
-                    }
-                }
-
-                val url = "https://steamcommunity.com/openid/login?" +
-                        "openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&" +
-                        "openid.identity=http://specs.openid.net/auth/2.0/identifier_select&" +
-                        "openid.mode=checkid_setup&" +
-                        "openid.ns=http://specs.openid.net/auth/2.0&" +
-                        "openid.realm=http://ratatoskr.ru&" +
-                        "openid.return_to=http://ratatoskr.ru/steam_success"
-
-                loadWebUrl(url)
+                ProfileScreen(profileViewModel, context)
 
 
             }

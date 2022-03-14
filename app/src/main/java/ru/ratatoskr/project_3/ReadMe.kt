@@ -1,6 +1,10 @@
 /****
 
-* Задания:
+ * Лог
+
+    ProfileViewModel
+
+ * Задания:
 
     Профиль вместо Notifications
     Какими данные могут быть "чувствительными" (пароль)?
@@ -9,21 +13,21 @@
     как обойти прослушку сигналов?
     Дизайн
 
-* Заметки:
+ * Заметки:
 
     UseCase может объединять два репозитория
 
-* Ссылки:
+ * Ссылки:
 
     https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
     https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
 
-* Книги:
+ * Книги:
 
     Карьера программиста крэкинг зэ пот
     Java Concurrency in Practiсe
 
-* Пройдено:
+ * Пройдено:
 
     Модуль клиент +
     Карточка героя +
@@ -37,19 +41,16 @@
 
 ****/
 
-package ru.ratatoskr.project_3.domain
+package ru.ratatoskr.project_3
 class ReadMe() {
 companion object {
 
 fun q1() {
 /*
-Вопрос писать тут, в коде ставить ссылку:
-ReadMe.q1
-ReadMe.q2
-...
-ReadMe.qN
+    на что заменить if (hero.id < 1) {
  */
 }
 
 }
 }
+val Readme = ReadMe()

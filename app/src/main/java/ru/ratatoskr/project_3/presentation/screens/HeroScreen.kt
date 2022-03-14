@@ -37,12 +37,16 @@ fun HeroScreen(
     val viewState = viewModel.hero_state.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroState.HeroLoadedState -> HeroView(
-            state.hero,
-            navController,
-            viewModel,
-            onFavoriteChange = { onCheckedChange(state.hero.id, viewModel.isHeroFavorite) }
-        )
+        is HeroState.HeroLoadedState -> {
+            val isChecked = state.isFavorite
+            val hero = state.hero
+            HeroView(
+                hero,
+                navController,
+                isChecked,
+                onFavoriteChange = { onCheckedChange(hero.id, isChecked) }
+            )
+        }
         is HeroState.NoHeroState -> NoHeroesView()
         is HeroState.LoadingHeroState -> LoadingHeroesView()
         is HeroState.ErrorHeroState -> NoHeroesView()
@@ -61,8 +65,9 @@ fun HeroScreen(
 fun HeroView(
     hero: Hero,
     navController: NavController,
-    heroViewModel: HeroViewModel,
-    onFavoriteChange: ((Boolean) -> Unit)? = null) {
+    isChecked: Boolean,
+    onFavoriteChange: ((Boolean) -> Unit)
+) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
         stickyHeader {
@@ -149,7 +154,7 @@ fun HeroView(
 
         item {
             Checkbox(
-                checked = heroViewModel.isHeroFavorite,
+                checked = isChecked,
                 onCheckedChange = onFavoriteChange,
                 colors = CheckboxDefaults.colors(
                     checkedColor = Color.Blue,

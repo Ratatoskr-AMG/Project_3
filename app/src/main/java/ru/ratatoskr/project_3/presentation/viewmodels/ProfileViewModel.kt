@@ -8,38 +8,37 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.useCases.sqlite.DropHeroFromFavorites
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.GetIfHeroIsFavoriteUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
 import javax.inject.Inject
 
-sealed class HeroState {
-    class NoHeroState : HeroState()
-    class LoadingHeroState : HeroState()
-    class ErrorHeroState : HeroState()
-    data class HeroLoadedState(
-        val hero: Hero,
-        val isFavorite: Boolean,
-    ) : HeroState()
+sealed class ProfileState {
+    object IndefiniteState : ProfileState()
+    object ErrorProfileState : ProfileState()
+    data class LoggedIntoSteam(
+        val steam_user_id: Boolean,
+    ) : ProfileState()
 }
 
-sealed class HeroEvent {
-    data class OnFavoriteCLick(val heroId: Int, val newValue: Boolean) : HeroEvent()
+sealed class ProfileEvent {
+    data class SteamIdReceived(val steam_user_id: Int) : ProfileEvent()
 }
 
 @HiltViewModel
-class HeroViewModel @Inject constructor(
+class ProfileViewModel @Inject constructor(
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
     private val dropHeroFromFavorites: DropHeroFromFavorites,
     private val insertHeroesUseCase: InsertHeroesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
+    //var isHeroFavorite = false
     val _hero_state: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
     val hero_state: LiveData<HeroState> = _hero_state
 
@@ -76,6 +75,7 @@ class HeroViewModel @Inject constructor(
                             isFavorite = false
                         )
                     )
+                    //isHeroFavorite=false
 
                 } catch (e: Exception) {
                     _hero_state.postValue(HeroState.ErrorHeroState())
@@ -89,6 +89,7 @@ class HeroViewModel @Inject constructor(
                             isFavorite = true
                         )
                     )
+                    //isHeroFavorite=true
                 } catch (e: Exception) {
                     _hero_state.postValue(HeroState.ErrorHeroState())
                 }
@@ -105,16 +106,15 @@ class HeroViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
-
-                ReadMe.q1()
-
+                var isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
+                //isHeroFavorite = isFavorite
                 if (hero.id < 1) {
                     _hero_state.postValue(HeroState.NoHeroState())
                 } else {
                     _hero_state.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
-                            isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
+                            isFavorite = isFavorite
                         )
                     )
                 }

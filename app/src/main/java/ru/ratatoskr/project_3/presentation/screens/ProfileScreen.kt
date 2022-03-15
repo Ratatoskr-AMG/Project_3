@@ -39,7 +39,7 @@ fun ProfileScreen(
                 state.steam_user_id.toString()
             )
         }
-        is ProfileState.IndefinedState -> steamWebView(context,viewModel)
+        is ProfileState.IndefinedState -> steamWebView(viewModel)
         is ProfileState.LoadingState -> profileLoadingView()
         is ProfileState.ErrorProfileState -> profileErrorView()
 
@@ -83,7 +83,7 @@ fun profileErrorView() {
 }
 
 @Composable
-fun steamWebView(context: Context,viewModel:ProfileViewModel) {
+fun steamWebView(viewModel:ProfileViewModel) {
 
     val REALM = "ratatoskr.ru"
     val url = "https://steamcommunity.com/openid/login?" +
@@ -101,9 +101,9 @@ fun steamWebView(context: Context,viewModel:ProfileViewModel) {
     ) {
         AndroidView(
             factory = {
-                WebView(context).apply {
-                    webViewClient = webViewClient(context,viewModel)
-                    //settings.safeBrowsingEnabled =false
+                WebView(it).apply {
+                    webViewClient = webViewClient(viewModel)
+                    //settings.safeBrowsingEnabled = false
                     settings.javaScriptEnabled = true
                     loadUrl(url)
 
@@ -116,9 +116,8 @@ fun steamWebView(context: Context,viewModel:ProfileViewModel) {
     }
 }
 
-class webViewClient(context:Context,viewModel: ProfileViewModel) : WebViewClient() {
+class webViewClient(viewModel: ProfileViewModel) : WebViewClient() {
 
-    val context = context;
     val viewModel = viewModel;
 
     override fun onPageFinished(view: WebView, url: String) {
@@ -128,14 +127,10 @@ class webViewClient(context:Context,viewModel: ProfileViewModel) : WebViewClient
             val userAccountUrl =
                 Uri.parse(Url.getQueryParameter("openid.identity"))
             val userId = userAccountUrl.lastPathSegment
-            Toast.makeText(
-                context,
-                "Your userId is: " + userId,
-                Toast.LENGTH_LONG
-            ).show()
+
             Log.e("TOHA", "userId:" + userId)
-            ReadMe.q2()
-            viewModel.steamLogin(userId!!.toInt())
+
+            //viewModel.steamLogin(userId!!.toInt())
 
         }
 

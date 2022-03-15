@@ -75,7 +75,7 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
     val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
-    val profileViewModel = hiltViewModel<ProfileViewModel>()
+    val profileViewModel = hiltViewModel<ProfileViewModel>(context)
     Scaffold(
         bottomBar = {
             BottomNavigation(

@@ -41,6 +41,10 @@ Java Concurrency in Practiсe
 Репозиторий во viewModel через UseCase +
 Избранные герои вместо Dashboard +
 
+
+http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
+
+
  ****/
 
 package ru.ratatoskr.project_3

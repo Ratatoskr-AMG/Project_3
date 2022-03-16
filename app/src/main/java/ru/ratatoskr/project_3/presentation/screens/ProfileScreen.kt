@@ -63,12 +63,31 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                         override fun onPageFinished(view: WebView, url: String) {
                             val Url: Uri = Uri.parse(url)
                             if (Url.authority.equals("ratatoskr.ru")) {
+
                                 val userAccountUrl =
                                     Uri.parse(Url.getQueryParameter("openid.identity"))
+
+                               // val userSteamData : steamData(){
+
+                               // }
+
+                                /*
+{"response":{"players":[{"steamid":"76561198165608798","communityvisibilitystate":3,"profilestate":1,"personaname":"AMG","profileurl":"https://steamcommunity.com/profiles/76561198165608798/","avatar":"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d992f14848645364976ba464ad2f2442c138611f.jpg","avatarmedium":"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d992f14848645364976ba464ad2f2442c138611f_medium.jpg","avatarfull":"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d992f14848645364976ba464ad2f2442c138611f_full.jpg","avatarhash":"d992f14848645364976ba464ad2f2442c138611f","lastlogoff":1647426748,"personastate":0,"primaryclanid":"103582791429521408","timecreated":1417273892,"personastateflags":0,"loccountrycode":"RU","locstatecode":"48","loccityid":41460}]}}
+                                 */
+
                                 val userId = userAccountUrl.lastPathSegment
+
+
+
+
+
+
+
                                 Log.e("TOHA", "userId:" + userId)
 
                                 onAuthorizeChange(userId.toString())
+
+
                             }
                         }
                     }

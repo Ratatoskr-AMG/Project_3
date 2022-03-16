@@ -72,7 +72,7 @@ fun MainScreen(
     val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
-
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
 
     Scaffold(
         bottomBar = {
@@ -149,19 +149,17 @@ fun MainScreen(
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
-                val profileViewModel = hiltViewModel<ProfileViewModel>()
-                ProfileScreen(profileViewModel,{ id ->
-                    profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
-                })
 
-                /*
+
+
+
 
                 HeroesListScreen(
                     heroesListviewModel = heroesListviewModel,
                     navController = navController
                 )
 
-                 */
+
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
 
@@ -190,11 +188,9 @@ fun MainScreen(
             }
             composable(Screens.Profile.route) {
 
-                /*
-                ProfileScreen(profileViewModel) { id ->
+                ProfileScreen(profileViewModel,{ id ->
                     profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
-                }
-                */
+                })
 
             }
         }

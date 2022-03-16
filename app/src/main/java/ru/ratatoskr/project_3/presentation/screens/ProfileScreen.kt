@@ -5,6 +5,7 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -13,9 +14,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileState
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
@@ -29,7 +33,7 @@ fun ProfileScreen(
     when (val state = viewState.value) {
         is ProfileState.LoggedIntoSteam -> {
             ProfileCard(
-                state.steam_user_id.toString()
+                state
             )
         }
         is ProfileState.IndefinedState -> steamWebView { onAuthorizeChange(it) }
@@ -72,7 +76,8 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                                // }
 
                                 /*
-{"response":{"players":[{"steamid":"76561198165608798","communityvisibilitystate":3,"profilestate":1,"personaname":"AMG","profileurl":"https://steamcommunity.com/profiles/76561198165608798/","avatar":"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d992f14848645364976ba464ad2f2442c138611f.jpg","avatarmedium":"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d992f14848645364976ba464ad2f2442c138611f_medium.jpg","avatarfull":"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d992f14848645364976ba464ad2f2442c138611f_full.jpg","avatarhash":"d992f14848645364976ba464ad2f2442c138611f","lastlogoff":1647426748,"personastate":0,"primaryclanid":"103582791429521408","timecreated":1417273892,"personastateflags":0,"loccountrycode":"RU","locstatecode":"48","loccityid":41460}]}}
+                                        {"response":{"players":[]}
+
                                  */
 
                                 val userId = userAccountUrl.lastPathSegment
@@ -103,10 +108,20 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
 }
 
 @Composable
-fun ProfileCard(user_id: String) {
+fun ProfileCard(state: ProfileState.LoggedIntoSteam) {
     Box(modifier = Modifier.fillMaxSize()) {
+
+        Image(
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .width(40.dp)
+                .height(40.dp),
+            painter = rememberImagePainter(state.steam_user_avatar),
+            contentDescription = "Steam user #"+state.steam_user_id+" avatar"
+        )
+
         Text(
-            modifier = Modifier.align(Alignment.Center), text = user_id,
+            modifier = Modifier.align(Alignment.Center), text = state.steam_user_name,
             color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
         )
     }

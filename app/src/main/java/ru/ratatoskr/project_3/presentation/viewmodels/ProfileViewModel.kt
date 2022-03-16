@@ -9,7 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
-import ru.ratatoskr.project_3.domain.extensions.set
+import ru.ratatoskr.project_3.domain.useCases.steam.GetSteamUserUseCase
+
 import javax.inject.Inject
 
 sealed class ProfileState {
@@ -18,6 +19,8 @@ sealed class ProfileState {
     object ErrorProfileState : ProfileState()
     data class LoggedIntoSteam(
         val steam_user_id: String,
+        val steam_user_avatar: String,
+        val steam_user_name: String,
     ) : ProfileState()
 }
 
@@ -27,7 +30,9 @@ sealed class ProfileEvent {
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-) : ViewModel(), EventHandler<ProfileEvent> {
+    private val getSteamUserUseCase: GetSteamUserUseCase,
+
+    ) : ViewModel(), EventHandler<ProfileEvent> {
 
     val _profile_state: MutableLiveData<ProfileState> =
         MutableLiveData<ProfileState>(ProfileState.IndefinedState)
@@ -58,10 +63,15 @@ class ProfileViewModel @Inject constructor(
         Log.e("TOHA", "isSteamLoggedSwitch"+user_id)
 
         viewModelScope.launch(Dispatchers.IO) {
+
+            var steamRespose = getSteamUserUseCase.getSteamResponseOnId(user_id)
+            Log.e("TOHA",steamRespose.toString());
+            var player = steamRespose.response.players[0]
+
             try {
                 if (user_id != "") {
                     _profile_state.postValue(
-                        ProfileState.LoggedIntoSteam(user_id)
+                        ProfileState.LoggedIntoSteam(user_id,player.avatar,player.personaname)
                     )
                 } else {
                     _profile_state.postValue(

@@ -23,7 +23,7 @@ import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    onAuthorizeChange: (Int) -> Unit
+    onAuthorizeChange: (String) -> Unit
 ) {
     val viewState = viewModel.profile_state.observeAsState()
     when (val state = viewState.value) {
@@ -32,7 +32,7 @@ fun ProfileScreen(
                 state.steam_user_id.toString()
             )
         }
-        is ProfileState.IndefinedState -> steamWebView(onAuthorizeChange)
+        is ProfileState.IndefinedState -> steamWebView { onAuthorizeChange(it) }
         is ProfileState.LoadingState -> profileLoadingView()
         is ProfileState.ErrorProfileState -> profileErrorView()
     }
@@ -41,7 +41,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun steamWebView(onAuthorizeChange: (Int) -> Unit) {
+fun steamWebView(onAuthorizeChange: (String) -> Unit) {
 
     val REALM = "ratatoskr.ru"
     val url = "https://steamcommunity.com/openid/login?" +
@@ -67,7 +67,8 @@ fun steamWebView(onAuthorizeChange: (Int) -> Unit) {
                                     Uri.parse(Url.getQueryParameter("openid.identity"))
                                 val userId = userAccountUrl.lastPathSegment
                                 Log.e("TOHA", "userId:" + userId)
-                                onAuthorizeChange(userId!!.toInt())
+
+                                onAuthorizeChange(userId.toString())
                             }
                         }
                     }

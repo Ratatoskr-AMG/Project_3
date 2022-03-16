@@ -72,7 +72,7 @@ fun MainScreen(
     val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
-    val profileViewModel = hiltViewModel<ProfileViewModel>()
+
 
     Scaffold(
         bottomBar = {
@@ -149,16 +149,10 @@ fun MainScreen(
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
-
-                fun test(i:Int){
-                    Log.e("TOHA", "test:"+i.toString());
-                }
-
-
-                ProfileScreen(profileViewModel) { id ->
-                    //profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
-
-                }
+                val profileViewModel = hiltViewModel<ProfileViewModel>()
+                ProfileScreen(profileViewModel,{ id ->
+                    profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
+                })
 
                 /*
 

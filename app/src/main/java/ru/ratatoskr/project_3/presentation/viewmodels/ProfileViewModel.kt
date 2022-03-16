@@ -17,12 +17,12 @@ sealed class ProfileState {
     object LoadingState : ProfileState()
     object ErrorProfileState : ProfileState()
     data class LoggedIntoSteam(
-        val steam_user_id: Int,
+        val steam_user_id: String,
     ) : ProfileState()
 }
 
 sealed class ProfileEvent {
-    data class OnSteamLogin(val user_id: Int) : ProfileEvent()
+    data class OnSteamLogin(val steam_user_id: String) : ProfileEvent()
 }
 
 @HiltViewModel
@@ -38,41 +38,42 @@ class ProfileViewModel @Inject constructor(
         Log.e("TOHA", "obtainEvent")
 
         when (val currentState = _profile_state.value) {
-            is ProfileState.LoggedIntoSteam -> reduce(event, currentState)
+            is ProfileState.IndefinedState -> reduce(event)
         }
     }
 
-    private fun reduce(event: ProfileEvent, currentState: ProfileState.LoggedIntoSteam) {
+    private fun reduce(event: ProfileEvent) {
 
         Log.e("TOHA", "reduce")
 
         when (event) {
-            is ProfileEvent.OnSteamLogin -> isSteamLoggedSwitch(currentState.steam_user_id)
+            is ProfileEvent.OnSteamLogin -> isSteamLoggedSwitch(event)
         }
     }
 
-    private fun isSteamLoggedSwitch(user_id: Int) {
+    private fun isSteamLoggedSwitch(event:ProfileEvent.OnSteamLogin) {
 
-        Log.e("TOHA", "isSteamLoggedSwitch")
+        val user_id = event.steam_user_id
 
-        /*
+        Log.e("TOHA", "isSteamLoggedSwitch"+user_id)
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if (user_id > 0) {
-                    _profile_state.set(
+                if (user_id != "") {
+                    _profile_state.postValue(
                         ProfileState.LoggedIntoSteam(user_id)
                     )
                 } else {
-                    _profile_state.set(
+                    _profile_state.postValue(
                         ProfileState.IndefinedState
                     )
                 }
             } catch (e: Exception) {
-                _profile_state.set(ProfileState.ErrorProfileState)
+                _profile_state.postValue(ProfileState.ErrorProfileState)
             }
 
         }
-         */
+
     }
 }
 

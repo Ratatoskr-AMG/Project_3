@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.model.Hero
@@ -39,7 +40,6 @@ class HeroViewModel @Inject constructor(
     private val insertHeroesUseCase: InsertHeroesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
-    var isHeroFavorite = false
     val _hero_state: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
     val hero_state: LiveData<HeroState> = _hero_state
 
@@ -76,7 +76,6 @@ class HeroViewModel @Inject constructor(
                             isFavorite = false
                         )
                     )
-                    isHeroFavorite=false
 
                 } catch (e: Exception) {
                     _hero_state.postValue(HeroState.ErrorHeroState())
@@ -90,7 +89,6 @@ class HeroViewModel @Inject constructor(
                             isFavorite = true
                         )
                     )
-                    isHeroFavorite=true
                 } catch (e: Exception) {
                     _hero_state.postValue(HeroState.ErrorHeroState())
                 }
@@ -107,15 +105,16 @@ class HeroViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
-                var isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
-                isHeroFavorite = isFavorite
+
+                ReadMe.q1()
+
                 if (hero.id < 1) {
                     _hero_state.postValue(HeroState.NoHeroState())
                 } else {
                     _hero_state.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
-                            isFavorite = isFavorite
+                            isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
                         )
                     )
                 }

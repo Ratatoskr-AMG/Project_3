@@ -38,10 +38,7 @@ import ru.ratatoskr.project_3.presentation.screens.FavoritesScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
 import ru.ratatoskr.project_3.presentation.screens.ProfileScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroEvent
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.viewmodels.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -52,9 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val navController = rememberNavController()
-            val context = this
             NavHost(navController = navController, startDestination = "main") {
-                composable("main") { MainScreen(navController, context) }
+                composable("main") { MainScreen() }
             }
         }
     }
@@ -70,12 +66,14 @@ sealed class Screens(val route: String, val stringId: Int) {
 
 @ExperimentalFoundationApi
 @Composable
-fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
+fun MainScreen(
+) {
     val navController = rememberNavController()
     val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
-    val profileViewModel = hiltViewModel<ProfileViewModel>(context)
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
+
     Scaffold(
         bottomBar = {
             BottomNavigation(
@@ -151,8 +149,19 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
-                ProfileScreen(profileViewModel, context)
-            /*
+
+                fun test(i:Int){
+                    Log.e("TOHA", "test:"+i.toString());
+                }
+
+
+                ProfileScreen(profileViewModel) { id ->
+                    //profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
+
+                }
+
+                /*
+
                 HeroesListScreen(
                     heroesListviewModel = heroesListviewModel,
                     navController = navController
@@ -187,12 +196,13 @@ fun MainScreen(parentNavController: NavController, context: AppCompatActivity) {
             }
             composable(Screens.Profile.route) {
 
-                ProfileScreen(profileViewModel, context)
-
+                /*
+                ProfileScreen(profileViewModel) { id ->
+                    profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
+                }
+                */
 
             }
-
-
         }
 
 

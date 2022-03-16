@@ -6,6 +6,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -20,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberImagePainter
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileState
+import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @ExperimentalFoundationApi
@@ -29,7 +31,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel,
     onAuthorizeChange: (String) -> Unit
 ) {
-    val viewState = viewModel.profile_state.observeAsState()
+    val viewState = viewModel.profileState.observeAsState()
     when (val state = viewState.value) {
         is ProfileState.LoggedIntoSteam -> {
             ProfileCard(
@@ -57,13 +59,20 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
             "openid.return_to=http://" + REALM + "/steam_success"
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
     ) {
         AndroidView(
             factory = {
                 WebView(it).apply {
-                    webViewClient = object : WebViewClient(){
+                    webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView, url: String) {
                             val Url: Uri = Uri.parse(url)
                             if (Url.authority.equals("ratatoskr.ru")) {
@@ -71,22 +80,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                                 val userAccountUrl =
                                     Uri.parse(Url.getQueryParameter("openid.identity"))
 
-                               // val userSteamData : steamData(){
-
-                               // }
-
-                                /*
-                                        {"response":{"players":[]}
-
-                                 */
-
                                 val userId = userAccountUrl.lastPathSegment
-
-
-
-
-
-
 
                                 Log.e("TOHA", "userId:" + userId)
 
@@ -98,49 +92,105 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                     }
                     settings.javaScriptEnabled = true
                     loadUrl(url)
+                    setBackgroundColor(0);
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color.DarkGray
+                        )
+                    )
+                )
         )
     }
 }
 
 @Composable
 fun ProfileCard(state: ProfileState.LoggedIntoSteam) {
-    Box(modifier = Modifier.fillMaxSize()) {
 
-        Image(
-            contentScale = ContentScale.Crop,
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
+
+        Box(
             modifier = Modifier
-                .width(40.dp)
-                .height(40.dp),
-            painter = rememberImagePainter(state.steam_user_avatar),
-            contentDescription = "Steam user #"+state.steam_user_id+" avatar"
-        )
+                .fillMaxWidth()
+                .height(100.dp)
 
-        Text(
-            modifier = Modifier.align(Alignment.Center), text = state.steam_user_name,
-            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
-        )
+        ) {
+            Image(
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .align(Alignment.CenterEnd)
+                    .width(60.dp)
+                    .height(60.dp),
+                painter = rememberImagePainter(state.steam_user_avatar),
+                contentDescription = "Steam user #" + state.steam_user_id + " avatar"
+            )
+
+            Text(
+                modifier = Modifier.align(Alignment.Center), text = state.steam_user_name,
+                color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
+            )
+        }
     }
+
+
 }
+
 @Composable
 fun profileLoadingView() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
         Text(
             modifier = Modifier.align(Alignment.Center), text = "Loading",
-            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
+            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }
 }
+
 @Composable
 fun profileErrorView() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
         Text(
             modifier = Modifier.align(Alignment.Center), text = "Error",
-            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
+            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }
 }

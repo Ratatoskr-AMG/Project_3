@@ -15,6 +15,7 @@ import io.ktor.client.request.*
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.SteamResponse
 import ru.ratatoskr.project_3.domain.model.SteamResponseUser
+import ru.ratatoskr.project_3.domain.model.SteamPlayer
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -23,17 +24,16 @@ class UserSteamRepoImpl @Inject constructor(
     private val client: HttpClient
 ) {
 
-    suspend fun getResponseFromSteam(steam_user_id:String): SteamResponse {
+    suspend fun getResponseFromSteam(steam_user_id: String): SteamResponse {
 
-        val Url = "http://api.steampowered.com/"+
-                "ISteamUser/GetPlayerSummaries/v0002/?"+
-                "key=D076D1B0AD4391F8156F8EED08C597CE&"+
-                "steamids="+steam_user_id;
+        val Url = "http://api.steampowered.com/" +
+                "ISteamUser/GetPlayerSummaries/v0002/?" +
+                "key=D076D1B0AD4391F8156F8EED08C597CE&" +
+                "steamids=" + steam_user_id;
 
-        Log.e("TOHA","Url:"+Url)
+        Log.e("TOHA", "Url:" + Url)
 
         return try {
-            Log.e("TOHA","Client.get")
             client.get(Url)
         } catch (e: Exception) {
             error(e)
@@ -41,19 +41,14 @@ class UserSteamRepoImpl @Inject constructor(
 
     }
 
-    suspend fun getUserSteamResponseByUserId(steam_user_id:String): SteamResponseUser {
+    suspend fun addPlayer(player: SteamPlayer) {
 
-        val URL = "http://api.steampowered.com/"+
-                "ISteamUser/GetPlayerSummaries/v0002/?"+
-                "key=D076D1B0AD4391F8156F8EED08C597CE&"+
-                "steamids="+steam_user_id;
-
-        return try {
-
-            client.get(URL)
-
+        try {
+            roomAppDatabase.SteamUsersDao().insertPlayer(player)
         } catch (e: Exception) {
-            error(e)
+            Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+        } finally {
+            Log.e("TOHA", "updateSqliteTable")
         }
 
     }

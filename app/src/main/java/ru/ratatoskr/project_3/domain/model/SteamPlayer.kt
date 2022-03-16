@@ -31,7 +31,7 @@ import ru.ratatoskr.project_3.data.contracts.SteamContract
  */
 @Serializable
 @Entity(tableName = SteamContract.USERS_STEAM_TABLE_NAME)
-data class UserSteam(
+data class SteamPlayer(
 
     @PrimaryKey
     @SerializedName(SteamContract.COLUMN_STEAM_ID)

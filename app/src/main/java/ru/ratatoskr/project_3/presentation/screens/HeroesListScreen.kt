@@ -38,11 +38,7 @@ fun HeroesListScreen(
     val viewState = heroesListviewModel.heroesListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(state.heroes, navController) {
-            val json = Json {
-                ignoreUnknownKeys = true
-            }
-        }
+        is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(state.heroes, navController)
         is HeroesListState.NoHeroesListState -> NoHeroesView()
         is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
         is HeroesListState.ErrorHeroesListState -> NoHeroesView()
@@ -56,27 +52,49 @@ fun HeroesListScreen(
 
 @Composable
 fun NoHeroesView() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
         Text(
             modifier = Modifier.align(Alignment.Center), text = "No heroes found",
-            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
+            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 16.sp
         )
     }
 }
 
 @Composable
 fun LoadingHeroesView() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
-            color = Color.Black
+            color = Color.White
         )
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroesListView(data: List<Any?>, navController: NavController, onHeroClick: (Hero) -> Unit) {
+fun HeroesListView(data: List<Any?>, navController: NavController) {
     val heroes = data.mapNotNull { it as? Hero }
 
 
@@ -97,7 +115,6 @@ fun HeroesListView(data: List<Any?>, navController: NavController, onHeroClick: 
                 item {
                     Box(modifier = Modifier
                         .clickable {
-                            onHeroClick.invoke(it)
                             navController.navigate(Screens.Hero.route + "/" + it.id)
                         }
                         .padding(10.dp)

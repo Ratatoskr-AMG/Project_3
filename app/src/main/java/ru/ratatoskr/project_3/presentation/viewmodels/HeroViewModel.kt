@@ -12,10 +12,10 @@ import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.useCases.sqlite.DropHeroFromFavorites
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetHeroByIdUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.GetIfHeroIsFavoriteUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.InsertHeroesUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.InsertHeroToFavoritesUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.DropHeroFromFavorites
+import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetHeroByIdUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.GetIfHeroIsFavoriteUseCase
 import javax.inject.Inject
 
 sealed class HeroState {
@@ -37,24 +37,19 @@ class HeroViewModel @Inject constructor(
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
     private val dropHeroFromFavorites: DropHeroFromFavorites,
-    private val insertHeroesUseCase: InsertHeroesUseCase
+    private val insertHeroToFavoritesUseCase: InsertHeroToFavoritesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
-    val _hero_state: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
-    val hero_state: LiveData<HeroState> = _hero_state
+    private val _heroState: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
+    val heroState: LiveData<HeroState> = _heroState
 
     override fun obtainEvent(event: HeroEvent) {
-
-        when (val currentState = _hero_state.value) {
+        when (val currentState = _heroState.value) {
             is HeroState.HeroLoadedState -> reduce(event, currentState)
         }
-
     }
 
     private fun reduce(event: HeroEvent, currentState: HeroState.HeroLoadedState) {
-
-        Log.e("TOHA", "reduce")
-
         when (event) {
             is HeroEvent.OnFavoriteCLick -> isFavoriteSwitch(
                 currentState.hero,
@@ -64,54 +59,48 @@ class HeroViewModel @Inject constructor(
     }
 
     private fun isFavoriteSwitch(hero: Hero, isFavorite: Boolean = false) {
-
         viewModelScope.launch {
-
             if (isFavorite) {
                 try {
                     dropHeroFromFavorites.dropHeroFromFavorites(hero.id)
-                    _hero_state.postValue(
+                    _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
                             isFavorite = false
                         )
                     )
-
                 } catch (e: Exception) {
-                    _hero_state.postValue(HeroState.ErrorHeroState())
+                    _heroState.postValue(HeroState.ErrorHeroState())
                 }
             }else{
                 try {
-                    insertHeroesUseCase.insertHeroToFavorites(hero.id)
-                    _hero_state.postValue(
+                    insertHeroToFavoritesUseCase.insertHeroToFavorites(hero.id)
+                    _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
                             isFavorite = true
                         )
                     )
                 } catch (e: Exception) {
-                    _hero_state.postValue(HeroState.ErrorHeroState())
+                    _heroState.postValue(HeroState.ErrorHeroState())
                 }
             }
         }
 
     }
 
-
     fun getHeroById(id: String) {
-        Log.e("TOHA","getHeroById");
-        _hero_state.set(newValue = HeroState.LoadingHeroState())
+
+        _heroState.set(newValue = HeroState.LoadingHeroState())
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
-
                 ReadMe.q1()
-
                 if (hero.id < 1) {
-                    _hero_state.postValue(HeroState.NoHeroState())
+                    _heroState.postValue(HeroState.NoHeroState())
                 } else {
-                    _hero_state.postValue(
+                    _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
                             isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
@@ -124,6 +113,4 @@ class HeroViewModel @Inject constructor(
             }
         }
     }
-
-
 }

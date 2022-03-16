@@ -23,7 +23,6 @@ class HeroesSqliteRepoImpl @Inject constructor(
     ) {
         Heroes.map { Hero ->
             try {
-
                 roomAppDatabase.heroesDao().insertHero(Hero)
             } catch (e: Exception) {
                 Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())

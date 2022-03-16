@@ -10,7 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.*
+import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.GetAllFavoriteHeroesUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.AddHeroesUserCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetAllHeroesByAttrUseCase
+import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetAllHeroesByNameUseCase
 import javax.inject.Inject
 
 sealed class HeroesListState {

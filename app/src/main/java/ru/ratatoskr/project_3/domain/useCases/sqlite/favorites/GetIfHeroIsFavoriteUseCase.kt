@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.useCases.sqlite
+package ru.ratatoskr.project_3.domain.useCases.sqlite.favorites
 
 import ru.ratatoskr.project_3.domain.repository.favorites.FavoritesSqliteRepoImpl
 import javax.inject.Inject

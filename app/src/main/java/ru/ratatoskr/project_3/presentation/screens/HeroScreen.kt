@@ -34,7 +34,7 @@ fun HeroScreen(
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
 
-    val viewState = viewModel.hero_state.observeAsState()
+    val viewState = viewModel.heroState.observeAsState()
 
     when (val state = viewState.value) {
         is HeroState.HeroLoadedState -> {

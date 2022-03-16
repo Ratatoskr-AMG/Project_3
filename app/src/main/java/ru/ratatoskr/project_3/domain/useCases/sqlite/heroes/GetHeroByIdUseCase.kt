@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.useCases.sqlite
+package ru.ratatoskr.project_3.domain.useCases.sqlite.heroes
 
 import ru.ratatoskr.project_3.data.storage.HeroesDao
 import ru.ratatoskr.project_3.domain.model.Hero

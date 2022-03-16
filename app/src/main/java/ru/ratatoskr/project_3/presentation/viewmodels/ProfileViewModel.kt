@@ -9,29 +9,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
-import ru.ratatoskr.project_3.domain.extensions.set
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
+import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.domain.useCases.sqlite.user.AddSteamPlayerUseCase
+import ru.ratatoskr.project_3.domain.useCases.steam.GetSteamUserUseCase
+
 import javax.inject.Inject
-
-sealed class ProfileState {
-    object IndefinedState : ProfileState()
-    object LoadingState : ProfileState()
-    object ErrorProfileState : ProfileState()
-    data class LoggedIntoSteam(
-        val steam_user_id: String,
-    ) : ProfileState()
-}
-
-sealed class ProfileEvent {
-    data class OnSteamLogin(val steam_user_id: String) : ProfileEvent()
-}
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-) : ViewModel(), EventHandler<ProfileEvent> {
+    private val getSteamUserUseCase: GetSteamUserUseCase,
+    private val addPlayerToUseCase: AddSteamPlayerUseCase,
 
-    val _profile_state: MutableLiveData<ProfileState> =
+    ) : ViewModel(), EventHandler<ProfileEvent> {
+
+    private val _profile_state: MutableLiveData<ProfileState> =
         MutableLiveData<ProfileState>(ProfileState.IndefinedState)
-    val profile_state: LiveData<ProfileState> = _profile_state
+    val profileState: LiveData<ProfileState> = _profile_state
 
     override fun obtainEvent(event: ProfileEvent) {
 
@@ -51,17 +45,24 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun isSteamLoggedSwitch(event:ProfileEvent.OnSteamLogin) {
+    private fun isSteamLoggedSwitch(event: ProfileEvent.OnSteamLogin) {
 
         val user_id = event.steam_user_id
 
         Log.e("TOHA", "isSteamLoggedSwitch"+user_id)
 
         viewModelScope.launch(Dispatchers.IO) {
+
+            var steamRespose = getSteamUserUseCase.getSteamResponseOnId(user_id)
+            Log.e("TOHA",steamRespose.toString());
+            var player = steamRespose.response.players[0]
+            addPlayerToUseCase.addPlayer(player)
+
             try {
                 if (user_id != "") {
                     _profile_state.postValue(
-                        ProfileState.LoggedIntoSteam(user_id)
+                        ProfileState.LoggedIntoSteam(user_id,player.avatarmedium,player.personaname)
+
                     )
                 } else {
                     _profile_state.postValue(

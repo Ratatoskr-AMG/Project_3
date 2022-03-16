@@ -1,12 +1,6 @@
 package ru.ratatoskr.project_3.presentation.activity
 
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,9 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.FavoritesScreen
 import ru.ratatoskr.project_3.presentation.screens.HeroScreen
@@ -188,9 +181,9 @@ fun MainScreen(
             }
             composable(Screens.Profile.route) {
 
-                ProfileScreen(profileViewModel,{ id ->
+                ProfileScreen(profileViewModel) { id ->
                     profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
-                })
+                }
 
             }
         }

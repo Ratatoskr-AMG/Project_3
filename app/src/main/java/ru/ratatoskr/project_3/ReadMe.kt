@@ -4,8 +4,7 @@
 
 ProfileViewModel
 ProfileScreen
-
-
+Database
 
  * Задания:
 
@@ -61,11 +60,40 @@ class ReadMe() {
 
         fun q2() {
 /*
-    Почему вызов viewModel.isSteamLoggedSwitch(userId!!.toInt()) вызывает падение?
+
+
  */
         }
 
+        fun q3() {
+/*
+
+
+ */
+        }
+
+        fun q4() {
+/*
+
+
+ */
+        }
     }
 }
 
 val Readme = ReadMe()
+
+/* Нижняя граница Box:
+
+.drawBehind {
+    val strokeWidth = density
+    val y = size.height - strokeWidth / 1
+    drawLine(
+        Color.LightGray,
+        Offset(0f, y),
+        Offset(size.width, y),
+        strokeWidth
+    )
+}  */
+
+

@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import kotlinx.serialization.json.Json
 import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
@@ -35,12 +34,9 @@ fun FavoritesScreen(
 
     when (val state = viewState.value) {
         is HeroListState.LoadedHeroListState<*> -> FavoritesListView(
-            state.heroes,
-            navController
+            state.heroes
         ) {
-            val json = Json {
-                ignoreUnknownKeys = true
-            }
+            navController.navigate(Screens.Hero.route + "/" + it.id)
         }
         is HeroListState.NoHeroListState -> NoHeroesView()
         is HeroListState.LoadingHeroListState -> LoadingHeroesView()
@@ -57,7 +53,6 @@ fun FavoritesScreen(
 @Composable
 fun FavoritesListView(
     data: List<Any?>,
-    navController: NavController,
     onHeroClick: (Hero) -> Unit
 ) {
     val heroes = data.mapNotNull { it as? Hero }
@@ -89,8 +84,7 @@ fun FavoritesListView(
                             .padding(1.dp)
                             .background(Color.Black)
                             .clickable {
-                                onHeroClick.invoke(it)
-                                navController.navigate(Screens.Hero.route + "/" + it.id)
+                                onHeroClick(it)
                             }
                     ) {
                         Image(

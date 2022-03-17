@@ -33,9 +33,8 @@ fun HeroesListScreen(
     heroesListviewModel: HeroesListViewModel,
     navController: NavController
 ) {
-    val viewState = heroesListviewModel.heroListState.observeAsState()
 
-    when (val state = viewState.value) {
+    when (val state = heroesListviewModel.heroListState.observeAsState().value) {
         is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes, navController)
         is HeroListState.NoHeroListState -> NoHeroesView()
         is HeroListState.LoadingHeroListState -> LoadingHeroesView()

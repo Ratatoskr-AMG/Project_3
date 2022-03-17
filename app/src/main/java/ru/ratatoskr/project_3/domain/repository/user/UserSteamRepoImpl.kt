@@ -42,15 +42,27 @@ class UserSteamRepoImpl @Inject constructor(
     }
 
     suspend fun addPlayer(player: SteamPlayer) {
+        Log.e("TOHA", "player.steamid"+player.steamid);
+        if (player.steamid != null) {
+            try {
+                roomAppDatabase.SteamUsersDao().insertPlayer(player)
+            } catch (e: Exception) {
+                Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+            } finally {
+                Log.e("TOHA", "updateSqliteTable")
+            }
+        }
+    }
 
+    suspend fun getSteamUser() : SteamPlayer{
         try {
-            roomAppDatabase.SteamUsersDao().insertPlayer(player)
+           roomAppDatabase.SteamUsersDao().player
         } catch (e: Exception) {
             Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
         } finally {
             Log.e("TOHA", "updateSqliteTable")
         }
-
+         return  SteamPlayer("")
     }
 }
 

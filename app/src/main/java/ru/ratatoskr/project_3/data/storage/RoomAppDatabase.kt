@@ -8,14 +8,13 @@ import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.model.SteamPlayer
 
-@Database(entities = [Hero::class,Favorites::class,SteamPlayer::class], version = 5)
+@Database(entities = [Hero::class,Favorites::class,SteamPlayer::class], version = 6)
 @TypeConverters(HeroesConverterImpl::class)
 abstract class RoomAppDatabase : RoomDatabase() {
 
     abstract fun heroesDao(): HeroesDao
     abstract fun favoritesDao(): FavoritesDao
     abstract fun SteamUsersDao(): SteamUsersDao
-
 
     companion object {
 

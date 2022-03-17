@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
 import ru.ratatoskr.project_3.presentation.screens.FavoritesScreen

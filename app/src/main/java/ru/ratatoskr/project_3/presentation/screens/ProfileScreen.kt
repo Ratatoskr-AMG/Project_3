@@ -33,12 +33,20 @@ fun ProfileScreen(
 ) {
     val viewState = viewModel.profileState.observeAsState()
     when (val state = viewState.value) {
+        is ProfileState.IndefinedState -> {
+
+            //var steamPlayer = viewModel.getSteamPlayer()
+
+
+            Log.e("TOHA","state="+state)
+
+            steamWebView { onAuthorizeChange(it) }
+        }
         is ProfileState.LoggedIntoSteam -> {
             ProfileCard(
                 state
             )
         }
-        is ProfileState.IndefinedState -> steamWebView { onAuthorizeChange(it) }
         is ProfileState.LoadingState -> profileLoadingView()
         is ProfileState.ErrorProfileState -> profileErrorView()
     }

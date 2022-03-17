@@ -20,9 +20,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 
 @ExperimentalFoundationApi

@@ -21,13 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-
-import kotlinx.serialization.json.Json
+import ru.ratatoskr.project_3.ReadMe
+import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-
 
 @ExperimentalFoundationApi
 @Composable
@@ -35,18 +33,17 @@ fun HeroesListScreen(
     heroesListviewModel: HeroesListViewModel,
     navController: NavController
 ) {
-    val viewState = heroesListviewModel.heroesListState.observeAsState()
+    val viewState = heroesListviewModel.heroListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(state.heroes, navController)
-        is HeroesListState.NoHeroesListState -> NoHeroesView()
-        is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
-        is HeroesListState.ErrorHeroesListState -> NoHeroesView()
+        is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes, navController)
+        is HeroListState.NoHeroListState -> NoHeroesView()
+        is HeroListState.LoadingHeroListState -> LoadingHeroesView()
+        is HeroListState.ErrorHeroListState -> NoHeroesView()
     }
 
     LaunchedEffect(key1 = Unit, block = {
         heroesListviewModel.getAllHeroesByName()
-
     })
 }
 
@@ -73,6 +70,7 @@ fun NoHeroesView() {
 
 @Composable
 fun LoadingHeroesView() {
+    ReadMe.q2()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -131,5 +129,4 @@ fun HeroesListView(data: List<Any?>, navController: NavController) {
                 }
             }
         })
-
 }

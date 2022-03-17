@@ -61,6 +61,8 @@ class ReadMe() {
         fun q2() {
 /*
 
+    Как убрать background в theme?
+    .background(brush = Brush.verticalGradient(colors = listOf(Color.Black,Color.DarkGray)))
 
  */
         }
@@ -83,6 +85,14 @@ class ReadMe() {
 
 val Readme = ReadMe()
 
+/* Архитектура
+
+screens
+theme(что это?)
+viewmodels @inject(useCases)
+*/
+
+
 /* Нижняя граница Box:
 
 .drawBehind {
@@ -97,3 +107,13 @@ val Readme = ReadMe()
 }  */
 
 
+/*
+    //private val addSteamPlayerUseCase: AddSteamPlayerUseCase,
+ //   suspend fun getSteamPlayer() : SteamPlayer {
+        //viewModelScope.launch(Dispatchers.IO) {
+//
+       // }
+       // Log.e("TOHA","steamPlayer:"+steamPlayer.toString())
+
+ //   }
+ */

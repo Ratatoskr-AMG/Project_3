@@ -42,7 +42,7 @@ fun ProfileScreen(
             steamWebView { onAuthorizeChange(it) }
         }
         is ProfileState.LoggedIntoSteam -> {
-            ProfileCard(
+            profileCard(
                 state
             )
         }
@@ -118,7 +118,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
 }
 
 @Composable
-fun ProfileCard(state: ProfileState.LoggedIntoSteam) {
+fun profileCard(state: ProfileState.LoggedIntoSteam) {
 
     Box(
         modifier = Modifier

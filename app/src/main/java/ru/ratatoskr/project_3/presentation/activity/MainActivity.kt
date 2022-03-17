@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
@@ -42,28 +43,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "main") {
-                composable("main") { MainScreen() }
-            }
+            MainScreen()
         }
     }
-}
-
-sealed class Screens(val route: String, val stringId: Int) {
-    object Home : Screens("home", R.string.title_home)
-    object Hero : Screens("hero", R.string.title_hero)
-    object Attr : Screens("attr", R.string.title_hero)
-    object Favorites : Screens("favorites", R.string.title_favorites)
-    object Profile : Screens("profile", R.string.title_profile)
 }
 
 @ExperimentalFoundationApi
 @Composable
 fun MainScreen(
 ) {
-    val navController = rememberNavController()
     val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
+    val navController = rememberNavController()
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
@@ -143,20 +133,12 @@ fun MainScreen(
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
-
-
-
-
-
                 HeroesListScreen(
                     heroesListviewModel = heroesListviewModel,
                     navController = navController
                 )
-
-
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
-
                 val id = navBackStack.arguments?.getString("id").toString()
                 HeroScreen(
                     id,

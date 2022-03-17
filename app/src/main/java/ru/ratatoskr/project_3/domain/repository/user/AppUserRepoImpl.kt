@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class AppUserRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
-    private val client: HttpClient
+    private val httpAppClient: HttpClient
 ) {
 
     suspend fun getResponseFromSteam(steam_user_id: String): SteamResponse {
@@ -24,7 +24,7 @@ class AppUserRepoImpl @Inject constructor(
         Log.e("TOHA", "Url:" + Url)
 
         return try {
-            client.get(Url)
+            httpAppClient.get(Url)
         } catch (e: Exception) {
             error(e)
         }

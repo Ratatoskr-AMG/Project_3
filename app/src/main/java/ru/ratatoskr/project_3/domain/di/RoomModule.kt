@@ -33,16 +33,3 @@ class RoomModule {
     ): RoomAppDatabase = RoomAppDatabase.buildDataSource(context = context)
 }
 
-
-val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-    // From version 1 to version 2
-    override fun migrate(database: SupportSQLiteDatabase) {
-        // Remove the table
-       // database.execSQL(HeroesContract.DROP_COMMAND) // Use the right table name
-
-        // OR: We could update it, by using an ALTER query
-
-        // OR: If needed, we can create the table again with the required settings
-        // database.execSQL("CREATE TABLE IF NOT EXISTS my_table (id INTEGER, PRIMARY KEY(id), ...)")
-    }
-}

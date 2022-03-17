@@ -10,7 +10,7 @@ class FavoritesSqliteRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
 ) {
 
-    suspend fun DropHeroFromFavorites(heroId: Int){
+    suspend fun dropHeroFromFavorites(heroId: Int){
 
         roomAppDatabase.favoritesDao().dropFavorite(heroId!!)
     }
@@ -19,7 +19,6 @@ class FavoritesSqliteRepoImpl @Inject constructor(
         try {
             Log.e("TOHA", "addHeroToFavoritesById " + heroId)
             roomAppDatabase.favoritesDao().insertFavorites(Favorites(null,heroId))
-
         } catch (e: Exception) {
             Log.e(
                 "TOHA",
@@ -28,7 +27,7 @@ class FavoritesSqliteRepoImpl @Inject constructor(
         }
     }
 
-    suspend fun getAllFavorites(): List<Favorites> {
+    fun getAllFavorites(): List<Favorites> {
 
         return roomAppDatabase.favoritesDao().all
 

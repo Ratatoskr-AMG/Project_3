@@ -1,12 +1,3 @@
-/*
-Многопоточность
-Параллельность
-Асинхронность
-3 основных ошибки конкурентности
-16.6 мс
-В скоуп передается диспетчер, это SuperVisorJob
-*/
-
 package ru.ratatoskr.project_3.domain.repository.user
 
 import android.util.Log
@@ -14,7 +5,6 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.SteamResponse
-import ru.ratatoskr.project_3.domain.model.SteamResponseUser
 import ru.ratatoskr.project_3.domain.model.SteamPlayer
 import java.lang.Exception
 import javax.inject.Inject
@@ -41,7 +31,7 @@ class AppUserRepoImpl @Inject constructor(
 
     }
 
-    suspend fun addPlayer(player: SteamPlayer) {
+    suspend fun updateAppUser(player: SteamPlayer) {
         Log.e("TOHA", "player.steamid"+player.steamid);
         if (player.steamid != null) {
             try {
@@ -54,6 +44,7 @@ class AppUserRepoImpl @Inject constructor(
         }
     }
 
+    /*
     suspend fun getSteamUser() : SteamPlayer{
         try {
            roomAppDatabase.SteamUsersDao().player
@@ -64,5 +55,6 @@ class AppUserRepoImpl @Inject constructor(
         }
          return  SteamPlayer("")
     }
+    */
 }
 

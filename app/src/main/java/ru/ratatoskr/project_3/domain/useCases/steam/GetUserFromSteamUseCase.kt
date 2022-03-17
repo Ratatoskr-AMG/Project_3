@@ -14,7 +14,9 @@ class GetSteamUserUseCase @Inject constructor(
         return steamRepoImpl.getResponseFromSteam(id)
     }
 
+    /*
     suspend fun getSteamPlayer(): SteamPlayer {
         return steamRepoImpl.getSteamUser()
     }
+    */
 }

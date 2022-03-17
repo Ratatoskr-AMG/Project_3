@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
-import ru.ratatoskr.project_3.domain.useCases.sqlite.user.AddSteamPlayerUseCase
 import ru.ratatoskr.project_3.domain.useCases.steam.GetSteamUserUseCase
 
 import javax.inject.Inject

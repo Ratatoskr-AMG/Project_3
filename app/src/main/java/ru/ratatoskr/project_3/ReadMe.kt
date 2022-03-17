@@ -86,10 +86,14 @@ class ReadMe() {
 val Readme = ReadMe()
 
 /* Архитектура
-
-screens
-theme(что это?)
-viewmodels @inject(useCases)
+domain
+    repository
+    useCases
+presentation
+    activity
+    screens
+    theme!
+    viewmodels(domain.useCases)
 */
 
 

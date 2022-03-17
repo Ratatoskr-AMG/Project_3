@@ -37,7 +37,6 @@ fun ProfileScreen(
 
             //var steamPlayer = viewModel.getSteamPlayer()
 
-
             Log.e("TOHA","state="+state)
 
             steamWebView { onAuthorizeChange(it) }

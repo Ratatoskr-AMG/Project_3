@@ -35,7 +35,9 @@ fun HeroesListScreen(
 ) {
 
     when (val state = heroesListviewModel.heroListState.observeAsState().value) {
-        is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes, navController)
+        is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes){
+            navController.navigate(Screens.Hero.route + "/" + it.id)
+        }
         is HeroListState.NoHeroListState -> NoHeroesView()
         is HeroListState.LoadingHeroListState -> LoadingHeroesView()
         is HeroListState.ErrorHeroListState -> NoHeroesView()
@@ -91,7 +93,7 @@ fun LoadingHeroesView() {
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroesListView(data: List<Any?>, navController: NavController) {
+fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
     val heroes = data.mapNotNull { it as? Hero }
 
 
@@ -112,7 +114,7 @@ fun HeroesListView(data: List<Any?>, navController: NavController) {
                 item {
                     Box(modifier = Modifier
                         .clickable {
-                            navController.navigate(Screens.Hero.route + "/" + it.id)
+                            onHeroClick(it)
                         }
                         .padding(10.dp)
                         .width(100.dp)

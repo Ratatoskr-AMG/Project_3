@@ -19,7 +19,7 @@ import ru.ratatoskr.project_3.domain.model.SteamPlayer
 import java.lang.Exception
 import javax.inject.Inject
 
-class UserSteamRepoImpl @Inject constructor(
+class AppUserRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
     private val client: HttpClient
 ) {

@@ -35,10 +35,8 @@ fun AttributeScreen(
     val viewState = viewModel.heroListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroListState.LoadedHeroListState<*> -> AttributeListView(attr, state.heroes, navController) {
-            val json = Json {
-                ignoreUnknownKeys = true
-            }
+        is HeroListState.LoadedHeroListState<*> -> AttributeListView(attr, state.heroes){
+            navController.navigate(Screens.Hero.route + "/" + it.id)
         }
         is HeroListState.NoHeroListState -> NoHeroesView()
         is HeroListState.LoadingHeroListState -> LoadingHeroesView()
@@ -56,7 +54,6 @@ fun AttributeScreen(
 fun AttributeListView(
     attr: String,
     data: List<Any?>,
-    navController: NavController,
     onHeroClick: (Hero) -> Unit
 ) {
     val heroes = data.mapNotNull { it as? Hero }
@@ -134,7 +131,6 @@ fun AttributeListView(
                                 .background(Color.Black)
                                 .clickable {
                                     onHeroClick.invoke(it)
-                                    navController.navigate(Screens.Hero.route + "/" + it.id)
                                 }
                         ) {
                             Image(

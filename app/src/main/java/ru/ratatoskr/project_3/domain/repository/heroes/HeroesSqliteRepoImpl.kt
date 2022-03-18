@@ -14,7 +14,7 @@ class HeroesSqliteRepoImpl @Inject constructor(
         return roomAppDatabase.heroesDao().all
     }
 
-    suspend fun getHeroById(heroId: String): Hero {
+    suspend fun   getHeroById(heroId: String): Hero {
         return roomAppDatabase.heroesDao().fetchHero(heroId.toInt())
     }
     suspend fun updateHeroesList(

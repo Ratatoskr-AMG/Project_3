@@ -10,7 +10,6 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class AppUserRepoImpl @Inject constructor(
-    private val roomAppDatabase: RoomAppDatabase,
     private val httpAppClient: HttpClient
 ) {
 

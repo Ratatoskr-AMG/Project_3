@@ -24,7 +24,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
@@ -93,7 +92,7 @@ fun MainScreen(
         ) {
             composable(Screens.Home.route) {
                 HeroesListScreen(
-                    heroesListviewModel = heroesListviewModel,
+                    viewModel = heroesListviewModel,
                     navController = navController
                 )
             }

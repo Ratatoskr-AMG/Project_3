@@ -30,11 +30,11 @@ import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 @ExperimentalFoundationApi
 @Composable
 fun HeroesListScreen(
-    heroesListviewModel: HeroesListViewModel,
+    viewModel: HeroesListViewModel,
     navController: NavController
 ) {
 
-    when (val state = heroesListviewModel.heroListState.observeAsState().value) {
+    when (val state = viewModel.heroListState.observeAsState().value) {
         is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes){
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
@@ -44,7 +44,7 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        heroesListviewModel.getAllHeroesByName()
+        viewModel.getAllHeroesByName()
     })
 }
 

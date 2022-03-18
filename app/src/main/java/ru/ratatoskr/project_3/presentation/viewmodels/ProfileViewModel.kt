@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getSteamUserUseCase: GetSteamUserUseCase
+    private val getSteamUserUseCase : GetSteamUserUseCase
 ) : ViewModel(), EventHandler<ProfileEvent> {
 
     private val _profile_state: MutableLiveData<ProfileState> =

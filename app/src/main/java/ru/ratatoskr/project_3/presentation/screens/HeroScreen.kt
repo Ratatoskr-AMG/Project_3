@@ -31,8 +31,7 @@ import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 fun HeroScreen(
     id: String,
     viewModel: HeroViewModel,
-    navController: NavController,
-    onCheckedChange: (Int, Boolean) -> Unit
+    navController: NavController
 ) {
 
     val viewState = viewModel.heroState.observeAsState()

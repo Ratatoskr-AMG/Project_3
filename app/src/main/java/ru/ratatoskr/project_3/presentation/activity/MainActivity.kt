@@ -101,17 +101,7 @@ fun MainScreen(
                 HeroScreen(
                     id,
                     heroViewModel,
-                    navController,
-                    onCheckedChange = { id,
-                                        isChecked ->
-                        heroViewModel.obtainEvent(
-                            HeroEvent.OnFavoriteCLick(
-                                id,
-                                false
-                            )
-                        )
-
-                    })
+                    navController)
             }
             composable(Screens.Attr.route + "/{attr}") { navBackStack ->
                 val attr = navBackStack.arguments?.getString("attr")

@@ -15,7 +15,7 @@ import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.InsertHeroToFavoritesUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.DropHeroFromFavorites
+import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.DropHeroFromFavoritesUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetHeroByIdUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.GetIfHeroIsFavoriteUseCase
 import javax.inject.Inject
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class HeroViewModel @Inject constructor(
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
-    private val dropHeroFromFavorites: DropHeroFromFavorites,
+    private val dropHeroFromFavorites: DropHeroFromFavoritesUseCase,
     private val insertHeroToFavoritesUseCase: InsertHeroToFavoritesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 

@@ -11,7 +11,7 @@ class GetSteamUserUseCase @Inject constructor(
 ) {
 
     suspend fun getSteamResponseOnId(id: String): SteamResponse {
-        return steamRepoImpl.getResponseFromSteam(id)
+        return steamRepoImpl. getResponseFromSteam(id)
     }
 
     /*

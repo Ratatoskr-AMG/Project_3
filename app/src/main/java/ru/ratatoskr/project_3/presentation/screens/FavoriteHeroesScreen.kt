@@ -19,10 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import kotlinx.serialization.json.Json
+import ru.ratatoskr.project_3.domain.helpers.Screens
+import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @ExperimentalFoundationApi
@@ -31,20 +30,17 @@ fun FavoritesScreen(
     viewModel: HeroesListViewModel,
     navController: NavController
 ) {
-    val viewState = viewModel.heroesListState.observeAsState()
+    val viewState = viewModel.heroListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroesListState.LoadedHeroesListState<*> -> FavoritesListView(
-            state.heroes,
-            navController
+        is HeroListState.LoadedHeroListState<*> -> FavoritesListView(
+            state.heroes
         ) {
-            val json = Json {
-                ignoreUnknownKeys = true
-            }
+            navController.navigate(Screens.Hero.route + "/" + it.id)
         }
-        is HeroesListState.NoHeroesListState -> NoHeroesView()
-        is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
-        is HeroesListState.ErrorHeroesListState -> NoHeroesView()
+        is HeroListState.NoHeroListState -> NoHeroesView()
+        is HeroListState.LoadingHeroListState -> LoadingHeroesView()
+        is HeroListState.ErrorHeroListState -> NoHeroesView()
     }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -57,7 +53,6 @@ fun FavoritesScreen(
 @Composable
 fun FavoritesListView(
     data: List<Any?>,
-    navController: NavController,
     onHeroClick: (Hero) -> Unit
 ) {
     val heroes = data.mapNotNull { it as? Hero }
@@ -89,8 +84,7 @@ fun FavoritesListView(
                             .padding(1.dp)
                             .background(Color.Black)
                             .clickable {
-                                onHeroClick.invoke(it)
-                                navController.navigate(Screens.Hero.route + "/" + it.id)
+                                onHeroClick(it)
                             }
                     ) {
                         Image(

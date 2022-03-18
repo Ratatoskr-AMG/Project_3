@@ -22,23 +22,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberImagePainter
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @ExperimentalFoundationApi
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel,
-    onAuthorizeChange: (String) -> Unit
+    viewModel: ProfileViewModel
 ) {
     val viewState = viewModel.profileState.observeAsState()
     when (val state = viewState.value) {
+        is ProfileState.IndefinedState -> {
+
+            Log.e("TOHA","state="+state)
+
+            steamWebView {
+                viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
+            }
+        }
         is ProfileState.LoggedIntoSteam -> {
-            ProfileCard(
+            profileCard(
                 state
             )
         }
-        is ProfileState.IndefinedState -> steamWebView { onAuthorizeChange(it) }
         is ProfileState.LoadingState -> profileLoadingView()
         is ProfileState.ErrorProfileState -> profileErrorView()
     }
@@ -111,7 +118,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
 }
 
 @Composable
-fun ProfileCard(state: ProfileState.LoggedIntoSteam) {
+fun profileCard(state: ProfileState.LoggedIntoSteam) {
 
     Box(
         modifier = Modifier

@@ -39,67 +39,65 @@ data class SteamPlayer(
     var steamid: String,
 
     @SerializedName("communityvisibilitystate")
-    @Expose
-    var communityvisibilitystate: Int,
+    var communityvisibilitystate: Int? = 0,
 
     @SerializedName("profilestate")
-    @Expose
-    var profilestate: Int,
+    var profilestate: Int? = 0,
 
     @SerializedName("personaname")
     @Expose
-    var personaname: String,
+    var personaname: String? = "",
 
     @SerializedName("profileurl")
     @Expose
-    var profileurl: String,
+    var profileurl: String? = "",
 
     @SerializedName("avatar")
     @Expose
-    var avatar: String,
+    var avatar: String? = "",
 
     @SerializedName("avatarmedium")
     @Expose
-    var avatarmedium: String,
+    var avatarmedium: String? = "",
 
     @SerializedName("avatarfull")
     @Expose
-    var avatarfull: String,
+    var avatarfull: String? = "",
 
     @SerializedName("avatarhash")
     @Expose
-    var avatarhash: String,
+    var avatarhash: String? = "",
 
     @SerializedName("lastlogoff")
     @Expose
-    var lastlogoff: Int,
+    var lastlogoff: Int? = 0,
 
     @SerializedName("personastate")
     @Expose
-    var personastate: Int,
+    var personastate: Int? = 0,
 
     @SerializedName("primaryclanid")
     @Expose
-    var primaryclanid: String,
+    var primaryclanid: String? = "",
 
     @SerializedName("timecreated")
     @Expose
-    var timecreated: Int,
+    var timecreated: Int? = 0,
 
     @SerializedName("personastateflags")
     @Expose
-    var personastateflags: String,
+    var personastateflags: String? = "",
 
     @SerializedName("loccountrycode")
     @Expose
-    var loccountrycode: String,
+    var loccountrycode: String? = "",
 
     @SerializedName("locstatecode")
     @Expose
-    var locstatecode: String,
+    var locstatecode: String? = "",
 
     @SerializedName("loccityid")
     @Expose
-    var loccityid: Int
+    var loccityid: Int? = 0
 
 )

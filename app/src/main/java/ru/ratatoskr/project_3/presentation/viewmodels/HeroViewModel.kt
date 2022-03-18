@@ -11,32 +11,20 @@ import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
+import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
+import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.InsertHeroToFavoritesUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.DropHeroFromFavorites
+import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.DropHeroFromFavoritesUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetHeroByIdUseCase
 import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.GetIfHeroIsFavoriteUseCase
 import javax.inject.Inject
-
-sealed class HeroState {
-    class NoHeroState : HeroState()
-    class LoadingHeroState : HeroState()
-    class ErrorHeroState : HeroState()
-    data class HeroLoadedState(
-        val hero: Hero,
-        val isFavorite: Boolean,
-    ) : HeroState()
-}
-
-sealed class HeroEvent {
-    data class OnFavoriteCLick(val heroId: Int, val newValue: Boolean) : HeroEvent()
-}
 
 @HiltViewModel
 class HeroViewModel @Inject constructor(
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
-    private val dropHeroFromFavorites: DropHeroFromFavorites,
+    private val dropHeroFromFavorites: DropHeroFromFavoritesUseCase,
     private val insertHeroToFavoritesUseCase: InsertHeroToFavoritesUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
@@ -94,8 +82,10 @@ class HeroViewModel @Inject constructor(
         _heroState.set(newValue = HeroState.LoadingHeroState())
 
         viewModelScope.launch(Dispatchers.IO) {
+
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
+
                 ReadMe.q1()
                 if (hero.id < 1) {
                     _heroState.postValue(HeroState.NoHeroState())
@@ -108,7 +98,10 @@ class HeroViewModel @Inject constructor(
                     )
                 }
             } catch (e: java.lang.Exception) {
-                Log.e("TOHA","e:"+e.toString());
+                /*
+                Здесь следует измененять состояние, а не просто печатать в лог
+                 */
+                Log.e("TOHA","getHeroById exception:"+e.toString());
                 e.printStackTrace()
             }
         }

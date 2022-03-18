@@ -20,9 +20,10 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import ru.ratatoskr.project_3.domain.helpers.Screens
+import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
+import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 
 @ExperimentalFoundationApi
@@ -30,8 +31,7 @@ import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 fun HeroScreen(
     id: String,
     viewModel: HeroViewModel,
-    navController: NavController,
-    onCheckedChange: (Int, Boolean) -> Unit
+    navController: NavController
 ) {
 
     val viewState = viewModel.heroState.observeAsState()
@@ -44,7 +44,16 @@ fun HeroScreen(
                 hero,
                 navController,
                 isChecked,
-                onFavoriteChange = { onCheckedChange(hero.id, isChecked) }
+                onFavoriteChange = {
+                    viewModel.obtainEvent(
+                        HeroEvent.OnFavoriteCLick(
+                            hero.id,
+                            isChecked
+                        )
+                    )
+                    /*onCheckedChange(hero.id, isChecked)*/
+                }
+
             )
         }
         is HeroState.NoHeroState -> NoHeroesView()

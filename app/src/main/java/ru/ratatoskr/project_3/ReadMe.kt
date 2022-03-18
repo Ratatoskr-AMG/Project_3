@@ -61,6 +61,8 @@ class ReadMe() {
         fun q2() {
 /*
 
+    Как убрать background в theme?
+    .background(brush = Brush.verticalGradient(colors = listOf(Color.Black,Color.DarkGray)))
 
  */
         }
@@ -83,6 +85,18 @@ class ReadMe() {
 
 val Readme = ReadMe()
 
+/* Архитектура
+domain
+    repository
+    useCases
+presentation
+    activity
+    screens
+    theme!
+    viewmodels(domain.useCases)
+*/
+
+
 /* Нижняя граница Box:
 
 .drawBehind {
@@ -97,3 +111,49 @@ val Readme = ReadMe()
 }  */
 
 
+/*
+    //private val addSteamPlayerUseCase: AddSteamPlayerUseCase,
+ //   suspend fun getSteamPlayer() : SteamPlayer {
+        //viewModelScope.launch(Dispatchers.IO) {
+//
+       // }
+       // Log.e("TOHA","steamPlayer:"+steamPlayer.toString())
+
+ //   }
+ */
+
+/*
+Многопоточность
+Параллельность
+Асинхронность
+3 основных ошибки конкурентности
+16.6 мс
+В скоуп передается диспетчер, это SuperVisorJob
+*/
+/*
+    suspend fun getSteamUser() : SteamPlayer{
+        try {
+           roomAppDatabase.SteamUsersDao().player
+        } catch (e: Exception) {
+            Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+        } finally {
+            Log.e("TOHA", "updateSqliteTable")
+        }
+         return  SteamPlayer("")
+    }
+*/
+/*
+    suspend fun updateAppUser(player: SteamPlayer) {
+        Log.e("TOHA", "player.steamid"+player.steamid);
+        if (player.steamid != null) {
+            try {
+                roomAppDatabase.SteamUsersDao().insertPlayer(player)
+            } catch (e: Exception) {
+                Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+            } finally {
+                Log.e("TOHA", "updateSqliteTable")
+            }
+        }
+    }
+
+ */

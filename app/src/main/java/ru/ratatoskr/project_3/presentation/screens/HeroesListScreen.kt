@@ -21,32 +21,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-
-import kotlinx.serialization.json.Json
+import ru.ratatoskr.project_3.ReadMe
+import ru.ratatoskr.project_3.domain.helpers.Screens
+import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.activity.Screens
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-
 
 @ExperimentalFoundationApi
 @Composable
 fun HeroesListScreen(
-    heroesListviewModel: HeroesListViewModel,
+    viewModel: HeroesListViewModel,
     navController: NavController
 ) {
-    val viewState = heroesListviewModel.heroesListState.observeAsState()
 
-    when (val state = viewState.value) {
-        is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(state.heroes, navController)
-        is HeroesListState.NoHeroesListState -> NoHeroesView()
-        is HeroesListState.LoadingHeroesListState -> LoadingHeroesView()
-        is HeroesListState.ErrorHeroesListState -> NoHeroesView()
+    when (val state = viewModel.heroListState.observeAsState().value) {
+        is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes){
+            navController.navigate(Screens.Hero.route + "/" + it.id)
+        }
+        is HeroListState.NoHeroListState -> NoHeroesView()
+        is HeroListState.LoadingHeroListState -> LoadingHeroesView()
+        is HeroListState.ErrorHeroListState -> NoHeroesView()
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        heroesListviewModel.getAllHeroesByName()
-
+        viewModel.getAllHeroesByName()
     })
 }
 
@@ -73,6 +71,7 @@ fun NoHeroesView() {
 
 @Composable
 fun LoadingHeroesView() {
+    ReadMe.q2()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -94,7 +93,7 @@ fun LoadingHeroesView() {
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroesListView(data: List<Any?>, navController: NavController) {
+fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
     val heroes = data.mapNotNull { it as? Hero }
 
 
@@ -115,7 +114,7 @@ fun HeroesListView(data: List<Any?>, navController: NavController) {
                 item {
                     Box(modifier = Modifier
                         .clickable {
-                            navController.navigate(Screens.Hero.route + "/" + it.id)
+                            onHeroClick(it)
                         }
                         .padding(10.dp)
                         .width(100.dp)
@@ -131,5 +130,4 @@ fun HeroesListView(data: List<Any?>, navController: NavController) {
                 }
             }
         })
-
 }

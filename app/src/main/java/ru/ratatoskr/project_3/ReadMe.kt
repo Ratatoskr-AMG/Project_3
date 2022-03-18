@@ -130,3 +130,30 @@ presentation
 16.6 мс
 В скоуп передается диспетчер, это SuperVisorJob
 */
+/*
+    suspend fun getSteamUser() : SteamPlayer{
+        try {
+           roomAppDatabase.SteamUsersDao().player
+        } catch (e: Exception) {
+            Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+        } finally {
+            Log.e("TOHA", "updateSqliteTable")
+        }
+         return  SteamPlayer("")
+    }
+*/
+/*
+    suspend fun updateAppUser(player: SteamPlayer) {
+        Log.e("TOHA", "player.steamid"+player.steamid);
+        if (player.steamid != null) {
+            try {
+                roomAppDatabase.SteamUsersDao().insertPlayer(player)
+            } catch (e: Exception) {
+                Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
+            } finally {
+                Log.e("TOHA", "updateSqliteTable")
+            }
+        }
+    }
+
+ */

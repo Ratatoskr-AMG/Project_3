@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             MainScreen()
         }
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MainScreen(
 ) {
-    val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
+
     val navController = rememberNavController()
     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
     val heroViewModel = hiltViewModel<HeroViewModel>()
@@ -66,56 +65,16 @@ fun MainScreen(
                     .height(35.dp),
                 backgroundColor = Color.White
             ) {
+                val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
-
                 items.forEach { value ->
                     val isSelected =
                         currentDestination?.hierarchy?.any { it.route == value.route } == true
 
                     BottomNavigationItem(selected = isSelected, onClick = {
-
-                        navController.navigate(value.route) {
-
-                            /*
-                            Всплывающее окно с заданным пунктом назначения перед навигацией.
-                            Это удаляет все несоответствующие пункты назначения из заднего стека
-                            до тех пор, пока это место назначения не будет найдено.
-                             */
-                            //popUpTo(navController.graph.findStartDestination().id) {
-
-                            /*
-                                Следует ли сохранять обратный стек и состояние всех пунктов
-                                назначения между текущим пунктом назначения и идентификатором
-                                NavOptionsBuilder.popupto для последующего восстановления с помощью
-                                NavOptionsBuilder.restoreState или атрибута restoreState с использованием того
-                                же идентификатора NavOptionsBuilder.popupto (примечание: этот соответствующий идентификатор
-                                имеет значение true независимо от того, является ли значение true или false).
-                                 */
-                            //saveState = true
-
-                            //}
-
-                            /*
-                            Должно ли это действие навигации запускаться как одиночное верхнее
-                            (т.е. в верхней части заднего стека будет не более одной копии
-                            данного пункта назначения). Это работает аналогично тому,
-                            как работает android.content.Намерение.FLAG_ACTIVITY_SINGLE_TOP
-                            работает с действиями.
-                             */
-                            //launchSingleTop = true
-
-                            /*
-                            Должно ли это действие навигации восстанавливать какое-либо состояние,
-                            ранее сохраненное с помощью всплывающего окна Builder.savestate или
-                            атрибута popUpToSaveState. Если ранее ни одно состояние не было сохранено
-                            с переходом по идентификатору назначения, это не имеет никакого эффекта.
-                             */
-                            //restoreState = true
-                        }
-
+                        navController.navigate(value.route)
                     }, icon = {
-
                     }, label = {
                         Text(
                             lineHeight = 20.sp,
@@ -170,7 +129,6 @@ fun MainScreen(
 
             }
         }
-
 
     }
 

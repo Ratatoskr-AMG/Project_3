@@ -112,9 +112,7 @@ fun MainScreen(
             }
             composable(Screens.Profile.route) {
 
-                ProfileScreen(profileViewModel) { id ->
-                    profileViewModel.obtainEvent(ProfileEvent.OnSteamLogin(id))
-                }
+                ProfileScreen(profileViewModel)
 
             }
         }

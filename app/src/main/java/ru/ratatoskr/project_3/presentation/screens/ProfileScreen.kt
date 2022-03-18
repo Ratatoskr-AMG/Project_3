@@ -22,24 +22,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberImagePainter
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @ExperimentalFoundationApi
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel,
-    onAuthorizeChange: (String) -> Unit
+    viewModel: ProfileViewModel
 ) {
     val viewState = viewModel.profileState.observeAsState()
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
 
-            //var steamPlayer = viewModel.getSteamPlayer()
-
             Log.e("TOHA","state="+state)
 
-            steamWebView { onAuthorizeChange(it) }
+            steamWebView {
+                viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
+            }
         }
         is ProfileState.LoggedIntoSteam -> {
             profileCard(

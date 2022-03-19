@@ -8,4 +8,5 @@ sealed class Screens(val route: String, val stringId: Int) {
     object Attr : Screens("attr", R.string.title_hero)
     object Favorites : Screens("favorites", R.string.title_favorites)
     object Profile : Screens("profile", R.string.title_profile)
+    object Video : Screens("video", R.string.video_string)
 }

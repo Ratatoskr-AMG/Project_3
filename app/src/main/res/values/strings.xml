@@ -6,4 +6,5 @@
     <string name="title_hero">Hero</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_profile">Profile</string>
+    <string name="video_string">Video</string>
 </resources>

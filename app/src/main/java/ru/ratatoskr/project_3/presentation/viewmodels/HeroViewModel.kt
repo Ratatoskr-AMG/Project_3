@@ -14,10 +14,10 @@ import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.InsertHeroToFavoritesUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.DropHeroFromFavoritesUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetHeroByIdUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.GetIfHeroIsFavoriteUseCase
+import ru.ratatoskr.project_3.domain.useCases.favorites.InsertHeroToFavoritesUseCase
+import ru.ratatoskr.project_3.domain.useCases.favorites.DropHeroFromFavoritesUseCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetHeroByIdUseCase
+import ru.ratatoskr.project_3.domain.useCases.favorites.GetIfHeroIsFavoriteUseCase
 import javax.inject.Inject
 
 @HiltViewModel

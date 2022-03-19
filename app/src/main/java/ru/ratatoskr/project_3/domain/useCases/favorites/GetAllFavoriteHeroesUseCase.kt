@@ -1,14 +1,14 @@
-package ru.ratatoskr.project_3.domain.useCases.sqlite.favorites;
+package ru.ratatoskr.project_3.domain.useCases.favorites;
 
 import ru.ratatoskr.project_3.domain.model.Hero
 import javax.inject.Inject;
-import ru.ratatoskr.project_3.domain.repository.favorites.FavoritesSqliteRepoImpl;
-import ru.ratatoskr.project_3.domain.repository.heroes.HeroesSqliteRepoImpl
-import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetHeroByIdUseCase
+import ru.ratatoskr.project_3.domain.repository.favorites.FavoritesRepoImpl;
+import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetHeroByIdUseCase
 
 class GetAllFavoriteHeroesUseCase @Inject constructor(
-    val favoritesLocalRepoImpl: FavoritesSqliteRepoImpl,
-    val heroesLocalRepoImpl: HeroesSqliteRepoImpl
+    val favoritesLocalRepoImpl: FavoritesRepoImpl,
+    val heroesLocalRepoImpl: HeroesRepoImpl
 ) {
     suspend fun getAllFavoriteHeroesUseCase(): List<Hero> {
         var favorites = favoritesLocalRepoImpl.getAllFavorites()

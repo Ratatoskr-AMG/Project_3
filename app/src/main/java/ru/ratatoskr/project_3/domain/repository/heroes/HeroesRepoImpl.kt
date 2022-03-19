@@ -1,13 +1,16 @@
 package ru.ratatoskr.project_3.domain.repository.heroes
 
 import android.util.Log
+import io.ktor.client.*
+import io.ktor.client.request.*
 import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Hero
 import java.lang.Exception
 import javax.inject.Inject
 
-class HeroesSqliteRepoImpl @Inject constructor(
+class HeroesRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
+    private val client: HttpClient
 ) {
 
     fun getAllHeroesList(): List<Hero> {
@@ -32,6 +35,20 @@ class HeroesSqliteRepoImpl @Inject constructor(
 
 
     }
+
+    suspend fun getAllHeroesListFromAPI(): List<Hero> {
+
+        val URL = "https://api.opendota.com/api/heroStats/";
+        Log.e("TOHA","getAllHeroesListFromAPI")
+        return try {
+
+            client.get(URL)
+
+        } catch (e: Exception) {
+            error(e)
+        }
+
+    }    
 
 }
 

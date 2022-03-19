@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.useCases.sqlite.user
+package ru.ratatoskr.project_3.domain.useCases.user
 
 import ru.ratatoskr.project_3.domain.model.SteamPlayer
 import ru.ratatoskr.project_3.domain.repository.user.AppUserRepoImpl

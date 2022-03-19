@@ -1,14 +1,14 @@
-package ru.ratatoskr.project_3.domain.useCases.sqlite.heroes
+package ru.ratatoskr.project_3.domain.useCases.heroes
 
 import ru.ratatoskr.project_3.domain.extensions.toArrayList
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.repository.heroes.HeroesSqliteRepoImpl
+import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
 import javax.inject.Inject
 import kotlin.reflect.full.memberProperties
 
 
 class GetAllHeroesByAttrUseCase @Inject constructor(
-    val localRepoImpl: HeroesSqliteRepoImpl
+    val localRepoImpl: HeroesRepoImpl
 ) {
     fun getAllHeroesByAttr(attr: String): List<Hero> {
         var heroes = localRepoImpl.getAllHeroesList().toArrayList()

@@ -10,11 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
-import ru.ratatoskr.project_3.domain.useCases.opendota.GetAllHeroesFromOpendotaUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.favorites.GetAllFavoriteHeroesUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.AddHeroesUserCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetAllHeroesByAttrUseCase
-import ru.ratatoskr.project_3.domain.useCases.sqlite.heroes.GetAllHeroesByNameUseCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
+import ru.ratatoskr.project_3.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.AddHeroesUserCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetAllHeroesByAttrUseCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetAllHeroesByNameUseCase
 import javax.inject.Inject
 
 @HiltViewModel

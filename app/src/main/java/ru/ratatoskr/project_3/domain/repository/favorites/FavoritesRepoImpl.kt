@@ -6,7 +6,7 @@ import ru.ratatoskr.project_3.domain.model.Favorites
 import java.lang.Exception
 import javax.inject.Inject
 
-class FavoritesSqliteRepoImpl @Inject constructor(
+class FavoritesRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
 ) {
 

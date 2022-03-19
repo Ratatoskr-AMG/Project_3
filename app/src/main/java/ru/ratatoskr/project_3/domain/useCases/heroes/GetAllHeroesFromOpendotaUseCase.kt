@@ -1,16 +1,22 @@
-package ru.ratatoskr.project_3.domain.useCases.calculations
+package ru.ratatoskr.project_3.domain.useCases.heroes
 
-import io.ktor.client.*
-import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 import javax.inject.Inject
 
-class BasicIndicatorsUseCase @Inject constructor()  {
 
-    fun calculate(heroes:List<Hero>) : List<Hero> {
+class GetAllHeroesFromOpendotaUseCase @Inject constructor(
+    var opendotaRepoImpl: HeroesRepoImpl,
+) {
+    suspend fun getAllHeroesFromApi(): List<Hero> {
+        return calculate(opendotaRepoImpl.getAllHeroesListFromAPI())
+    }
+
+    fun calculate(heroes: List<Hero>): List<Hero> {
         val strHealhMultiplier = 20;
         val strHealhRegenMultiplier = 0.1;
         val intManaMultiplier = 12;
@@ -46,5 +52,4 @@ class BasicIndicatorsUseCase @Inject constructor()  {
 
         return heroes
     }
-
 }

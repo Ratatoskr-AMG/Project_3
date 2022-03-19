@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
@@ -64,7 +65,7 @@ fun MainScreen(
                     .height(35.dp),
                 backgroundColor = Color.White
             ) {
-                val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile)
+                val items = listOf(Screens.Home, Screens.Favorites, Screens.Profile, Screens.Video)
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { value ->

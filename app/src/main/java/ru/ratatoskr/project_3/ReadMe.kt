@@ -69,8 +69,7 @@ class ReadMe() {
 
         fun q3() {
 /*
-
-
+        Как использовать BGBox из Theme?
  */
         }
 

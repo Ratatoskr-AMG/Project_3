@@ -18,12 +18,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberImagePainter
+import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.presentation.theme.BGBox
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @ExperimentalFoundationApi
@@ -34,12 +37,10 @@ fun ProfileScreen(
     val viewState = viewModel.profileState.observeAsState()
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-
-            Log.e("TOHA","state="+state)
-
             steamWebView {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }
+
         }
         is ProfileState.LoggedIntoSteam -> {
             profileCard(
@@ -64,6 +65,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
             "openid.ns=http://specs.openid.net/auth/2.0&" +
             "openid.realm=http://" + REALM + "&" +
             "openid.return_to=http://" + REALM + "/steam_success"
+    ReadMe.q3()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +77,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                     )
                 )
             )
-    ) {
+    ){
         AndroidView(
             factory = {
                 WebView(it).apply {
@@ -115,6 +117,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                 )
         )
     }
+
 }
 
 @Composable
@@ -132,7 +135,6 @@ fun profileCard(state: ProfileState.LoggedIntoSteam) {
                 )
             )
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -157,11 +159,11 @@ fun profileCard(state: ProfileState.LoggedIntoSteam) {
         }
     }
 
-
 }
 
 @Composable
 fun profileLoadingView() {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -175,7 +177,8 @@ fun profileLoadingView() {
             )
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Center), text = "Loading",
+            textAlign = TextAlign.Center,
+            text = "Loading",
             color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }
@@ -196,7 +199,8 @@ fun profileErrorView() {
             )
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Center), text = "Error",
+            textAlign = TextAlign.Center,
+            text = "Error",
             color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }

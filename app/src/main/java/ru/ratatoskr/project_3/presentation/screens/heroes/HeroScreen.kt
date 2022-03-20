@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -52,12 +53,15 @@ fun HeroScreen(
                         )
                     )
                     /*onCheckedChange(hero.id, isChecked)*/
+                },
+                onRoleClick = {
+                    navController.navigate(Screens.Role.route + "/" + it)
                 }
 
             )
         }
         is HeroState.NoHeroState -> NoHeroesView()
-        is HeroState.LoadingHeroState -> LoadingHeroesView()
+        is HeroState.LoadingHeroState -> LoadingHeroView()
         is HeroState.ErrorHeroState -> NoHeroesView()
 
     }
@@ -69,13 +73,35 @@ fun HeroScreen(
 
 }
 
-@ExperimentalFoundationApi
+@Composable
+fun LoadingHeroView() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center),
+            color = Color.White
+        )
+    }
+}
+
+        @ExperimentalFoundationApi
 @Composable
 fun HeroView(
     hero: Hero,
     navController: NavController,
     isChecked: Boolean,
-    onFavoriteChange: ((Boolean) -> Unit)
+    onFavoriteChange: (Boolean) -> Unit,
+    onRoleClick: (String) -> Unit
 ) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
@@ -116,13 +142,16 @@ fun HeroView(
 
                             for (role in hero.roles) {
                                 val gson = GsonBuilder().create()
-                                val theList = gson.fromJson<ArrayList<String>>(role, object :
+                                val rolesList = gson.fromJson<ArrayList<String>>(role, object :
                                     TypeToken<ArrayList<String>>() {}.type)
-                                for (role in theList) {
+                                for (role in rolesList) {
                                     Text(
                                         modifier = Modifier
                                             .height(30.dp)
-                                            .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                                            .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                            .clickable {
+                                                onRoleClick(role)
+                                                       },
                                         fontSize = 16.sp,
                                         lineHeight = 20.sp,
                                         color = Color.White,
@@ -330,7 +359,7 @@ fun attributeRow(column: String, name: String, value: String, navController: Nav
             .clickable {
                 navController.navigate(Screens.Attr.route + "/" + column)
             }
-    ) {
+    ){
         Text(color = Color.White, text = name)
         Text(color = Color.White, text = value)
     }

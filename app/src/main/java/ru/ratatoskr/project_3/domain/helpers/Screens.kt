@@ -9,4 +9,5 @@ sealed class Screens(val route: String, val stringId: Int) {
     object Favorites : Screens("favorites", R.string.title_favorites)
     object Profile : Screens("profile", R.string.title_profile)
     object Video : Screens("video", R.string.video_string)
+    object Role : Screens("role", R.string.role_string)
 }

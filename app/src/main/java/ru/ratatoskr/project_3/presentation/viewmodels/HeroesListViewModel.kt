@@ -102,6 +102,19 @@ class HeroesListViewModel @Inject constructor(
 
     fun getAllHeroesByRole(role:String){
         _heroList_state.set(newValue = HeroListState.LoadingHeroListState())
-        val heroes = getAllHeroesByRoleUseCase.getAllHeroesByRole(role)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val heroes = getAllHeroesByRoleUseCase.getAllHeroesByRole(role)
+
+                if (heroes.isEmpty()) {
+                    _heroList_state.postValue(HeroListState.NoHeroListState("Empty Heroes by attr list"))
+                } else {
+
+                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes = heroes))
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

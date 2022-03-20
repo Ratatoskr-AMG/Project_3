@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,6 +51,7 @@ fun HeroesListScreen(
 
 @Composable
 fun NoHeroesView() {
+    Log.e("TOHA","NoHeroesView")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,6 +73,7 @@ fun NoHeroesView() {
 
 @Composable
 fun LoadingHeroesView() {
+    Log.e("TOHA","LoadingHeroesView")
     ReadMe.q2()
     Box(
         modifier = Modifier

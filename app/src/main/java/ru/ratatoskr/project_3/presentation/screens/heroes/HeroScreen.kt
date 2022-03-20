@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -60,7 +61,7 @@ fun HeroScreen(
             )
         }
         is HeroState.NoHeroState -> NoHeroesView()
-        is HeroState.LoadingHeroState -> LoadingHeroesView()
+        is HeroState.LoadingHeroState -> LoadingHeroView()
         is HeroState.ErrorHeroState -> NoHeroesView()
 
     }
@@ -72,7 +73,28 @@ fun HeroScreen(
 
 }
 
-@ExperimentalFoundationApi
+@Composable
+fun LoadingHeroView() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        Color.DarkGray
+                    )
+                )
+            )
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center),
+            color = Color.White
+        )
+    }
+}
+
+        @ExperimentalFoundationApi
 @Composable
 fun HeroView(
     hero: Hero,

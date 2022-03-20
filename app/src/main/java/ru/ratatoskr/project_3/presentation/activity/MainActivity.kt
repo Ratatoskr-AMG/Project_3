@@ -49,9 +49,9 @@ fun MainScreen(
 ) {
 
     val navController = rememberNavController()
-    val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-    val heroViewModel = hiltViewModel<HeroViewModel>()
-    val profileViewModel = hiltViewModel<ProfileViewModel>()
+
+
+
 
     Scaffold(
         bottomBar = {
@@ -88,6 +88,7 @@ fun MainScreen(
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
+                val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(
                     viewModel = heroesListviewModel,
                     navController = navController
@@ -95,6 +96,7 @@ fun MainScreen(
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
                 val id = navBackStack.arguments?.getString("id").toString()
+                val heroViewModel = hiltViewModel<HeroViewModel>()
                 HeroScreen(
                     id,
                     heroViewModel,
@@ -102,18 +104,20 @@ fun MainScreen(
             }
             composable(Screens.Attr.route + "/{attr}") { navBackStack ->
                 val attr = navBackStack.arguments?.getString("attr")
+                val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 AttributeScreen(attr!!, heroesListviewModel, navController)
             }
             composable(Screens.Favorites.route) {
+                val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 FavoritesScreen(heroesListviewModel, navController)
             }
             composable(Screens.Profile.route) {
-
+                val profileViewModel = hiltViewModel<ProfileViewModel>()
                 ProfileScreen(profileViewModel)
-
             }
             composable(Screens.Role.route + "/{role}") { navBackStack ->
                 val role = navBackStack.arguments?.getString("role")
+                val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesByRoleScreen(role!!, heroesListviewModel, navController)
             }
         }

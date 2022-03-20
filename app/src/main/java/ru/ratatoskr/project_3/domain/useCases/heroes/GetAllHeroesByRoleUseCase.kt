@@ -1,10 +1,21 @@
 package ru.ratatoskr.project_3.domain.useCases.heroes
 
+import android.util.Log
+import ru.ratatoskr.project_3.domain.extensions.toArrayList
+import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
 import javax.inject.Inject
 
-class GetAllHeroesByRoleUseCase @Inject constructor() {
+class GetAllHeroesByRoleUseCase @Inject constructor(val localRepoImpl: HeroesRepoImpl) {
 
-    fun getAllHeroesByRole(role:String){
+    fun getAllHeroesByRole(role:String) : List<Hero>{
+        var heroes = localRepoImpl.getAllHeroesList().toArrayList()
 
+        return heroes.filter{
+            //Log.e("TOHA", "role:"+role)
+            //Log.e("TOHA","it:"+it.roles[0].toString())
+            //Log.e("TOHA","it:"+it.roles[0].contains(role).toString())
+            it.roles[0].contains(role)
+        }
     }
 }

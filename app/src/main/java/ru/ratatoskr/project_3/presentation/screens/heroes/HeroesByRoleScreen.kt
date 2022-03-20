@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,7 +36,8 @@ fun HeroesByRoleScreen(
     val viewState = viewModel.heroListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroListState.LoadedHeroListState<*> -> RoleListView(role, state.heroes){
+
+        is HeroListState.LoadedHeroListState<*> -> RoleListView(role, state.heroes) {
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
         is HeroListState.NoHeroListState -> NoHeroesView()
@@ -52,16 +54,32 @@ fun HeroesByRoleScreen(
 @ExperimentalFoundationApi
 @Composable
 fun RoleListView(
-    attr: String,
+    role: String,
     data: List<Any?>,
     onHeroClick: (Hero) -> Unit
 ) {
+
     val heroes = data.mapNotNull { it as? Hero }
 
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .background(Color.Black)
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                .align(Alignment.CenterEnd),
+            color = Color.White,
+            text = role
+        )
+    }
 
     LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxSize()
+            .padding(top = 40.dp)
+            .fillMaxWidth()
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
@@ -70,79 +88,24 @@ fun RoleListView(
                     )
                 )
             ),
-        cells = GridCells.Fixed(count = 1),
+        cells = GridCells.Fixed(count = 4),
         content = {
             heroes.forEach {
-
-                var attrValue = ""
-
-                when (attr) {
-                    "legs" -> attrValue = it.legs.toString()
-                    "baseHealth" -> attrValue = it.baseHealth.toString()
-                    "baseHealthRegen" -> attrValue = "+"+it.baseHealthRegen.toString()
-                    "baseMana" -> attrValue = it.baseMana.toString()
-                    "baseManaRegen" -> attrValue = "+"+it.baseManaRegen.toString()
-                    "baseArmor" -> attrValue = it.baseArmor.toString()
-                    "baseMr" -> attrValue = it.baseMr.toString()+"%"
-                    "baseStr" -> attrValue = it.baseStr.toString()
-                    "baseAgi" -> attrValue = it.baseAgi.toString()
-                    "baseInt" -> attrValue = it.baseInt.toString()
-                    "strGain" -> attrValue = it.strGain.toString()
-                    "agiGain" -> attrValue = it.agiGain.toString()
-                    "intGain" -> attrValue = it.intGain.toString()
-                    "attackRange" -> attrValue = it.attackRange.toString()
-                    "projectileSpeed" -> attrValue = it.projectileSpeed.toString()
-                    "attackRate" -> attrValue = it.attackRate.toString()
-                    "moveSpeed" -> attrValue = it.moveSpeed.toString()
-                    "cmEnabled" -> attrValue = it.cmEnabled
-                    "turboPicks" -> attrValue = it.turboPicks.toString()
-                    "turboWins" -> attrValue = it.turboWins.toString()
-                    "proBan" -> attrValue = it.proBan.toString()
-                    "proWin" -> attrValue = it.proWin.toString()
-                    "proPick" -> attrValue = it.proPick.toString()
-                    "_1Pick" -> attrValue = it._1Pick.toString()
-                    "_1Win" -> attrValue = it._1Win.toString()
-                    "_2Pick" -> attrValue = it._2Pick.toString()
-                    "_2Win" -> attrValue = it._2Win.toString()
-                    "_3Pick" -> attrValue = it._3Pick.toString()
-                    "_3Win" -> attrValue = it._3Win.toString()
-                    "_4Pick" -> attrValue = it._4Pick.toString()
-                    "_4Win" -> attrValue = it._4Win.toString()
-                    "_5Pick" -> attrValue = it._5Pick.toString()
-                    "_5Win" -> attrValue = it._5Win.toString()
-                    "_6Pick" -> attrValue = it._6Pick.toString()
-                    "_6Win" -> attrValue = it._6Win.toString()
-                    "_7Pick" -> attrValue = it._7Pick.toString()
-                    "_7Win" -> attrValue = it._7Win.toString()
-                    "_8Pick" -> attrValue = it._8Pick.toString()
-                    "_8Win" -> attrValue = it._8Win.toString()
-                }
-
-                if (attrValue != "") {
-                    item {
-
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(60.dp)
-                                .padding(1.dp)
-                                .background(Color.Black)
-                                .clickable {
-                                    onHeroClick.invoke(it)
-                                }
-                        ) {
-                            Image(
-                                modifier = Modifier
-                                    .width(50.dp)
-                                    .height(30.dp),
-                                painter = rememberImagePainter(it.icon),
-                                contentDescription = it.name
-                            )
-                            Text(modifier = Modifier.padding(10.dp), lineHeight = 50.sp, color = Color.White, text = attrValue)
+                item {
+                    Box(modifier = Modifier
+                        .clickable {
+                            onHeroClick(it)
                         }
-
+                        .padding(10.dp)
+                        .width(100.dp)
+                        .height(60.dp)) {
+                        Image(
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(60.dp),
+                            painter = rememberImagePainter(it.icon),
+                            contentDescription = it.name
+                        )
                     }
                 }
             }

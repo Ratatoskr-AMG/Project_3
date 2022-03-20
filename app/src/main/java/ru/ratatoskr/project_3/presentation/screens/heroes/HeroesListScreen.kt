@@ -8,24 +8,20 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.theme.LoadingView
+import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @ExperimentalFoundationApi
@@ -39,57 +35,14 @@ fun HeroesListScreen(
         is HeroListState.LoadedHeroListState<*> -> HeroesListView(state.heroes){
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
-        is HeroListState.NoHeroListState -> NoHeroesView()
-        is HeroListState.LoadingHeroListState -> LoadingHeroesView()
-        is HeroListState.ErrorHeroListState -> NoHeroesView()
+        is HeroListState.NoHeroListState -> MessageView("Heroes not found")
+        is HeroListState.LoadingHeroListState -> LoadingView("Heroes are loading...")
+        is HeroListState.ErrorHeroListState -> MessageView("Heroes error!")
     }
 
     LaunchedEffect(key1 = Unit, block = {
         viewModel.getAllHeroesByName()
     })
-}
-
-@Composable
-fun NoHeroesView() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        Text(
-            modifier = Modifier.align(Alignment.Center), text = "No heroes found",
-            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 16.sp
-        )
-    }
-}
-
-@Composable
-fun LoadingHeroesView() {
-    ReadMe.q2()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.White
-        )
-    }
 }
 
 @ExperimentalFoundationApi

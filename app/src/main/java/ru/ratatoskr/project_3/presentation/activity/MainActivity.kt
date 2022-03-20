@@ -24,10 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
-import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.viewmodels.*
 
@@ -105,7 +102,7 @@ fun MainScreen(
             composable(Screens.Attr.route + "/{attr}") { navBackStack ->
                 val attr = navBackStack.arguments?.getString("attr")
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                AttributeScreen(attr!!, heroesListviewModel, navController)
+                HeroesByAttributeScreen(attr!!, heroesListviewModel, navController)
             }
             composable(Screens.Favorites.route) {
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
@@ -119,6 +116,10 @@ fun MainScreen(
                 val role = navBackStack.arguments?.getString("role")
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesByRoleScreen(role!!, heroesListviewModel, navController)
+            }
+            composable(Screens.Video.route) { navBackStack ->
+                val videoViewModel = hiltViewModel<VideoViewModel>()
+                VideoScreen(videoViewModel)
             }
         }
 

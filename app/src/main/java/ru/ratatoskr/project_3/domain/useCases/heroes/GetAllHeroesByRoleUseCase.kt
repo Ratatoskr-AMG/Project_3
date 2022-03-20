@@ -12,9 +12,6 @@ class GetAllHeroesByRoleUseCase @Inject constructor(val localRepoImpl: HeroesRep
         var heroes = localRepoImpl.getAllHeroesList().toArrayList()
 
         return heroes.filter{
-            //Log.e("TOHA", "role:"+role)
-            //Log.e("TOHA","it:"+it.roles[0].toString())
-            //Log.e("TOHA","it:"+it.roles[0].contains(role).toString())
             it.roles[0].contains(role)
         }
     }

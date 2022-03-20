@@ -25,6 +25,8 @@ import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.theme.LoadingView
+import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 
 @ExperimentalFoundationApi
@@ -60,10 +62,9 @@ fun HeroScreen(
 
             )
         }
-        is HeroState.NoHeroState -> NoHeroesView()
-        is HeroState.LoadingHeroState -> LoadingHeroView()
-        is HeroState.ErrorHeroState -> NoHeroesView()
-
+        is HeroState.NoHeroState -> MessageView("Hero not found")
+        is HeroState.LoadingHeroState -> LoadingView("Hero is loading...")
+        is HeroState.ErrorHeroState -> MessageView("Hero error!")
     }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -73,28 +74,8 @@ fun HeroScreen(
 
 }
 
-@Composable
-fun LoadingHeroView() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.White
-        )
-    }
-}
 
-        @ExperimentalFoundationApi
+@ExperimentalFoundationApi
 @Composable
 fun HeroView(
     hero: Hero,
@@ -345,7 +326,6 @@ fun HeroView(
     }
 
 }
-
 
 @Composable
 fun attributeRow(column: String, name: String, value: String, navController: NavController) {

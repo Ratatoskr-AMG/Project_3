@@ -28,16 +28,13 @@ class HeroesListViewModel @Inject constructor(
     val heroListState: LiveData<HeroListState> = _heroList_state
 
     fun getAllHeroesByName(){
-        Log.e("TOHA","getAllHeroesByName")
         _heroList_state.set(HeroListState.LoadingHeroListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByNameUseCase.getAllHeroesByName()
                 if (heroes.isEmpty()) {
-                    Log.e("TOHA","isEmpty")
                     getAllHeroesFromApi()
                 } else {
-                    Log.e("TOHA","isNotEmpty")
                     _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes))
                 }
             } catch (e: java.lang.Exception) {

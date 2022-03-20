@@ -51,7 +51,6 @@ fun HeroesListScreen(
 
 @Composable
 fun NoHeroesView() {
-    Log.e("TOHA","NoHeroesView")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +72,6 @@ fun NoHeroesView() {
 
 @Composable
 fun LoadingHeroesView() {
-    Log.e("TOHA","LoadingHeroesView")
     ReadMe.q2()
     Box(
         modifier = Modifier

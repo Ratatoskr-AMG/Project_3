@@ -37,9 +37,6 @@ fun ProfileScreen(
     val viewState = viewModel.profileState.observeAsState()
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-
-            Log.e("TOHA","state="+state)
-
             steamWebView {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }

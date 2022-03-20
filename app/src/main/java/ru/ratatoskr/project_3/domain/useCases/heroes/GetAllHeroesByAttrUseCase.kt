@@ -57,6 +57,7 @@ class GetAllHeroesByAttrUseCase @Inject constructor(
         }
     }
 
+    /*
     @Throws(IllegalAccessException::class, ClassCastException::class)
     inline fun <reified T> Any.getField(fieldName: String): T? {
         this::class.memberProperties.forEach { kCallable ->
@@ -66,6 +67,6 @@ class GetAllHeroesByAttrUseCase @Inject constructor(
         }
         return null
     }
-
+*/
 }
 

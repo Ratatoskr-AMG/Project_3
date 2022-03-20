@@ -28,11 +28,7 @@ import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
-import ru.ratatoskr.project_3.presentation.screens.AttributeScreen
-import ru.ratatoskr.project_3.presentation.screens.FavoritesScreen
-import ru.ratatoskr.project_3.presentation.screens.HeroScreen
-import ru.ratatoskr.project_3.presentation.screens.ProfileScreen
-import ru.ratatoskr.project_3.presentation.screens.HeroesListScreen
+import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.viewmodels.*
 
 @AndroidEntryPoint
@@ -115,6 +111,10 @@ fun MainScreen(
 
                 ProfileScreen(profileViewModel)
 
+            }
+            composable(Screens.Role.route + "/{role}") { navBackStack ->
+                val role = navBackStack.arguments?.getString("role")
+                HeroesByRoleScreen(role!!, heroesListviewModel, navController)
             }
         }
 

@@ -52,6 +52,9 @@ fun HeroScreen(
                         )
                     )
                     /*onCheckedChange(hero.id, isChecked)*/
+                },
+                onRoleClick = {
+                    navController.navigate(Screens.Role.route + "/" + it)
                 }
 
             )
@@ -75,7 +78,8 @@ fun HeroView(
     hero: Hero,
     navController: NavController,
     isChecked: Boolean,
-    onFavoriteChange: ((Boolean) -> Unit)
+    onFavoriteChange: (Boolean) -> Unit,
+    onRoleClick: (String) -> Unit
 ) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
@@ -116,13 +120,16 @@ fun HeroView(
 
                             for (role in hero.roles) {
                                 val gson = GsonBuilder().create()
-                                val theList = gson.fromJson<ArrayList<String>>(role, object :
+                                val rolesList = gson.fromJson<ArrayList<String>>(role, object :
                                     TypeToken<ArrayList<String>>() {}.type)
-                                for (role in theList) {
+                                for (role in rolesList) {
                                     Text(
                                         modifier = Modifier
                                             .height(30.dp)
-                                            .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                                            .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                            .clickable {
+                                                onRoleClick(role)
+                                                       },
                                         fontSize = 16.sp,
                                         lineHeight = 20.sp,
                                         color = Color.White,
@@ -330,7 +337,7 @@ fun attributeRow(column: String, name: String, value: String, navController: Nav
             .clickable {
                 navController.navigate(Screens.Attr.route + "/" + column)
             }
-    ) {
+    ){
         Text(color = Color.White, text = name)
         Text(color = Color.White, text = value)
     }

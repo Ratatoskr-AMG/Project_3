@@ -25,6 +25,8 @@ import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.states.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.theme.LoadingView
+import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 
 @ExperimentalFoundationApi
@@ -60,10 +62,9 @@ fun HeroScreen(
 
             )
         }
-        is HeroState.NoHeroState -> NoHeroesView()
-        is HeroState.LoadingHeroState -> LoadingHeroView()
-        is HeroState.ErrorHeroState -> NoHeroesView()
-
+        is HeroState.NoHeroState -> MessageView("Hero not found")
+        is HeroState.LoadingHeroState -> LoadingView("Hero is loading...")
+        is HeroState.ErrorHeroState -> MessageView("Hero error!")
     }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -73,28 +74,8 @@ fun HeroScreen(
 
 }
 
-@Composable
-fun LoadingHeroView() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.White
-        )
-    }
-}
 
-        @ExperimentalFoundationApi
+@ExperimentalFoundationApi
 @Composable
 fun HeroView(
     hero: Hero,
@@ -140,6 +121,31 @@ fun HeroView(
                             horizontalArrangement = Arrangement.End
                         ) {
 
+
+                            Text(
+                                modifier = Modifier
+                                    .height(30.dp)
+                                    .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                                fontSize = 18.sp,
+                                lineHeight = 18.sp,
+                                color = Color.White,
+                                text = hero.localizedName,
+                            )
+                        }
+                    }
+                    Surface(
+                        color = Color.Black.copy(alpha = 0.6f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(20.dp)
+                            .align(Alignment.BottomEnd)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(30.dp),
+                            horizontalArrangement = Arrangement.End
+                        ) {
                             for (role in hero.roles) {
                                 val gson = GsonBuilder().create()
                                 val rolesList = gson.fromJson<ArrayList<String>>(role, object :
@@ -151,38 +157,14 @@ fun HeroView(
                                             .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                             .clickable {
                                                 onRoleClick(role)
-                                                       },
+                                            },
                                         fontSize = 16.sp,
-                                        lineHeight = 20.sp,
+                                        lineHeight = 30.sp,
                                         color = Color.White,
                                         text = role,
                                     )
                                 }
                             }
-                        }
-                    }
-                    Surface(
-                        color = Color.Black.copy(alpha = 0.6f),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(30.dp)
-                            .align(Alignment.BottomEnd)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(30.dp),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .height(30.dp)
-                                    .padding(0.dp, 0.dp, 10.dp, 0.dp),
-                                fontSize = 20.sp,
-                                lineHeight = 20.sp,
-                                color = Color.White,
-                                text = hero.localizedName,
-                            )
                         }
                     }
                 }
@@ -215,7 +197,6 @@ fun HeroView(
                 hero.baseMana.toString(), navController
             )
         }
-
         item {
             attributeRow(
                 "baseHealthRegen",
@@ -241,12 +222,10 @@ fun HeroView(
                 navController
             )
         }
-
         /*
         item { attributeRow("baseAttackMin", hero.baseAttackMin.toString()) }
         item { attributeRow("baseAttackMax", hero.baseAttackMax.toString()) }
         */
-
         item { attributeRow("baseStr", "Base Strength", hero.baseStr.toString(), navController) }
         item { attributeRow("baseAgi", "Base Agility", hero.baseAgi.toString(), navController) }
         item {
@@ -289,7 +268,6 @@ fun HeroView(
                 navController
             )
         }
-
         if (hero.projectileSpeed > 0)
 
             item {
@@ -345,7 +323,6 @@ fun HeroView(
     }
 
 }
-
 
 @Composable
 fun attributeRow(column: String, name: String, value: String, navController: NavController) {

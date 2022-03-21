@@ -27,6 +27,8 @@ import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.theme.BGBox
+import ru.ratatoskr.project_3.presentation.theme.LoadingView
+import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @ExperimentalFoundationApi
@@ -40,15 +42,14 @@ fun ProfileScreen(
             steamWebView {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }
-
         }
         is ProfileState.LoggedIntoSteam -> {
             profileCard(
                 state
             )
         }
-        is ProfileState.LoadingState -> profileLoadingView()
-        is ProfileState.ErrorProfileState -> profileErrorView()
+        is ProfileState.LoadingState -> LoadingView("Profile is loading")
+        is ProfileState.ErrorProfileState -> MessageView("Profile error!")
     }
     LaunchedEffect(key1 = Unit, block = {
     })
@@ -160,50 +161,3 @@ fun profileCard(state: ProfileState.LoggedIntoSteam) {
     }
 
 }
-
-@Composable
-fun profileLoadingView() {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        Text(
-            textAlign = TextAlign.Center,
-            text = "Loading",
-            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 14.sp
-        )
-    }
-}
-
-@Composable
-fun profileErrorView() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        Text(
-            textAlign = TextAlign.Center,
-            text = "Error",
-            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
-        )
-    }
-}
-
-

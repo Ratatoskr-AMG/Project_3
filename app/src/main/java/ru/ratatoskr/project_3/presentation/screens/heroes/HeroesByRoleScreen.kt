@@ -24,6 +24,8 @@ import kotlinx.serialization.json.Json
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.theme.LoadingView
+import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @ExperimentalFoundationApi
@@ -40,9 +42,9 @@ fun HeroesByRoleScreen(
         is HeroListState.LoadedHeroListState<*> -> RoleListView(role, state.heroes) {
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
-        is HeroListState.NoHeroListState -> NoHeroesView()
-        is HeroListState.LoadingHeroListState -> LoadingHeroesView()
-        is HeroListState.ErrorHeroListState -> NoHeroesView()
+        is HeroListState.NoHeroListState -> MessageView("Heroes not found")
+        is HeroListState.LoadingHeroListState -> LoadingView("Heroes loading...")
+        is HeroListState.ErrorHeroListState -> MessageView("Heroes error!")
     }
 
     LaunchedEffect(key1 = Unit, block = {

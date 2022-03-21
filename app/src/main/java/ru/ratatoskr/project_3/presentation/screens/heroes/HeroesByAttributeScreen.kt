@@ -19,15 +19,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import kotlinx.serialization.json.Json
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.presentation.theme.LoadingView
+import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @ExperimentalFoundationApi
 @Composable
-fun AttributeScreen(
+fun HeroesByAttributeScreen(
     attr: String,
     viewModel: HeroesListViewModel,
     navController: NavController
@@ -35,12 +36,12 @@ fun AttributeScreen(
     val viewState = viewModel.heroListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroListState.LoadedHeroListState<*> -> AttributeListView(attr, state.heroes){
+        is HeroListState.LoadedHeroListState<*> -> HeroesByAttributeListView(attr, state.heroes){
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
-        is HeroListState.NoHeroListState -> NoHeroesView()
-        is HeroListState.LoadingHeroListState -> LoadingHeroesView()
-        is HeroListState.ErrorHeroListState -> NoHeroesView()
+        is HeroListState.NoHeroListState -> MessageView("Heroes not found")
+        is HeroListState.LoadingHeroListState -> LoadingView("Heroes loading...")
+        is HeroListState.ErrorHeroListState -> MessageView("Heroes error!")
     }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -51,7 +52,7 @@ fun AttributeScreen(
 
 @ExperimentalFoundationApi
 @Composable
-fun AttributeListView(
+fun HeroesByAttributeListView(
     attr: String,
     data: List<Any?>,
     onHeroClick: (Hero) -> Unit

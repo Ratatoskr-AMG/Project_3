@@ -89,17 +89,17 @@ fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
-            Log.e("TOHA", "playbackState: " + playbackState)
+            Log.e("TOHA", "playbackState" + playbackState)
         }
 
         override fun onSeekProcessed() {
             super.onSeekProcessed()
-            Log.e("TOHA", "onSeekProcessed: ")
+            Log.e("TOHA", "onSeekProcessed")
         }
 
         override fun onTimelineChanged(timeline: Timeline, reason: Int) {
             super.onTimelineChanged(timeline, reason)
-            Log.e("TOHA", "onTimelineChanged: ")
+            Log.e("TOHA", "onTimelineChanged")
             Log.e("TOHA", "reason: $reason")
         }
     })

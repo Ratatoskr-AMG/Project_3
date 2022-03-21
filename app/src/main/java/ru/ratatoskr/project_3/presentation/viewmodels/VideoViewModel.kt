@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,11 +20,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VideoViewModel @Inject constructor(
-    private val getSteamUserUseCase : GetSteamUserUseCase
+    player:SimpleExoPlayer
 ) : ViewModel(), EventHandler<VideoEvent> {
 
+    val url1=""
+    val url2=""
     private val _video_state: MutableLiveData<VideoState> =
-        MutableLiveData<VideoState>(VideoState.PlayerState(0))
+        MutableLiveData<VideoState>(VideoState.PlayerState(player,0,url1))
     val videoState: LiveData<VideoState> = _video_state
 
     override fun obtainEvent(event: VideoEvent) {

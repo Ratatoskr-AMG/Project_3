@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.DefaultEventListener
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -37,7 +38,7 @@ import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
 @ExperimentalFoundationApi
 @Composable
 fun VideoScreen(
-    viewModel: VideoViewModel
+    viewModel: VideoViewModel,
 ) {
 
     val viewState = viewModel.videoState.observeAsState()
@@ -45,6 +46,7 @@ fun VideoScreen(
     when (val state = viewState.value) {
         is VideoState.PlayerState -> {
             videoPlayer(
+                state.player,
                 viewModel.obtainEvent(VideoEvent.OnPlay),
                 viewModel.obtainEvent(VideoEvent.OnPause(state.curr_time)),
                 viewModel.obtainEvent(VideoEvent.OnStop(state.curr_time)),
@@ -60,13 +62,18 @@ fun VideoScreen(
 }
 
 @Composable
-fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
+fun videoPlayer(
+    exoPlayer: SimpleExoPlayer,
+    OnPlay: Unit,
+    OnPause: Unit,
+    OnStop: Unit,
+    OnStamp: Unit
+) {
+
+    Log.e("TOHA2", "currentPosition:" + exoPlayer.currentPosition)
+    Log.e("TOHA2", "playbackState:" + exoPlayer.playbackState)
+
     val context = LocalContext.current
-
-    val exoPlayer = remember {
-        SimpleExoPlayer.Builder(context).build();
-    }
-
 
     exoPlayer.addListener(object : Player.EventListener {
         fun onBtnCLick() {
@@ -106,7 +113,7 @@ fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
 
     var uri by remember {
         mutableStateOf(
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
         )
     }
 
@@ -122,6 +129,12 @@ fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
             )
         )
 
+    if(exoPlayer.currentPosition>0) {
+        exoPlayer.prepare(source, false, false)
+    }else{
+        exoPlayer.prepare(source)
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             factory = { context ->
@@ -130,9 +143,8 @@ fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
                 }
             },
             modifier = Modifier
-                .padding(bottom = 40.dp)
+                .padding(bottom = 0.dp)
                 .fillMaxWidth()
-                .fillMaxHeight()
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -143,10 +155,11 @@ fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
                 )
         )
 
+/*
         Button(onClick = {
             // Elephant Dream by Blender Foundation
             uri =
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             //exoPlayer.setPlayWhenReady(false)
             // exoPlayer.seekTo(0);
             //exoPlayer.setPlayWhenReady(false);
@@ -164,11 +177,14 @@ fun videoPlayer(OnPlay: Unit, OnPause: Unit, OnStop: Unit, OnStamp: Unit) {
             .align(Alignment.BottomCenter)) {
             Text(text = "Get time", modifier = Modifier.fillMaxWidth())
         }
+
+        */
+
     }
 
     LaunchedEffect(key1 = Unit, block = {
 
-        exoPlayer.prepare(source)
+
     })
 
 

@@ -15,6 +15,7 @@
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="false" />
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".presentation.activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"

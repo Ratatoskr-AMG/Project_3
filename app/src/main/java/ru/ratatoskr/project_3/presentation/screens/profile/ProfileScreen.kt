@@ -67,17 +67,8 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
             "openid.realm=http://" + REALM + "&" +
             "openid.return_to=http://" + REALM + "/steam_success"
     ReadMe.q3()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
+    BGBox(
+
     ){
         AndroidView(
             factory = {

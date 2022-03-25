@@ -49,16 +49,7 @@ fun Project_3Theme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         LightColorPalette
     }
 
-    val systemUiController = rememberSystemUiController()
-    if(darkTheme){
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent
-        )
-    }else{
-        systemUiController.setSystemBarsColor(
-            color = Color.White
-        )
-    }
+
 
     MaterialTheme(
         colors = colors,
@@ -80,7 +71,7 @@ fun BGBox(content: @Composable () -> Unit) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Black,
-                        Color.DarkGray
+                        Color.Black
                     )
                 )
             )

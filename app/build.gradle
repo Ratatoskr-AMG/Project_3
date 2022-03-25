@@ -49,6 +49,9 @@ android {
 
 dependencies {
 
+    implementation("androidx.compose.foundation:foundation:1.1.1")
+    implementation("androidx.compose.foundation:foundation-layout:1.1.1")
+
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
 
     def coroutinesVersion = '1.6.0'
@@ -126,5 +129,7 @@ dependencies {
 
     //Accompanist (topbar etc)
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+    implementation "com.google.accompanist:accompanist-insets:0.14.0"
+
 
 }

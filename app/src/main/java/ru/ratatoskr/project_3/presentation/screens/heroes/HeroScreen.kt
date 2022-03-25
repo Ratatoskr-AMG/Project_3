@@ -171,7 +171,7 @@ fun HeroView(
             }
 
         }
-
+        stickyHeader {  }
         item {
             Checkbox(
                 checked = isChecked,

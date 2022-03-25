@@ -92,7 +92,7 @@ fun MessageView(text:String) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Black,
-                        Color.DarkGray
+                        Color.Black
                     )
                 )
             )
@@ -114,7 +114,7 @@ fun LoadingView(text:String) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Black,
-                        Color.DarkGray
+                        Color.Black
                     )
                 )
             )

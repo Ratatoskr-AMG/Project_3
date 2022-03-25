@@ -156,7 +156,7 @@ fun videoPlayer(
                 )
         )
 
-
+      /*
         Button(onClick = {
             // Elephant Dream by Blender Foundation
             //uri =
@@ -179,7 +179,7 @@ fun videoPlayer(
             .align(Alignment.BottomCenter)) {
             Text(text = "Get time", modifier = Modifier.fillMaxWidth())
         }
-
+*/
 
 
     }

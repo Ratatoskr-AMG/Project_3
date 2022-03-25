@@ -61,6 +61,7 @@ fun VideoScreen(
     }
 }
 
+
 @Composable
 fun videoPlayer(
     exoPlayer: SimpleExoPlayer,
@@ -155,11 +156,11 @@ fun videoPlayer(
                 )
         )
 
-/*
+
         Button(onClick = {
             // Elephant Dream by Blender Foundation
-            uri =
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            //uri =
+            //    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             //exoPlayer.setPlayWhenReady(false)
             // exoPlayer.seekTo(0);
             //exoPlayer.setPlayWhenReady(false);
@@ -171,6 +172,7 @@ fun videoPlayer(
                 "Current time (ms): " + time,
                 Toast.LENGTH_SHORT
             ).show();
+
             //exoPlayer.prepare(source)
         }, modifier = Modifier
             .height(40.dp)
@@ -178,7 +180,7 @@ fun videoPlayer(
             Text(text = "Get time", modifier = Modifier.fillMaxWidth())
         }
 
-        */
+
 
     }
 

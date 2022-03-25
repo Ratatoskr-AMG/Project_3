@@ -1,10 +1,8 @@
 /****
 
- * Лог
+* Вопросы
 
-ProfileViewModel
-ProfileScreen
-Database
+Безопасность exoplayer, accompanist
 
  * Задания:
 

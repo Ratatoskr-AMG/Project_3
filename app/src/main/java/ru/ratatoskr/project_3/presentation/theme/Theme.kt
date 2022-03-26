@@ -39,17 +39,14 @@ private val LightColorPalette = lightColors(
     */
 )
 
-
-
 @Composable
 fun Project_3Theme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
-
-
 
     MaterialTheme(
         colors = colors,
@@ -91,8 +88,8 @@ fun MessageView(text:String) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.Black,
-                        Color.Black
+                        Color(0x00000039),
+                        Color(0x00000039)
                     )
                 )
             )

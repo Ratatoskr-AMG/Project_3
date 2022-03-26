@@ -3,20 +3,22 @@ package ru.ratatoskr.project_3.presentation.screens
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -67,15 +69,27 @@ fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
             ).fillMaxSize()
         ) {
 
+            val listState = rememberLazyListState()
+            val nestedScrollConnection = remember {
+                object : NestedScrollConnection {
+                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                        val delta = available.y
+                        // called when you scroll the content
+                        Log.e("TOHA", "Delta:$delta");
+                        return Offset.Zero
+                    }
+                }
+            }
             LazyVerticalGrid(
+                state = listState,
                 modifier = Modifier
-
+                    .nestedScroll(nestedScrollConnection)
                     .fillMaxSize()
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color.Black,
-                                Color.Black
+                                Color(0xFF000022),
+                                Color(0xFF000022)
                             )
                         )
                     ),

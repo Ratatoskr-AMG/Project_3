@@ -1,5 +1,5 @@
-
 package ru.ratatoskr.project_3
+
 class ReadMe {
     companion object {
 
@@ -100,16 +100,11 @@ presentation
 В скоуп передается диспетчер, это SuperVisorJob
 */
 
-/* Immersive mode
-
-val windowInsetsController =
+/* val windowInsetsController =
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
-
  */
-/* Нижняя граница Box:
-
-.drawBehind {
+/* .drawBehind {
     val strokeWidth = density
     val y = size.height - strokeWidth / 1
     drawLine(
@@ -154,5 +149,11 @@ windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
             }
         }
     }
+
+ */
+/*
+    systemUiController.isStatusBarVisible = false // Status bar
+    systemUiController.isNavigationBarVisible = false // Navigation bar
+    systemUiController.isSystemBarsVisible = false // Status & Navigation bars
 
  */

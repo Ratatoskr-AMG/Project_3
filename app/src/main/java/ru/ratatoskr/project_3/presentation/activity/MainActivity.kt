@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -36,10 +37,12 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
+import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.exoplayer2.util.Log
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.VideoState
@@ -54,20 +57,15 @@ class MainActivity() : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         setContent {
             val systemUiController = rememberSystemUiController()
-            systemUiController.setStatusBarColor(
-                color = Color.Transparent
-            )
-                ProvideWindowInsets{
-                    MainScreen()
-                }
-         }
+            systemUiController.setStatusBarColor(color = Color.Transparent)
+            ProvideWindowInsets {
+                MainScreen()
+            }
+        }
     }
 
 
@@ -90,14 +88,15 @@ class MainActivity() : AppCompatActivity() {
         val videoViewModel = hiltViewModel<VideoViewModel>()
         val videoViewState = videoViewModel.videoState.observeAsState()
 
-        Scaffold(modifier = Modifier.navigationBarsPadding(),
+        Scaffold(
+            modifier = Modifier.navigationBarsPadding(),
             bottomBar = {
                 BottomNavigation(
                     modifier = Modifier
                         .background(Color.Red)
-                        .height(30.dp),
+                        .height(60.dp),
 
-                    backgroundColor = Color.Black
+                    backgroundColor = Color.Red
                 ) {
                     val items =
                         listOf(Screens.Home, Screens.Favorites, Screens.Profile, Screens.Video)
@@ -110,6 +109,13 @@ class MainActivity() : AppCompatActivity() {
                         BottomNavigationItem(selected = isSelected, onClick = {
                             navController.navigate(value.route)
                         }, icon = {
+                            Image(
+                                modifier = Modifier
+                                    .width(20.dp)
+                                    .height(20.dp),
+                                painter = if (isSelected) rememberImagePainter(R.drawable.ic_home_96371) else rememberImagePainter(R.drawable.ic_house_wh),
+                                contentDescription = "Home"
+                            )
                         }, label = {
                             Text(
                                 lineHeight = 30.sp,

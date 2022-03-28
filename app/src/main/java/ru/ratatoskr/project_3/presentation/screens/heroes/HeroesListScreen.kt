@@ -1,17 +1,15 @@
 package ru.ratatoskr.project_3.presentation.screens
 
-import android.util.Log
+import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -20,6 +18,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -75,11 +75,24 @@ fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
                     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                         val delta = available.y
                         // called when you scroll the content
-                        Log.e("TOHA", "Delta:$delta");
+                        //Log.e("TOHA", "Delta:$delta");
                         return Offset.Zero
                     }
                 }
             }
+            val configuration = LocalConfiguration.current
+            var listColumnsCount = 4
+            var listBannerHeight: Dp = 250.dp
+            when (configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    listColumnsCount=5
+                    listBannerHeight=370.dp
+                }
+                else -> {
+
+                }
+            }
+
             LazyVerticalGrid(
                 state = listState,
                 modifier = Modifier
@@ -88,25 +101,27 @@ fun HeroesListView(data: List<Any?>, onHeroClick: (Hero) -> Unit) {
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color(0xFF000022),
-                                Color(0xFF000022)
+                                Color.Black,
+                                Color.Black
+                                //Color(0xFF000022),
+                                //Color(0xFF000022)
                             )
                         )
                     ),
-                cells = GridCells.Fixed(count = 4),
+                cells = GridCells.Fixed(count = listColumnsCount),
                 content = {
-                    item(span = { GridItemSpan(4) }){
+                    item(span = { GridItemSpan(listColumnsCount) }){
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(250.dp)
+                                .height(listBannerHeight)
                         ) {
                             Image(
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(250.dp),
-                                painter = rememberImagePainter("https://janssencosmetics.ru/app/img/HeroesList.jpg"),
+                                    .height(listBannerHeight),
+                                painter = rememberImagePainter("http://ratatoskr.ru/app/img/HeroesList.jpg"),
                                 contentDescription = "Welcome"
                             )
                         }

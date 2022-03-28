@@ -6,20 +6,25 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -68,7 +73,6 @@ class MainActivity() : AppCompatActivity() {
         }
     }
 
-
     fun stopPlayer(state: State<VideoState?>) {
         ReadMe.q2()
         when (val state = state.value) {
@@ -87,42 +91,67 @@ class MainActivity() : AppCompatActivity() {
         val navController = rememberNavController()
         val videoViewModel = hiltViewModel<VideoViewModel>()
         val videoViewState = videoViewModel.videoState.observeAsState()
+        var bottomNavMenuHeight = 80.dp
 
         Scaffold(
             modifier = Modifier.navigationBarsPadding(),
             bottomBar = {
                 BottomNavigation(
                     modifier = Modifier
-                        .background(Color.Red)
-                        .height(60.dp),
-
-                    backgroundColor = Color.Red
+                        .drawWithContent {
+                            drawContent()
+                            clipRect { // Not needed if you do not care about painting half stroke outside
+                                val strokeWidth = Stroke.DefaultMiter
+                                val y = size.height / size.height // strokeWidth
+                                drawLine(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            //Color(0xFF000022),
+                                            //Color(0xFF000022)
+                                        )
+                                    ),
+                                    strokeWidth = strokeWidth,
+                                    cap = StrokeCap.Square,
+                                    start = Offset.Zero.copy(y = y),
+                                    end = Offset(x = size.width, y = y)
+                                )
+                            }
+                        }
+                        .height(bottomNavMenuHeight),
+                     backgroundColor = Color(0xFF000000)
                 ) {
                     val items =
                         listOf(Screens.Home, Screens.Favorites, Screens.Profile, Screens.Video)
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
+
                     items.forEach { value ->
                         val isSelected =
                             currentDestination?.hierarchy?.any { it.route == value.route } == true
-
-                        BottomNavigationItem(selected = isSelected, onClick = {
-                            navController.navigate(value.route)
-                        }, icon = {
-                            Image(
-                                modifier = Modifier
-                                    .width(20.dp)
-                                    .height(20.dp),
-                                painter = if (isSelected) rememberImagePainter(R.drawable.ic_home_96371) else rememberImagePainter(R.drawable.ic_house_wh),
-                                contentDescription = "Home"
-                            )
-                        }, label = {
-                            Text(
-                                lineHeight = 30.sp,
-                                text = stringResource(id = value.stringId),
-                                color = if (isSelected) Color.Gray else Color.White
-                            )
-                        })
+                        BottomNavigationItem(
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .height(bottomNavMenuHeight)
+                                .background(Color.Black)
+                            ,
+                            selected = isSelected,
+                            onClick = {
+                                navController.navigate(value.route)
+                            }, icon = {
+                                Image(
+                                    modifier = Modifier
+                                        .width(20.dp)
+                                        .height(20.dp)
+                                        .align(Alignment.CenterVertically),
+                                    painter = if (isSelected) rememberImagePainter(value.icon_wh) else rememberImagePainter(
+                                        value.icon_tr
+                                    ),
+                                    contentDescription = value.description.toString(),
+                                )
+                            })
                     }
                 }
             }

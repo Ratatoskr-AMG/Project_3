@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.states.HeroState
@@ -74,6 +75,134 @@ fun HeroScreen(
 
 }
 
+@ExperimentalFoundationApi
+@Composable
+fun stickyHeaderBox(
+    hero: Hero,
+    onRoleClick: (String) -> Unit,
+    onFavoriteChange: (Boolean) -> Unit,
+    isChecked: Boolean
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(bottom=10.dp)
+    ) {
+        Image(
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            painter = rememberImagePainter(hero.img),
+            contentDescription = hero.localizedName
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+        ) {
+            Surface(
+
+                color = Color.Black.copy(alpha = 0f),
+                modifier = Modifier
+                    .padding(top=20.dp)
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .align(Alignment.TopEnd)
+
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                        fontSize = 18.sp,
+                        lineHeight = 18.sp,
+                        color = Color.White,
+                        text = hero.localizedName,
+                    )
+                }
+            }
+            Surface(
+                color = Color.Transparent.copy(alpha = 0.0f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .align(Alignment.BottomEnd)
+
+            ) {
+
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Transparent,
+                                Color.Black
+                            )
+                        )
+                    )){
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp)
+                        .padding(top=10.dp,end = 10.dp),
+                        horizontalArrangement = Arrangement.End
+
+                    ){
+
+                        Image(
+
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(50.dp)
+                                .clickable {
+                                    onFavoriteChange(!isChecked)
+                                },
+                            painter = if (isChecked) rememberImagePainter(R.drawable.ic_hearth_wh) else rememberImagePainter(R.drawable.ic_hearth_tr),
+                            contentDescription = "Is hero favorite?"
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(30.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        for (role in hero.roles) {
+                            val gson = GsonBuilder().create()
+                            val rolesList = gson.fromJson<ArrayList<String>>(role, object :
+                                TypeToken<ArrayList<String>>() {}.type)
+                            for (role in rolesList) {
+                                Text(
+                                    modifier = Modifier
+                                        .height(30.dp)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                        .clickable {
+                                            onRoleClick(role)
+                                        },
+                                    fontSize = 14.sp,
+                                    lineHeight = 30.sp,
+                                    color = Color.White,
+                                    text = role,
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
 
 @ExperimentalFoundationApi
 @Composable
@@ -86,103 +215,11 @@ fun HeroView(
 ) {
 
     LazyColumn(modifier = Modifier.background(Color.Black)) {
+
         stickyHeader {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            ) {
-                Image(
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    painter = rememberImagePainter(hero.img),
-                    contentDescription = hero.localizedName
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                ) {
-                    Surface(
-
-                        color = Color.Black.copy(alpha = 0f),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(30.dp)
-                            .align(Alignment.TopEnd)
-
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(30.dp),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-
-
-                            Text(
-                                modifier = Modifier
-                                    .height(30.dp)
-                                    .padding(0.dp, 0.dp, 10.dp, 0.dp),
-                                fontSize = 18.sp,
-                                lineHeight = 18.sp,
-                                color = Color.White,
-                                text = hero.localizedName,
-                            )
-                        }
-                    }
-                    Surface(
-                        color = Color.Black.copy(alpha = 0.6f),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(20.dp)
-                            .align(Alignment.BottomEnd)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(30.dp),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            for (role in hero.roles) {
-                                val gson = GsonBuilder().create()
-                                val rolesList = gson.fromJson<ArrayList<String>>(role, object :
-                                    TypeToken<ArrayList<String>>() {}.type)
-                                for (role in rolesList) {
-                                    Text(
-                                        modifier = Modifier
-                                            .height(30.dp)
-                                            .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                                            .clickable {
-                                                onRoleClick(role)
-                                            },
-                                        fontSize = 16.sp,
-                                        lineHeight = 30.sp,
-                                        color = Color.White,
-                                        text = role,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
+            stickyHeaderBox(hero, onRoleClick,onFavoriteChange,isChecked)
         }
-        stickyHeader {  }
-        item {
-            Checkbox(
-                checked = isChecked,
-                onCheckedChange = onFavoriteChange,
-                colors = CheckboxDefaults.colors(
-                    checkedColor = Color.Blue,
-                    uncheckedColor = Color.Red
-                )
-            )
 
-        }
         item {
             attributeRow(
                 "baseHealth",
@@ -269,7 +306,6 @@ fun HeroView(
             )
         }
         if (hero.projectileSpeed > 0)
-
             item {
                 attributeRow(
                     "projectileSpeed",
@@ -278,8 +314,6 @@ fun HeroView(
                     navController
                 )
             }
-
-
         item {
             attributeRow(
                 "attackRate",
@@ -336,7 +370,7 @@ fun attributeRow(column: String, name: String, value: String, navController: Nav
             .clickable {
                 navController.navigate(Screens.Attr.route + "/" + column)
             }
-    ){
+    ) {
         Text(color = Color.White, text = name)
         Text(color = Color.White, text = value)
     }

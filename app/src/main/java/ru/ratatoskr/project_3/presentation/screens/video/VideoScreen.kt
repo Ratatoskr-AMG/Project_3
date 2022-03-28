@@ -136,7 +136,17 @@ fun videoPlayer(
         exoPlayer.prepare(source)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color.Black,
+                    Color.Black
+                )
+            )
+        )
+    ) {
         AndroidView(
             factory = { context ->
                 PlayerView(context).apply {
@@ -145,12 +155,12 @@ fun videoPlayer(
             },
             modifier = Modifier
                 .padding(bottom = 0.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Black,
-                            Color.DarkGray
+                            Color.Black
                         )
                     )
                 )

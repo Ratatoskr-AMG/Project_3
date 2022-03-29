@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,9 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -86,75 +93,107 @@ fun stickyHeaderBox(
     isChecked: Boolean
 ) {
 
+    var flowRowWidth=200.dp
+    val configuration = LocalConfiguration.current
+    when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            flowRowWidth=400.dp
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(160.dp)
+            .height(140.dp)
             .background(Color.Black)
-
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
-            ) {
-                Image(
-                    painter = rememberImagePainter(hero.img),
-                    contentDescription = hero.localizedName,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .width(70.dp)
-                        .height(70.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, Color(0xFF1f2430), CircleShape)
-                )
-            }
-            Box(
-                modifier = Modifier.padding(start = 0.dp)
-            ) {
-                Column() {
-                    Box() {
-                        for (role in hero.roles) {
-                            val gson = GsonBuilder().create()
-                            val rolesList = gson.fromJson<ArrayList<String>>(role, object :
-                                TypeToken<ArrayList<String>>() {}.type)
-
-                            FlowRow(modifier = Modifier.width(200.dp)) {
-                                for (role in rolesList) {
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(end = 3.dp)
-                                            .clickable {
-                                                onRoleClick(role)
-                                            },
-                                        fontSize = 12.sp,
-                                        lineHeight = 16.sp,
-                                        color = Color(0xFF474b55),
-                                        text = role,
-                                    )
-                                }
-                            }
-
-                        }
-                    }
-                    Box() {
-                        Text(
-                            hero.localizedName,
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            lineHeight = 20.sp
+                .drawWithContent {
+                    drawContent()
+                    clipRect { // Not needed if you do not care about painting half stroke outside
+                        val strokeWidth = Stroke.DefaultMiter
+                        val y = size.height // strokeWidth
+                        drawLine(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFF0d111c),
+                                    Color(0xFF0d111c),
+                                    Color(0xFF0d111c),
+                                    //Color(0xFF000022),
+                                    //Color(0xFF000022)
+                                )
+                            ),
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Square,
+                            start = Offset.Zero.copy(y = y),
+                            end = Offset(x = size.width, y = y)
                         )
                     }
                 }
+                .fillMaxSize()
+                .padding(start = 20.dp, end = 20.dp, top = 30.dp, bottom=20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+
+            Row(){
+                Box(
+                    modifier = Modifier
+                        .width(70.dp)
+                        .height(70.dp)
+                ) {
+                    Image(
+                        painter = rememberImagePainter(hero.img),
+                        contentDescription = hero.localizedName,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(70.dp)
+                            .height(70.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color(0xFF1f2430), CircleShape)
+                    )
+                }
+                Box(
+                    modifier = Modifier.padding(start = 20.dp)
+                ) {
+                    Column() {
+                        Box() {
+                            for (role in hero.roles) {
+                                val gson = GsonBuilder().create()
+                                val rolesList = gson.fromJson<ArrayList<String>>(role, object :
+                                    TypeToken<ArrayList<String>>() {}.type)
+
+                                FlowRow(modifier = Modifier.width(flowRowWidth)) {
+                                    for (role in rolesList) {
+                                        Text(
+                                            modifier = Modifier
+                                                .padding(end = 3.dp)
+                                                .clickable {
+                                                    onRoleClick(role)
+                                                },
+                                            fontSize = 12.sp,
+                                            lineHeight = 16.sp,
+                                            color = Color(0xFF474b55),
+                                            text = role,
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
+                        Box() {
+                            Text(
+                                hero.localizedName,
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                lineHeight = 20.sp
+                            )
+                        }
+                    }
+                }
             }
+
             Box(contentAlignment = Alignment.Center,
 
                 modifier = Modifier
@@ -340,16 +379,45 @@ fun HeroView(
 fun attributeRow(column: String, name: String, value: String, navController: NavController) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .drawWithContent {
+                drawContent()
+                clipRect { // Not needed if you do not care about painting half stroke outside
+                    val strokeWidth = Stroke.DefaultMiter
+                    val y = size.height // strokeWidth
+                    drawLine(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFF0d111c),
+                                Color(0xFF0d111c),
+                                Color(0xFF0d111c),
+                                //Color(0xFF000022),
+                                //Color(0xFF000022)
+                            )
+                        ),
+                        strokeWidth = strokeWidth,
+                        cap = StrokeCap.Square,
+                        start = Offset.Zero.copy(y = y),
+                        end = Offset(x = size.width, y = y)
+                    )
+                }
+            }
             .fillMaxWidth()
-            .height(40.dp)
+            .height(50.dp)
             .padding(start=20.dp,end=20.dp)
             .background(Color.Black)
             .clickable {
                 navController.navigate(Screens.Attr.route + "/" + column)
             }
     ) {
-        Text(color = Color.White, text = name)
-        Text(color = Color.White, text = value)
+        Text(
+            fontSize = 12.sp,
+            color = Color.White,
+            text = name)
+        Text(
+            fontSize = 12.sp,
+            color = Color.White,
+            text = value)
     }
 }

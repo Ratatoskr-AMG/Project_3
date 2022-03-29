@@ -67,7 +67,7 @@ fun FavoritesListView(
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Black,
-                        Color.DarkGray
+                        Color.Black
                     )
                 )
             ),

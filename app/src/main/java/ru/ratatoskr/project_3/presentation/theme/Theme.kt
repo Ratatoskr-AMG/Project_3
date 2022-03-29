@@ -39,25 +39,13 @@ private val LightColorPalette = lightColors(
     */
 )
 
-
-
 @Composable
 fun Project_3Theme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
-    }
-
-    val systemUiController = rememberSystemUiController()
-    if(darkTheme){
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent
-        )
-    }else{
-        systemUiController.setSystemBarsColor(
-            color = Color.White
-        )
     }
 
     MaterialTheme(
@@ -80,7 +68,7 @@ fun BGBox(content: @Composable () -> Unit) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Black,
-                        Color.DarkGray
+                        Color.Black
                     )
                 )
             )
@@ -100,8 +88,8 @@ fun MessageView(text:String) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
+                        Color(0x00000039),
+                        Color(0x00000039)
                     )
                 )
             )
@@ -123,7 +111,7 @@ fun LoadingView(text:String) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Black,
-                        Color.DarkGray
+                        Color.Black
                     )
                 )
             )

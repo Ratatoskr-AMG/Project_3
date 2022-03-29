@@ -37,16 +37,21 @@ fun ProfileScreen(
     viewModel: ProfileViewModel
 ) {
     val viewState = viewModel.profileState.observeAsState()
+    Log.e("TOHA","ProfileScreen")
+
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
+            Log.e("TOHA","steamWebView")
             steamWebView {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }
         }
         is ProfileState.LoggedIntoSteam -> {
+            Log.e("TOHA","profileCard")
             profileCard(
                 state
             )
+
         }
         is ProfileState.LoadingState -> LoadingView("Profile is loading")
         is ProfileState.ErrorProfileState -> MessageView("Profile error!")
@@ -67,18 +72,9 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
             "openid.realm=http://" + REALM + "&" +
             "openid.return_to=http://" + REALM + "/steam_success"
     ReadMe.q3()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ){
+    Box {
+        Log.e("TOHA","AndroidView")
+
         AndroidView(
             factory = {
                 WebView(it).apply {
@@ -112,7 +108,7 @@ fun steamWebView(onAuthorizeChange: (String) -> Unit) {
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Black,
-                            Color.DarkGray
+                            Color.Black
                         )
                     )
                 )

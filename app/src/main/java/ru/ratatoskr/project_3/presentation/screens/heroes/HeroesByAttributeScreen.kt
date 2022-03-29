@@ -134,13 +134,18 @@ fun HeroesByAttributeListView(
                                     onHeroClick.invoke(it)
                                 }
                         ) {
-                            Image(
-                                modifier = Modifier
-                                    .width(50.dp)
-                                    .height(30.dp),
-                                painter = rememberImagePainter(it.icon),
-                                contentDescription = it.name
-                            )
+                            Row(){
+                                Image(
+                                    modifier = Modifier
+                                        .width(50.dp)
+                                        .height(30.dp),
+                                    painter = rememberImagePainter(it.icon),
+                                    contentDescription = it.name
+                                )
+                                Text(modifier = Modifier.padding(10.dp), lineHeight = 50.sp, color = Color.White, text = it.localizedName)
+
+                            }
+
                             Text(modifier = Modifier.padding(10.dp), lineHeight = 50.sp, color = Color.White, text = attrValue)
                         }
 

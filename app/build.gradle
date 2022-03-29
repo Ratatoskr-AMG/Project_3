@@ -129,7 +129,8 @@ dependencies {
 
     //Accompanist (topbar etc)
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
-    implementation "com.google.accompanist:accompanist-insets:0.14.0"
+    implementation "com.google.accompanist:accompanist-insets:0.17.0"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.17.0"
 
 
 }

@@ -93,7 +93,7 @@ fun stickyHeaderBox(
     isChecked: Boolean
 ) {
 
-    var flowRowWidth=200.dp
+    var flowRowWidth=170.dp
     val configuration = LocalConfiguration.current
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
@@ -132,7 +132,7 @@ fun stickyHeaderBox(
                     }
                 }
                 .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp, top = 30.dp, bottom=20.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom=20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -155,9 +155,21 @@ fun stickyHeaderBox(
                     )
                 }
                 Box(
-                    modifier = Modifier.padding(start = 20.dp)
+                    modifier = Modifier.padding(start = 30.dp).height(70.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Column() {
+                    Column(
+                        modifier=Modifier.padding(top=0.dp),
+                        ) {
+                        Box() {
+                            Text(
+                                hero.localizedName,
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                lineHeight = 20.sp
+                            )
+                        }
+
                         Box() {
                             for (role in hero.roles) {
                                 val gson = GsonBuilder().create()
@@ -172,8 +184,8 @@ fun stickyHeaderBox(
                                                 .clickable {
                                                     onRoleClick(role)
                                                 },
-                                            fontSize = 12.sp,
-                                            lineHeight = 16.sp,
+                                            fontSize = 14.sp,
+                                            lineHeight = 18.sp,
                                             color = Color(0xFF474b55),
                                             text = role,
                                         )
@@ -182,14 +194,7 @@ fun stickyHeaderBox(
 
                             }
                         }
-                        Box() {
-                            Text(
-                                hero.localizedName,
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                lineHeight = 20.sp
-                            )
-                        }
+
                     }
                 }
             }
@@ -200,7 +205,6 @@ fun stickyHeaderBox(
 
                     .size(70.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF1f2430))
                     .clickable {
                         onFavoriteChange(!isChecked)
                     }
@@ -406,7 +410,7 @@ fun attributeRow(column: String, name: String, value: String, navController: Nav
             .fillMaxWidth()
             .height(50.dp)
             .padding(start=20.dp,end=20.dp)
-            .background(Color.Black)
+            .background(Color(0x55202020))
             .clickable {
                 navController.navigate(Screens.Attr.route + "/" + column)
             }

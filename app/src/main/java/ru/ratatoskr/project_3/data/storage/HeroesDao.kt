@@ -19,6 +19,8 @@ interface HeroesDao {
     @Query(HeroesContract.fetchHero)
     suspend fun fetchHero(heroId: Int): Hero
 
+    @Query("SELECT * FROM ${HeroesContract.HEROES_TABLE_NAME} WHERE localizedName LIKE :str")
+    suspend fun fetchHeroesByStr(str: String): List<Hero>
 
 
 }

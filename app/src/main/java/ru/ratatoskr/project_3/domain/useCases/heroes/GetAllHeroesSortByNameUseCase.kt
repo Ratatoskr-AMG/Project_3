@@ -4,11 +4,13 @@ import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
 import javax.inject.Inject
 
-class GetAllHeroesByNameUseCase @Inject constructor(
+class GetAllHeroesSortByNameUseCase @Inject constructor(
     val localRepoImpl: HeroesRepoImpl
 ) {
-    fun getAllHeroesByName(): List<Hero> {
+    fun getAllHeroesSortByName(): List<Hero> {
         return localRepoImpl.getAllHeroesList()
     }
-
+    suspend fun getAllHeroesByStrSortByName(str:String): List<Hero> {
+        return localRepoImpl.getAllHeroesListByStr(str)
+    }
 }

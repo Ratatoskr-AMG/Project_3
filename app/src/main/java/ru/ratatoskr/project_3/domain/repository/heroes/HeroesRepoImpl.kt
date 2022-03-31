@@ -17,6 +17,10 @@ class HeroesRepoImpl @Inject constructor(
         return roomAppDatabase.heroesDao().all
     }
 
+    suspend fun getAllHeroesListByStr(str:String): List<Hero> {
+        return roomAppDatabase.heroesDao().fetchHeroesByStr(str+"%")
+    }
+
     suspend fun   getHeroById(heroId: String): Hero {
         return roomAppDatabase.heroesDao().fetchHero(heroId.toInt())
     }

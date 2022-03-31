@@ -3,6 +3,7 @@ package ru.ratatoskr.project_3.presentation.activity
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -64,6 +65,8 @@ class MainActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         setContent {
             val systemUiController = rememberSystemUiController()
             systemUiController.setStatusBarColor(color = Color.Transparent)
@@ -180,11 +183,12 @@ class MainActivity() : AppCompatActivity() {
                         navController
                     )
                 }
-                composable(Screens.Attr.route + "/{attr}") { navBackStack ->
+                composable(Screens.Attr.route + "/{attr}/{id}") { navBackStack ->
                     stopPlayer(videoViewState)
                     val attr = navBackStack.arguments?.getString("attr")
+                    val id = navBackStack.arguments?.getString("id")
                     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                    HeroesByAttributeScreen(attr!!, heroesListviewModel, navController)
+                    HeroesByAttributeScreen(attr!!, id!!, heroesListviewModel, navController)
                 }
                 composable(Screens.Favorites.route) {
                     stopPlayer(videoViewState)

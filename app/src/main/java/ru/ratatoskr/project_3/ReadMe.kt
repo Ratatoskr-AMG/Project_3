@@ -158,3 +158,73 @@ windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
     systemUiController.isSystemBarsVisible = false // Status & Navigation bars
 
  */
+/*AnimatedVisibility(
+                visible = visible,
+                enter = slideInVertically {
+                    // Slide in from 40 dp from the top.
+                    with(density) { -40.dp.roundToPx() }
+                } + expandVertically(
+                    // Expand from the top.
+                    expandFrom = Alignment.Top
+                ) + fadeIn(
+                    // Fade in with the initial alpha of 0.3f.
+                    initialAlpha = 0.3f
+                ),
+                exit = slideOutVertically() + shrinkVertically() + fadeOut()
+            ) {
+                Box(modifier = Modifier.padding(top = 30.dp)) {
+
+                    Box(
+                        modifier = Modifier
+                            .height(70.dp)
+                            .padding(start = 20.dp, end = 20.dp)
+                            .padding(bottom = 20.dp)
+                    ) {
+
+
+                        TextField(
+                            singleLine = true,
+                            textStyle = LocalTextStyle.current.copy(
+                                color = Color.Black,
+                                lineHeight = 220.sp,
+                                textDecoration = TextDecoration.None
+                            ),
+                            value = searchState.text,
+                            onValueChange = {
+                                searchState = TextFieldValue(it, TextRange(it.length))
+                                scope.launch {
+                                    scrollState.scrollToItem(0)
+                                    delay(250)
+                                    focusRequesterTop.requestFocus()
+                                }
+                                //onHeroSearch(it)
+                                visible = false
+                                offsetPosition = 0f
+
+                            },
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            modifier = Modifier
+                                .focusRequester(focusRequesterPopUp)
+                                .onFocusChanged {
+                                    if (it.isFocused) {
+                                        Log.e("TOHA", "Popup is focused")
+                                    } else {
+                                        Log.e("TOHA", "Popup is not focused")
+                                    }
+                                }
+                                .clip(RoundedCornerShape(5.dp))
+                                .fillMaxWidth()
+                                .background(Color.White),
+
+                            )
+                    }
+                }
+
+            }
+
+*/

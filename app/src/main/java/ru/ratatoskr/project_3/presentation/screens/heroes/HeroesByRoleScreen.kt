@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -8,20 +9,35 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -67,14 +83,35 @@ fun RoleListView(
     navController: NavController,
     onHeroClick: (Hero) -> Unit
 ) {
-
+    val configuration = LocalConfiguration.current
     val heroes = data.mapNotNull { it as? Hero }
+    var scrollState = rememberForeverLazyListState(key = "Role_"+role)
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val delta = consumed.y
+                return Offset.Zero
+            }
+        }
+    }
+    var listColumnsCount = 4
+    when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            listColumnsCount = 7
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.Black)) {
         LazyColumn(
+            state = scrollState,
             modifier = Modifier
+                .nestedScroll(nestedScrollConnection)
                 .fillMaxSize()
                 .background(Color(0x55202020))
         ) {
@@ -164,115 +201,59 @@ fun RoleListView(
                     }
                 }
             }
-            heroes.forEach {
+
+            var listRowsCount = heroes.size / listColumnsCount
+            if (heroes.size % listColumnsCount > 0) {
+                listRowsCount += 1
+            }
+
+            for (row in 0..listRowsCount-1) {
 
                 item {
-
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .drawWithContent {
-                                drawContent()
-                                clipRect { // Not needed if you do not care about painting half stroke outside
-                                    val strokeWidth = Stroke.DefaultMiter
-                                    val y = size.height // strokeWidth
-                                    drawLine(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(
-                                                Color(0xFF0d111c),
-                                                Color(0xFF0d111c),
-                                                Color(0xFF0d111c),
-                                                //Color(0xFF000022),
-                                                //Color(0xFF000022)
-                                            )
-                                        ),
-                                        strokeWidth = strokeWidth,
-                                        cap = StrokeCap.Square,
-                                        start = Offset.Zero.copy(y = y),
-                                        end = Offset(x = size.width, y = y)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        for (column in 0..listColumnsCount) {
+                            var index = column + (row * listColumnsCount)
+                            if (index <= heroes.size - 1) {
+                                var hero = heroes.get(index)
+                                Box(modifier = Modifier
+                                    .clickable {
+                                        onHeroClick(hero)
+                                    }
+                                    .width(70.dp)
+                                    .padding(10.dp)
+                                    .height(35.dp)) {
+                                    Image(
+                                        modifier = Modifier
+                                            .width(70.dp)
+                                            .height(35.dp),
+                                        painter = rememberImagePainter(hero.icon),
+                                        contentDescription = hero.name
                                     )
+                                    com.google.android.exoplayer2.util.Log.e("TOHA_CALC", hero.name)
+                                }
+
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .width(70.dp)
+                                        .padding(10.dp)
+                                        .height(35.dp)
+                                ) {
                                 }
                             }
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .padding(start = 20.dp, end = 20.dp)
 
-                            .clickable {
-                                onHeroClick(it)
-                            }
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .width(20.dp)
-                                .height(20.dp),
-                            painter = rememberImagePainter(it.icon),
-                            contentDescription = it.name
-                        )
-                        Text(
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            text = it.localizedName
-                        )
+
+                        }
+
                     }
 
                 }
-
             }
         }
     }
 
-    /*
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .background(Color.Black)
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                .align(Alignment.CenterEnd),
-            color = Color.White,
-            text = role
-        )
-    }
-
-    LazyVerticalGrid(
-        modifier = Modifier
-            .padding(top = 40.dp)
-            .fillMaxWidth()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            ),
-        cells = GridCells.Fixed(count = 4),
-        content = {
-            heroes.forEach {
-                item {
-                    Box(modifier = Modifier
-                        .clickable {
-                            onHeroClick(it)
-                        }
-                        .padding(10.dp)
-                        .width(100.dp)
-                        .height(60.dp)) {
-                        Image(
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(60.dp),
-                            painter = rememberImagePainter(it.icon),
-                            contentDescription = it.name
-                        )
-                    }
-                }
-            }
-        })
-
-     */
 
 }

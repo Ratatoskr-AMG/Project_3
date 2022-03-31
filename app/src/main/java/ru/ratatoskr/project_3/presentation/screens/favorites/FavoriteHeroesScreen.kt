@@ -75,10 +75,13 @@ fun FavoritesListView(
     onHeroClick: (Hero) -> Unit
 ) {
     val heroes = data.mapNotNull { it as? Hero }
+    var scrollState = rememberForeverLazyListState(key = "Favorites")
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.Black)) {
         LazyColumn(
+            state=scrollState,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0x55202020))
@@ -227,54 +230,4 @@ fun FavoritesListView(
         }
     }
 
-    /*
-    LazyVerticalGrid(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.Black
-                    )
-                )
-            ),
-        cells = GridCells.Fixed(count = 1),
-        content = {
-            heroes.forEach {
-
-                item {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .padding(1.dp)
-                            .background(Color.Black)
-                            .clickable {
-                                onHeroClick(it)
-                            }
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(30.dp),
-                            painter = rememberImagePainter(it.icon),
-                            contentDescription = it.name
-                        )
-                        Text(
-                            modifier = Modifier.padding(10.dp),
-                            lineHeight = 50.sp,
-                            color = Color.White,
-                            text = it.localizedName
-                        )
-                    }
-
-                }
-
-            }
-        })
-    */
 }

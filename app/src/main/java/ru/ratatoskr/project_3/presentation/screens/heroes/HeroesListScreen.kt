@@ -106,28 +106,10 @@ fun HeroesListView(
             .background(Color.Black)
     ) {
 
-        /*
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-        ) {
-            Image(
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(listBannerHeight),
-                painter = rememberImagePainter("http://ratatoskr.ru/app/img/HeroesList.jpg"),
-                contentDescription = "Welcome"
-            )
-        }
-        */
-
         Box(
             modifier = Modifier
                 .background(
                     Color.Black,
-                    //shape = RoundedCornerShape(4.dp)
                 )
                 .fillMaxSize()
         ) {
@@ -141,7 +123,6 @@ fun HeroesListView(
                     ): Offset {
                         val delta = consumed.y
                         offsetPosition += delta
-                        //visible = offsetPosition < -1049
                         Log.e("TOHA", "offsetPosition:" + offsetPosition)
                         return Offset.Zero
                     }
@@ -158,8 +139,7 @@ fun HeroesListView(
                         colors = listOf(
                             Color.Transparent,
                             Color.Transparent
-                            //Color(0xFF000022),
-                            //Color(0xFF000022)
+
                         )
                     ))
 
@@ -207,9 +187,7 @@ fun HeroesListView(
                             value = searchState.text,
                             onValueChange = {
                                 searchState = TextFieldValue(it, TextRange(it.length))
-                                Log.e("TOHA", "Top onValueChange")
-                                Log.e("TOHA", "Top value:" + searchState.text)
-                                Log.e("TOHA", "Top selection1:" + searchState.selection.toString())
+
                                 onHeroSearch(it)
                             },
                             colors = TextFieldDefaults.textFieldColors(
@@ -238,10 +216,7 @@ fun HeroesListView(
                         )
                     }
                 }
-                Log.e("TOHA_CALC", "heroes.size:" + heroes.size)
-                Log.e("TOHA_CALC", "listColumnsCount:" + listColumnsCount)
-                Log.e("TOHA_CALC", "heroes.size/listColumnsCount:" + heroes.size / listColumnsCount)
-                Log.e("TOHA_CALC", "heroes.size%listColumnsCount:" + heroes.size % listColumnsCount)
+
 
                 var listRowsCount = heroes.size / listColumnsCount
                 if (heroes.size % listColumnsCount > 0) {
@@ -293,213 +268,13 @@ fun HeroesListView(
 
                     }
                 }
-                /*
-                item {
-                    heroes.forEach {
-                        Box(modifier = Modifier
-                            .clickable {
-                                onHeroClick(it)
-                            }
-                            .padding(10.dp)
-                            .width(100.dp)
-                            .height(45.dp)) {
-                            Image(
-                                modifier = Modifier
-                                    .width(100.dp)
-                                    .height(45.dp),
-                                painter = rememberImagePainter(it.icon),
-                                contentDescription = it.name
-                            )
-                        }
-                    }
-                }
-            */
+
 
             }
-
-/*
-            LazyVerticalGrid(
-                state = scrollState,
-                modifier = Modifier
-                    .nestedScroll(nestedScrollConnection)
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Black,
-                                Color.Black
-                                //Color(0xFF000022),
-                                //Color(0xFF000022)
-                            )
-                        )
-                    ),
-                cells = GridCells.Fixed(count = listColumnsCount)
-            ) {
-                item(span = { GridItemSpan(listColumnsCount) }) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(listBannerHeight)
-                    ) {
-                        Image(
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(listBannerHeight),
-                            painter = rememberImagePainter("http://ratatoskr.ru/app/img/HeroesList.jpg"),
-                            contentDescription = "Welcome"
-                        )
-                    }
-                }
-                item(span = { GridItemSpan(listColumnsCount) }) {
-
-
-                    Box(
-                        modifier = Modifier
-                            .height(70.dp)
-                            .padding(start = 20.dp, end = 20.dp)
-                            .padding(bottom = 20.dp)
-                    ) {
-
-
-                        TextField(
-                            singleLine = true,
-                            textStyle = LocalTextStyle.current.copy(
-                                color = Color.Black,
-                                lineHeight = 220.sp,
-                                textDecoration = TextDecoration.None
-                            ),
-
-                            value = searchState.text,
-                            onValueChange = {
-                                searchState = TextFieldValue(it, TextRange(it.length))
-                                Log.e("TOHA", "Top onValueChange")
-                                Log.e("TOHA", "Top value:" + searchState.text)
-                                Log.e("TOHA", "Top selection1:" + searchState.selection.toString())
-                                onHeroSearch(it)
-                            },
-                            colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
-                            ),
-                            modifier = Modifier
-                                .focusRequester(focusRequesterTop)
-                                .onFocusChanged {
-                                    if (it.isFocused) {
-                                        keyboardController?.hide()
-                                        Log.e("TOHA", "Top is focused")
-                                    } else {
-                                        Log.e("TOHA", "Top is not focused")
-                                    }
-                                }
-                                .clip(RoundedCornerShape(5.dp))
-                                .fillMaxWidth()
-                                .background(Color.White),
-                            //keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                            //keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
-
-                        )
-                    }
-
-                }
-                heroes.forEach {
-                    item {
-                        Box(modifier = Modifier
-                            .clickable {
-                                onHeroClick(it)
-                            }
-                            .padding(10.dp)
-                            .width(100.dp)
-                            .height(45.dp)) {
-                            Image(
-                                modifier = Modifier
-                                    .width(100.dp)
-                                    .height(45.dp),
-                                painter = rememberImagePainter(it.icon),
-                                contentDescription = it.name
-                            )
-                        }
-                    }
-                }
-            }
-*/
-            AnimatedVisibility(
-                visible = visible,
-                enter = slideInVertically {
-                    // Slide in from 40 dp from the top.
-                    with(density) { -40.dp.roundToPx() }
-                } + expandVertically(
-                    // Expand from the top.
-                    expandFrom = Alignment.Top
-                ) + fadeIn(
-                    // Fade in with the initial alpha of 0.3f.
-                    initialAlpha = 0.3f
-                ),
-                exit = slideOutVertically() + shrinkVertically() + fadeOut()
-            ) {
-                Box(modifier = Modifier.padding(top = 30.dp)) {
-
-                    Box(
-                        modifier = Modifier
-                            .height(70.dp)
-                            .padding(start = 20.dp, end = 20.dp)
-                            .padding(bottom = 20.dp)
-                    ) {
-
-
-                        TextField(
-                            singleLine = true,
-                            textStyle = LocalTextStyle.current.copy(
-                                color = Color.Black,
-                                lineHeight = 220.sp,
-                                textDecoration = TextDecoration.None
-                            ),
-                            value = searchState.text,
-                            onValueChange = {
-                                searchState = TextFieldValue(it, TextRange(it.length))
-                                scope.launch {
-                                    scrollState.scrollToItem(0)
-                                    delay(250)
-                                    focusRequesterTop.requestFocus()
-                                }
-                                //onHeroSearch(it)
-                                visible = false
-                                offsetPosition = 0f
-
-                            },
-                            colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
-                            ),
-                            modifier = Modifier
-                                .focusRequester(focusRequesterPopUp)
-                                .onFocusChanged {
-                                    if (it.isFocused) {
-                                        Log.e("TOHA", "Popup is focused")
-                                    } else {
-                                        Log.e("TOHA", "Popup is not focused")
-                                    }
-                                }
-                                .clip(RoundedCornerShape(5.dp))
-                                .fillMaxWidth()
-                                .background(Color.White),
-
-                            )
-                    }
-                }
-
-            }
-
-
         }
     }
 
     LaunchedEffect(Unit) {
-
 
     }
 }

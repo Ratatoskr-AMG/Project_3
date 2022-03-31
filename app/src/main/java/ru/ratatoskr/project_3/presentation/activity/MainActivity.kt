@@ -183,11 +183,12 @@ class MainActivity() : AppCompatActivity() {
                         navController
                     )
                 }
-                composable(Screens.Attr.route + "/{attr}") { navBackStack ->
+                composable(Screens.Attr.route + "/{attr}/{id}") { navBackStack ->
                     stopPlayer(videoViewState)
                     val attr = navBackStack.arguments?.getString("attr")
+                    val id = navBackStack.arguments?.getString("id")
                     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                    HeroesByAttributeScreen(attr!!, heroesListviewModel, navController)
+                    HeroesByAttributeScreen(attr!!, id!!, heroesListviewModel, navController)
                 }
                 composable(Screens.Favorites.route) {
                     stopPlayer(videoViewState)

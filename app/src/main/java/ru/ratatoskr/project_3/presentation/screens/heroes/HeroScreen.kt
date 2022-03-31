@@ -84,146 +84,6 @@ fun HeroScreen(
 
 }
 
-@ExperimentalFoundationApi
-@Composable
-fun stickyHeaderBox(
-    hero: Hero,
-    onRoleClick: (String) -> Unit,
-    onFavoriteChange: (Boolean) -> Unit,
-    isChecked: Boolean
-) {
-
-    var flowRowWidth=170.dp
-    val configuration = LocalConfiguration.current
-    when (configuration.orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            flowRowWidth=400.dp
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(140.dp)
-            .background(Color.Black)
-    ) {
-        Row(
-            modifier = Modifier
-                .drawWithContent {
-                    drawContent()
-                    clipRect { // Not needed if you do not care about painting half stroke outside
-                        val strokeWidth = Stroke.DefaultMiter
-                        val y = size.height // strokeWidth
-                        drawLine(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFF0d111c),
-                                    Color(0xFF0d111c),
-                                    Color(0xFF0d111c),
-                                    //Color(0xFF000022),
-                                    //Color(0xFF000022)
-                                )
-                            ),
-                            strokeWidth = strokeWidth,
-                            cap = StrokeCap.Square,
-                            start = Offset.Zero.copy(y = y),
-                            end = Offset(x = size.width, y = y)
-                        )
-                    }
-                }
-                .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom=20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-
-            Row(){
-                Box(
-                    modifier = Modifier
-                        .width(70.dp)
-                        .height(70.dp)
-                ) {
-                    Image(
-                        painter = rememberImagePainter(hero.img),
-                        contentDescription = hero.localizedName,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .width(70.dp)
-                            .height(70.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, Color(0xFF1f2430), CircleShape)
-                    )
-                }
-                Box(
-                    modifier = Modifier.padding(start = 30.dp).height(70.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        modifier=Modifier.padding(top=0.dp),
-                        ) {
-                        Box() {
-                            Text(
-                                hero.localizedName,
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                lineHeight = 20.sp
-                            )
-                        }
-
-                        Box() {
-                            for (role in hero.roles) {
-                                val gson = GsonBuilder().create()
-                                val rolesList = gson.fromJson<ArrayList<String>>(role, object :
-                                    TypeToken<ArrayList<String>>() {}.type)
-
-                                FlowRow(modifier = Modifier.width(flowRowWidth)) {
-                                    for (role in rolesList) {
-                                        Text(
-                                            modifier = Modifier
-                                                .padding(end = 3.dp)
-                                                .clickable {
-                                                    onRoleClick(role)
-                                                },
-                                            fontSize = 14.sp,
-                                            lineHeight = 18.sp,
-                                            color = Color(0xFF474b55),
-                                            text = role,
-                                        )
-                                    }
-                                }
-
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            Box(contentAlignment = Alignment.Center,
-
-                modifier = Modifier
-
-                    .size(70.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        onFavoriteChange(!isChecked)
-                    }
-            ) {
-                Image(
-
-                    modifier = Modifier
-                        .width(20.dp)
-                        .height(20.dp),
-                    painter = if (isChecked) rememberImagePainter(R.drawable.ic_hearth_wh) else rememberImagePainter(
-                        R.drawable.ic_hearth_tr
-                    ),
-                    contentDescription = "Is hero favorite?"
-                )
-            }
-        }
-    }
-
-}
 
 @ExperimentalFoundationApi
 @Composable
@@ -235,10 +95,151 @@ fun HeroView(
     onRoleClick: (String) -> Unit
 ) {
 
-    LazyColumn(modifier = Modifier.background(Color.Black)) {
+    var flowRowWidth = 170.dp
+    val configuration = LocalConfiguration.current
+    when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            flowRowWidth = 400.dp
+        }
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .background(Color.Black)
+    ) {
 
         stickyHeader {
-            stickyHeaderBox(hero, onRoleClick, onFavoriteChange, isChecked)
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .background(Color.Black)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .drawWithContent {
+                            drawContent()
+                            clipRect { // Not needed if you do not care about painting half stroke outside
+                                val strokeWidth = Stroke.DefaultMiter
+                                val y = size.height // strokeWidth
+                                drawLine(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            //Color(0xFF000022),
+                                            //Color(0xFF000022)
+                                        )
+                                    ),
+                                    strokeWidth = strokeWidth,
+                                    cap = StrokeCap.Square,
+                                    start = Offset.Zero.copy(y = y),
+                                    end = Offset(x = size.width, y = y)
+                                )
+                            }
+                        }
+                        .fillMaxSize()
+                        .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+
+                    Row() {
+
+                        Box(
+                            modifier = Modifier
+                                .width(70.dp)
+                                .height(70.dp)
+                                .clickable {
+                                    navController.popBackStack()
+                                }
+                        ) {
+                            Image(
+                                painter = rememberImagePainter(hero.img),
+                                contentDescription = hero.localizedName,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .width(70.dp)
+                                    .height(70.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color(0xFF1f2430), CircleShape)
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 30.dp)
+                                .height(70.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(top = 0.dp),
+                            ) {
+                                Box() {
+                                    Text(
+                                        hero.localizedName,
+                                        color = Color.White,
+                                        fontSize = 20.sp,
+                                        lineHeight = 20.sp
+                                    )
+                                }
+
+                                Box() {
+                                    for (role in hero.roles) {
+                                        val gson = GsonBuilder().create()
+                                        val rolesList =
+                                            gson.fromJson<ArrayList<String>>(role, object :
+                                                TypeToken<ArrayList<String>>() {}.type)
+
+                                        FlowRow(modifier = Modifier.width(flowRowWidth)) {
+                                            for (role in rolesList) {
+                                                Text(
+                                                    modifier = Modifier
+                                                        .padding(end = 3.dp)
+                                                        .clickable {
+                                                            onRoleClick(role)
+                                                        },
+                                                    fontSize = 14.sp,
+                                                    lineHeight = 18.sp,
+                                                    color = Color(0xFF474b55),
+                                                    text = role,
+                                                )
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    Box(contentAlignment = Alignment.Center,
+
+                        modifier = Modifier
+
+                            .size(70.dp)
+                            .background(Color.Transparent)
+                            .border(1.dp, Color(0xFF0d111c), CircleShape)
+                            .clickable {
+                                onFavoriteChange(!isChecked)
+                            }
+                    ) {
+                        Image(
+
+                            modifier = Modifier
+                                .width(20.dp)
+                                .height(20.dp),
+                            painter = if (isChecked) rememberImagePainter(R.drawable.ic_hearth_wh) else rememberImagePainter(
+                                R.drawable.ic_hearth_tr
+                            ),
+                            contentDescription = "Is hero favorite?"
+                        )
+                    }
+                }
+            }
+
         }
 
         item {
@@ -385,6 +386,7 @@ fun attributeRow(column: String, name: String, value: String, navController: Nav
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .background(Color(0x55202020))
             .drawWithContent {
                 drawContent()
                 clipRect { // Not needed if you do not care about painting half stroke outside
@@ -409,19 +411,29 @@ fun attributeRow(column: String, name: String, value: String, navController: Nav
             }
             .fillMaxWidth()
             .height(50.dp)
-            .padding(start=20.dp,end=20.dp)
-            .background(Color(0x55202020))
             .clickable {
                 navController.navigate(Screens.Attr.route + "/" + column)
             }
     ) {
-        Text(
-            fontSize = 12.sp,
-            color = Color.White,
-            text = name)
-        Text(
-            fontSize = 12.sp,
-            color = Color.White,
-            text = value)
+        Box(
+            modifier = Modifier
+                .padding(start = 20.dp)
+        ) {
+            Text(
+                fontSize = 12.sp,
+                color = Color.White,
+                text = name
+            )
+        }
+        Box(
+            modifier = Modifier
+                .padding(end = 20.dp)
+        ) {
+            Text(
+                fontSize = 12.sp,
+                color = Color.White,
+                text = value
+            )
+        }
     }
 }

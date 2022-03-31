@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -89,22 +90,44 @@ fun HeroesListView(
     val configuration = LocalConfiguration.current
     var listColumnsCount = 4
     var listBannerHeight: Dp = 240.dp
+    var lazYColumnSpaceBoxHeight: Dp = 210.dp
     val listState = rememberLazyListState()
-
-
+    when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            listColumnsCount = 7
+            listBannerHeight = 480.dp
+            lazYColumnSpaceBoxHeight = 480.dp
+        }
+    }
 
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Transparent)
+            .background(Color.Black)
     ) {
+
+        /*
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
+            Image(
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(listBannerHeight),
+                painter = rememberImagePainter("http://ratatoskr.ru/app/img/HeroesList.jpg"),
+                contentDescription = "Welcome"
+            )
+        }
+        */
 
         Box(
             modifier = Modifier
                 .background(
                     Color.Black,
-                    // rounded corner to match with the OutlinedTextField
-                    shape = RoundedCornerShape(4.dp)
+                    //shape = RoundedCornerShape(4.dp)
                 )
                 .fillMaxSize()
         ) {
@@ -118,25 +141,19 @@ fun HeroesListView(
                     ): Offset {
                         val delta = consumed.y
                         offsetPosition += delta
-                        visible = offsetPosition < -1049
+                        //visible = offsetPosition < -1049
                         Log.e("TOHA", "offsetPosition:" + offsetPosition)
                         return Offset.Zero
                     }
                 }
             }
 
-            when (configuration.orientation) {
-                Configuration.ORIENTATION_LANDSCAPE -> {
-                    listColumnsCount = 5
-                    listBannerHeight = 320.dp
-                }
-            }
-
             val density = LocalDensity.current
 
             LazyColumn(
-                state = listState,
+                state = scrollState,
                 modifier = Modifier
+                    .nestedScroll(nestedScrollConnection)
                     .background(brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
@@ -153,8 +170,9 @@ fun HeroesListView(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(listBannerHeight)
+                            .height(lazYColumnSpaceBoxHeight)
                     ) {
+
                         Image(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -163,6 +181,7 @@ fun HeroesListView(
                             painter = rememberImagePainter("http://ratatoskr.ru/app/img/HeroesList.jpg"),
                             contentDescription = "Welcome"
                         )
+
                     }
 
                 }
@@ -229,7 +248,7 @@ fun HeroesListView(
                     listRowsCount += 1
                 }
 
-                for (row in 0..listRowsCount) {
+                for (row in 0..listRowsCount-1) {
 
                     item {
                         Row(

@@ -38,7 +38,7 @@ presentation
     viewModels(domain.useCases)
 */
 /* Вопросы
-Code review
+Что показать вместо пустого списка избранных?
 Безопасность exoplayer, accompanist
 Какими данные могут быть "чувствительными" (пароль)?
 Как передавать пароль (md5 не вариант)?
@@ -74,7 +74,8 @@ class ReadMe {
     }
 }
 /* Задания:
-
+Страница уровней
+Возможность обновить данные вручную после установки
 */
 /* Ссылки:
 https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt

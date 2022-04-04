@@ -1,15 +1,10 @@
 package ru.ratatoskr.project_3.presentation.screens
 
-import android.content.res.Resources
-import android.provider.Settings.Global.getString
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 
-import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,23 +19,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import dagger.hilt.android.shaded.auto.common.AnnotationValues.getString
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
+import ru.ratatoskr.project_3.domain.helpers.states.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.theme.LoadingView
-import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.presentation.theme.LoadingScreen
+import ru.ratatoskr.project_3.presentation.theme.leftBtnHeaderBox
 
 @ExperimentalFoundationApi
 @Composable
@@ -48,17 +39,16 @@ fun FavoritesScreen(
     viewModel: HeroesListViewModel,
     navController: NavController
 ) {
-    val viewState = viewModel.heroListState.observeAsState()
+    val viewState = viewModel.heroesListState.observeAsState()
 
     when (val state = viewState.value) {
-        is HeroListState.LoadedHeroListState<*> -> FavoritesListView(
-            state.heroes,navController
+        is HeroesListState.LoadedHeroesListState<*> -> FavoritesListView(
+            state.heroes, navController
         ) {
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
-        is HeroListState.NoHeroListState -> MessageView("Heroes not found")
-        is HeroListState.LoadingHeroListState -> LoadingView("Favorites loading...")
-        is HeroListState.ErrorHeroListState -> MessageView("Heroes error!")
+        is HeroesListState.NoHeroesListState -> EmptyFavoritesListView(navController, "No heroes found")
+        is HeroesListState.LoadingHeroesListState -> LoadingFavoritesView(navController, "Favorites")
     }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -66,6 +56,48 @@ fun FavoritesScreen(
     })
 }
 
+@ExperimentalFoundationApi
+@Composable
+fun LoadingFavoritesView(
+    navController: NavController,
+    title: String
+) {
+    LoadingScreen("$title is loading", navController, R.drawable.ic_back, title)
+}
+
+@ExperimentalFoundationApi
+@Composable
+fun EmptyFavoritesListView(
+    navController: NavController,
+    title: String
+) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        Column {
+            leftBtnHeaderBox(navController, R.drawable.ic_back, "Favorites")
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x55202020))
+            ) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                    text = title,
+                    color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
+                )
+            }
+        }
+
+
+    }
+}
 
 @ExperimentalFoundationApi
 @Composable
@@ -77,11 +109,13 @@ fun FavoritesListView(
     val heroes = data.mapNotNull { it as? Hero }
     var scrollState = rememberForeverLazyListState(key = "Favorites")
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Black)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
         LazyColumn(
-            state=scrollState,
+            state = scrollState,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0x55202020))

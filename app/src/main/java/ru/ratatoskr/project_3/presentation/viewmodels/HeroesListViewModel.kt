@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,9 +10,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.extensions.set
-import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
+import ru.ratatoskr.project_3.domain.helpers.states.HeroesListState
 import ru.ratatoskr.project_3.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
 import ru.ratatoskr.project_3.domain.useCases.heroes.*
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,85 +26,120 @@ class HeroesListViewModel @Inject constructor(
     val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
 ) : ViewModel() {
 
-    val _heroList_state: MutableLiveData<HeroListState> = MutableLiveData<HeroListState>(HeroListState.LoadingHeroListState())
-    val heroListState: LiveData<HeroListState> = _heroList_state
+    val _heroesList_state: MutableLiveData<HeroesListState> =
+        MutableLiveData<HeroesListState>(HeroesListState.LoadingHeroesListState())
+    val heroesListState: LiveData<HeroesListState> = _heroesList_state
 
-    fun switchAttrSortDirection(attr:String,sortAsc:Boolean){
-        Log.e("TOHA_test","switchAttrSortDirection")
+    fun switchAttrSortDirection(attr: String, sortAsc: Boolean) {
+        Log.e("TOHA_test", "switchAttrSortDirection")
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr,sortAsc)
-                _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes,"",sortAsc))
-            }
-            catch (e: java.lang.Exception) {
-                Log.e("TOHA","e:"+e.toString())
+                val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr, sortAsc)
+                _heroesList_state.postValue(
+                    HeroesListState.LoadedHeroesListState(
+                        heroes,
+                        "",
+                        sortAsc
+                    )
+                )
+            } catch (e: java.lang.Exception) {
+                Log.e("TOHA", "e:" + e.toString())
                 e.printStackTrace()
             }
 
         }
     }
 
-    fun getAllHeroesSortByName(){
-        _heroList_state.set(HeroListState.LoadingHeroListState())
+    fun getAllHeroesSortByName(opendotaUpdatePreferences: SharedPreferences) {
+        _heroesList_state.set(HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
                 if (heroes.isEmpty()) {
-                    getAllHeroesFromApi()
+                    getAllHeroesFromApi(opendotaUpdatePreferences)
                 } else {
-                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes,"",false))
+                    _heroesList_state.postValue(
+                        HeroesListState.LoadedHeroesListState(
+                            heroes,
+                            "",
+                            false
+                        )
+                    )
                 }
             } catch (e: java.lang.Exception) {
-                Log.e("TOHA","e:"+e.toString())
+                Log.e("TOHA", "e:" + e.toString())
                 e.printStackTrace()
             }
         }
     }
 
-    fun getAllHeroesByStrSortByName(str:String){
+    fun getAllHeroesByStrSortByName(str: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesByStrSortByName(str)
                 if (!heroes.isEmpty()) {
-                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes,str,false))
+                    _heroesList_state.postValue(
+                        HeroesListState.LoadedHeroesListState(
+                            heroes,
+                            str,
+                            false
+                        )
+                    )
                 }
             } catch (e: java.lang.Exception) {
-                Log.e("TOHA","e:"+e.toString())
+                Log.e("TOHA", "e:" + e.toString())
                 e.printStackTrace()
             }
         }
     }
 
-    suspend fun getAllHeroesFromApi() {
+    suspend fun getAllHeroesFromApi(opendotaUpdatePreferences: SharedPreferences) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.e("TOHA","getAllHeroesFromApi")
+                Log.e("TOHA", "getAllHeroesFromApi")
                 var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
 
                 if (heroes.isEmpty()) {
-                    _heroList_state.postValue(HeroListState.NoHeroListState("Empty Heroes from API list"))
+                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes from API list"))
                 } else {
                     addHeroesUserCase.addHeroes(heroes)
-                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes = heroes.sortedBy { it.localizedName },"",false))
+
+                    var date = Date(System.currentTimeMillis())
+                    opendotaUpdatePreferences.edit().putLong("time", date.time).apply();
+                    Log.e("TOHA","update time:"+date.time)
+
+                    _heroesList_state.postValue(
+                        HeroesListState.LoadedHeroesListState(
+                            heroes = heroes.sortedBy { it.localizedName },
+                            "",
+                            false
+                        )
+                    )
                 }
 
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
-                _heroList_state.postValue(HeroListState.NoHeroListState(e.toString()))
+                _heroesList_state.postValue(HeroesListState.NoHeroesListState(e.toString()))
             }
         }
     }
 
     fun getAllHeroesByAttr(attr: String) {
-        _heroList_state.set(newValue = HeroListState.LoadingHeroListState())
+        _heroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr,false)
+                val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr, false)
                 if (heroes.isEmpty()) {
-                    _heroList_state.postValue(HeroListState.NoHeroListState("Empty Heroes by attr list"))
+                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes by attr list"))
                 } else {
-                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes = heroes,"",false))
+                    _heroesList_state.postValue(
+                        HeroesListState.LoadedHeroesListState(
+                            heroes = heroes,
+                            "",
+                            false
+                        )
+                    )
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -111,14 +148,20 @@ class HeroesListViewModel @Inject constructor(
     }
 
     fun getAllFavoriteHeroes() {
-        _heroList_state.set(newValue = HeroListState.LoadingHeroListState())
+        _heroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
                 if (heroes.isEmpty()) {
-                    _heroList_state.postValue(HeroListState.NoHeroListState("Empty favorite heroes list"))
+                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty favorite heroes list"))
                 } else {
-                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes = heroes,"",false))
+                    _heroesList_state.postValue(
+                        HeroesListState.LoadedHeroesListState(
+                            heroes = heroes,
+                            "",
+                            false
+                        )
+                    )
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -126,17 +169,23 @@ class HeroesListViewModel @Inject constructor(
         }
     }
 
-    fun getAllHeroesByRole(role:String){
-        _heroList_state.set(newValue = HeroListState.LoadingHeroListState())
+    fun getAllHeroesByRole(role: String) {
+        _heroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByRoleUseCase.getAllHeroesByRole(role)
 
                 if (heroes.isEmpty()) {
-                    _heroList_state.postValue(HeroListState.NoHeroListState("Empty Heroes by attr list"))
+                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes by attr list"))
                 } else {
 
-                    _heroList_state.postValue(HeroListState.LoadedHeroListState(heroes = heroes,"",false))
+                    _heroesList_state.postValue(
+                        HeroesListState.LoadedHeroesListState(
+                            heroes = heroes,
+                            "",
+                            false
+                        )
+                    )
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

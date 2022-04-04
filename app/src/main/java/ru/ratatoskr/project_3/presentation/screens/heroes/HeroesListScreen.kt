@@ -1,7 +1,7 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -10,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +23,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
@@ -33,11 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.google.android.exoplayer2.util.Log
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.states.HeroListState
+import ru.ratatoskr.project_3.domain.helpers.states.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.theme.LoadingView
 import ru.ratatoskr.project_3.presentation.theme.MessageView
@@ -48,24 +43,25 @@ import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 @Composable
 fun HeroesListScreen(
     viewModel: HeroesListViewModel,
-    navController: NavController
+    navController: NavController,
+    opendotaUpdatePreferences: SharedPreferences
 ) {
 
-    when (val state = viewModel.heroListState.observeAsState().value) {
-        is HeroListState.LoadedHeroListState<*> -> HeroesListView(
+    when (val state = viewModel.heroesListState.observeAsState().value) {
+        is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(
             state.heroes, {
                 navController.navigate(Screens.Hero.route + "/" + it.id)
             }, {
                 viewModel.getAllHeroesByStrSortByName(it)
             }
         )
-        is HeroListState.NoHeroListState -> MessageView("Heroes not found")
-        is HeroListState.LoadingHeroListState -> LoadingView("Heroes are loading...")
-        is HeroListState.ErrorHeroListState -> MessageView("Heroes error!")
+        is HeroesListState.NoHeroesListState -> MessageView("Heroes not found")
+        is HeroesListState.LoadingHeroesListState -> LoadingView("Heroes are loading...")
+        is HeroesListState.ErrorHeroesListState -> MessageView("Heroes error!")
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.getAllHeroesSortByName()
+        viewModel.getAllHeroesSortByName(opendotaUpdatePreferences)
     })
 }
 
@@ -82,16 +78,11 @@ fun HeroesListView(
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
-    val focusRequesterPopUp = remember { FocusRequester() }
-    var keyboardController = LocalSoftwareKeyboardController.current
-    val scope = rememberCoroutineScope()
     var scrollState = rememberForeverLazyListState(key = "Overview")
-    var visible by remember { mutableStateOf(scrollState.firstVisibleItemScrollOffset < -1049) }
     val configuration = LocalConfiguration.current
     var listColumnsCount = 4
     var listBannerHeight: Dp = 240.dp
     var lazYColumnSpaceBoxHeight: Dp = 210.dp
-    val listState = rememberLazyListState()
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
             listColumnsCount = 7

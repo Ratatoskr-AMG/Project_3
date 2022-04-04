@@ -134,7 +134,7 @@ fun FavoritesListView(
 
                                     .size(70.dp)
                                     .clip(CircleShape)
-                                    .border(1.dp, Color(0xFF0d111c), CircleShape)
+                                    .border(1.dp, Color(0x880d111c), CircleShape)
                                     .clickable {
                                         navController.popBackStack()
                                     }
@@ -153,7 +153,7 @@ fun FavoritesListView(
 
                             Box(
                                 modifier = Modifier
-                                    .padding(start = 30.dp)
+                                    .padding(start = 15.dp)
                                     .height(70.dp),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -161,7 +161,7 @@ fun FavoritesListView(
                                     Text(
                                         "Favorites",
                                         color = Color.White,
-                                        fontSize = 20.sp,
+                                        fontSize = 16.sp,
                                         lineHeight = 20.sp
                                     )
                                 }

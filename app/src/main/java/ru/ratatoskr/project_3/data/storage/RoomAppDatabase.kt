@@ -6,9 +6,9 @@ import ru.ratatoskr.project_3.data.contracts.HeroesContract
 import ru.ratatoskr.project_3.data.converters.HeroesConverterImpl
 import ru.ratatoskr.project_3.domain.model.Favorites
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.model.SteamPlayer
+import ru.ratatoskr.project_3.domain.model.steam.SteamPlayer
 
-@Database(entities = [Hero::class,Favorites::class,SteamPlayer::class], version = 6)
+@Database(entities = [Hero::class,Favorites::class, SteamPlayer::class], version = 6)
 @TypeConverters(HeroesConverterImpl::class)
 abstract class RoomAppDatabase : RoomDatabase() {
 

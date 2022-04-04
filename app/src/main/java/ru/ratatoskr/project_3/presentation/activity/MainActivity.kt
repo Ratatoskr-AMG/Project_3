@@ -48,13 +48,14 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.exoplayer2.util.Log
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.*
+import kotlinx.coroutines.Dispatchers
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.ReadMe
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.VideoState
 import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.viewmodels.*
-import kotlin.math.absoluteValue
+
 
 @AndroidEntryPoint
 class MainActivity() : AppCompatActivity() {
@@ -66,6 +67,8 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
 
         setContent {
             val systemUiController = rememberSystemUiController()
@@ -93,7 +96,10 @@ class MainActivity() : AppCompatActivity() {
 
         val navController = rememberNavController()
         val videoViewModel = hiltViewModel<VideoViewModel>()
+        val profileViewModel = hiltViewModel<ProfileViewModel>()
         val videoViewState = videoViewModel.videoState.observeAsState()
+        val profileViewState = profileViewModel.profileState.observeAsState()
+
         var bottomNavMenuHeight = 80.dp
 
         Scaffold(
@@ -127,7 +133,7 @@ class MainActivity() : AppCompatActivity() {
                      backgroundColor = Color(0xFF000000)
                 ) {
                     val items =
-                        listOf(Screens.Home, Screens.Favorites, Screens.Profile, Screens.Video)
+                        listOf(Screens.Home, Screens.Favorites, Screens.Profile)
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
 
@@ -195,11 +201,7 @@ class MainActivity() : AppCompatActivity() {
                     val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                     FavoritesScreen(heroesListviewModel, navController)
                 }
-                composable(Screens.Profile.route) {
-                    stopPlayer(videoViewState)
-                    val profileViewModel = hiltViewModel<ProfileViewModel>()
-                    ProfileScreen(profileViewModel)
-                }
+
                 composable(Screens.Role.route + "/{role}") { navBackStack ->
                     stopPlayer(videoViewState)
                     val role = navBackStack.arguments?.getString("role")
@@ -208,6 +210,14 @@ class MainActivity() : AppCompatActivity() {
                 }
                 composable(Screens.Video.route) { navBackStack ->
                     VideoScreen(videoViewModel)
+                }
+                composable(Screens.Profile.route) {
+                    stopPlayer(videoViewState)
+                    val profileViewModel = hiltViewModel<ProfileViewModel>()
+                    ProfileScreen(navController, profileViewState,profileViewModel)
+                }
+                composable(Screens.Steam.route) {
+                    SteamLoginScreen(navController,profileViewState,profileViewModel)
                 }
             }
         }

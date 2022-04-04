@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.ratatoskr.project_3.data.contracts.HeroesContract
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.model.SteamPlayer
 
 @Dao
 interface HeroesDao {

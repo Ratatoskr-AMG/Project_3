@@ -12,4 +12,5 @@ sealed class Screens(val route: String, val description: Int = 0, val icon_tr: I
     object Profile : Screens("profile", R.string.title_profile,R.drawable.ic_human_tr,R.drawable.ic_human_wh)
     object Video : Screens("video", R.string.video_string,R.drawable.ic_video_tr,R.drawable.ic_video_wh)
     object Role : Screens("role")
+    object Steam : Screens("steam")
 }

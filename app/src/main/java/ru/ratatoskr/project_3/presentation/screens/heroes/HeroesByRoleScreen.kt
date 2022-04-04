@@ -61,7 +61,7 @@ fun HeroesByRoleScreen(
 
     when (val state = viewState.value) {
 
-        is HeroListState.LoadedHeroListState<*> -> RoleListView(role, state.heroes,navController) {
+        is HeroListState.LoadedHeroListState<*> -> RoleListView(role, state.heroes, navController) {
             navController.navigate(Screens.Hero.route + "/" + it.id)
         }
         is HeroListState.NoHeroListState -> MessageView("Heroes not found")
@@ -85,7 +85,7 @@ fun RoleListView(
 ) {
     val configuration = LocalConfiguration.current
     val heroes = data.mapNotNull { it as? Hero }
-    var scrollState = rememberForeverLazyListState(key = "Role_"+role)
+    var scrollState = rememberForeverLazyListState(key = "Role_" + role)
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPostScroll(
@@ -105,9 +105,11 @@ fun RoleListView(
         }
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Black)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
         LazyColumn(
             state = scrollState,
             modifier = Modifier
@@ -163,7 +165,7 @@ fun RoleListView(
 
                                     .size(70.dp)
                                     .clip(CircleShape)
-                                    .border(1.dp, Color(0xFF0d111c), CircleShape)
+                                    .border(1.dp, Color(0x880d111c), CircleShape)
                                     .clickable {
                                         navController.popBackStack()
                                     }
@@ -176,21 +178,22 @@ fun RoleListView(
                                     painter = rememberImagePainter(
                                         ru.ratatoskr.project_3.R.drawable.ic_back
                                     ),
-                                    contentDescription = "Is hero favorite?"
+                                    contentDescription = "Back"
                                 )
                             }
 
                             Box(
                                 modifier = Modifier
-                                    .padding(start = 30.dp)
-                                    .height(70.dp),
-                                contentAlignment = Alignment.Center
+                                    .padding(start = 15.dp)
+                                    .height(70.dp)
+                                    .width(140.dp),
+                                contentAlignment = Alignment.CenterStart
                             ) {
                                 Box() {
                                     Text(
                                         role,
                                         color = Color.White,
-                                        fontSize = 20.sp,
+                                        fontSize = 16.sp,
                                         lineHeight = 20.sp
                                     )
                                 }
@@ -207,7 +210,7 @@ fun RoleListView(
                 listRowsCount += 1
             }
 
-            for (row in 0..listRowsCount-1) {
+            for (row in 0..listRowsCount - 1) {
 
                 item {
                     Row(
@@ -232,7 +235,6 @@ fun RoleListView(
                                         painter = rememberImagePainter(hero.icon),
                                         contentDescription = hero.name
                                     )
-                                    com.google.android.exoplayer2.util.Log.e("TOHA_CALC", hero.name)
                                 }
 
                             } else {

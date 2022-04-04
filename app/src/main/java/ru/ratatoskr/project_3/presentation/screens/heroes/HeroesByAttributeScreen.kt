@@ -208,7 +208,7 @@ fun HeroesByAttributeListView(
 
                                     .size(70.dp)
                                     .clip(CircleShape)
-                                    .border(1.dp, Color(0xFF0d111c), CircleShape)
+                                    .border(1.dp, Color(0x880d111c), CircleShape)
                                     .clickable {
                                         navController.popBackStack()
                                     }
@@ -221,21 +221,22 @@ fun HeroesByAttributeListView(
                                     painter = rememberImagePainter(
                                         R.drawable.ic_back
                                     ),
-                                    contentDescription = "Is hero favorite?"
+                                    contentDescription = "Back"
                                 )
                             }
 
                             Box(
                                 modifier = Modifier
-                                    .padding(start = 30.dp)
-                                    .height(70.dp),
-                                contentAlignment = Alignment.Center
+                                    .padding(start = 15.dp)
+                                    .height(70.dp)
+                                    .width(140.dp),
+                                contentAlignment = Alignment.CenterStart
                             ) {
                                 Box() {
                                     Text(
                                         titleValue,
                                         color = Color.White,
-                                        fontSize = 20.sp,
+                                        fontSize = 16.sp,
                                         lineHeight = 20.sp
                                     )
                                 }
@@ -250,7 +251,7 @@ fun HeroesByAttributeListView(
 
                                 .size(70.dp)
                                 .background(Color.Transparent)
-                                .border(1.dp, Color(0xFF0d111c), CircleShape)
+                                .border(1.dp, Color(0x880d111c), CircleShape)
                                 .clickable {
                                     onSortChange(!isSortAsc)
                                 }
@@ -262,7 +263,7 @@ fun HeroesByAttributeListView(
                                     .height(20.dp),
                                 painter = if (isSortAsc) rememberImagePainter(R.drawable.ic_down)
                                 else rememberImagePainter(R.drawable.ic_up),
-                                contentDescription = "Is hero favorite?"
+                                contentDescription = "Sort"
                             )
                         }
                     }

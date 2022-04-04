@@ -166,23 +166,23 @@ fun HeroView(
                                     .width(70.dp)
                                     .height(70.dp)
                                     .clip(CircleShape)
-                                    .border(1.dp, Color(0xFF1f2430), CircleShape)
+                                    .border(1.dp, Color(0x880d111c), CircleShape)
                             )
                         }
                         Box(
                             modifier = Modifier
-                                .padding(start = 30.dp)
+                                .padding(start = 15.dp)
                                 .height(70.dp),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.CenterStart
                         ) {
                             Column(
-                                modifier = Modifier.padding(top = 0.dp),
+                                modifier = Modifier.padding(top = 0.dp).width(160.dp),
                             ) {
                                 Box() {
                                     Text(
                                         hero.localizedName,
                                         color = Color.White,
-                                        fontSize = 20.sp,
+                                        fontSize = 16.sp,
                                         lineHeight = 20.sp
                                     )
                                 }
@@ -202,7 +202,7 @@ fun HeroView(
                                                         .clickable {
                                                             onRoleClick(role)
                                                         },
-                                                    fontSize = 14.sp,
+                                                    fontSize = 13.sp,
                                                     lineHeight = 18.sp,
                                                     color = Color(0xFF474b55),
                                                     text = role,
@@ -217,13 +217,13 @@ fun HeroView(
                         }
                     }
 
-                    Box(contentAlignment = Alignment.Center,
-
+                    Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
 
                             .size(70.dp)
                             .background(Color.Transparent)
-                            .border(1.dp, Color(0xFF0d111c), CircleShape)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
                             .clickable {
                                 onFavoriteChange(!isChecked)
                             }
@@ -232,7 +232,8 @@ fun HeroView(
 
                             modifier = Modifier
                                 .width(20.dp)
-                                .height(20.dp),
+                                .height(20.dp)
+                                ,
                             painter = if (isChecked) rememberImagePainter(R.drawable.ic_hearth_wh) else rememberImagePainter(
                                 R.drawable.ic_hearth_tr
                             ),

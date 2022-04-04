@@ -1,7 +1,6 @@
 package ru.ratatoskr.project_3.domain.useCases.user
 
-import ru.ratatoskr.project_3.domain.model.SteamPlayer
-import ru.ratatoskr.project_3.domain.model.SteamResponse
+import ru.ratatoskr.project_3.domain.model.steam.SteamResponse
 import ru.ratatoskr.project_3.domain.repository.user.AppUserRepoImpl
 import javax.inject.Inject
 
@@ -20,3 +19,4 @@ class GetSteamUserUseCase @Inject constructor(
     }
     */
 }
+

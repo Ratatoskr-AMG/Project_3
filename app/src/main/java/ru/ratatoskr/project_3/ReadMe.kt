@@ -32,10 +32,7 @@ class ReadMe {
     }
 }
 
-/*
-
- * Вопросы
-
+/* Вопросы
 Стили (BGBOx,padding(X:Y))
 Безопасность exoplayer, accompanist
 Какими данные могут быть "чувствительными" (пароль)?
@@ -43,24 +40,21 @@ class ReadMe {
 Как обойти кражу мобилы?
 как обойти прослушку сигналов?
 Как обойти передачу ссылки на видео? Blob(?)
-
- * Задания:
-
+*/
+/* Задания:
 Дизайн
-
- * Ссылки:
-
+*/
+/* Ссылки:
+https://api.opendota.com/api/players/205343070
 https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
 https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
 http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
-
- * Книги:
-
+*/
+/* Книги:
 Карьера программиста крэкинг зэ пот
 Java Concurrency in Practiсe
-
- * Пройдено:
-
+*/
+/* Пройдено:
 Модуль клиент +
 Карточка героя +
 Размер картинок +
@@ -73,7 +67,6 @@ Java Concurrency in Practiсe
 Профиль вместо Notifications +
 
 */
-
 /* Архитектура
 domain
     base(?)
@@ -90,7 +83,6 @@ presentation
     theme
     viewModels(domain.useCases)
 */
-
 /* Из конспектов
 1:UseCase может объединять два репозитория
 2:Многопоточность
@@ -100,7 +92,6 @@ presentation
 16.6 мс
 В скоуп передается диспетчер, это SuperVisorJob
 */
-
 /* val windowInsetsController =
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())

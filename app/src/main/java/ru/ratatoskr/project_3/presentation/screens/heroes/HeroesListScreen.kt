@@ -123,7 +123,6 @@ fun HeroesListView(
                     ): Offset {
                         val delta = consumed.y
                         offsetPosition += delta
-                        Log.e("TOHA", "offsetPosition:" + offsetPosition)
                         return Offset.Zero
                     }
                 }
@@ -202,9 +201,7 @@ fun HeroesListView(
                                 .onFocusChanged {
                                     if (it.isFocused) {
                                         //keyboardController?.hide()
-                                        Log.e("TOHA", "Top is focused")
                                     } else {
-                                        Log.e("TOHA", "Top is not focused")
                                     }
                                 }
                                 .clip(RoundedCornerShape(5.dp))
@@ -248,7 +245,6 @@ fun HeroesListView(
                                             painter = rememberImagePainter(hero.icon),
                                             contentDescription = hero.name
                                         )
-                                        Log.e("TOHA_CALC", hero.name)
                                     }
 
                                 } else {

@@ -7,7 +7,6 @@ import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Hero
 import java.lang.Exception
 import javax.inject.Inject
-
 class HeroesRepoImpl @Inject constructor(
     private val roomAppDatabase: RoomAppDatabase,
     private val client: HttpClient
@@ -18,8 +17,13 @@ class HeroesRepoImpl @Inject constructor(
     }
 
     suspend fun getAllHeroesListByStr(str:String): List<Hero> {
-        return roomAppDatabase.heroesDao().fetchHeroesByStr(str+"%")
+        if(str!="") {
+            return roomAppDatabase.heroesDao().fetchHeroesByStr(str + "%")
+        }else{
+            return roomAppDatabase.heroesDao().all
+        }
     }
+
 
     suspend fun   getHeroById(heroId: String): Hero {
         return roomAppDatabase.heroesDao().fetchHero(heroId.toInt())
@@ -52,7 +56,8 @@ class HeroesRepoImpl @Inject constructor(
             error(e)
         }
 
-    }    
+    }
 
 }
+
 

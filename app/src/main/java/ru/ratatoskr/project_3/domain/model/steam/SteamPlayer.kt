@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.model
+package ru.ratatoskr.project_3.domain.model.steam
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

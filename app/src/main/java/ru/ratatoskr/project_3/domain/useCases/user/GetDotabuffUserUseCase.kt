@@ -1,7 +1,6 @@
 package ru.ratatoskr.project_3.domain.useCases.user
 
-import ru.ratatoskr.project_3.domain.model.steam.SteamResponse
-import ru.ratatoskr.project_3.domain.repository.user.AppUserRepoImpl
+import ru.ratatoskr.project_3.domain.repository.AppUserRepoImpl
 import javax.inject.Inject
 
 class GetDotaBuffUserUseCase @Inject constructor(

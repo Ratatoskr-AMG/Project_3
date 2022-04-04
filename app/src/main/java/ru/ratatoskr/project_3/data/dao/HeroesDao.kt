@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.data.storage
+package ru.ratatoskr.project_3.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,7 +1,7 @@
-package ru.ratatoskr.project_3.domain.repository.favorites
+package ru.ratatoskr.project_3.domain.repository
 
 import android.util.Log
-import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import ru.ratatoskr.project_3.data.dao.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Favorites
 import java.lang.Exception
 import javax.inject.Inject

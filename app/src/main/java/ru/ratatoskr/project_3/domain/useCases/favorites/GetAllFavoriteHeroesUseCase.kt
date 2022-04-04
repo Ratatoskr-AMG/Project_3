@@ -2,8 +2,8 @@ package ru.ratatoskr.project_3.domain.useCases.favorites;
 
 import ru.ratatoskr.project_3.domain.model.Hero
 import javax.inject.Inject;
-import ru.ratatoskr.project_3.domain.repository.favorites.FavoritesRepoImpl;
-import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
+import ru.ratatoskr.project_3.domain.repository.FavoritesRepoImpl;
+import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 import ru.ratatoskr.project_3.domain.useCases.heroes.GetHeroByIdUseCase
 
 class GetAllFavoriteHeroesUseCase @Inject constructor(

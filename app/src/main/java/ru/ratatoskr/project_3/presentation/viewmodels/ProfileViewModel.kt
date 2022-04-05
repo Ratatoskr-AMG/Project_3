@@ -1,14 +1,16 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.processor.internal.AnnotationValues.getString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.base.EventHandler
+import ru.ratatoskr.project_3.domain.di.App
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.domain.useCases.user.GetDotaBuffUserUseCase
@@ -22,10 +24,18 @@ class ProfileViewModel @Inject constructor(
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase
-) : ViewModel(), EventHandler<ProfileEvent> {
+) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
-    private val _profile_state: MutableLiveData<ProfileState> =
-        MutableLiveData<ProfileState>(ProfileState.IndefinedState)
+
+    val appSharedPreferences = this.getSharedPreferences(
+        R.string.app_preferences,
+        Context.MODE_PRIVATE
+    )
+
+    var spTier= "undefined"
+
+        private val _profile_state: MutableLiveData<ProfileState> =
+        MutableLiveData<ProfileState>(ProfileState.IndefinedState(spTier))
     val profileState: LiveData<ProfileState> = _profile_state
 
     private fun getResponseFromOpenDota(steam_user_id: String) {

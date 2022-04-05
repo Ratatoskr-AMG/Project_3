@@ -224,6 +224,9 @@ fun SteamSignedInHeader(
     state: ProfileState.LoggedIntoSteam,
 ) {
 
+    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierDescription = "Tier undefined"
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -314,9 +317,9 @@ fun SteamSignedInHeader(
                     .border(1.dp, Color(0x880d111c), CircleShape)
             ) {
                 Image(
-                    painter = rememberImagePainter(state.steam_user_avatar),
-                    contentDescription = state.steam_user_name,
-                    contentScale = ContentScale.Inside,
+                    painter = rememberImagePainter(tierImage),
+                    contentDescription = tierDescription,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .width(70.dp)
                         .height(70.dp)
@@ -334,11 +337,8 @@ fun SteamSignInHeader(
     navController: NavController,
 ) {
 
-    val isUserLogged = false;
-    var avatarContentDescription = "Unknown user"
-    if (isUserLogged) {
-        var avatarContentDescription = "Username"
-    }
+    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierDescription="Tier undefined"
 
     Box(
         modifier = Modifier
@@ -423,29 +423,30 @@ fun SteamSignInHeader(
                 }
             }
 
-            if (isUserLogged) {
-                Box(contentAlignment = Alignment.Center,
 
+            Box(contentAlignment = Alignment.Center,
+                modifier = Modifier
+
+                    .size(70.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, Color(0x880d111c), CircleShape)
+                    .clickable {
+                        //navController.popBackStack()
+                    }
+            ) {
+
+                Image(
+                    painter = rememberImagePainter(tierImage),
+                    contentDescription = tierDescription,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-
-                        .size(70.dp)
-                        .background(Color.Transparent)
+                        .width(70.dp)
+                        .height(70.dp)
+                        .clip(CircleShape)
                         .border(1.dp, Color(0x880d111c), CircleShape)
-                        .clickable {
-                            //onExitChange(!isChecked)
-                        }
-                ) {
-
-                    Image(
-
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp),
-                        painter = rememberImagePainter(R.drawable.ic_back),
-                        contentDescription = "Exit"
-                    )
-                }
+                )
             }
+
         }
     }
 }

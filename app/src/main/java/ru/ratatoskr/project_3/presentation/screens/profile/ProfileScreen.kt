@@ -32,6 +32,7 @@ import ru.ratatoskr.project_3.presentation.theme.LoadingView
 import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 import java.util.*
+import kotlin.math.absoluteValue
 
 @ExperimentalFoundationApi
 @Composable
@@ -39,19 +40,20 @@ fun ProfileScreen(
     navController: NavController,
     viewState: State<ProfileState?>,
     viewModel: ProfileViewModel,
-    openDotaSharedPreferences:SharedPreferences
+    appSharedPreferences: SharedPreferences
 ) {
 
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-            UndefinedProfileView(state, navController,openDotaSharedPreferences)
+            UndefinedProfileView(state, navController, appSharedPreferences)
         }
         is ProfileState.LoggedIntoSteam -> {
             definedBySteamProfileView(
                 state,
                 navController,
-                {viewModel.obtainEvent(ProfileEvent.OnSteamExit)},
-                openDotaSharedPreferences)
+                { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
+                appSharedPreferences
+            )
 
         }
         is ProfileState.LoadingState -> LoadingView("Profile is loading")
@@ -68,47 +70,47 @@ fun ProfileHeader(
     state: ProfileState
 ) {
 
-    val isUserLogged = false;
-    var avatarContentDescription = "Unknown user"
+    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierDescription = "Tier undefined"
 
-    when (state) {
-        is ProfileState.IndefinedState -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .background(Color.Black)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .drawWithContent {
-                            drawContent()
-                            clipRect { // Not needed if you do not care about painting half stroke outside
-                                val strokeWidth = Stroke.DefaultMiter
-                                val y = size.height // strokeWidth
-                                drawLine(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            //Color(0xFF000022),
-                                            //Color(0xFF000022)
-                                        )
-                                    ),
-                                    strokeWidth = strokeWidth,
-                                    cap = StrokeCap.Square,
-                                    start = Offset.Zero.copy(y = y),
-                                    end = Offset(x = size.width, y = y)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .background(Color.Black)
+    ) {
+        Row(
+            modifier = Modifier
+                .drawWithContent {
+                    drawContent()
+                    clipRect { // Not needed if you do not care about painting half stroke outside
+                        val strokeWidth = Stroke.DefaultMiter
+                        val y = size.height // strokeWidth
+                        drawLine(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFF0d111c),
+                                    Color(0xFF0d111c),
+                                    Color(0xFF0d111c),
+                                    //Color(0xFF000022),
+                                    //Color(0xFF000022)
                                 )
-                            }
-                        }
-                        .fillMaxSize()
-                        .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
+                            ),
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Square,
+                            start = Offset.Zero.copy(y = y),
+                            end = Offset(x = size.width, y = y)
+                        )
+                    }
+                }
+                .fillMaxSize()
+                .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
 
+            when (state) {
+                is ProfileState.IndefinedState -> {
                     Row() {
                         Box(
                             modifier = Modifier
@@ -138,63 +140,40 @@ fun ProfileHeader(
                                 .height(70.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Column(
-                                modifier = Modifier.padding(top = 0.dp),
-                            ) {
-                                Box() {
-                                    Text(
-                                        "Profile",
-                                        color = Color.White,
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp
-                                    )
-                                }
 
+                            Text(
+                                "Profile",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                lineHeight = 20.sp
+                            )
 
-                            }
                         }
                     }
-
-                }
-            }
-        }
-        is ProfileState.LoggedIntoSteam -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .background(Color.Black)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .drawWithContent {
-                            drawContent()
-                            clipRect { // Not needed if you do not care about painting half stroke outside
-                                val strokeWidth = Stroke.DefaultMiter
-                                val y = size.height // strokeWidth
-                                drawLine(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            //Color(0xFF000022),
-                                            //Color(0xFF000022)
-                                        )
-                                    ),
-                                    strokeWidth = strokeWidth,
-                                    cap = StrokeCap.Square,
-                                    start = Offset.Zero.copy(y = y),
-                                    end = Offset(x = size.width, y = y)
-                                )
+                    Box(contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            //.background(Color.Red)
+                            .size(70.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
+                            .clickable {
+                                //navController.popBackStack()
                             }
-                        }
-                        .fillMaxSize()
-                        .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
+                    ) {
 
+                        Image(
+                            painter = rememberImagePainter(tierImage),
+                            contentDescription = tierDescription,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(70.dp)
+                                .height(70.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color(0x880d111c), CircleShape)
+                        )
+                    }
+                }
+                is ProfileState.LoggedIntoSteam -> {
                     Row(modifier = Modifier.width(160.dp)) {
                         Box(
                             modifier = Modifier
@@ -245,9 +224,7 @@ fun ProfileHeader(
                             }
                         }
                     }
-
                     Box(contentAlignment = Alignment.Center,
-
                         modifier = Modifier
 
                             .size(70.dp)
@@ -269,20 +246,19 @@ fun ProfileHeader(
                                 .border(1.dp, Color(0x880d111c), CircleShape)
                         )
                     }
-
                 }
             }
         }
-
     }
 }
+
 
 @ExperimentalFoundationApi
 @Composable
 fun UndefinedProfileView(
-    state: ProfileState,
+    state: ProfileState.IndefinedState,
     navController: NavController,
-    openDotaUpdatePreferences:SharedPreferences
+    appSharedPreferences: SharedPreferences
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
@@ -349,7 +325,7 @@ fun UndefinedProfileView(
                 }
 
             }
-            val time = Date(openDotaUpdatePreferences.getLong("time", 0))
+            val time = Date(appSharedPreferences.getLong("time", 0))
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -391,7 +367,7 @@ fun UndefinedProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Last data update: "+time
+                            text = "Last data update: " + time
                         )
                     }
 
@@ -408,8 +384,8 @@ fun UndefinedProfileView(
 fun definedBySteamProfileView(
     state: ProfileState.LoggedIntoSteam,
     navController: NavController,
-    onSteamExit: ()->Unit,
-    openDotaUpdatePreferences:SharedPreferences
+    onSteamExit: () -> Unit,
+    appSharedPreferences: SharedPreferences
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
@@ -465,7 +441,7 @@ fun definedBySteamProfileView(
                         modifier = Modifier
                             .padding(start = 20.dp, end = 20.dp)
                             .fillMaxWidth()
-                            .clickable{
+                            .clickable {
                                 onSteamExit()
                             }
                     ) {

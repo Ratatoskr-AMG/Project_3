@@ -27,13 +27,13 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val systemUiController = rememberSystemUiController()
             systemUiController.setStatusBarColor(color = Color.Transparent)
-            val opendotaSharedPreferences = this?.getSharedPreferences(
-                getString(R.string.opendota_update_preferences),
+            val appSharedPreferences = this?.getSharedPreferences(
+                getString(R.string.app_preferences),
                 Context.MODE_PRIVATE
             )
 
             ProvideWindowInsets {
-                WrapperScreen(opendotaSharedPreferences)
+                WrapperScreen(appSharedPreferences)
             }
         }
     }

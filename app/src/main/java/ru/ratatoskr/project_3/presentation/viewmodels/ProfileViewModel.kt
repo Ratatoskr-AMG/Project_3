@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(
         MutableLiveData<ProfileState>(ProfileState.IndefinedState)
     val profileState: LiveData<ProfileState> = _profile_state
 
-    private fun getResponseFromOpenDota(steam_user_id:String) {
+    private fun getResponseFromOpenDota(steam_user_id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var dbResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steam_user_id)
             try {
@@ -40,17 +40,18 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-    private fun getResponseFromDotaBuff(steam_user_id:String) {
+
+    private fun getResponseFromDotaBuff(steam_user_id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var dbResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(steam_user_id)
             val index = dbResponse.lastIndexOf("https://www.dotabuff.com/players/")
             val part = dbResponse.substring(index)
             val addr = part.substringBefore('"')
             val index2 = addr.lastIndexOf('/')
-            var part2 = addr.substring(index2+1)
+            var part2 = addr.substring(index2 + 1)
 
             var odResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(part2)
-            Log.e("TOHA","Tier:"+odResponse.rank_tier)
+            Log.e("TOHA", "Tier:" + odResponse.rank_tier)
         }
     }
 
@@ -58,6 +59,7 @@ class ProfileViewModel @Inject constructor(
 
         when (val currentState = _profile_state.value) {
             is ProfileState.IndefinedState -> reduce(event)
+            is ProfileState.LoggedIntoSteam -> reduce(event)
         }
     }
 
@@ -65,6 +67,7 @@ class ProfileViewModel @Inject constructor(
 
         when (event) {
             is ProfileEvent.OnSteamLogin -> loginWithSteam(event)
+            is ProfileEvent.OnSteamExit -> exitSteam()
         }
     }
 
@@ -100,6 +103,21 @@ class ProfileViewModel @Inject constructor(
 
         }
 
+    }
+
+    private fun exitSteam() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+                _profile_state.postValue(
+                    ProfileState.IndefinedState
+                )
+            } catch (e: Exception) {
+                _profile_state.postValue(ProfileState.ErrorProfileState)
+            }
+
+        }
     }
 }
 

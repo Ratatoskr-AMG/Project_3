@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.helpers.Screens
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.theme.LoadingView
 import ru.ratatoskr.project_3.presentation.theme.MessageView
@@ -46,7 +47,11 @@ fun ProfileScreen(
             UndefinedProfileView(state, navController,openDotaSharedPreferences)
         }
         is ProfileState.LoggedIntoSteam -> {
-            definedBySteamProfileView(state, navController,openDotaSharedPreferences)
+            definedBySteamProfileView(
+                state,
+                navController,
+                {viewModel.obtainEvent(ProfileEvent.OnSteamExit)},
+                openDotaSharedPreferences)
 
         }
         is ProfileState.LoadingState -> LoadingView("Profile is loading")
@@ -403,6 +408,7 @@ fun UndefinedProfileView(
 fun definedBySteamProfileView(
     state: ProfileState.LoggedIntoSteam,
     navController: NavController,
+    onSteamExit: ()->Unit,
     openDotaUpdatePreferences:SharedPreferences
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
@@ -459,6 +465,9 @@ fun definedBySteamProfileView(
                         modifier = Modifier
                             .padding(start = 20.dp, end = 20.dp)
                             .fillMaxWidth()
+                            .clickable{
+                                onSteamExit()
+                            }
                     ) {
                         Text(
                             fontSize = 12.sp,

@@ -177,7 +177,6 @@ fun WrapperScreen(
 
             composable(Screens.Profile.route) {
                 stopPlayer(videoViewState)
-                val profileViewModel = hiltViewModel<ProfileViewModel>()
                 ProfileScreen(navController, profileViewState, profileViewModel,opendotaUpdatePreferences)
             }
             composable(Screens.Steam.route) {

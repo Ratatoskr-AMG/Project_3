@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import android.webkit.WebView
@@ -42,7 +43,7 @@ import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 fun SteamLoginScreen(
     navController: NavController,
     viewState: State<ProfileState?>,
-    viewModel: ProfileViewModel,
+    viewModel: ProfileViewModel
 ) {
 
     when (val state = viewState.value) {

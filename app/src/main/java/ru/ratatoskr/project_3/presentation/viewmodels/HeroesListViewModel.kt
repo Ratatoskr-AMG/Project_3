@@ -1,11 +1,10 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
+import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class HeroesListViewModel @Inject constructor(
     val addHeroesUserCase: AddHeroesUserCase,
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
     val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
-) : ViewModel() {
+) : AndroidViewModel(Application()) {
 
     val _heroesList_state: MutableLiveData<HeroesListState> =
         MutableLiveData<HeroesListState>(HeroesListState.LoadingHeroesListState())
@@ -50,13 +49,13 @@ class HeroesListViewModel @Inject constructor(
         }
     }
 
-    fun getAllHeroesSortByName(opendotaUpdatePreferences: SharedPreferences) {
+    fun getAllHeroesSortByName(appSharedPreferences:SharedPreferences) {
         _heroesList_state.set(HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
                 if (heroes.isEmpty()) {
-                    getAllHeroesFromApi(opendotaUpdatePreferences)
+                    getAllHeroesFromApi(appSharedPreferences)
                 } else {
                     _heroesList_state.postValue(
                         HeroesListState.LoadedHeroesListState(

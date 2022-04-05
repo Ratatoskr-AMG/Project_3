@@ -1,6 +1,9 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import dagger.hilt.android.internal.Contexts.getApplication
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
@@ -40,8 +44,12 @@ fun ProfileScreen(
     navController: NavController,
     viewState: State<ProfileState?>,
     viewModel: ProfileViewModel,
-    appSharedPreferences: SharedPreferences
 ) {
+
+    val appSharedPreferences = Application().getSharedPreferences(
+        "app_preferences",
+        Context.MODE_PRIVATE
+    )
 
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
@@ -51,9 +59,8 @@ fun ProfileScreen(
             definedBySteamProfileView(
                 state,
                 navController,
-                { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
                 appSharedPreferences
-            )
+            ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit(appSharedPreferences = appSharedPreferences)) }
 
         }
         is ProfileState.LoadingState -> LoadingView("Profile is loading")
@@ -67,7 +74,8 @@ fun ProfileScreen(
 @Composable
 fun ProfileHeader(
     navController: NavController,
-    state: ProfileState
+    state: ProfileState,
+    appSharedPreferences: SharedPreferences
 ) {
 
     var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
@@ -111,6 +119,14 @@ fun ProfileHeader(
 
             when (state) {
                 is ProfileState.IndefinedState -> {
+
+                    var spTier = appSharedPreferences.getString("tier", "undefined")
+                    if(spTier!="undefined"){
+                        tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier + ".png"
+                        tierDescription = "Tier "+spTier
+                        Log.e("TOHA","IndefinedState.spTier:"+spTier)
+                    }
+
                     Row() {
                         Box(
                             modifier = Modifier
@@ -174,6 +190,14 @@ fun ProfileHeader(
                     }
                 }
                 is ProfileState.LoggedIntoSteam -> {
+
+                    var spTier = appSharedPreferences.getString("tier", "undefined")
+                    if(spTier!="undefined"){
+                        tierImage = "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
+                        tierDescription = "Tier "+state.player_tier[0]
+                        Log.e("TOHA","LoggedIntoSteam.state_tier:"+state.player_tier[0])
+                    }
+
                     Row(modifier = Modifier.width(160.dp)) {
                         Box(
                             modifier = Modifier
@@ -234,7 +258,8 @@ fun ProfileHeader(
                                 //navController.popBackStack()
                             }
                     ) {
-
+                        var spTier = appSharedPreferences.getString("tier", "undefined")
+                        var tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier + ".png"
                         Image(
                             painter = rememberImagePainter(state.steam_user_avatar),
                             contentDescription = state.steam_user_name,
@@ -275,7 +300,7 @@ fun UndefinedProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeader(navController, state)
+                ProfileHeader(navController, state, appSharedPreferences)
             }
             item {
                 Row(
@@ -384,8 +409,8 @@ fun UndefinedProfileView(
 fun definedBySteamProfileView(
     state: ProfileState.LoggedIntoSteam,
     navController: NavController,
-    onSteamExit: () -> Unit,
-    appSharedPreferences: SharedPreferences
+    appSharedPreferences: SharedPreferences,
+    onSteamExit: () -> Unit
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
@@ -402,7 +427,7 @@ fun definedBySteamProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeader(navController, state)
+                ProfileHeader(navController, state, appSharedPreferences)
             }
             item {
                 Row(

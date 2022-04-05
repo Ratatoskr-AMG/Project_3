@@ -2,22 +2,23 @@ package ru.ratatoskr.project_3.presentation.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.lifecycle.*
+import dagger.hilt.android.internal.Contexts
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.processor.internal.AnnotationValues.getString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.base.EventHandler
-import ru.ratatoskr.project_3.domain.di.App
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.domain.useCases.user.GetDotaBuffUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetOpenDotaUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
-
 import javax.inject.Inject
+
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -26,16 +27,10 @@ class ProfileViewModel @Inject constructor(
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
+    var sp = getApplication(Application()).getSharedPreferences("app_preferences",Context.MODE_PRIVATE)
 
-    val appSharedPreferences = Application().getSharedPreferences(
-        "app_preferences",
-        Context.MODE_PRIVATE
-    )
-
-    var spTier= "undefined"
-
-        private val _profile_state: MutableLiveData<ProfileState> =
-        MutableLiveData<ProfileState>(ProfileState.IndefinedState(spTier))
+    private val _profile_state: MutableLiveData<ProfileState> =
+        MutableLiveData<ProfileState>(ProfileState.IndefinedState("undefined"))
     val profileState: LiveData<ProfileState> = _profile_state
 
     private fun getResponseFromOpenDota(steam_user_id: String) {
@@ -51,7 +46,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun getResponseFromDotaBuff(steam_user_id: String) {
+    private fun getResponseFromDotaBuff(steam_user_id: String): String {
+
+        var result = "undefined"
+
         viewModelScope.launch(Dispatchers.IO) {
             var dbResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(steam_user_id)
             val index = dbResponse.lastIndexOf("https://www.dotabuff.com/players/")
@@ -62,7 +60,12 @@ class ProfileViewModel @Inject constructor(
 
             var odResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(part2)
             Log.e("TOHA", "Tier:" + odResponse.rank_tier)
+            if (odResponse.rank_tier != null) {
+                result = odResponse.rank_tier
+            }
+
         }
+        return result
     }
 
     override fun obtainEvent(event: ProfileEvent) {
@@ -77,7 +80,7 @@ class ProfileViewModel @Inject constructor(
 
         when (event) {
             is ProfileEvent.OnSteamLogin -> loginWithSteam(event)
-            is ProfileEvent.OnSteamExit -> exitSteam()
+            is ProfileEvent.OnSteamExit -> exitSteam(event.appSharedPreferences)
         }
     }
 
@@ -95,7 +98,7 @@ class ProfileViewModel @Inject constructor(
             //addSteamPlayerUseCase.addPlayer(player)
 
             getResponseFromOpenDota(player.steamid)
-            getResponseFromDotaBuff(player.steamid)
+            var tier = getResponseFromDotaBuff(player.steamid)
 
             try {
                 if (user_id != "") {
@@ -103,7 +106,8 @@ class ProfileViewModel @Inject constructor(
                         ProfileState.LoggedIntoSteam(
                             user_id,
                             player.avatarmedium!!,
-                            player.personaname!!
+                            player.personaname!!,
+                            tier
                         )
                     )
                 }
@@ -115,13 +119,14 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    private fun exitSteam() {
+    private fun exitSteam(appSharedPreferences:SharedPreferences) {
+
+        var spTier = appSharedPreferences.getString("tier", "undefined")
 
         viewModelScope.launch(Dispatchers.IO) {
-
             try {
                 _profile_state.postValue(
-                    ProfileState.IndefinedState
+                    ProfileState.IndefinedState(spTier!!)
                 )
             } catch (e: Exception) {
                 _profile_state.postValue(ProfileState.ErrorProfileState)

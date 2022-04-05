@@ -1,5 +1,7 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.compose.foundation.*
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import dagger.hilt.android.internal.Contexts.getApplication
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
@@ -44,8 +47,9 @@ import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 fun HeroesListScreen(
     viewModel: HeroesListViewModel,
     navController: NavController,
-    opendotaUpdatePreferences: SharedPreferences
 ) {
+
+
 
     when (val state = viewModel.heroesListState.observeAsState().value) {
         is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(
@@ -61,7 +65,7 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.getAllHeroesSortByName(opendotaUpdatePreferences)
+        viewModel.getAllHeroesSortByName(appSharedPreferences)
     })
 }
 

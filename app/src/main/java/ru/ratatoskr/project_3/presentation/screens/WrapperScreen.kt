@@ -37,7 +37,7 @@ import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
 @ExperimentalFoundationApi
 @Composable
 fun WrapperScreen(
-    appSharedPreferences: SharedPreferences
+    appSharedPreferences:SharedPreferences
 ) {
 
     val navController = rememberNavController()
@@ -128,9 +128,7 @@ fun WrapperScreen(
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(
                     viewModel = heroesListviewModel,
-                    navController = navController,
-                    appSharedPreferences
-                )
+                    navController = navController)
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
                 stopPlayer(videoViewState)
@@ -163,7 +161,7 @@ fun WrapperScreen(
 
             composable(Screens.Profile.route) {
                 stopPlayer(videoViewState)
-                ProfileScreen(navController, profileViewState, profileViewModel,appSharedPreferences)
+                ProfileScreen(navController, profileViewState, profileViewModel)
             }
             composable(Screens.Steam.route) {
                 SteamLoginScreen(navController, profileViewState, profileViewModel)

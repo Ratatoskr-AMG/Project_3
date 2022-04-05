@@ -27,8 +27,8 @@ class ProfileViewModel @Inject constructor(
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
 
-    val appSharedPreferences = this.getSharedPreferences(
-        R.string.app_preferences,
+    val appSharedPreferences = Application().getSharedPreferences(
+        "app_preferences",
         Context.MODE_PRIVATE
     )
 

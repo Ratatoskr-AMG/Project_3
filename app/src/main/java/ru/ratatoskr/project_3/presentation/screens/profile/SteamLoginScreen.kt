@@ -74,11 +74,6 @@ fun SteamLoggedInView(
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
-
-
-
-
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -500,47 +495,6 @@ fun SteamWebView(onAuthorizeChange: (String) -> Unit) {
                     )
                 )
         )
-    }
-
-}
-
-@Composable
-fun SteamTopCard(state: ProfileState.LoggedIntoSteam) {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-
-        ) {
-            Image(
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(end = 10.dp)
-                    .align(Alignment.CenterEnd)
-                    .width(60.dp)
-                    .height(60.dp),
-                painter = rememberImagePainter(state.steam_user_avatar),
-                contentDescription = "Steam user #" + state.steam_user_id + " avatar"
-            )
-
-            Text(
-                modifier = Modifier.align(Alignment.Center), text = state.steam_user_name,
-                color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
-            )
-        }
     }
 
 }

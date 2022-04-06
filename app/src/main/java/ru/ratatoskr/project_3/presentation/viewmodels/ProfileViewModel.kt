@@ -1,36 +1,38 @@
 package ru.ratatoskr.project_3.presentation.viewmodels
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.lifecycle.*
-import dagger.hilt.android.internal.Contexts
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.domain.model.steam.SteamPlayer
 import ru.ratatoskr.project_3.domain.useCases.user.GetDotaBuffUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetOpenDotaUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
+import java.util.*
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
+    appSharedPreferences: SharedPreferences,
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
-    var sp = getApplication(Application()).getSharedPreferences("app_preferences",Context.MODE_PRIVATE)
+    var appSharedPreferences = appSharedPreferences
+
+    var sp_tier = appSharedPreferences.getString("tier", "undefined")
+    var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
     private val _profile_state: MutableLiveData<ProfileState> =
-        MutableLiveData<ProfileState>(ProfileState.IndefinedState("undefined"))
+        MutableLiveData<ProfileState>(ProfileState.IndefinedState(sp_tier!!,sp_heroes_list_last_modified!!))
     val profileState: LiveData<ProfileState> = _profile_state
 
     private fun getResponseFromOpenDota(steam_user_id: String) {
@@ -46,26 +48,49 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun getResponseFromDotaBuff(steam_user_id: String): String {
-
-        var result = "undefined"
+    private fun getResponseFromDotaBuff(player:SteamPlayer) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            var dbResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(steam_user_id)
-            val index = dbResponse.lastIndexOf("https://www.dotabuff.com/players/")
-            val part = dbResponse.substring(index)
+
+            var dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
+            val index = dotaBuffResponse.lastIndexOf("https://www.dotabuff.com/players/")
+            val part = dotaBuffResponse.substring(index)
             val addr = part.substringBefore('"')
             val index2 = addr.lastIndexOf('/')
             var part2 = addr.substring(index2 + 1)
+            var openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(part2)
 
-            var odResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(part2)
-            Log.e("TOHA", "Tier:" + odResponse.rank_tier)
-            if (odResponse.rank_tier != null) {
-                result = odResponse.rank_tier
+            Log.e("TOHA", "Tier:" + openDotaResponse.rank_tier)
+
+            if (openDotaResponse.rank_tier != null) {
+                appSharedPreferences.edit().putString("player_tier", openDotaResponse.rank_tier)
+                    .apply();
             }
 
+            var sp_tier = appSharedPreferences.getString("tier", "undefined")
+            var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
+
+            try {
+                if (player.steamid != "") {
+                    Log.e("TOHA","player.personaname!!"+player.personaname!!)
+                    Log.e("TOHA","player_tier"+appSharedPreferences.getString("player_tier","nudefined1"))
+                    Log.e("TOHA","sp_heroes_list_last_modified"+sp_heroes_list_last_modified)
+                    _profile_state.postValue(
+                        ProfileState.LoggedIntoSteam(
+                            player.steamid,
+                            player.avatarmedium!!,
+                            player.personaname!!,
+                            appSharedPreferences.getString("player_tier","nudefined1")!!,
+                            sp_heroes_list_last_modified!!
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _profile_state.postValue(ProfileState.ErrorProfileState)
+            }
+
+
         }
-        return result
     }
 
     override fun obtainEvent(event: ProfileEvent) {
@@ -80,7 +105,7 @@ class ProfileViewModel @Inject constructor(
 
         when (event) {
             is ProfileEvent.OnSteamLogin -> loginWithSteam(event)
-            is ProfileEvent.OnSteamExit -> exitSteam(event.appSharedPreferences)
+            is ProfileEvent.OnSteamExit -> exitSteam()
         }
     }
 
@@ -93,40 +118,24 @@ class ProfileViewModel @Inject constructor(
             var steamResponse = getSteamUserUseCase.getSteamResponseOnId(user_id)
 
             var player = steamResponse.response.players[0]
+
             player.steamid = user_id
-
-            //addSteamPlayerUseCase.addPlayer(player)
-
             getResponseFromOpenDota(player.steamid)
-            var tier = getResponseFromDotaBuff(player.steamid)
-
-            try {
-                if (user_id != "") {
-                    _profile_state.postValue(
-                        ProfileState.LoggedIntoSteam(
-                            user_id,
-                            player.avatarmedium!!,
-                            player.personaname!!,
-                            tier
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                _profile_state.postValue(ProfileState.ErrorProfileState)
-            }
+            getResponseFromDotaBuff(player)
 
         }
 
     }
 
-    private fun exitSteam(appSharedPreferences:SharedPreferences) {
+    private fun exitSteam() {
 
-        var spTier = appSharedPreferences.getString("tier", "undefined")
+        var sp_tier = appSharedPreferences.getString("tier", "undefined")
+        var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _profile_state.postValue(
-                    ProfileState.IndefinedState(spTier!!)
+                    ProfileState.IndefinedState(sp_tier!!,sp_heroes_list_last_modified!!)
                 )
             } catch (e: Exception) {
                 _profile_state.postValue(ProfileState.ErrorProfileState)

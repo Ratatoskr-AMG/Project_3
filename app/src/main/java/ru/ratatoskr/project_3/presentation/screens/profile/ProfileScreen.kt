@@ -1,7 +1,5 @@
 package ru.ratatoskr.project_3.presentation.screens
 
-import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.*
@@ -27,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import dagger.hilt.android.internal.Contexts.getApplication
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
@@ -36,7 +33,6 @@ import ru.ratatoskr.project_3.presentation.theme.LoadingView
 import ru.ratatoskr.project_3.presentation.theme.MessageView
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 import java.util.*
-import kotlin.math.absoluteValue
 
 @ExperimentalFoundationApi
 @Composable
@@ -44,23 +40,20 @@ fun ProfileScreen(
     navController: NavController,
     viewState: State<ProfileState?>,
     viewModel: ProfileViewModel,
+    appSharedPreferences: SharedPreferences
 ) {
 
-    val appSharedPreferences = Application().getSharedPreferences(
-        "app_preferences",
-        Context.MODE_PRIVATE
-    )
 
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-            UndefinedProfileView(state, navController, appSharedPreferences)
+            UndefinedProfileView(state, navController,appSharedPreferences)
         }
         is ProfileState.LoggedIntoSteam -> {
             definedBySteamProfileView(
                 state,
                 navController,
                 appSharedPreferences
-            ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit(appSharedPreferences = appSharedPreferences)) }
+            ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit) }
 
         }
         is ProfileState.LoadingState -> LoadingView("Profile is loading")
@@ -119,14 +112,12 @@ fun ProfileHeader(
 
             when (state) {
                 is ProfileState.IndefinedState -> {
-
                     var spTier = appSharedPreferences.getString("tier", "undefined")
                     if(spTier!="undefined"){
                         tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier + ".png"
                         tierDescription = "Tier "+spTier
                         Log.e("TOHA","IndefinedState.spTier:"+spTier)
                     }
-
                     Row() {
                         Box(
                             modifier = Modifier
@@ -168,7 +159,6 @@ fun ProfileHeader(
                     }
                     Box(contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            //.background(Color.Red)
                             .size(70.dp)
                             .clip(CircleShape)
                             .border(1.dp, Color(0x880d111c), CircleShape)
@@ -190,11 +180,10 @@ fun ProfileHeader(
                     }
                 }
                 is ProfileState.LoggedIntoSteam -> {
-
-                    var spTier = appSharedPreferences.getString("tier", "undefined")
-                    if(spTier!="undefined"){
+                    Log.e("TOHA","state.player_tier:"+state.player_tier)
+                    if(state.player_tier!="undefined"){
                         tierImage = "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
-                        tierDescription = "Tier "+state.player_tier[0]
+                        tierDescription = state.player_tier[0]+" tier"
                         Log.e("TOHA","LoggedIntoSteam.state_tier:"+state.player_tier[0])
                     }
 
@@ -258,11 +247,9 @@ fun ProfileHeader(
                                 //navController.popBackStack()
                             }
                     ) {
-                        var spTier = appSharedPreferences.getString("tier", "undefined")
-                        var tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier + ".png"
                         Image(
-                            painter = rememberImagePainter(state.steam_user_avatar),
-                            contentDescription = state.steam_user_name,
+                            painter = rememberImagePainter(tierImage),
+                            contentDescription = tierDescription,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .width(70.dp)
@@ -283,9 +270,10 @@ fun ProfileHeader(
 fun UndefinedProfileView(
     state: ProfileState.IndefinedState,
     navController: NavController,
-    appSharedPreferences: SharedPreferences
+    appSharedPreferences: SharedPreferences,
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
+    val heroes_list_last_modified = Date(appSharedPreferences.getLong("heroes_list_last_modified", 0))
 
     Box(
         modifier = Modifier
@@ -300,7 +288,7 @@ fun UndefinedProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeader(navController, state, appSharedPreferences)
+                ProfileHeader(navController, state,appSharedPreferences)
             }
             item {
                 Row(
@@ -350,7 +338,8 @@ fun UndefinedProfileView(
                 }
 
             }
-            val time = Date(appSharedPreferences.getLong("time", 0))
+
+
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -392,7 +381,7 @@ fun UndefinedProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Last data update: " + time
+                            text = "Heroes list last modified: " + heroes_list_last_modified
                         )
                     }
 
@@ -412,22 +401,20 @@ fun definedBySteamProfileView(
     appSharedPreferences: SharedPreferences,
     onSteamExit: () -> Unit
 ) {
-    var scrollState = rememberForeverLazyListState(key = "Profile")
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
         LazyColumn(
-            state = scrollState,
+            state = rememberForeverLazyListState(key = "Profile"),
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0x55202020))
         ) {
 
             stickyHeader {
-                ProfileHeader(navController, state, appSharedPreferences)
+                ProfileHeader(navController, state,appSharedPreferences)
             }
             item {
                 Row(
@@ -474,6 +461,55 @@ fun definedBySteamProfileView(
                             fontSize = 12.sp,
                             color = Color.White,
                             text = "Exit"
+                        )
+                    }
+
+                }
+
+            }
+
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .drawWithContent {
+                            drawContent()
+                            clipRect { // Not needed if you do not care about painting half stroke outside
+                                val strokeWidth = Stroke.DefaultMiter
+                                val y = size.height // strokeWidth
+                                drawLine(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            //Color(0xFF000022),
+                                            //Color(0xFF000022)
+                                        )
+                                    ),
+                                    strokeWidth = strokeWidth,
+                                    cap = StrokeCap.Square,
+                                    start = Offset.Zero.copy(y = y),
+                                    end = Offset(x = size.width, y = y)
+                                )
+                            }
+                        }
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clickable {
+                            //navController.navigate(Screens.Steam.route)
+                        }
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            text = "Heroes list last modified: " + Date(appSharedPreferences.getLong("heroes_list_last_modified", 0))
                         )
                     }
 

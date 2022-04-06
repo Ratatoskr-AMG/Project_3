@@ -2,6 +2,7 @@ package ru.ratatoskr.project_3.presentation.activity
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -19,7 +20,7 @@ import ru.ratatoskr.project_3.presentation.screens.*
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.R)
     @OptIn(ExperimentalFoundationApi::class)
@@ -27,11 +28,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            val systemUiController = rememberSystemUiController()
-            systemUiController.setStatusBarColor(color = Color.Transparent)
-            val appSharedPreferences = this.getSharedPreferences(
+            var appSharedPreferences = this.getSharedPreferences(
                 "app_preferences", Context.MODE_PRIVATE
             )
+            val systemUiController = rememberSystemUiController()
+            systemUiController.setStatusBarColor(color = Color.Transparent)
             ProvideWindowInsets {
                 WrapperScreen(appSharedPreferences)
             }

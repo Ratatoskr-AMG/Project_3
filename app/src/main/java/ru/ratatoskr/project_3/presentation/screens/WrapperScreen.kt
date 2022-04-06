@@ -128,7 +128,8 @@ fun WrapperScreen(
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(
                     viewModel = heroesListviewModel,
-                    navController = navController)
+                    navController = navController,
+                    )
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
                 stopPlayer(videoViewState)
@@ -161,7 +162,7 @@ fun WrapperScreen(
 
             composable(Screens.Profile.route) {
                 stopPlayer(videoViewState)
-                ProfileScreen(navController, profileViewState, profileViewModel)
+                ProfileScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
             composable(Screens.Steam.route) {
                 SteamLoginScreen(navController, profileViewState, profileViewModel)

@@ -65,7 +65,7 @@ fun HeroesListScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.getAllHeroesSortByName(appSharedPreferences)
+        viewModel.getAllHeroesSortByName()
     })
 }
 

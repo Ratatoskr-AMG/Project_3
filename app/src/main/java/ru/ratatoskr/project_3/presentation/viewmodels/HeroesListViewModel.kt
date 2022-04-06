@@ -17,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeroesListViewModel @Inject constructor(
+    appSharedPreferences: SharedPreferences,
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
@@ -24,6 +25,8 @@ class HeroesListViewModel @Inject constructor(
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
     val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
 ) : AndroidViewModel(Application()) {
+
+    var appSharedPreferences = appSharedPreferences
 
     val _heroesList_state: MutableLiveData<HeroesListState> =
         MutableLiveData<HeroesListState>(HeroesListState.LoadingHeroesListState())
@@ -49,7 +52,7 @@ class HeroesListViewModel @Inject constructor(
         }
     }
 
-    fun getAllHeroesSortByName(appSharedPreferences:SharedPreferences) {
+    fun getAllHeroesSortByName() {
         _heroesList_state.set(HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -92,7 +95,7 @@ class HeroesListViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAllHeroesFromApi(opendotaUpdatePreferences: SharedPreferences) {
+    suspend fun getAllHeroesFromApi(appSharedPreferences:SharedPreferences) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -103,11 +106,8 @@ class HeroesListViewModel @Inject constructor(
                     _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes from API list"))
                 } else {
                     addHeroesUserCase.addHeroes(heroes)
-
-                    var date = Date(System.currentTimeMillis())
-                    opendotaUpdatePreferences.edit().putLong("time", date.time).apply();
-                    Log.e("TOHA","update time:"+date.time)
-
+                    appSharedPreferences.edit().putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time).apply();
+                    Log.e("TOHA","All heroes updated at:"+Date(System.currentTimeMillis()).time)
                     _heroesList_state.postValue(
                         HeroesListState.LoadedHeroesListState(
                             heroes = heroes.sortedBy { it.localizedName },

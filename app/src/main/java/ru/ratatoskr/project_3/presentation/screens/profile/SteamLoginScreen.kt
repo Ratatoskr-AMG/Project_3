@@ -43,12 +43,13 @@ import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 fun SteamLoginScreen(
     navController: NavController,
     viewState: State<ProfileState?>,
-    viewModel: ProfileViewModel
+    viewModel: ProfileViewModel,
+    appSharedPreferences: SharedPreferences,
 ) {
 
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-            SteamSignInView(navController, state) {
+            SteamSignInView(navController, state,appSharedPreferences) {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }
         }
@@ -145,6 +146,7 @@ fun SteamLoggedInView(
 fun SteamSignInView(
     navController: NavController,
     state: ProfileState.IndefinedState,
+    appSharedPreferences: SharedPreferences,
     onAuthorizeChange: (String) -> Unit
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
@@ -162,7 +164,7 @@ fun SteamSignInView(
         ) {
 
             stickyHeader {
-                SteamSignInHeader(navController)
+                SteamSignInHeader(navController,appSharedPreferences)
             }
             item {
                 Row(
@@ -222,6 +224,10 @@ fun SteamSignedInHeader(
 
     var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
     var tierDescription = "Tier undefined"
+    if(state.player_tier!="undefined"){
+        tierImage = "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
+        tierDescription = state.player_tier[0]+" tier"
+    }
 
     Box(
         modifier = Modifier
@@ -331,11 +337,17 @@ fun SteamSignedInHeader(
 @Composable
 fun SteamSignInHeader(
     navController: NavController,
+    appSharedPreferences: SharedPreferences,
 ) {
 
     var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
     var tierDescription="Tier undefined"
-
+    var spTier = appSharedPreferences.getString("player_tier", "undefined").toString()
+    if(spTier!="undefined"){
+        tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier[0] + ".png"
+        tierDescription = "Tier "+spTier[0]
+        Log.e("TOHA","IndefinedState.spTier:"+spTier[0])
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()

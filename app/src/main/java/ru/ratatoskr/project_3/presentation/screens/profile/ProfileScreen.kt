@@ -112,11 +112,11 @@ fun ProfileHeader(
 
             when (state) {
                 is ProfileState.IndefinedState -> {
-                    var spTier = appSharedPreferences.getString("tier", "undefined")
+                    var spTier = appSharedPreferences.getString("player_tier", "undefined").toString()
                     if(spTier!="undefined"){
-                        tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier + ".png"
-                        tierDescription = "Tier "+spTier
-                        Log.e("TOHA","IndefinedState.spTier:"+spTier)
+                        tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier[0] + ".png"
+                        tierDescription = "Tier "+spTier[0]
+                        Log.e("TOHA","IndefinedState.spTier:"+spTier[0])
                     }
                     Row() {
                         Box(

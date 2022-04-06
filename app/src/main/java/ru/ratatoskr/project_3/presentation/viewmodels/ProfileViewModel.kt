@@ -60,27 +60,28 @@ class ProfileViewModel @Inject constructor(
             var part2 = addr.substring(index2 + 1)
             var openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(part2)
 
-            Log.e("TOHA", "Tier:" + openDotaResponse.rank_tier)
-
             if (openDotaResponse.rank_tier != null) {
                 appSharedPreferences.edit().putString("player_tier", openDotaResponse.rank_tier)
                     .apply();
+            }else{
+                appSharedPreferences.edit().putString("player_tier", "undefined")
+                    .apply();
             }
 
-            var sp_tier = appSharedPreferences.getString("tier", "undefined")
+            var sp_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
             var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
             try {
                 if (player.steamid != "") {
                     Log.e("TOHA","player.personaname!!"+player.personaname!!)
-                    Log.e("TOHA","player_tier"+appSharedPreferences.getString("player_tier","nudefined1"))
+                    Log.e("TOHA","player_tier"+sp_tier)
                     Log.e("TOHA","sp_heroes_list_last_modified"+sp_heroes_list_last_modified)
                     _profile_state.postValue(
                         ProfileState.LoggedIntoSteam(
                             player.steamid,
                             player.avatarmedium!!,
                             player.personaname!!,
-                            appSharedPreferences.getString("player_tier","nudefined1")!!,
+                            sp_tier,
                             sp_heroes_list_last_modified!!
                         )
                     )
@@ -129,7 +130,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun exitSteam() {
 
-        var sp_tier = appSharedPreferences.getString("tier", "undefined")
+        var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
         var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
         viewModelScope.launch(Dispatchers.IO) {

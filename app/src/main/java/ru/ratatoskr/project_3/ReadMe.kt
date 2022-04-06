@@ -1,59 +1,5 @@
 package ru.ratatoskr.project_3
 
-class ReadMe {
-    companion object {
-
-        fun q1() {
-/*
-    на что заменить if (hero.id < 1) {
- */
-        }
-
-        fun q2() {
-/*
-
-    Куда убрать этот метод?
-
- */
-        }
-
-        fun q3() {
-/*
-        Как использовать BGBox из Theme?
- */
-        }
-
-        fun q4() {
-/*
-
-
- */
-        }
-    }
-}
-
-/* Вопросы
-Стили (BGBOx,padding(X:Y))
-Безопасность exoplayer, accompanist
-Какими данные могут быть "чувствительными" (пароль)?
-Как передавать пароль (md5 не вариант)?
-Как обойти кражу мобилы?
-как обойти прослушку сигналов?
-Как обойти передачу ссылки на видео? Blob(?)
-*/
-/* Задания:
-Дизайн
-*/
-/* Ссылки:
-https://api.opendota.com/api/players/205343070
-https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
-https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
-http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
-*/
-/* Книги:
-Карьера программиста крэкинг зэ пот
-Java Concurrency in Practiсe
-*/
 /* Пройдено:
 Модуль клиент +
 Карточка героя +
@@ -65,12 +11,20 @@ Java Concurrency in Practiсe
 Репозиторий во viewModel через UseCase +
 Избранные герои вместо Dashboard +
 Профиль вместо Notifications +
-
+Дизайн
+Авторизация и определение уровня пользователя
 */
 /* Архитектура
+data
+    contracts
+    converters
+    remote (?)
+        implementations
+        services
+    dao
 domain
     base(?)
-    di
+    di (ktor)
     helpers
         events
         states
@@ -83,15 +37,78 @@ presentation
     theme
     viewModels(domain.useCases)
 */
+/* Вопросы
+Что показать вместо пустого списка избранных?
+Безопасность exoplayer, accompanist
+Какими данные могут быть "чувствительными" (пароль)?
+Как передавать пароль (md5 не вариант)?
+Как обойти кражу мобилы?
+как обойти прослушку сигналов?
+Как обойти передачу ссылки на видео? Blob(?)
+*/
+class ReadMe {
+    companion object {
+        fun q1() {
+/*
+    на что заменить if (hero.id < 1) {
+ */
+        }
+        fun q2() {
+/*
+
+    Куда убрать метод stopPlayer из MainActivity?
+
+ */
+        }
+        fun q3() {
+/*
+        Как использовать BGBox из Theme?
+ */
+        }
+        fun q4() {
+/*
+
+
+ */
+        }
+    }
+}
+/* Задания:
+Страница уровней
+Возможность обновить данные вручную после установки
+*/
+/* Ссылки:
+https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
+https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
+http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
+*/
+/* Книги:
+Карьера программиста крэкинг зэ пот
+Java Concurrency in Practiсe
+*/
 /* Из конспектов
-1:UseCase может объединять два репозитория
-2:Многопоточность
+1:
+UseCase может объединять два репозитория
+
+2:
+Многопоточность
 Параллельность
 Асинхронность
 3 основных ошибки конкурентности
 16.6 мс
 В скоуп передается диспетчер, это SuperVisorJob
+
+3:
+Room Module - спец. класс в котором объявлены зависимости
+scope http bd converters -> app.scope = @Singleton
+Модуль привязан к lifecycle = @InstallIn
+Внутри обычных классов @Provides (@Bind - для абстрактных)
+Не можем повлиять на класс (библиотека), а только создать = @Provides
+Все view : Context , @ApplicationContext
+Когда подтягиваем ресурсы (строки, картинки): если передан Апп контекст то нет проблем, контекст вьюхи не подойдет
+
 */
+
 /* val windowInsetsController =
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())

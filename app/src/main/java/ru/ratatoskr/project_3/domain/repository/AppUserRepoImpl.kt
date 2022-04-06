@@ -1,6 +1,5 @@
-package ru.ratatoskr.project_3.domain.repository.user
+package ru.ratatoskr.project_3.domain.repository
 
-import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
 import ru.ratatoskr.project_3.domain.model.OpenDotaResponse

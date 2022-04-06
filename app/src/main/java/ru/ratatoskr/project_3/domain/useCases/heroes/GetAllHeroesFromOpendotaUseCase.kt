@@ -1,8 +1,7 @@
 package ru.ratatoskr.project_3.domain.useCases.heroes
 
-import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.domain.repository.heroes.HeroesRepoImpl
+import ru.ratatoskr.project_3.domain.repository.HeroesRepoImpl
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode

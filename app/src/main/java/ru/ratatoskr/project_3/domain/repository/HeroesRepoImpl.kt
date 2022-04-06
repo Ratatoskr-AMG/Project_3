@@ -1,9 +1,9 @@
-package ru.ratatoskr.project_3.domain.repository.heroes
+package ru.ratatoskr.project_3.domain.repository
 
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
-import ru.ratatoskr.project_3.data.storage.RoomAppDatabase
+import ru.ratatoskr.project_3.data.dao.RoomAppDatabase
 import ru.ratatoskr.project_3.domain.model.Hero
 import java.lang.Exception
 import javax.inject.Inject

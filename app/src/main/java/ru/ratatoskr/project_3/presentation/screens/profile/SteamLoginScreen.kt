@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens
 
+import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import android.webkit.WebView
@@ -43,11 +44,12 @@ fun SteamLoginScreen(
     navController: NavController,
     viewState: State<ProfileState?>,
     viewModel: ProfileViewModel,
+    appSharedPreferences: SharedPreferences,
 ) {
 
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-            SteamSignInView(navController, state) {
+            SteamSignInView(navController, state,appSharedPreferences) {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }
         }
@@ -72,11 +74,6 @@ fun SteamLoggedInView(
     state: ProfileState.LoggedIntoSteam,
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
-
-
-
-
-
 
     Box(
         modifier = Modifier
@@ -149,6 +146,7 @@ fun SteamLoggedInView(
 fun SteamSignInView(
     navController: NavController,
     state: ProfileState.IndefinedState,
+    appSharedPreferences: SharedPreferences,
     onAuthorizeChange: (String) -> Unit
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
@@ -166,7 +164,7 @@ fun SteamSignInView(
         ) {
 
             stickyHeader {
-                SteamSignInHeader(navController)
+                SteamSignInHeader(navController,appSharedPreferences)
             }
             item {
                 Row(
@@ -223,6 +221,13 @@ fun SteamSignedInHeader(
     navController: NavController,
     state: ProfileState.LoggedIntoSteam,
 ) {
+
+    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierDescription = "Tier undefined"
+    if(state.player_tier!="undefined"){
+        tierImage = "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
+        tierDescription = state.player_tier[0]+" tier"
+    }
 
     Box(
         modifier = Modifier
@@ -314,9 +319,9 @@ fun SteamSignedInHeader(
                     .border(1.dp, Color(0x880d111c), CircleShape)
             ) {
                 Image(
-                    painter = rememberImagePainter(state.steam_user_avatar),
-                    contentDescription = state.steam_user_name,
-                    contentScale = ContentScale.Inside,
+                    painter = rememberImagePainter(tierImage),
+                    contentDescription = tierDescription,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .width(70.dp)
                         .height(70.dp)
@@ -332,14 +337,17 @@ fun SteamSignedInHeader(
 @Composable
 fun SteamSignInHeader(
     navController: NavController,
+    appSharedPreferences: SharedPreferences,
 ) {
 
-    val isUserLogged = false;
-    var avatarContentDescription = "Unknown user"
-    if (isUserLogged) {
-        var avatarContentDescription = "Username"
+    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierDescription="Tier undefined"
+    var spTier = appSharedPreferences.getString("player_tier", "undefined").toString()
+    if(spTier!="undefined"){
+        tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier[0] + ".png"
+        tierDescription = "Tier "+spTier[0]
+        Log.e("TOHA","IndefinedState.spTier:"+spTier[0])
     }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -423,29 +431,30 @@ fun SteamSignInHeader(
                 }
             }
 
-            if (isUserLogged) {
-                Box(contentAlignment = Alignment.Center,
 
+            Box(contentAlignment = Alignment.Center,
+                modifier = Modifier
+
+                    .size(70.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, Color(0x880d111c), CircleShape)
+                    .clickable {
+                        //navController.popBackStack()
+                    }
+            ) {
+
+                Image(
+                    painter = rememberImagePainter(tierImage),
+                    contentDescription = tierDescription,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-
-                        .size(70.dp)
-                        .background(Color.Transparent)
+                        .width(70.dp)
+                        .height(70.dp)
+                        .clip(CircleShape)
                         .border(1.dp, Color(0x880d111c), CircleShape)
-                        .clickable {
-                            //onExitChange(!isChecked)
-                        }
-                ) {
-
-                    Image(
-
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp),
-                        painter = rememberImagePainter(R.drawable.ic_back),
-                        contentDescription = "Exit"
-                    )
-                }
+                )
             }
+
         }
     }
 }
@@ -498,47 +507,6 @@ fun SteamWebView(onAuthorizeChange: (String) -> Unit) {
                     )
                 )
         )
-    }
-
-}
-
-@Composable
-fun SteamTopCard(state: ProfileState.LoggedIntoSteam) {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black,
-                        Color.DarkGray
-                    )
-                )
-            )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-
-        ) {
-            Image(
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(end = 10.dp)
-                    .align(Alignment.CenterEnd)
-                    .width(60.dp)
-                    .height(60.dp),
-                painter = rememberImagePainter(state.steam_user_avatar),
-                contentDescription = "Steam user #" + state.steam_user_id + " avatar"
-            )
-
-            Text(
-                modifier = Modifier.align(Alignment.Center), text = state.steam_user_name,
-                color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
-            )
-        }
     }
 
 }

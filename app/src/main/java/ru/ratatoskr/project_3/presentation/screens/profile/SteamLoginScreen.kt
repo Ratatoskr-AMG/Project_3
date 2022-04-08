@@ -24,14 +24,13 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.R
-import ru.ratatoskr.project_3.ReadMe
+import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.theme.LoadingView
@@ -265,7 +264,7 @@ fun SteamSignedInHeader(
             verticalAlignment = Alignment.CenterVertically,
         ) {
 
-            Row() {
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
 
                 Box(
                     modifier = Modifier
@@ -274,7 +273,7 @@ fun SteamSignedInHeader(
                         .clickable {
                             navController.popBackStack()
                         }
-                        .border(1.dp, Color(0x880d111c), CircleShape)
+                        .border(1.dp, Color(0xFF0d111c), CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -290,12 +289,13 @@ fun SteamSignedInHeader(
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 30.dp)
-                        .height(70.dp),
+                        .padding(start = 20.dp)
+                        .height(70.dp)
+                        .width(140.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        modifier = Modifier.padding(top = 0.dp),
+                        modifier = Modifier.padding(top = 0.dp).width(210.dp),
                     ) {
                         Box() {
                             Text(
@@ -410,12 +410,13 @@ fun SteamSignInHeader(
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 30.dp)
-                        .height(70.dp),
+                        .padding(start = 20.dp)
+                        .height(70.dp)
+                        .width(140.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        modifier = Modifier.padding(top = 0.dp),
+                        modifier = Modifier.padding(top = 0.dp).width(140.dp),
                     ) {
                         Box() {
                             Text(
@@ -470,7 +471,7 @@ fun SteamWebView(onAuthorizeChange: (String) -> Unit) {
             "openid.ns=http://specs.openid.net/auth/2.0&" +
             "openid.realm=http://" + REALM + "&" +
             "openid.return_to=http://" + REALM + "/steam_success"
-    ReadMe.q3()
+    Questions.q3()
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             factory = {

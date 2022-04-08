@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.project_3.ReadMe
+import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.base.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
@@ -86,7 +86,7 @@ class HeroViewModel @Inject constructor(
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
 
-                ReadMe.q1()
+                Questions.q1()
                 if (hero.id < 1) {
                     _heroState.postValue(HeroState.NoHeroState())
                 } else {

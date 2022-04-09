@@ -22,7 +22,7 @@ import ru.ratatoskr.project_3.presentation.screens.*
 @AndroidEntryPoint
 class MainActivity() : AppCompatActivity() {
 
-    @RequiresApi(Build.VERSION_CODES.R)
+
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

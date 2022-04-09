@@ -165,7 +165,11 @@ fun WrapperScreen(
                 ProfileScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
             composable(Screens.Steam.route) {
-                SteamLoginScreen(navController, profileViewState, profileViewModel,appSharedPreferences)
+                SteamScreen(navController, profileViewState, profileViewModel,appSharedPreferences)
+            }
+            composable(Screens.Tier.route) {
+                stopPlayer(videoViewState)
+                TiersScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
 
             composable(Screens.Video.route) { navBackStack ->

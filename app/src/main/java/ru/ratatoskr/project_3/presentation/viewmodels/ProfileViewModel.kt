@@ -17,7 +17,6 @@ import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
 import java.util.*
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
@@ -28,11 +27,17 @@ class ProfileViewModel @Inject constructor(
 
     var appSharedPreferences = appSharedPreferences
 
-    var sp_tier = appSharedPreferences.getString("tier", "undefined")
-    var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
+    var player_tier = appSharedPreferences.getString("player_tier", "undefined")
+    var sp_heroes_list_last_modified =
+        appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
     private val _profile_state: MutableLiveData<ProfileState> =
-        MutableLiveData<ProfileState>(ProfileState.IndefinedState(sp_tier!!,sp_heroes_list_last_modified!!))
+        MutableLiveData<ProfileState>(
+            ProfileState.IndefinedState(
+                player_tier!!,
+                sp_heroes_list_last_modified!!
+            )
+        )
     val profileState: LiveData<ProfileState> = _profile_state
 
     private fun getResponseFromOpenDota(steam_user_id: String) {
@@ -48,7 +53,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun getResponseFromDotaBuff(player:SteamPlayer) {
+    private fun getResponseFromDotaBuff(player: SteamPlayer) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -63,19 +68,20 @@ class ProfileViewModel @Inject constructor(
             if (openDotaResponse.rank_tier != null) {
                 appSharedPreferences.edit().putString("player_tier", openDotaResponse.rank_tier)
                     .apply();
-            }else{
+            } else {
                 appSharedPreferences.edit().putString("player_tier", "undefined")
                     .apply();
             }
 
             var sp_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
-            var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
+            var sp_heroes_list_last_modified =
+                appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
             try {
                 if (player.steamid != "") {
-                    Log.e("TOHA","player.personaname!!"+player.personaname!!)
-                    Log.e("TOHA","player_tier"+sp_tier)
-                    Log.e("TOHA","sp_heroes_list_last_modified"+sp_heroes_list_last_modified)
+                    Log.e("TOHA", "player.personaname!!" + player.personaname!!)
+                    Log.e("TOHA", "player_tier" + sp_tier)
+                    Log.e("TOHA", "sp_heroes_list_last_modified" + sp_heroes_list_last_modified)
                     _profile_state.postValue(
                         ProfileState.LoggedIntoSteam(
                             player.steamid,
@@ -95,18 +101,19 @@ class ProfileViewModel @Inject constructor(
     }
 
     override fun obtainEvent(event: ProfileEvent) {
-
-        when (val currentState = _profile_state.value) {
+        Log.e("TOHA","obtainEvent")
+        when (profileState.value) {
             is ProfileState.IndefinedState -> reduce(event)
             is ProfileState.LoggedIntoSteam -> reduce(event)
         }
     }
 
     private fun reduce(event: ProfileEvent) {
-
+        Log.e("TOHA","reduce")
         when (event) {
             is ProfileEvent.OnSteamLogin -> loginWithSteam(event)
             is ProfileEvent.OnSteamExit -> exitSteam()
+            is ProfileEvent.OnTierChange -> selectTier(event)
         }
     }
 
@@ -128,15 +135,61 @@ class ProfileViewModel @Inject constructor(
 
     }
 
+    private fun selectTier(event: ProfileEvent.OnTierChange) {
+        val selected_tier = event.selected_tier
+        viewModelScope.launch(Dispatchers.IO) {
+
+            var state = profileState.value
+
+            appSharedPreferences.edit().putString("player_tier", selected_tier).apply()
+
+            when (state) {
+                is ProfileState.IndefinedState -> {
+                    try {
+                        if (selected_tier != "undefined") {
+                            _profile_state.postValue(
+                                ProfileState.IndefinedState(
+                                    selected_tier,
+                                    state.heroes_list_last_modified
+                                )
+                            )
+                            Log.e("TOHA"," _profile_state:"+ _profile_state.value.toString())
+                        }
+                    } catch (e: Exception) {
+                        _profile_state.postValue(ProfileState.ErrorProfileState)
+                    }
+                }
+                is ProfileState.LoggedIntoSteam -> {
+                    try {
+                        if (selected_tier != "undefined") {
+                            _profile_state.postValue(
+                                ProfileState.LoggedIntoSteam(
+                                    state.steam_user_id,
+                                    state.steam_user_avatar,
+                                    state.steam_user_name,
+                                    selected_tier,
+                                    state.heroes_list_last_modified
+                                )
+                            )
+                        }
+                    } catch (e: Exception) {
+                        _profile_state.postValue(ProfileState.ErrorProfileState)
+                    }
+                }
+            }
+        }
+    }
+
     private fun exitSteam() {
 
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
-        var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
+        var sp_heroes_list_last_modified =
+            appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _profile_state.postValue(
-                    ProfileState.IndefinedState(sp_tier!!,sp_heroes_list_last_modified!!)
+                    ProfileState.IndefinedState(sp_tier!!, sp_heroes_list_last_modified!!)
                 )
             } catch (e: Exception) {
                 _profile_state.postValue(ProfileState.ErrorProfileState)

@@ -26,7 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
-import ru.ratatoskr.project_3.ReadMe
+import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.states.VideoState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
@@ -48,7 +48,7 @@ fun WrapperScreen(
     var bottomNavMenuHeight = 80.dp
 
     fun stopPlayer(state: State<VideoState?>) {
-        ReadMe.q2()
+        Questions.q2()
         when (val state = state.value) {
             is VideoState.PlayerState -> {
                 state.player.stop()
@@ -165,7 +165,11 @@ fun WrapperScreen(
                 ProfileScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
             composable(Screens.Steam.route) {
-                SteamLoginScreen(navController, profileViewState, profileViewModel,appSharedPreferences)
+                SteamScreen(navController, profileViewState, profileViewModel,appSharedPreferences)
+            }
+            composable(Screens.Tier.route) {
+                stopPlayer(videoViewState)
+                TiersScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
 
             composable(Screens.Video.route) { navBackStack ->

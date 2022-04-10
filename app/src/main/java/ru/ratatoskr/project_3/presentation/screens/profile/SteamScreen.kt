@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +29,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.Questions
+import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
@@ -45,12 +44,12 @@ fun SteamScreen(
 ) {
     when (val state = viewState.value) {
         is ProfileState.IndefinedState -> {
-            SteamSignInView(navController, state,appSharedPreferences) {
+            SteamSignInView(navController, state, appSharedPreferences) {
                 viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
             }
         }
         is ProfileState.LoggedIntoSteam -> {
-            SteamLoggedInView(navController, state,appSharedPreferences)
+            SteamLoggedInView(navController, state, appSharedPreferences)
         }
     }
     LaunchedEffect(key1 = Unit, block = {
@@ -208,7 +207,10 @@ fun SteamSignInView(
                                 factory = {
                                     WebView(it).apply {
                                         webViewClient = object : WebViewClient() {
-                                            override fun onPageFinished(view: WebView, url: String) {
+                                            override fun onPageFinished(
+                                                view: WebView,
+                                                url: String
+                                            ) {
                                                 val Url: Uri = Uri.parse(url)
                                                 if (Url.authority.equals("ratatoskr.ru")) {
 
@@ -255,20 +257,18 @@ fun SteamHeader(
     navController: NavController,
     state: ProfileState,
     appSharedPreferences: SharedPreferences
-){
-    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+) {
+    var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png") }
     var tierDescription = "Tier undefined"
     var steamTitle = "Sign in with Steam"
 
     when (state) {
         is ProfileState.IndefinedState -> {
-            var spTier =
-                appSharedPreferences.getString("player_tier", "undefined").toString()
-            if (spTier != "undefined") {
-                tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier[0] + ".png"
-                tierDescription = "Tier " + spTier[0]
+            if (state.player_tier != "undefined") {
+                tierImage =
+                    "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
+                tierDescription = state.player_tier[0] + " tier"
             }
-
         }
         is ProfileState.LoggedIntoSteam -> {
             if (state.player_tier != "undefined") {
@@ -352,7 +352,11 @@ fun SteamHeader(
 
             }
         }
-        Box(contentAlignment = Alignment.Center) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
+            navController.navigate(
+                Screens.Tier.route
+            )
+        }) {
 
             Image(
                 painter = rememberImagePainter(tierImage),

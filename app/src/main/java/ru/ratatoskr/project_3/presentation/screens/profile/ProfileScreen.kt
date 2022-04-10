@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,19 +61,17 @@ fun ProfileHeader(
     appSharedPreferences: SharedPreferences
 ) {
 
-    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png")}
     var tierDescription = "Tier undefined"
     var profileTitle = "Profile"
 
     when (state) {
         is ProfileState.IndefinedState -> {
-            var spTier =
-                appSharedPreferences.getString("player_tier", "undefined").toString()
-            if (spTier != "undefined") {
-                tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier[0] + ".png"
-                tierDescription = "Tier " + spTier[0]
+            if (state.player_tier != "undefined") {
+                tierImage =
+                    "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
+                tierDescription = state.player_tier[0] + " tier"
             }
-
         }
         is ProfileState.LoggedIntoSteam -> {
             if (state.player_tier != "undefined") {

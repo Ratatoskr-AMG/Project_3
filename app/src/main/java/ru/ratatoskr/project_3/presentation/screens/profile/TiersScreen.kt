@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
@@ -39,10 +38,18 @@ fun TiersScreen(
 
     when (val viewState = viewState.value) {
         is ProfileState.IndefinedState -> {
-            TiersView(navController, viewState, appSharedPreferences)
+            TiersView(navController, viewState, appSharedPreferences) {
+                viewModel.obtainEvent(
+                    ProfileEvent.OnTierChange(it)
+                )
+            }
         }
         is ProfileState.LoggedIntoSteam -> {
-            TiersView(navController, viewState, appSharedPreferences)
+            TiersView(navController, viewState, appSharedPreferences) {
+                viewModel.obtainEvent(
+                    ProfileEvent.OnTierChange(it)
+                )
+            }
         }
     }
 
@@ -57,18 +64,16 @@ fun TiersHeader(
     state: ProfileState,
     appSharedPreferences: SharedPreferences
 ) {
-
-    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var tierImage by remember {mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png")}
     var tierDescription = "Tier undefined"
     var tierTitle = "Select your tier"
 
     when (state) {
         is ProfileState.IndefinedState -> {
-            var spTier =
-                appSharedPreferences.getString("player_tier", "undefined").toString()
-            if (spTier != "undefined") {
-                tierImage = "http://ratatoskr.ru/app/img/tier/" + spTier[0] + ".png"
-                tierDescription = "Tier " + spTier[0]
+            if (state.player_tier != "undefined") {
+                tierImage =
+                    "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
+                tierDescription = state.player_tier[0] + " tier"
             }
         }
         is ProfileState.LoggedIntoSteam -> {
@@ -176,30 +181,52 @@ fun TiersHeader(
 
 @ExperimentalFoundationApi
 @Composable
-fun tierRow(tierNum:Int,appSharedPreferences:SharedPreferences,state:ProfileState,selected:Boolean) {
+fun tierRow(
+    tierNum: Int,
+    viewState: ProfileState,
+    OnTierChange: (String) -> Unit
+) {
 
-    var tierImage = "http://ratatoskr.ru/app/img/tier/undefined.png"
+    var selectedTier by remember { mutableStateOf("0") }
+
+    when (viewState) {
+        is ProfileState.IndefinedState -> {
+            Log.e("TOHA","viewState.player_tier="+viewState.player_tier)
+            if (viewState.player_tier != "undefined") {
+                selectedTier = viewState.player_tier[0] + ""
+            }
+        }
+        is ProfileState.LoggedIntoSteam -> {
+            if (viewState.player_tier != "undefined") {
+                selectedTier = viewState.player_tier[0] + ""
+            }
+        }
+    }
+
+    Log.e("TOHA", "selectedTier:" + selectedTier);
+
+    var tierImage = "http://ratatoskr.ru/app/img/tier/0.png"
     var tierDescription = "Tier undefined"
     var tierName = "Undefined"
     var rowTextColor = Color.White
     var rowBackgroundColor = Color.Transparent
 
-    if(tierNum>0){
-        tierName = "Tier:"+tierNum
+    if (tierNum > 0) {
+        tierName = "Tier:" + tierNum
         tierImage = "http://ratatoskr.ru/app/img/tier/$tierNum.png"
-        when(tierNum){
-            1 -> tierName="Herald"
-            2 -> tierName="Guardian"
-            3 -> tierName="Crusader"
-            4 -> tierName="Archon"
-            5 -> tierName="Legend"
-            6 -> tierName="Ancient"
-            7 -> tierName="Divine"
-            8 -> tierName="Immortal"
+        when (tierNum) {
+            1 -> tierName = "Herald"
+            2 -> tierName = "Guardian"
+            3 -> tierName = "Crusader"
+            4 -> tierName = "Archon"
+            5 -> tierName = "Legend"
+            6 -> tierName = "Ancient"
+            7 -> tierName = "Divine"
+            8 -> tierName = "Immortal"
         }
     }
 
-    if(selected){
+    if (selectedTier==tierNum.toString()) {
         rowTextColor = Color.Black
         rowBackgroundColor = Color(0xFFc98000)
     }
@@ -233,11 +260,12 @@ fun tierRow(tierNum:Int,appSharedPreferences:SharedPreferences,state:ProfileStat
             .fillMaxWidth()
             .height(50.dp)
             .background(rowBackgroundColor)
+            .clickable { OnTierChange(tierNum.toString()) }
 
     ) {
         Row(
             modifier = Modifier
-                .padding(start=20.dp,end=20.dp)
+                .padding(start = 20.dp, end = 20.dp)
         ) {
             Image(
                 modifier = Modifier
@@ -266,24 +294,10 @@ fun TiersView(
     navController: NavController,
     viewState: ProfileState,
     appSharedPreferences: SharedPreferences,
+    onTierChange: (String) -> Unit,
 ) {
     var scrollState = rememberForeverLazyListState(key = "Tiers")
-    var curr_tier = "0"
 
-    when (viewState) {
-        is ProfileState.IndefinedState -> {
-            var spTier =
-                appSharedPreferences.getString("player_tier", "undefined").toString()
-            if (spTier != "undefined") {
-                curr_tier= spTier[0]+""
-            }
-        }
-        is ProfileState.LoggedIntoSteam -> {
-            if (viewState.player_tier != "undefined") {
-                curr_tier= viewState.player_tier[0]+""
-            }
-        }
-    }
 
     Box(
         modifier = Modifier
@@ -300,12 +314,13 @@ fun TiersView(
             stickyHeader {
                 TiersHeader(navController, viewState, appSharedPreferences)
             }
-            for(i in 0..8){
-                Log.e("TOHA","curr_tier:"+curr_tier);
-                Log.e("TOHA","i.toString():"+i.toString());
-
+            for (i in 0..8) {
                 item {
-                    tierRow(i,appSharedPreferences,viewState,curr_tier==i.toString())
+                    tierRow(
+                        i,
+                        viewState,
+                        onTierChange
+                    )
                 }
             }
         }

@@ -5,6 +5,7 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-serialization'
 
 
+
 android {
     compileSdkVersion 31
     defaultConfig {
@@ -15,9 +16,12 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    aaptOptions {
+        additionalParameters =["--warn-manifest-validation"]
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -48,7 +52,7 @@ android {
 }
 
 dependencies {
-
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
     implementation("androidx.compose.foundation:foundation:1.1.1")
     implementation("androidx.compose.foundation:foundation-layout:1.1.1")
 

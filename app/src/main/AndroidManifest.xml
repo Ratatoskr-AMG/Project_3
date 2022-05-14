@@ -3,6 +3,7 @@
     package="ru.ratatoskr.project_3">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:usesCleartextTraffic="true"
         android:name=".domain.di.App"
@@ -12,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_3">
+        <profileable android:shell="true"/>
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="false" />
         <activity

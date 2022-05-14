@@ -56,7 +56,7 @@ class HeroesListViewModel @Inject constructor(
         _heroesList_state.set(HeroesListState.LoadingHeroesListState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                getAllHeroesFromApi(appSharedPreferences)
+
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
                 if (heroes.isEmpty()) {
                     getAllHeroesFromApi(appSharedPreferences)

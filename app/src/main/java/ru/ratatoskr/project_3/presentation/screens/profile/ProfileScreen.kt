@@ -300,9 +300,13 @@ fun UndefinedProfileView(
                 }
 
             }
+
+            /*
             item{
                 topPicks()
             }
+
+            */
         }
     }
 }

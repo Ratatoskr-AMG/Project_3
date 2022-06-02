@@ -190,7 +190,7 @@ fun Project_3Theme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         )
 
 }
-
+//high order fun.
 @Composable
 fun BGBox(content: @Composable () -> Unit) {
 
@@ -207,7 +207,8 @@ fun BGBox(content: @Composable () -> Unit) {
             )
 
     ) {
-        content
+        //content.invoke()
+        content()
     }
 
 }

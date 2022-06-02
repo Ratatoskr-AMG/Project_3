@@ -32,6 +32,7 @@ import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.presentation.theme.BGBox
 import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
 
 @ExperimentalFoundationApi
@@ -202,7 +203,7 @@ fun SteamSignInView(
                                 "openid.realm=http://" + REALM + "&" +
                                 "openid.return_to=http://" + REALM + "/steam_success"
                         Questions.q3()
-                        Box(modifier = Modifier.fillMaxSize()) {
+                        BGBox(){
                             AndroidView(
                                 factory = {
                                     WebView(it).apply {
@@ -241,6 +242,11 @@ fun SteamSignInView(
                                         )
                                     )
                             )
+                        }
+
+
+                        Box(modifier = Modifier.fillMaxSize()) {
+
                         }
                     }
 

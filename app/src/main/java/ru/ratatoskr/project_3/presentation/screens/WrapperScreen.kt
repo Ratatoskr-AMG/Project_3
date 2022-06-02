@@ -87,7 +87,7 @@ fun WrapperScreen(
                 backgroundColor = Color(0xFF000000)
             ) {
                 val items =
-                    listOf(Screens.Home, Screens.Favorites, Screens.Profile)
+                    listOf(Screens.Home, Screens.Favorites, Screens.Profile/*, Screens.Video*/)
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 

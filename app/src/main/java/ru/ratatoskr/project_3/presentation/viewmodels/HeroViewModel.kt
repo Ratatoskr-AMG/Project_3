@@ -88,6 +88,7 @@ class HeroViewModel @Inject constructor(
 
                 Questions.q1()
                 if (hero.id < 1) {
+                    //переносим в ЮзКейс трайкетч
                     _heroState.postValue(HeroState.NoHeroState())
                 } else {
                     _heroState.postValue(

@@ -41,10 +41,14 @@ fun WrapperScreen(
 ) {
 
     val navController = rememberNavController()
+
+    /* ? Походу, здесь нужна фабрика ? */
     val videoViewModel = hiltViewModel<VideoViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
     val videoViewState = videoViewModel.videoState.observeAsState()
     val profileViewState = profileViewModel.profileState.observeAsState()
+    /* ? Походу, здесь нужна фабрика ? */
+
     var bottomNavMenuHeight = 80.dp
 
     fun stopPlayer(state: State<VideoState?>) {

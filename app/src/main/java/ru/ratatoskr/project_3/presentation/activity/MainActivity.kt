@@ -18,7 +18,6 @@ import dagger.hilt.android.internal.Contexts
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.*
 
-
 @AndroidEntryPoint
 class MainActivity() : AppCompatActivity() {
 

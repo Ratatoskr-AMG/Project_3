@@ -1,19 +1,5 @@
 package ru.ratatoskr.project_3
 
-/* Пройдено:
-Модуль клиент +
-Карточка героя +
-Размер картинок +
-Двойное нажатие в навигации +
-Карточка атрибута +
-Перенос расчётов артибутов +-
-Расчёты в UseCase +
-Репозиторий во viewModel через UseCase +
-Избранные герои вместо Dashboard +
-Профиль вместо Notifications +
-Дизайн +-
-Авторизация и определение уровня пользователя +
-*/
 /* Архитектура
 data
     contracts
@@ -33,37 +19,17 @@ domain
      useCases
 presentation
     activity
+        MainActivity
     screens
+        WrapperScreen
     theme
     viewModels(domain.useCases)
 */
-
-/* Вопросы
-+ Куда опубликовать?
-+ Что показывать вместо пустого списка избранных? (добавить быстрое удаление, арт в центр экрана)
-+ Безопасность exoplayer
-+ Дизайн под планшеты (?)
-+ Какими данные могут быть "чувствительными" (пароль)?
-+ Как передавать пароль (md5 не вариант)?
-+ Как учесть кражу мобилы? (привязка устройств на стороне сервиса)
-+ Как обойти снифферы? Оконечное шифрование!
-+ Как обойти получение ссылки на видео? Blob(?) blob:// Класть видео в базу, сторонние сервисы
+/* Задания:
+Кэп-Рефакторинг (Prepare-For-Cap ревизии)
+Аккаунт Huawei App Gallery
+Кэп-Переговоры
 */
-
-/*
-Google PLay Market: No in-app
-+ Huawei App Gallery (Android HMS)
-- NashStore (no push, no Geo)
-RuStore (no push, no Geo)
-
-Голый: AOSP
-Наш: Android GMS -> Android HMS
-
-SMT линии
-GTPR ГлавТоргПродукт XDDD
-AOS2
-MTProto
- */
 
 class Questions {
     companion object {
@@ -93,20 +59,50 @@ class Questions {
         }
     }
 }
+/* Вопросы
 
-/* Задания:
-Страница уровней
-Возможность обновить данные вручную после установки
 */
-/* Ссылки:
-https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
-https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
-https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
-http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
+/*Ответы
+
++ Куда опубликовать?
++ Что показывать вместо пустого списка избранных? (добавить быстрое удаление, арт в центр экрана)
++ Безопасность exoplayer
++ Дизайн под планшеты (?)
++ Какими данные могут быть "чувствительными" (пароль)?
++ Как передавать пароль (md5 не вариант)?
++ Как учесть кражу мобилы? (привязка устройств на стороне сервиса)
++ Как обойти снифферы? Оконечное шифрование!
++ Как обойти получение ссылки на видео? Blob(?) blob:// Класть видео в базу, сторонние сервисы
+
+Google PLay Market: No in-app
++ Huawei App Gallery (Android HMS)
+- NashStore (no push, no Geo)
+RuStore (no push, no Geo)
+
+Голый: AOSP
+Наш: Android GMS -> Android HMS
+
+SMT линии
+GTPR ГлавТоргПродукт XDDD
+AOS2
+MTProto
+
 */
-/* Книги:
-Карьера программиста крэкинг зэ пот
-Java Concurrency in Practiсe
+/* Пройдено:
+Модуль клиент +
+Карточка героя +
+Размер картинок +
+Двойное нажатие в навигации +
+Карточка атрибута +
+Перенос расчётов артибутов +-
+Расчёты в UseCase +
+Репозиторий во viewModel через UseCase +
+Избранные герои вместо Dashboard +
+Профиль вместо Notifications +
+Основы дизайна +
+Авторизация и определение уровня пользователя +
+Страница уровней+
+Возможность обновить данные вручную после установки+
 */
 /* Из конспектов
 1:
@@ -129,6 +125,16 @@ scope http bd converters -> app.scope = @Singleton
 Все view : Context , @ApplicationContext
 Когда подтягиваем ресурсы (строки, картинки): если передан Апп контекст то нет проблем, контекст вьюхи не подойдет
 
+*/
+/* Ссылки:
+https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
+https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
+https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt
+http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4391F8156F8EED08C597CE&steamids=76561198165608798
+*/
+/* Книги:
+Карьера программиста крэкинг зэ пот
+Java Concurrency in Practiсe
 */
 
 /* val windowInsetsController =

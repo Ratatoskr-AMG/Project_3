@@ -24,14 +24,18 @@ class MainActivity() : AppCompatActivity() {
         setContent {
             rememberSystemUiController().setStatusBarColor(color = Color.Transparent)
             ProvideWindowInsets {
+
                 WrapperScreen(
                     this.getSharedPreferences(
                         APP_SHARED_PREFERENCES_NAME,
                         Context.MODE_PRIVATE
                     )
                 )
+
             }
         }
     }
 
 }
+
+/*test*/

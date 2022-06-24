@@ -44,7 +44,7 @@ class Questions {
     Куда убрать метод stopPlayer из MainActivity?
 
  */
-        //см. onDispose (и др. эффекты)
+            //см. onDispose (и др. эффекты)
         }
         fun q3() {
 /*
@@ -53,6 +53,31 @@ class Questions {
         }
         fun q4() {
 /*
+
+        Здесь нужна фабрика ?
+
+ */
+        }
+
+        fun q5() {
+/*
+
+
+
+ */
+        }
+
+        fun q6() {
+/*
+
+
+
+ */
+        }
+
+        fun q7() {
+/*
+
 
 
  */

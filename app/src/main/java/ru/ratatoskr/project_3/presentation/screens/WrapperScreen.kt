@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import coil.request.Disposable
 import com.google.accompanist.insets.navigationBarsPadding
 import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.Screens
@@ -42,14 +43,15 @@ fun WrapperScreen(
 
     val navController = rememberNavController()
 
-    /* ? Походу, здесь нужна фабрика ? */
+    Questions.q4()
     val videoViewModel = hiltViewModel<VideoViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
     val videoViewState = videoViewModel.videoState.observeAsState()
     val profileViewState = profileViewModel.profileState.observeAsState()
-    /* ? Походу, здесь нужна фабрика ? */
 
     var bottomNavMenuHeight = 80.dp
+
+    lateinit var disposable: Disposable
 
     fun stopPlayer(state: State<VideoState?>) {
         Questions.q2()

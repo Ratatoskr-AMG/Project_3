@@ -202,7 +202,7 @@ fun SteamSignInView(
                                 "openid.ns=http://specs.openid.net/auth/2.0&" +
                                 "openid.realm=http://" + REALM + "&" +
                                 "openid.return_to=http://" + REALM + "/steam_success"
-                        Questions.q3()
+
                         BGBox(){
                             AndroidView(
                                 factory = {

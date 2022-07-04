@@ -2,20 +2,18 @@ package ru.ratatoskr.project_3
 
 /* Архитектура
 data
-    contracts
-    converters
+    contracts (названия таблиц и столбцов в БД)
+    converters (Roles List <-> Roles String)
     remote (?)
         implementations
         services
-    dao
+    dao (база данных, запросы)
 domain
-    base(?)
-    di (ktor)
-    helpers
-        events
-        states
-     model
-     repository
+    base (?)
+    di (модули для ktor)
+    helpers (состояния, события, перечень экранов)
+     model (дата классы: героя, избранного, пользователей и т.п.)
+     repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)
      useCases
 presentation
     activity
@@ -26,39 +24,31 @@ presentation
     viewModels(domain.useCases)
 */
 /* Задания:
-Кэп-Рефакторинг (Prepare-For-Cap ревизии)
-Аккаунт Huawei App Gallery
-Кэп-Переговоры
+    Рефакторинг
 */
+
 
 class Questions {
     companion object {
         fun q1() {
-/*
-    на что заменить if (hero.id < 1) {
- */
+        /*
+            Как правильно сделать onDispose, чтобы убрать метод stopPlayer
+            из MainActivity
+        */
         }
         fun q2() {
-/*
-
-    Куда убрать метод stopPlayer из MainActivity?
-
- */
-        //см. onDispose (и др. эффекты)
+        /*
+             Здесь нужна фабрика?
+        */
         }
         fun q3() {
 /*
-        Как использовать BGBox из Theme?
+
  */
         }
         fun q4() {
-/*
 
-        Здесь нужна фабрика ?
-
- */
         }
-
         fun q5() {
 /*
 
@@ -66,7 +56,6 @@ class Questions {
 
  */
         }
-
         fun q6() {
 /*
 
@@ -74,7 +63,6 @@ class Questions {
 
  */
         }
-
         fun q7() {
 /*
 
@@ -84,9 +72,14 @@ class Questions {
         }
     }
 }
-/* Вопросы
 
+/* Другие вопросы
+    Удаление папки remote
+    В правильном ли месте лежит содержимое файлов папки base
+    Позырить developer.huawei.com
+    Название
 */
+
 /*Ответы
 
 + Куда опубликовать?
@@ -114,6 +107,7 @@ MTProto
 
 */
 /* Пройдено:
+Аккаунт Huawei App Gallery +
 Модуль клиент +
 Карточка героя +
 Размер картинок +

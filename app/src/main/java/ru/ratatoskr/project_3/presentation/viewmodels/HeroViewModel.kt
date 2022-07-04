@@ -86,7 +86,7 @@ class HeroViewModel @Inject constructor(
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
 
-                Questions.q1()
+
                 if (hero.id < 1) {
                     //переносим в ЮзКейс трайкетч
                     _heroState.postValue(HeroState.NoHeroState())

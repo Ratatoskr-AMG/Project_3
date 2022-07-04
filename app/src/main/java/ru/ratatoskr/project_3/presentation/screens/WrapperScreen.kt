@@ -43,7 +43,7 @@ fun WrapperScreen(
 
     val navController = rememberNavController()
 
-    Questions.q4()
+    Questions.q2()
     val videoViewModel = hiltViewModel<VideoViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
     val videoViewState = videoViewModel.videoState.observeAsState()
@@ -51,10 +51,11 @@ fun WrapperScreen(
 
     var bottomNavMenuHeight = 80.dp
 
-    lateinit var disposable: Disposable
+    //lateinit var disposable: Disposable
+    Questions.q1()
 
     fun stopPlayer(state: State<VideoState?>) {
-        Questions.q2()
+
         when (val state = state.value) {
             is VideoState.PlayerState -> {
                 state.player.stop()
@@ -93,7 +94,7 @@ fun WrapperScreen(
                 backgroundColor = Color(0xFF000000)
             ) {
                 val items =
-                    listOf(Screens.Home, Screens.Favorites, Screens.Profile/*, Screens.Video*/)
+                    listOf(Screens.Home, Screens.Favorites, Screens.Profile, Screens.Video)
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 

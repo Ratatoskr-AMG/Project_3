@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation.viewmodels
+package ru.ratatoskr.project_3.presentation.screens.account.profile
 
 import android.app.Application
 import android.content.SharedPreferences

@@ -2,7 +2,6 @@ package ru.ratatoskr.project_3.presentation.screens
 
 import android.content.SharedPreferences
 import android.net.Uri
-import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.*
@@ -27,13 +26,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import ru.ratatoskr.project_3.R
-import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.presentation.theme.BGBox
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 
 @ExperimentalFoundationApi
 @Composable

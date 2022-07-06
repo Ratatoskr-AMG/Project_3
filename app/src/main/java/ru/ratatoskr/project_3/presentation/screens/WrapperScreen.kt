@@ -5,7 +5,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -25,14 +24,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
-import coil.request.Disposable
 import com.google.accompanist.insets.navigationBarsPadding
-import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.states.VideoState
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
 
 @ExperimentalFoundationApi

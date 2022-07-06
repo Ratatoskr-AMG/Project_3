@@ -26,7 +26,7 @@ import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 import java.util.*
 
 @ExperimentalFoundationApi

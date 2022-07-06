@@ -8,8 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.project_3.Questions
-import ru.ratatoskr.project_3.domain.base.EventHandler
+import ru.ratatoskr.project_3.domain.utils.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
 import ru.ratatoskr.project_3.domain.helpers.states.HeroState

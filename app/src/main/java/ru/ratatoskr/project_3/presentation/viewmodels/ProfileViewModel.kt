@@ -7,14 +7,13 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.project_3.domain.base.EventHandler
+import ru.ratatoskr.project_3.domain.utils.EventHandler
 import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
 import ru.ratatoskr.project_3.domain.model.steam.SteamPlayer
 import ru.ratatoskr.project_3.domain.useCases.user.GetDotaBuffUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetOpenDotaUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel

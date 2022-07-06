@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.Util
 import io.ktor.util.cio.*
+import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
 import ru.ratatoskr.project_3.domain.helpers.events.VideoEvent
 import ru.ratatoskr.project_3.domain.helpers.states.VideoState
 import ru.ratatoskr.project_3.presentation.theme.LoadingView
@@ -53,14 +54,28 @@ fun VideoScreen(
                 viewModel.obtainEvent(VideoEvent.OnStamp(state.curr_time))
             )
 
+
         }
         is VideoState.ErrorState -> {
             MessageView("Video Error")
         }
         is VideoState.LoadingState -> LoadingView("Video is loading...")
     }
+
+    DisposableEffect(key1 = Unit, effect = {
+        onDispose{
+            stopPlayer(viewState)
+        }
+    })
 }
 
+fun stopPlayer(state: State<VideoState?>) {
+    when (val state = state.value) {
+        is VideoState.PlayerState -> {
+            state.player.setPlayWhenReady(false);
+        }
+    }
+}
 
 @Composable
 fun videoPlayer(
@@ -75,6 +90,14 @@ fun videoPlayer(
     Log.e("TOHA2", "playbackState:" + exoPlayer.playbackState)
 
     val context = LocalContext.current
+
+
+
+    var uri2 by remember {
+        mutableStateOf(
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+        )
+    }
 
     exoPlayer.addListener(object : Player.EventListener {
         fun onBtnCLick() {
@@ -97,6 +120,16 @@ fun videoPlayer(
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
+
+            if(playbackState == ExoPlayer.STATE_IDLE){
+               // exoPlayer.setPlayWhenReady(true);
+
+            }
+
+            if(playbackState == ExoPlayer.STATE_READY){
+               // exoPlayer.setPlayWhenReady(true);
+            }
+
             Log.e("TOHA", "playbackState" + playbackState)
         }
 
@@ -112,11 +145,7 @@ fun videoPlayer(
         }
     })
 
-    var uri by remember {
-        mutableStateOf(
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-        )
-    }
+    var uri = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
 
     val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
         context,
@@ -195,6 +224,7 @@ fun videoPlayer(
     }
 
     LaunchedEffect(key1 = Unit, block = {
+
 
 
     })

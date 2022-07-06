@@ -42,26 +42,9 @@ fun WrapperScreen(
 ) {
 
     val navController = rememberNavController()
-
-    Questions.q2()
-    val videoViewModel = hiltViewModel<VideoViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
-    val videoViewState = videoViewModel.videoState.observeAsState()
     val profileViewState = profileViewModel.profileState.observeAsState()
-
     var bottomNavMenuHeight = 80.dp
-
-    //lateinit var disposable: Disposable
-    Questions.q1()
-
-    fun stopPlayer(state: State<VideoState?>) {
-
-        when (val state = state.value) {
-            is VideoState.PlayerState -> {
-                state.player.stop()
-            }
-        }
-    }
 
     Scaffold(
         modifier = Modifier.navigationBarsPadding(),
@@ -131,7 +114,7 @@ fun WrapperScreen(
             modifier = Modifier.padding(it)
         ) {
             composable(Screens.Home.route) {
-                stopPlayer(videoViewState)
+               // stopPlayer(videoViewState)
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesListScreen(
                     viewModel = heroesListviewModel,
@@ -139,7 +122,7 @@ fun WrapperScreen(
                     )
             }
             composable(Screens.Hero.route + "/{id}") { navBackStack ->
-                stopPlayer(videoViewState)
+                //stopPlayer(videoViewState)
                 val id = navBackStack.arguments?.getString("id").toString()
                 val heroViewModel = hiltViewModel<HeroViewModel>()
                 HeroScreen(
@@ -149,40 +132,43 @@ fun WrapperScreen(
                 )
             }
             composable(Screens.Role.route + "/{role}") { navBackStack ->
-                stopPlayer(videoViewState)
+               // stopPlayer(videoViewState)
                 val role = navBackStack.arguments?.getString("role")
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesByRoleScreen(role!!, heroesListviewModel, navController)
             }
             composable(Screens.Attr.route + "/{attr}/{id}") { navBackStack ->
-                stopPlayer(videoViewState)
+                //stopPlayer(videoViewState)
                 val attr = navBackStack.arguments?.getString("attr")
                 val id = navBackStack.arguments?.getString("id")
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 HeroesByAttributeScreen(attr!!, id!!, heroesListviewModel, navController)
             }
             composable(Screens.Favorites.route) {
-                stopPlayer(videoViewState)
+                //stopPlayer(videoViewState)
                 val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                 FavoritesScreen(heroesListviewModel, navController)
             }
 
             composable(Screens.Profile.route) {
-                stopPlayer(videoViewState)
+                //stopPlayer(videoViewState)
                 ProfileScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
             composable(Screens.Steam.route) {
                 SteamScreen(navController, profileViewState, profileViewModel,appSharedPreferences)
             }
             composable(Screens.Tier.route) {
-                stopPlayer(videoViewState)
+                //stopPlayer(videoViewState)
                 TiersScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
             }
 
             composable(Screens.Video.route) { navBackStack ->
+                val videoViewModel = hiltViewModel<VideoViewModel>()
                 VideoScreen(videoViewModel)
             }
         }
     }
 
 }
+
+//val videoViewState = videoViewModel.videoState.observeAsState()

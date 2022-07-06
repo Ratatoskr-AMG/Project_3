@@ -1,8 +1,42 @@
 package ru.ratatoskr.project_3
 
+class Questions {
+    companion object {
+        fun q1() {
+            /*
+                 Если не ошибаюсь, здесь нужно сделать фабрику? распедалить модели по хатам
+            */
+        }
+        fun q2() {
+            /*
+                Как правильно сделать onDispose, чтобы убрать метод stopPlayer
+                из MainActivity
+            */
+        }
+
+        fun qX() {
+        /*
+            #########
+        */
+        }
+    }
+}
+/* Другие вопросы
+    Архитектура +
+    Позырить developer.huawei.com
+    Название (Dota Heroes Comparing Doheco)
+
+LocalConfiguration.current  (width, height)
+1. получаю ширину
+2. узнаю текущий элемент (scrollState)
+3. переменную делаем mutableState
+4. swipeable модификатор
+*/
+
+
 /* Архитектура
 data
-    contracts (названия таблиц и столбцов в БД)
+    contracts (названия таблиц и столбцов в БД) можно разбить по фичам (!)
     converters (Roles List <-> Roles String)
     remote (?)
         implementations
@@ -11,80 +45,45 @@ data
 domain
     base (?)
     di (модули для ktor)
-    helpers (состояния, события, перечень экранов)
-     model (дата классы: героя, избранного, пользователей и т.п.)
-     repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)
-     useCases
+    helpers (состояния, события, перечень экранов) -
+    model (дата классы: героя, избранного, пользователей и т.п.)
+    repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)
+    useCases (добавить в избранное, получить списки героев, данные о пользователе и т.п.)
 presentation
-    activity
-        MainActivity
-    screens
-        WrapperScreen
-    theme
-    viewModels(domain.useCases)
+    activity (Точки входа)
+    screens (Вёрстка)
+    theme (Стили)
+    viewModels(Состояния) разнести по экранам (!)
 */
 /* Задания:
+    helpers (состояния, события, перечень экранов) перенести к экранам
+    Убрать кнопку назад везде где возможно
+    Удаление из избранного
+    Список героев по рейтингу юзера
+    Листалка скролла
     Рефакторинг
 */
-
-
-class Questions {
-    companion object {
-        fun q1() {
-        /*
-            Как правильно сделать onDispose, чтобы убрать метод stopPlayer
-            из MainActivity
-        */
-        }
-        fun q2() {
-        /*
-             Здесь нужна фабрика?
-        */
-        }
-        fun q3() {
-/*
-
- */
-        }
-        fun q4() {
-
-        }
-        fun q5() {
-/*
-
-
-
- */
-        }
-        fun q6() {
-/*
-
-
-
- */
-        }
-        fun q7() {
-/*
-
-
-
- */
-        }
-    }
-}
-
-/* Другие вопросы
-    Удаление папки remote
-    В правильном ли месте лежит содержимое файлов папки base
-    Позырить developer.huawei.com
-    Название
+/* Пройдено:
+Аккаунт Huawei App Gallery +
+Модуль клиент +
+Карточка героя +
+Размер картинок +
+Двойное нажатие в навигации +
+Карточка атрибута +
+Перенос расчётов артибутов +-
+Расчёты в UseCase +
+Репозиторий во viewModel через UseCase +
+Избранные герои вместо Dashboard +
+Профиль вместо Notifications +
+Основы дизайна +
+Авторизация и определение уровня пользователя +
+Страница уровней+
+Возможность обновить данные вручную после установки+
 */
-
-/*Ответы
-
-+ Куда опубликовать?
+/* Разное
++ Куда опубликовать? Huawei
 + Что показывать вместо пустого списка избранных? (добавить быстрое удаление, арт в центр экрана)
-+ Безопасность exoplayer
++ Безопасность exoplayer +
 + Дизайн под планшеты (?)
 + Какими данные могут быть "чувствительными" (пароль)?
 + Как передавать пароль (md5 не вариант)?
@@ -105,25 +104,6 @@ GTPR ГлавТоргПродукт XDDD
 AOS2
 MTProto
 
-*/
-/* Пройдено:
-Аккаунт Huawei App Gallery +
-Модуль клиент +
-Карточка героя +
-Размер картинок +
-Двойное нажатие в навигации +
-Карточка атрибута +
-Перенос расчётов артибутов +-
-Расчёты в UseCase +
-Репозиторий во viewModel через UseCase +
-Избранные герои вместо Dashboard +
-Профиль вместо Notifications +
-Основы дизайна +
-Авторизация и определение уровня пользователя +
-Страница уровней+
-Возможность обновить данные вручную после установки+
-*/
-/* Из конспектов
 1:
 UseCase может объединять два репозитория
 
@@ -144,6 +124,7 @@ scope http bd converters -> app.scope = @Singleton
 Все view : Context , @ApplicationContext
 Когда подтягиваем ресурсы (строки, картинки): если передан Апп контекст то нет проблем, контекст вьюхи не подойдет
 
+
 */
 /* Ссылки:
 https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
@@ -155,7 +136,6 @@ http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=D076D1B0AD4
 Карьера программиста крэкинг зэ пот
 Java Concurrency in Practiсe
 */
-
 /* val windowInsetsController =
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())

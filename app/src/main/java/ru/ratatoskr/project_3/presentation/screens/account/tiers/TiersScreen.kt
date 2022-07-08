@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
-import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileEvent
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
 import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 
 @ExperimentalFoundationApi

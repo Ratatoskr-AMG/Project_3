@@ -27,26 +27,28 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
-import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamEvent
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
 import ru.ratatoskr.project_3.presentation.theme.BGBox
 import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamState
 
 @ExperimentalFoundationApi
 @Composable
 fun SteamScreen(
     navController: NavController,
-    viewState: State<ProfileState?>,
-    viewModel: ProfileViewModel,
+    viewState: State<SteamState?>,
+    viewModel: SteamViewModel,
     appSharedPreferences: SharedPreferences,
 ) {
     when (val state = viewState.value) {
-        is ProfileState.IndefinedState -> {
+        is SteamState.IndefinedState -> {
             SteamSignInView(navController, state, appSharedPreferences) {
-                viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
+                viewModel.obtainEvent(SteamEvent.OnSteamLogin(it))
             }
         }
-        is ProfileState.LoggedIntoSteam -> {
+        is SteamState.LoggedIntoSteam -> {
             SteamLoggedInView(navController, state, appSharedPreferences)
         }
     }
@@ -133,7 +135,7 @@ fun SteamLoggedInView(
 @Composable
 fun SteamSignInView(
     navController: NavController,
-    state: ProfileState.IndefinedState,
+    state: SteamState.IndefinedState,
     appSharedPreferences: SharedPreferences,
     onAuthorizeChange: (String) -> Unit
 ) {
@@ -258,7 +260,7 @@ fun SteamSignInView(
 @Composable
 fun SteamHeader(
     navController: NavController,
-    state: ProfileState,
+    state: SteamState,
     appSharedPreferences: SharedPreferences
 ) {
     var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png") }

@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation.screens.account.profile
+package ru.ratatoskr.project_3.presentation.screens.account.steam
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -14,15 +14,17 @@ import ru.ratatoskr.project_3.domain.model.steam.SteamPlayer
 import ru.ratatoskr.project_3.domain.useCases.user.GetDotaBuffUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetOpenDotaUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
+import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamEvent
+import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamState
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class SteamViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase
-) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
+) : AndroidViewModel(Application()), EventHandler<SteamEvent> {
 
     var appSharedPreferences = appSharedPreferences
 
@@ -30,14 +32,13 @@ class ProfileViewModel @Inject constructor(
     var sp_heroes_list_last_modified =
         appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
-    private val _profile_state: MutableLiveData<ProfileState> =
-        MutableLiveData<ProfileState>(
-            ProfileState.IndefinedState(
-                player_tier!!,
-                sp_heroes_list_last_modified!!
+    private val _steam_state: MutableLiveData<SteamState> =
+        MutableLiveData<SteamState>(
+            SteamState.IndefinedState(
+                player_tier!!
             )
         )
-    val profileState: LiveData<ProfileState> = _profile_state
+    val steamState: LiveData<SteamState> = _steam_state
 
     private fun getResponseFromOpenDota(steam_user_id: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -81,8 +82,8 @@ class ProfileViewModel @Inject constructor(
                     Log.e("TOHA", "player.personaname!!" + player.personaname!!)
                     Log.e("TOHA", "player_tier" + sp_tier)
                     Log.e("TOHA", "sp_heroes_list_last_modified" + sp_heroes_list_last_modified)
-                    _profile_state.postValue(
-                        ProfileState.LoggedIntoSteam(
+                    _steam_state.postValue(
+                        SteamState.LoggedIntoSteam(
                             player.steamid,
                             player.avatarmedium!!,
                             player.personaname!!,
@@ -92,31 +93,30 @@ class ProfileViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _profile_state.postValue(ProfileState.ErrorProfileState)
+                _steam_state.postValue(SteamState.ErrorProfileState)
             }
 
 
         }
     }
 
-    override fun obtainEvent(event: ProfileEvent) {
+    override fun obtainEvent(event: SteamEvent) {
         Log.e("TOHA","obtainEvent")
-        when (profileState.value) {
-            is ProfileState.IndefinedState -> reduce(event)
-            is ProfileState.LoggedIntoSteam -> reduce(event)
+        when (steamState.value) {
+            is SteamState.IndefinedState -> reduce(event)
+            is SteamState.LoggedIntoSteam -> reduce(event)
         }
     }
 
-    private fun reduce(event: ProfileEvent) {
+    private fun reduce(event: SteamEvent) {
         Log.e("TOHA","reduce")
         when (event) {
-            is ProfileEvent.OnSteamLogin -> loginWithSteam(event)
-            is ProfileEvent.OnSteamExit -> exitSteam()
-            is ProfileEvent.OnTierChange -> selectTier(event)
+            is SteamEvent.OnSteamLogin -> loginWithSteam(event)
+            is SteamEvent.OnSteamExit -> exitSteam()
         }
     }
 
-    private fun loginWithSteam(event: ProfileEvent.OnSteamLogin) {
+    private fun loginWithSteam(event: SteamEvent.OnSteamLogin) {
 
         val user_id = event.steam_user_id
 
@@ -133,7 +133,7 @@ class ProfileViewModel @Inject constructor(
         }
 
     }
-
+/*
     private fun selectTier(event: ProfileEvent.OnTierChange) {
         val selected_tier = event.selected_tier
         viewModelScope.launch(Dispatchers.IO) {
@@ -178,7 +178,7 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
+*/
     private fun exitSteam() {
 
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
@@ -187,15 +187,16 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _profile_state.postValue(
-                    ProfileState.IndefinedState(sp_tier!!, sp_heroes_list_last_modified!!)
+                _steam_state.postValue(
+                    SteamState.IndefinedState()
                 )
             } catch (e: Exception) {
-                _profile_state.postValue(ProfileState.ErrorProfileState)
+                _steam_state.postValue(ProfileState.ErrorProfileState)
             }
 
         }
     }
+
 }
 
 

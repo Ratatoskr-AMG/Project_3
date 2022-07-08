@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation.screens.account.profile
+package ru.ratatoskr.project_3.presentation.screens.account.tiers
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -17,7 +17,7 @@ import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class TiersViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,

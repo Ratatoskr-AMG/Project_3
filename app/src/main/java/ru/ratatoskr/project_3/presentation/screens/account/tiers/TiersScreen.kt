@@ -29,6 +29,7 @@ import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewMo
 import ru.ratatoskr.project_3.presentation.screens.account.tiers.TiersViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.tiers.models.TiersEvent
 import ru.ratatoskr.project_3.presentation.screens.account.tiers.models.TiersState
+import ru.ratatoskr.project_3.presentation.screens.heroes.home.rememberForeverLazyListState
 
 @ExperimentalFoundationApi
 @Composable

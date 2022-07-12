@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation.screens
+package ru.ratatoskr.project_3.presentation.screens.heroes.home
 
 import android.app.Application
 import android.content.Context
@@ -44,12 +44,10 @@ import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 
 @ExperimentalFoundationApi
 @Composable
-fun HeroesListScreen(
+fun HomeScreen(
     viewModel: HeroesListViewModel,
     navController: NavController,
 ) {
-
-
 
     when (val state = viewModel.heroesListState.observeAsState().value) {
         is HeroesListState.LoadedHeroesListState<*> -> HeroesListView(

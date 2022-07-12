@@ -38,6 +38,7 @@ import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.tiers.TiersViewModel
+import ru.ratatoskr.project_3.presentation.screens.heroes.home.HomeScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
@@ -135,7 +136,7 @@ class MainActivity() : AppCompatActivity() {
                         composable(Screens.Home.route) {
                             // stopPlayer(videoViewState)
                             val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                            HeroesListScreen(
+                            HomeScreen(
                                 viewModel = heroesListviewModel,
                                 navController = navController,
                             )
@@ -161,7 +162,7 @@ class MainActivity() : AppCompatActivity() {
                             val attr = navBackStack.arguments?.getString("attr")
                             val id = navBackStack.arguments?.getString("id")
                             val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                            HeroesByAttributeScreen(attr!!, id!!, heroesListviewModel, navController)
+                            AttributeScreen(attr!!, id!!, heroesListviewModel, navController)
                         }
                         composable(Screens.Favorites.route) {
                             //stopPlayer(videoViewState)

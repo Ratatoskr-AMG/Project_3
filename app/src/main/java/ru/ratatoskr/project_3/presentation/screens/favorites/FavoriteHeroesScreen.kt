@@ -30,6 +30,7 @@ import ru.ratatoskr.project_3.domain.helpers.states.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.presentation.screens.heroes.home.rememberForeverLazyListState
 import ru.ratatoskr.project_3.presentation.theme.LoadingScreen
 import ru.ratatoskr.project_3.presentation.theme.leftBtnHeaderBox
 

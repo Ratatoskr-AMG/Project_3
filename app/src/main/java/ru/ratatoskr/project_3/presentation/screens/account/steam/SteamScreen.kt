@@ -31,6 +31,7 @@ import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamEve
 import ru.ratatoskr.project_3.presentation.theme.BGBox
 import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamState
+import ru.ratatoskr.project_3.presentation.screens.heroes.home.rememberForeverLazyListState
 
 @ExperimentalFoundationApi
 @Composable

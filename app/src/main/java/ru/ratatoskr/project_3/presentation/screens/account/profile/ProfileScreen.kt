@@ -30,6 +30,7 @@ import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
 import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.heroes.home.rememberForeverLazyListState
 import java.util.*
 
 @ExperimentalFoundationApi

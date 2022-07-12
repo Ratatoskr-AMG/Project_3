@@ -2,7 +2,6 @@ package ru.ratatoskr.project_3.presentation.screens
 
 import android.content.SharedPreferences
 import android.net.Uri
-import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.*
@@ -27,30 +26,32 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import ru.ratatoskr.project_3.R
-import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
-import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamEvent
 import ru.ratatoskr.project_3.presentation.theme.BGBox
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamState
 
 @ExperimentalFoundationApi
 @Composable
 fun SteamScreen(
     navController: NavController,
-    viewState: State<ProfileState?>,
-    viewModel: ProfileViewModel,
+    viewState: State<SteamState?>,
+    viewModel: SteamViewModel,
     appSharedPreferences: SharedPreferences,
 ) {
+    //var player_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
+    //viewModel.getPlayerTierFromSP()
+
+    var player_tier = viewModel.getPlayerTierFromSP()
     when (val state = viewState.value) {
-        is ProfileState.IndefinedState -> {
-            SteamSignInView(navController, state, appSharedPreferences) {
-                viewModel.obtainEvent(ProfileEvent.OnSteamLogin(it))
+        is SteamState.IndefinedState -> {
+            SteamSignInView(navController, state, player_tier) {
+                viewModel.obtainEvent(SteamEvent.OnSteamLogin(it))
             }
         }
-        is ProfileState.LoggedIntoSteam -> {
-            SteamLoggedInView(navController, state, appSharedPreferences)
+        is SteamState.LoggedIntoSteam -> {
+            SteamLoggedInView(navController, state, state.player_tier)
         }
     }
     LaunchedEffect(key1 = Unit, block = {
@@ -61,8 +62,8 @@ fun SteamScreen(
 @Composable
 fun SteamLoggedInView(
     navController: NavController,
-    state: ProfileState.LoggedIntoSteam,
-    appSharedPreferences: SharedPreferences,
+    state: SteamState,
+    player_tier:String
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
@@ -79,7 +80,7 @@ fun SteamLoggedInView(
         ) {
 
             stickyHeader {
-                SteamHeader(navController, state, appSharedPreferences)
+                SteamHeader(navController, state, player_tier)
             }
             item {
                 Row(
@@ -136,8 +137,8 @@ fun SteamLoggedInView(
 @Composable
 fun SteamSignInView(
     navController: NavController,
-    state: ProfileState.IndefinedState,
-    appSharedPreferences: SharedPreferences,
+    state:SteamState,
+    player_tier: String,
     onAuthorizeChange: (String) -> Unit
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
@@ -155,7 +156,7 @@ fun SteamSignInView(
         ) {
 
             stickyHeader {
-                SteamHeader(navController, state, appSharedPreferences)
+                SteamHeader(navController, state, player_tier)
             }
             item {
                 Row(
@@ -261,13 +262,25 @@ fun SteamSignInView(
 @Composable
 fun SteamHeader(
     navController: NavController,
-    state: ProfileState,
-    appSharedPreferences: SharedPreferences
+    state: SteamState,
+    player_tier: String,
 ) {
     var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png") }
-    var tierDescription = "Tier undefined"
-    var steamTitle = "Sign in with Steam"
+    var tierDescription by remember { mutableStateOf("Tier undefined") }
+    var steamTitle by remember { mutableStateOf("Sign in with Steam") }
 
+    tierImage =
+        "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+
+    tierDescription = player_tier + " tier"
+
+    when (state) {
+        is SteamState.LoggedIntoSteam -> {
+            steamTitle = state.steam_user_name
+        }
+    }
+
+    /*
     when (state) {
         is ProfileState.IndefinedState -> {
             if (state.player_tier != "undefined") {
@@ -285,6 +298,7 @@ fun SteamHeader(
             steamTitle = state.steam_user_name
         }
     }
+    */
 
     Row(
         modifier = Modifier

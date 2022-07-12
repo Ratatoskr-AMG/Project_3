@@ -1,6 +1,8 @@
 package ru.ratatoskr.project_3.presentation.screens
 
 import android.content.SharedPreferences
+import android.provider.ContactsContract
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,33 +27,61 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.domain.helpers.Screens
-import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
-import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
-import ru.ratatoskr.project_3.presentation.viewmodels.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileEvent
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
+import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 import java.util.*
 
 @ExperimentalFoundationApi
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    viewState: State<ProfileState?>,
     viewModel: ProfileViewModel,
     appSharedPreferences: SharedPreferences
 ) {
+
+    val player_tier = viewModel.getPlayerTierFromSP()
+    val player_steam_name = viewModel.getPlayerSteamNameFromSP()
+
+    if(player_steam_name!="undefined"){
+        viewModel.setSteamIsDefinedProfileState()
+    }else{
+        viewModel.setUndefinedProfileState()
+    }
+
+    val viewState = viewModel.profileState.observeAsState()
+
+    val heroes_list_last_modified =
+        Date(appSharedPreferences.getLong("heroes_list_last_modified", 0))
+            .toString()
+
+    Log.e("TOHA", "player_steam_name:" + player_steam_name)
+    Log.e("TOHA", "viewState.value:" + viewState.value)
+
+
+
     when (val state = viewState.value) {
-        is ProfileState.IndefinedState -> {
-            UndefinedProfileView(state, navController, appSharedPreferences)
+        is ProfileState.UndefinedState -> {
+
+            UndefinedProfileView(state, viewModel, navController, player_tier, heroes_list_last_modified)
+
         }
-        is ProfileState.LoggedIntoSteam -> {
+        is ProfileState.SteamNameIsDefinedState -> {
             DefinedBySteamProfileView(
                 state,
+                viewModel,
+                player_tier,
+                heroes_list_last_modified,
                 navController,
-                appSharedPreferences
             ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit) }
 
         }
     }
+
     LaunchedEffect(key1 = Unit, block = {
+
+        // viewModel.player_steam_name
+
     })
 }
 
@@ -58,31 +89,48 @@ fun ProfileScreen(
 @Composable
 fun ProfileHeader(
     navController: NavController,
-    state: ProfileState,
-    appSharedPreferences: SharedPreferences
+    viewState: ProfileState,
+    viewModel: ProfileViewModel,
+    player_tier: String,
 ) {
 
-    var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png")}
+    var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png") }
     var tierDescription = "Tier undefined"
-    var profileTitle = "Profile"
+    lateinit var profileTitle : String
 
+    when (viewState) {
+        is ProfileState.UndefinedState -> {
+            profileTitle = "Profile"
+        }
+        is ProfileState.SteamNameIsDefinedState -> {
+            profileTitle = viewModel.getPlayerSteamNameFromSP()
+        }
+    }
+
+    tierImage =
+        "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+
+    tierDescription = player_tier + " tier"
+
+    /*
     when (state) {
         is ProfileState.IndefinedState -> {
-            if (state.player_tier != "undefined") {
+            if (player_tier != "undefined") {
                 tierImage =
-                    "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
-                tierDescription = state.player_tier[0] + " tier"
+                    "http://ratatoskr.ru/app/img/tier/" + player_tier + ".png"
+                tierDescription = player_tier + " tier"
             }
         }
         is ProfileState.LoggedIntoSteam -> {
-            if (state.player_tier != "undefined") {
+            if (player_tier != "undefined") {
                 tierImage =
-                    "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
-                tierDescription = state.player_tier[0] + " tier"
+                    "http://ratatoskr.ru/app/img/tier/" + player_tier + ".png"
+                tierDescription = player_tier + " tier"
             }
             profileTitle = state.steam_user_name
         }
     }
+    */
 
     Row(
         modifier = Modifier
@@ -181,13 +229,13 @@ fun ProfileHeader(
 @ExperimentalFoundationApi
 @Composable
 fun UndefinedProfileView(
-    state: ProfileState.IndefinedState,
+    state: ProfileState.UndefinedState,
+    viewModel: ProfileViewModel,
     navController: NavController,
-    appSharedPreferences: SharedPreferences,
+    player_tier: String,
+    heroes_list_last_modified: String,
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
-    val heroes_list_last_modified =
-        Date(appSharedPreferences.getLong("heroes_list_last_modified", 0))
 
     Box(
         modifier = Modifier
@@ -202,7 +250,7 @@ fun UndefinedProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeader(navController, state, appSharedPreferences)
+                ProfileHeader(navController, state, viewModel, player_tier)
             }
             item {
                 Row(
@@ -313,7 +361,7 @@ fun UndefinedProfileView(
 
 @ExperimentalFoundationApi
 @Composable
-fun topPicks(){
+fun topPicks() {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -388,13 +436,16 @@ fun topPicks(){
     ) {
 
 
-        var roles : List<String> = listOf("Carry","Nuker","Disabler","Durable","Support","Escape")
+        var roles: List<String> =
+            listOf("Carry", "Nuker", "Disabler", "Durable", "Support", "Escape")
 
         LazyRow(
             contentPadding = PaddingValues(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize(1F).padding(start = 15.dp, end = 15.dp)
+            modifier = Modifier
+                .fillMaxSize(1F)
+                .padding(start = 15.dp, end = 15.dp)
         ) {
             // display items horizontally
             items(roles.size) { item ->
@@ -412,19 +463,17 @@ fun topPicks(){
         }
 
 
-
-
-
-
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
 fun DefinedBySteamProfileView(
-    state: ProfileState.LoggedIntoSteam,
+    state: ProfileState.SteamNameIsDefinedState,
+    viewModel: ProfileViewModel,
+    player_tier: String,
+    heroes_list_last_modified: String,
     navController: NavController,
-    appSharedPreferences: SharedPreferences,
     onSteamExit: () -> Unit
 ) {
     Box(
@@ -440,7 +489,7 @@ fun DefinedBySteamProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeader(navController, state, appSharedPreferences)
+                ProfileHeader(navController, state, viewModel, player_tier)
             }
             item {
                 Row(
@@ -535,12 +584,7 @@ fun DefinedBySteamProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Heroes list last modified: " + Date(
-                                appSharedPreferences.getLong(
-                                    "heroes_list_last_modified",
-                                    0
-                                )
-                            )
+                            text = "Heroes list last modified: " + heroes_list_last_modified
                         )
                     }
 

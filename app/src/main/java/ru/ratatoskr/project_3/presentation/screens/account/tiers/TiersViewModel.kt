@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation.viewmodels
+package ru.ratatoskr.project_3.presentation.screens.account.tiers
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -8,37 +8,43 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.utils.EventHandler
-import ru.ratatoskr.project_3.domain.helpers.events.ProfileEvent
-import ru.ratatoskr.project_3.domain.helpers.states.ProfileState
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileEvent
+import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
 import ru.ratatoskr.project_3.domain.model.steam.SteamPlayer
 import ru.ratatoskr.project_3.domain.useCases.user.GetDotaBuffUserUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetOpenDotaUserUseCase
+import ru.ratatoskr.project_3.domain.useCases.user.GetPlayerTierFromSPUseCase
 import ru.ratatoskr.project_3.domain.useCases.user.GetSteamUserUseCase
+import ru.ratatoskr.project_3.presentation.screens.account.tiers.models.TiersEvent
+import ru.ratatoskr.project_3.presentation.screens.account.tiers.models.TiersState
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class TiersViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,
-    private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase
-) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
+    private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase,
+    getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase
+) : AndroidViewModel(Application()), EventHandler<TiersEvent> {
 
     var appSharedPreferences = appSharedPreferences
 
-    var player_tier = appSharedPreferences.getString("player_tier", "undefined")
-    var sp_heroes_list_last_modified =
-        appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
+    //var player_tier = appSharedPreferences.getString("player_tier", "undefined")
+    //var sp_heroes_list_last_modified = appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
-    private val _profile_state: MutableLiveData<ProfileState> =
-        MutableLiveData<ProfileState>(
-            ProfileState.IndefinedState(
-                player_tier!!,
-                sp_heroes_list_last_modified!!
+    private val player_tier_from_sp =
+        getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
+
+    private val _tiers_state: MutableLiveData<TiersState> =
+        MutableLiveData<TiersState>(
+            TiersState.IndefinedState(
+                player_tier_from_sp!!,
             )
         )
-    val profileState: LiveData<ProfileState> = _profile_state
+    val tiersState: LiveData<TiersState> = _tiers_state
 
+    /*
     private fun getResponseFromOpenDota(steam_user_id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var dbResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steam_user_id)
@@ -51,7 +57,8 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
+    */
+    /*
     private fun getResponseFromDotaBuff(player: SteamPlayer) {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -81,8 +88,8 @@ class ProfileViewModel @Inject constructor(
                     Log.e("TOHA", "player.personaname!!" + player.personaname!!)
                     Log.e("TOHA", "player_tier" + sp_tier)
                     Log.e("TOHA", "sp_heroes_list_last_modified" + sp_heroes_list_last_modified)
-                    _profile_state.postValue(
-                        ProfileState.LoggedIntoSteam(
+                    _tiers_state.postValue(
+                        TiersState.LoggedIntoSteam(
                             player.steamid,
                             player.avatarmedium!!,
                             player.personaname!!,
@@ -92,31 +99,33 @@ class ProfileViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _profile_state.postValue(ProfileState.ErrorProfileState)
+                _tiers_state.postValue(ProfileState.ErrorProfileState)
             }
 
 
         }
     }
+*/
 
-    override fun obtainEvent(event: ProfileEvent) {
+    override fun obtainEvent(event: TiersEvent) {
         Log.e("TOHA","obtainEvent")
-        when (profileState.value) {
-            is ProfileState.IndefinedState -> reduce(event)
-            is ProfileState.LoggedIntoSteam -> reduce(event)
+        when (tiersState.value) {
+            is TiersState.IndefinedState -> reduce(event)
+            is TiersState.DefinedState -> reduce(event)
         }
     }
 
-    private fun reduce(event: ProfileEvent) {
+    private fun reduce(event: TiersEvent) {
         Log.e("TOHA","reduce")
         when (event) {
-            is ProfileEvent.OnSteamLogin -> loginWithSteam(event)
-            is ProfileEvent.OnSteamExit -> exitSteam()
-            is ProfileEvent.OnTierChange -> selectTier(event)
+            //is TiersEvent.OnSteamLogin -> loginWithSteam(event)
+            //is TiersEvent.OnSteamExit -> exitSteam()
+            is TiersEvent.OnTierChange -> selectTier(event)
         }
     }
 
-    private fun loginWithSteam(event: ProfileEvent.OnSteamLogin) {
+/*
+    private fun loginWithSteam(event: TiersEvent.OnSteamLogin) {
 
         val user_id = event.steam_user_id
 
@@ -133,52 +142,51 @@ class ProfileViewModel @Inject constructor(
         }
 
     }
+*/
 
-    private fun selectTier(event: ProfileEvent.OnTierChange) {
+    private fun selectTier(event: TiersEvent.OnTierChange) {
         val selected_tier = event.selected_tier
         viewModelScope.launch(Dispatchers.IO) {
 
-            var state = profileState.value
+            var state = tiersState.value
 
             appSharedPreferences.edit().putString("player_tier", selected_tier).apply()
+            var curr_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
+            Log.d("TOHA","curr_tier:"+curr_tier);
 
             when (state) {
-                is ProfileState.IndefinedState -> {
+                is TiersState.IndefinedState -> {
                     try {
                         if (selected_tier != "undefined") {
-                            _profile_state.postValue(
-                                ProfileState.IndefinedState(
-                                    selected_tier,
-                                    state.heroes_list_last_modified
+                            _tiers_state.postValue(
+                                TiersState.IndefinedState(
+                                    selected_tier
                                 )
                             )
-                            Log.e("TOHA"," _profile_state:"+ _profile_state.value.toString())
+                            Log.e("TOHA"," _tiers_state:"+ _tiers_state.value.toString())
                         }
                     } catch (e: Exception) {
-                        _profile_state.postValue(ProfileState.ErrorProfileState)
+                        _tiers_state.postValue(TiersState.ErrorTiersState)
                     }
                 }
-                is ProfileState.LoggedIntoSteam -> {
+                is TiersState.DefinedState -> {
                     try {
                         if (selected_tier != "undefined") {
-                            _profile_state.postValue(
-                                ProfileState.LoggedIntoSteam(
-                                    state.steam_user_id,
-                                    state.steam_user_avatar,
-                                    state.steam_user_name,
+                            _tiers_state.postValue(
+                                TiersState.DefinedState(
                                     selected_tier,
-                                    state.heroes_list_last_modified
                                 )
                             )
                         }
                     } catch (e: Exception) {
-                        _profile_state.postValue(ProfileState.ErrorProfileState)
+                        _tiers_state.postValue(TiersState.ErrorTiersState)
                     }
                 }
             }
         }
     }
 
+/*
     private fun exitSteam() {
 
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
@@ -196,6 +204,8 @@ class ProfileViewModel @Inject constructor(
 
         }
     }
+    */
+
 }
 
 

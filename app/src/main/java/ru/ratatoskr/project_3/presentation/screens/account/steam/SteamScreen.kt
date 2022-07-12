@@ -28,9 +28,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamEvent
-import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
 import ru.ratatoskr.project_3.presentation.theme.BGBox
-import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.steam.models.SteamState
 
@@ -42,14 +40,18 @@ fun SteamScreen(
     viewModel: SteamViewModel,
     appSharedPreferences: SharedPreferences,
 ) {
+    //var player_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
+    //viewModel.getPlayerTierFromSP()
+
+    var player_tier = viewModel.getPlayerTierFromSP()
     when (val state = viewState.value) {
         is SteamState.IndefinedState -> {
-            SteamSignInView(navController, state, appSharedPreferences) {
+            SteamSignInView(navController, state, player_tier) {
                 viewModel.obtainEvent(SteamEvent.OnSteamLogin(it))
             }
         }
         is SteamState.LoggedIntoSteam -> {
-            SteamLoggedInView(navController, state, appSharedPreferences)
+            SteamLoggedInView(navController, state, state.player_tier)
         }
     }
     LaunchedEffect(key1 = Unit, block = {
@@ -60,8 +62,8 @@ fun SteamScreen(
 @Composable
 fun SteamLoggedInView(
     navController: NavController,
-    state: ProfileState.LoggedIntoSteam,
-    appSharedPreferences: SharedPreferences,
+    state: SteamState,
+    player_tier:String
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
@@ -78,7 +80,7 @@ fun SteamLoggedInView(
         ) {
 
             stickyHeader {
-                SteamHeader(navController, state, appSharedPreferences)
+                SteamHeader(navController, state, player_tier)
             }
             item {
                 Row(
@@ -135,8 +137,8 @@ fun SteamLoggedInView(
 @Composable
 fun SteamSignInView(
     navController: NavController,
-    state: SteamState.IndefinedState,
-    appSharedPreferences: SharedPreferences,
+    state:SteamState,
+    player_tier: String,
     onAuthorizeChange: (String) -> Unit
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
@@ -154,7 +156,7 @@ fun SteamSignInView(
         ) {
 
             stickyHeader {
-                SteamHeader(navController, state, appSharedPreferences)
+                SteamHeader(navController, state, player_tier)
             }
             item {
                 Row(
@@ -261,12 +263,24 @@ fun SteamSignInView(
 fun SteamHeader(
     navController: NavController,
     state: SteamState,
-    appSharedPreferences: SharedPreferences
+    player_tier: String,
 ) {
     var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png") }
-    var tierDescription = "Tier undefined"
-    var steamTitle = "Sign in with Steam"
+    var tierDescription by remember { mutableStateOf("Tier undefined") }
+    var steamTitle by remember { mutableStateOf("Sign in with Steam") }
 
+    tierImage =
+        "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+
+    tierDescription = player_tier + " tier"
+
+    when (state) {
+        is SteamState.LoggedIntoSteam -> {
+            steamTitle = state.steam_user_name
+        }
+    }
+
+    /*
     when (state) {
         is ProfileState.IndefinedState -> {
             if (state.player_tier != "undefined") {
@@ -284,6 +298,7 @@ fun SteamHeader(
             steamTitle = state.steam_user_name
         }
     }
+    */
 
     Row(
         modifier = Modifier

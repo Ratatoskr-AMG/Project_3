@@ -26,28 +26,31 @@ import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.account.profile.models.ProfileState
 import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.tiers.TiersViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.tiers.models.TiersEvent
+import ru.ratatoskr.project_3.presentation.screens.account.tiers.models.TiersState
 
 @ExperimentalFoundationApi
 @Composable
 fun TiersScreen(
     navController: NavController,
-    viewState: State<ProfileState?>,
-    viewModel: ProfileViewModel,
+    viewState: State<TiersState?>,
+    viewModel: TiersViewModel,
     appSharedPreferences: SharedPreferences
 ) {
 
     when (val viewState = viewState.value) {
-        is ProfileState.IndefinedState -> {
+        is TiersState.IndefinedState -> {
             TiersView(navController, viewState, appSharedPreferences) {
                 viewModel.obtainEvent(
-                    ProfileEvent.OnTierChange(it)
+                    TiersEvent.OnTierChange(it)
                 )
             }
         }
-        is ProfileState.LoggedIntoSteam -> {
+        is TiersState.DefinedState -> {
             TiersView(navController, viewState, appSharedPreferences) {
                 viewModel.obtainEvent(
-                    ProfileEvent.OnTierChange(it)
+                    TiersEvent.OnTierChange(it)
                 )
             }
         }
@@ -61,7 +64,7 @@ fun TiersScreen(
 @Composable
 fun TiersHeader(
     navController: NavController,
-    state: ProfileState,
+    state: TiersState,
     appSharedPreferences: SharedPreferences
 ) {
     var tierImage by remember {mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png")}
@@ -69,20 +72,20 @@ fun TiersHeader(
     var tierTitle = "Select your tier"
 
     when (state) {
-        is ProfileState.IndefinedState -> {
+        is TiersState.IndefinedState -> {
             if (state.player_tier != "undefined") {
                 tierImage =
                     "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
                 tierDescription = state.player_tier[0] + " tier"
             }
         }
-        is ProfileState.LoggedIntoSteam -> {
+        is TiersState.DefinedState -> {
             if (state.player_tier != "undefined") {
                 tierImage =
                     "http://ratatoskr.ru/app/img/tier/" + state.player_tier[0] + ".png"
                 tierDescription = state.player_tier[0] + " tier"
             }
-            tierTitle = state.steam_user_name
+            tierTitle = "Your tier"
         }
     }
 
@@ -183,20 +186,20 @@ fun TiersHeader(
 @Composable
 fun tierRow(
     tierNum: Int,
-    viewState: ProfileState,
+    viewState: TiersState,
     OnTierChange: (String) -> Unit
 ) {
 
     var selectedTier by remember { mutableStateOf("0") }
 
     when (viewState) {
-        is ProfileState.IndefinedState -> {
+        is TiersState.IndefinedState -> {
             Log.e("TOHA","viewState.player_tier="+viewState.player_tier)
             if (viewState.player_tier != "undefined") {
                 selectedTier = viewState.player_tier[0] + ""
             }
         }
-        is ProfileState.LoggedIntoSteam -> {
+        is TiersState.DefinedState -> {
             if (viewState.player_tier != "undefined") {
                 selectedTier = viewState.player_tier[0] + ""
             }
@@ -292,7 +295,7 @@ fun tierRow(
 @Composable
 fun TiersView(
     navController: NavController,
-    viewState: ProfileState,
+    viewState: TiersState,
     appSharedPreferences: SharedPreferences,
     onTierChange: (String) -> Unit,
 ) {

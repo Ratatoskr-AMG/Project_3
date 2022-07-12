@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.domain.repository
 
+import android.content.SharedPreferences
 import io.ktor.client.*
 import io.ktor.client.request.*
 import ru.ratatoskr.project_3.domain.model.OpenDotaResponse
@@ -12,6 +13,24 @@ import javax.inject.Inject
 class AppUserRepoImpl @Inject constructor(
     private val httpAppClient: HttpClient
 ) {
+
+    fun getPlayerTierFromSP(appSharedPreferences: SharedPreferences):String{
+        return appSharedPreferences.getString("player_tier", "undefined").toString()
+    }
+
+    fun setPlayerTierToSP(appSharedPreferences: SharedPreferences, tier:String){
+        appSharedPreferences.edit().putString("player_tier",tier)
+            .apply();
+    }
+
+    fun getPlayerSteamNameFromSP(appSharedPreferences: SharedPreferences):String{
+        return appSharedPreferences.getString("player_steam_name", "undefined").toString()
+    }
+
+    fun setPlayerSteamNameToSP(appSharedPreferences: SharedPreferences,name:String){
+        appSharedPreferences.edit().putString("player_steam_name",name)
+            .apply();
+    }
 
     suspend fun getResponseFromOpenDota(steam_user_id: String): OpenDotaResponse {
         val Url = "https://api.opendota.com/api/players/$steam_user_id";

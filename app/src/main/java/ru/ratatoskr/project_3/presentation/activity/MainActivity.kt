@@ -37,6 +37,7 @@ import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
+import ru.ratatoskr.project_3.presentation.screens.account.tiers.TiersViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
@@ -60,8 +61,7 @@ class MainActivity() : AppCompatActivity() {
                 )
 
                 val navController = rememberNavController()
-                val profileViewModel = hiltViewModel<ProfileViewModel>()
-                val profileViewState = profileViewModel.profileState.observeAsState()
+
 
                 var bottomNavMenuHeight = 80.dp
 
@@ -171,7 +171,9 @@ class MainActivity() : AppCompatActivity() {
 
                         composable(Screens.Profile.route) {
                             //stopPlayer(videoViewState)
-                            ProfileScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
+                            val profileViewModel = hiltViewModel<ProfileViewModel>()
+
+                            ProfileScreen(navController, profileViewModel, appSharedPreferences)
                         }
                         composable(Screens.Steam.route) {
                             val steamViewModel = hiltViewModel<SteamViewModel>()
@@ -180,7 +182,9 @@ class MainActivity() : AppCompatActivity() {
                         }
                         composable(Screens.Tier.route) {
                             //stopPlayer(videoViewState)
-                            TiersScreen(navController, profileViewState, profileViewModel, appSharedPreferences)
+                            val tiersViewModel = hiltViewModel<TiersViewModel>()
+                            val tiersViewState = tiersViewModel.tiersState.observeAsState()
+                            TiersScreen(navController, tiersViewState, tiersViewModel, appSharedPreferences)
                         }
 
                         composable(Screens.Video.route) { navBackStack ->

@@ -1,7 +1,6 @@
-package ru.ratatoskr.project_3.presentation.viewmodels
+package ru.ratatoskr.project_3.presentation.screens.favorites
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
@@ -9,15 +8,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.extensions.set
-import ru.ratatoskr.project_3.domain.helpers.states.HeroesListState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
 import ru.ratatoskr.project_3.domain.useCases.heroes.*
+import ru.ratatoskr.project_3.presentation.screens.favorites.models.FavoritesState
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class HeroesListViewModel @Inject constructor(
+class FavoritesViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
@@ -29,17 +28,17 @@ class HeroesListViewModel @Inject constructor(
 
     var appSharedPreferences = appSharedPreferences
 
-    val _heroesList_state: MutableLiveData<HeroesListState> =
-        MutableLiveData<HeroesListState>(HeroesListState.LoadingHeroesListState())
-    val heroesListState: LiveData<HeroesListState> = _heroesList_state
+    val _favoritesList_state: MutableLiveData<FavoritesState> =
+        MutableLiveData<FavoritesState>(FavoritesState.LoadingHeroesState())
+    val favoritesState: LiveData<FavoritesState> = _favoritesList_state
 
     fun switchAttrSortDirection(attr: String, sortAsc: Boolean) {
         Log.e("TOHA_test", "switchAttrSortDirection")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr, sortAsc)
-                _heroesList_state.postValue(
-                    HeroesListState.LoadedHeroesListState(
+                _favoritesList_state.postValue(
+                    FavoritesState.LoadedHeroesState(
                         heroes,
                         "",
                         sortAsc
@@ -54,7 +53,7 @@ class HeroesListViewModel @Inject constructor(
     }
 
     fun getAllHeroesSortByName() {
-        _heroesList_state.set(HeroesListState.LoadingHeroesListState())
+        _favoritesList_state.set(FavoritesState.LoadingHeroesState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByStrSortByName("")
@@ -74,8 +73,8 @@ class HeroesListViewModel @Inject constructor(
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesByStrSortByName(str)
                 if (!heroes.isEmpty()) {
-                    _heroesList_state.postValue(
-                        HeroesListState.LoadedHeroesListState(
+                    _favoritesList_state.postValue(
+                        FavoritesState.LoadedHeroesState(
                             heroes,
                             str,
                             false
@@ -98,13 +97,13 @@ class HeroesListViewModel @Inject constructor(
                 var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
 
                 if (heroes.isEmpty()) {
-                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes from API list"))
+                    _favoritesList_state.postValue(FavoritesState.NoHeroesState("Empty Heroes from API list"))
                 } else {
                     addHeroesUserCase.addHeroes(heroes)
                     appSharedPreferences.edit().putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time).apply();
                     Log.e("TOHA","All heroes updated at:"+Date(System.currentTimeMillis()).time)
-                    _heroesList_state.postValue(
-                        HeroesListState.LoadedHeroesListState(
+                    _favoritesList_state.postValue(
+                        FavoritesState.LoadedHeroesState(
                             heroes = heroes.sortedBy { it.localizedName },
                             "",
                             false
@@ -114,43 +113,23 @@ class HeroesListViewModel @Inject constructor(
 
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
-                _heroesList_state.postValue(HeroesListState.NoHeroesListState(e.toString()))
+                _favoritesList_state.postValue(FavoritesState.NoHeroesState(e.toString()))
             }
         }
     }
 
-    fun getAllHeroesByAttr(attr: String) {
-        _heroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr, false)
-                if (heroes.isEmpty()) {
-                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes by attr list"))
-                } else {
-                    _heroesList_state.postValue(
-                        HeroesListState.LoadedHeroesListState(
-                            heroes = heroes,
-                            "",
-                            false
-                        )
-                    )
-                }
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
+
 
     fun getAllFavoriteHeroes() {
-        _heroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
+        _favoritesList_state.set(newValue = FavoritesState.LoadingHeroesState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
                 if (heroes.isEmpty()) {
-                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty favorite heroes list"))
+                    _favoritesList_state.postValue(FavoritesState.NoHeroesState("Empty favorite heroes list"))
                 } else {
-                    _heroesList_state.postValue(
-                        HeroesListState.LoadedHeroesListState(
+                    _favoritesList_state.postValue(
+                        FavoritesState.LoadedHeroesState(
                             heroes = heroes,
                             "",
                             false
@@ -163,27 +142,4 @@ class HeroesListViewModel @Inject constructor(
         }
     }
 
-    fun getAllHeroesByRole(role: String) {
-        _heroesList_state.set(newValue = HeroesListState.LoadingHeroesListState())
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val heroes = getAllHeroesByRoleUseCase.getAllHeroesByRole(role)
-
-                if (heroes.isEmpty()) {
-                    _heroesList_state.postValue(HeroesListState.NoHeroesListState("Empty Heroes by attr list"))
-                } else {
-
-                    _heroesList_state.postValue(
-                        HeroesListState.LoadedHeroesListState(
-                            heroes = heroes,
-                            "",
-                            false
-                        )
-                    )
-                }
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
 }

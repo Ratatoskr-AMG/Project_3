@@ -12,7 +12,6 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -35,11 +34,14 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.presentation.screens.*
-import ru.ratatoskr.project_3.presentation.screens.account.profile.ProfileViewModel
-import ru.ratatoskr.project_3.presentation.screens.account.steam.SteamViewModel
-import ru.ratatoskr.project_3.presentation.screens.account.tiers.TiersViewModel
-import ru.ratatoskr.project_3.presentation.screens.heroes.home.HomeScreen
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroViewModel
+import ru.ratatoskr.project_3.presentation.screens.attribute.AttributeViewModel
+import ru.ratatoskr.project_3.presentation.screens.favorites.FavoritesViewModel
+import ru.ratatoskr.project_3.presentation.screens.profile.ProfileViewModel
+import ru.ratatoskr.project_3.presentation.screens.steam.SteamViewModel
+import ru.ratatoskr.project_3.presentation.screens.tiers.TiersViewModel
+import ru.ratatoskr.project_3.presentation.screens.home.HomeScreen
+import ru.ratatoskr.project_3.presentation.screens.hero.models.HeroViewModel
+import ru.ratatoskr.project_3.presentation.screens.tiers.TiersScreen
 import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
 import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
 
@@ -51,21 +53,19 @@ class MainActivity() : AppCompatActivity() {
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val appSharedPreferences = this.getSharedPreferences(
+            APP_SHARED_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
+        )
+
         setContent {
             rememberSystemUiController().setStatusBarColor(color = Color.Transparent)
             ProvideWindowInsets {
-
-                val appSharedPreferences = this.getSharedPreferences(
-                    APP_SHARED_PREFERENCES_NAME,
-                    Context.MODE_PRIVATE
-                )
-
                 val navController = rememberNavController()
-
-
                 var bottomNavMenuHeight = 80.dp
-
                 Scaffold(
                     modifier = Modifier.navigationBarsPadding(),
                     bottomBar = {
@@ -97,7 +97,12 @@ class MainActivity() : AppCompatActivity() {
                             backgroundColor = Color(0xFF000000)
                         ) {
                             val items =
-                                listOf(Screens.Home, Screens.Favorites, Screens.Profile, Screens.Video)
+                                listOf(
+                                    Screens.Home,
+                                    Screens.Favorites,
+                                    Screens.Profile,
+                                    Screens.Video
+                                )
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentDestination = navBackStackEntry?.destination
 
@@ -134,7 +139,6 @@ class MainActivity() : AppCompatActivity() {
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
-                            // stopPlayer(videoViewState)
                             val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
                             HomeScreen(
                                 viewModel = heroesListviewModel,
@@ -142,7 +146,6 @@ class MainActivity() : AppCompatActivity() {
                             )
                         }
                         composable(Screens.Hero.route + "/{id}") { navBackStack ->
-                            //stopPlayer(videoViewState)
                             val id = navBackStack.arguments?.getString("id").toString()
                             val heroViewModel = hiltViewModel<HeroViewModel>()
                             HeroScreen(
@@ -152,40 +155,32 @@ class MainActivity() : AppCompatActivity() {
                             )
                         }
                         composable(Screens.Role.route + "/{role}") { navBackStack ->
-                            // stopPlayer(videoViewState)
                             val role = navBackStack.arguments?.getString("role")
                             val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                            HeroesByRoleScreen(role!!, heroesListviewModel, navController)
+                            RoleScreen(role!!, heroesListviewModel, navController)
                         }
                         composable(Screens.Attr.route + "/{attr}/{id}") { navBackStack ->
-                            //stopPlayer(videoViewState)
                             val attr = navBackStack.arguments?.getString("attr")
                             val id = navBackStack.arguments?.getString("id")
-                            val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                            AttributeScreen(attr!!, id!!, heroesListviewModel, navController)
+                            val attributeListviewModel = hiltViewModel<AttributeViewModel>()
+                            AttributeScreen(attr!!, id!!, attributeListviewModel, navController)
                         }
                         composable(Screens.Favorites.route) {
-                            //stopPlayer(videoViewState)
-                            val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                            FavoritesScreen(heroesListviewModel, navController)
+                            val favoritesViewModel = hiltViewModel<FavoritesViewModel>()
+                            FavoritesScreen(favoritesViewModel, navController)
                         }
 
                         composable(Screens.Profile.route) {
-                            //stopPlayer(videoViewState)
                             val profileViewModel = hiltViewModel<ProfileViewModel>()
-
                             ProfileScreen(navController, profileViewModel, appSharedPreferences)
                         }
                         composable(Screens.Steam.route) {
                             val steamViewModel = hiltViewModel<SteamViewModel>()
-                            val steamViewState = steamViewModel.steamState.observeAsState()
-                            SteamScreen(navController, steamViewState, steamViewModel,appSharedPreferences)
+                            SteamScreen(navController, steamViewModel, appSharedPreferences)
                         }
                         composable(Screens.Tier.route) {
-                            //stopPlayer(videoViewState)
                             val tiersViewModel = hiltViewModel<TiersViewModel>()
-                            val tiersViewState = tiersViewModel.tiersState.observeAsState()
-                            TiersScreen(navController, tiersViewState, tiersViewModel, appSharedPreferences)
+                            TiersScreen(navController, tiersViewModel, appSharedPreferences)
                         }
 
                         composable(Screens.Video.route) { navBackStack ->

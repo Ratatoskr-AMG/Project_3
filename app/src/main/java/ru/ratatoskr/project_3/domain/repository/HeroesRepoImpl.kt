@@ -24,10 +24,10 @@ class HeroesRepoImpl @Inject constructor(
         }
     }
 
-
     suspend fun   getHeroById(heroId: String): Hero {
         return roomAppDatabase.heroesDao().fetchHero(heroId.toInt())
     }
+
     suspend fun updateHeroesList(
         Heroes: List<Hero>
     ) {

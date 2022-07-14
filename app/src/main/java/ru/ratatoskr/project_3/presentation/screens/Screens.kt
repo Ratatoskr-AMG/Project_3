@@ -1,7 +1,5 @@
-package ru.ratatoskr.project_3.domain.helpers
+package ru.ratatoskr.project_3.presentation.screens
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import ru.ratatoskr.project_3.R
 
 sealed class Screens(val route: String, val description: Int = 0, val icon_tr: Int = 0, val icon_wh: Int = 0) {

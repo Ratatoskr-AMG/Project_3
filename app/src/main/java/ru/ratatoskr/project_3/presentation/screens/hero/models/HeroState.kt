@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.helpers.states
+package ru.ratatoskr.project_3.presentation.screens.hero.models
 import ru.ratatoskr.project_3.domain.model.Hero
 
 sealed class HeroState {

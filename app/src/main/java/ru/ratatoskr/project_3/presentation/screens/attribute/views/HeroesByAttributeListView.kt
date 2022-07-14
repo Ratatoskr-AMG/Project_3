@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.model.Hero
-import ru.ratatoskr.project_3.presentation.screens.home.rememberForeverLazyListState
+import ru.ratatoskr.project_3.domain.utils.rememberForeverLazyListState
 
 @ExperimentalFoundationApi
 @Composable

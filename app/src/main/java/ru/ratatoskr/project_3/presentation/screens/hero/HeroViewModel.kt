@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.presentation.screens.hero.models
+package ru.ratatoskr.project_3.presentation.screens.hero
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,8 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.utils.EventHandler
 import ru.ratatoskr.project_3.domain.extensions.set
-import ru.ratatoskr.project_3.domain.helpers.events.HeroEvent
-import ru.ratatoskr.project_3.domain.helpers.states.HeroState
+import ru.ratatoskr.project_3.presentation.screens.hero.models.HeroEvent
+import ru.ratatoskr.project_3.presentation.screens.hero.models.HeroState
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.useCases.favorites.InsertHeroToFavoritesUseCase
 import ru.ratatoskr.project_3.domain.useCases.favorites.DropHeroFromFavoritesUseCase
@@ -29,6 +29,37 @@ class HeroViewModel @Inject constructor(
 
     private val _heroState: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
     val heroState: LiveData<HeroState> = _heroState
+
+    fun getHeroById(id: String) {
+
+        _heroState.set(newValue = HeroState.LoadingHeroState())
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+                val hero = getHeroByIdUseCase.GetHeroById(id)
+
+
+                if (hero.id < 1) {
+                    //переносим в ЮзКейс трайкетч
+                    _heroState.postValue(HeroState.NoHeroState())
+                } else {
+                    _heroState.postValue(
+                        HeroState.HeroLoadedState(
+                            hero = hero,
+                            isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
+                        )
+                    )
+                }
+            } catch (e: java.lang.Exception) {
+                /*
+                Здесь следует измененять состояние, а не просто печатать в лог
+                 */
+                Log.e("TOHA", "getHeroById exception:" + e.toString());
+                e.printStackTrace()
+            }
+        }
+    }
 
     override fun obtainEvent(event: HeroEvent) {
         when (val currentState = _heroState.value) {
@@ -59,7 +90,7 @@ class HeroViewModel @Inject constructor(
                 } catch (e: Exception) {
                     _heroState.postValue(HeroState.ErrorHeroState())
                 }
-            }else{
+            } else {
                 try {
                     insertHeroToFavoritesUseCase.insertHeroToFavorites(hero.id)
                     _heroState.postValue(
@@ -76,34 +107,4 @@ class HeroViewModel @Inject constructor(
 
     }
 
-    fun getHeroById(id: String) {
-
-        _heroState.set(newValue = HeroState.LoadingHeroState())
-
-        viewModelScope.launch(Dispatchers.IO) {
-
-            try {
-                val hero = getHeroByIdUseCase.GetHeroById(id)
-
-
-                if (hero.id < 1) {
-                    //переносим в ЮзКейс трайкетч
-                    _heroState.postValue(HeroState.NoHeroState())
-                } else {
-                    _heroState.postValue(
-                        HeroState.HeroLoadedState(
-                            hero = hero,
-                            isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
-                        )
-                    )
-                }
-            } catch (e: java.lang.Exception) {
-                /*
-                Здесь следует измененять состояние, а не просто печатать в лог
-                 */
-                Log.e("TOHA","getHeroById exception:"+e.toString());
-                e.printStackTrace()
-            }
-        }
-    }
 }

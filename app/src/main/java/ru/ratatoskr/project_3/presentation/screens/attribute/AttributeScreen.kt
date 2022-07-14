@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
-import ru.ratatoskr.project_3.domain.helpers.Screens
 import ru.ratatoskr.project_3.presentation.screens.attribute.AttributeViewModel
 import ru.ratatoskr.project_3.presentation.screens.attribute.models.AttributeState
 import ru.ratatoskr.project_3.presentation.screens.attribute.views.HeroesByAttributeListView

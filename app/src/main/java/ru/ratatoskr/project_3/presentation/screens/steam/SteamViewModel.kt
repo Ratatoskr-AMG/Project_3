@@ -20,7 +20,7 @@ class SteamViewModel @Inject constructor(
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase,
-    getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
+    private val getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
     setPlayerTierToSPUseCase: SetPlayerTierToSPUseCase,
     setPlayerSteamNameToSPUseCase: SetPlayerSteamNameToSPUseCase
 ) : AndroidViewModel(Application()), EventHandler<SteamEvent> {
@@ -39,7 +39,7 @@ class SteamViewModel @Inject constructor(
     val steamState: LiveData<SteamState> = _steam_state
 
     fun getPlayerTierFromSP(): String {
-        return player_tier_from_sp
+        return getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
     }
 
     private fun getResponseFromOpenDota(steam_user_id: String) {
@@ -71,9 +71,7 @@ class SteamViewModel @Inject constructor(
             if (openDotaResponse.rank_tier != null) {
                 var rank_tier = openDotaResponse.rank_tier.toString()
                 appSharedPreferences.edit().putString("player_tier", rank_tier).apply()
-                var curr_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
 
-                //Log.d("TOHA","steam_curr_tier:"+curr_tier);
 
             } else {
                 appSharedPreferences.edit().putString("player_tier", "undefined")
@@ -90,9 +88,6 @@ class SteamViewModel @Inject constructor(
                     setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(appSharedPreferences,player.personaname!!)
                     setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,sp_tier)
 
-                    //Log.e("TOHA", "player.personaname!!" + player.personaname!!)
-                    //Log.e("TOHA", "player_tier" + sp_tier)
-                    //Log.e("TOHA", "sp_heroes_list_last_modified" + sp_heroes_list_last_modified)
                     _steam_state.postValue(
                         SteamState.LoggedIntoSteam(
                             player.steamid,
@@ -123,7 +118,6 @@ class SteamViewModel @Inject constructor(
         Log.e("TOHA", "reduce")
         when (event) {
             is SteamEvent.OnSteamLogin -> loginWithSteam(event)
-            //is SteamEvent.OnSteamExit -> exitSteam()
         }
     }
 

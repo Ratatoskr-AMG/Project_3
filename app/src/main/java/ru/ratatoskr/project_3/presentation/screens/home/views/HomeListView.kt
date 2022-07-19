@@ -50,7 +50,7 @@ fun HomeListView(
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
-    var scrollState = rememberForeverLazyListState(key = "Overview")
+    var scrollState = rememberForeverLazyListState(key = "Home")
     val configuration = LocalConfiguration.current
     var listColumnsCount = 4
     var listBannerHeight: Dp = 240.dp

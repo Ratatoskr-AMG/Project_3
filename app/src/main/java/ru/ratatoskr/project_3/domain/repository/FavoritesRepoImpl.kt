@@ -11,7 +11,6 @@ class FavoritesRepoImpl @Inject constructor(
 ) {
 
     suspend fun dropHeroFromFavorites(heroId: Int){
-
         roomAppDatabase.favoritesDao().dropFavorite(heroId!!)
     }
 

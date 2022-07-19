@@ -2,17 +2,17 @@ package ru.ratatoskr.project_3.presentation.screens.favorites
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.ratatoskr.project_3.domain.extensions.set
 import ru.ratatoskr.project_3.domain.model.Hero
+import ru.ratatoskr.project_3.domain.useCases.favorites.DropHeroFromFavoritesUseCase
 import ru.ratatoskr.project_3.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
 import ru.ratatoskr.project_3.domain.useCases.heroes.*
 import ru.ratatoskr.project_3.presentation.screens.favorites.models.FavoritesState
-import java.util.*
+
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +20,7 @@ class FavoritesViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
+    private val dropHeroFromFavorites: DropHeroFromFavoritesUseCase,
 ) : AndroidViewModel(Application()) {
 
     var appSharedPreferences = appSharedPreferences
@@ -37,10 +38,8 @@ class FavoritesViewModel @Inject constructor(
                     _favoritesList_state.postValue(FavoritesState.NoHeroesState("Empty favorite heroes list"))
                 } else {
                     _favoritesList_state.postValue(
-                        FavoritesState.LoadedHeroesState(
-                            heroes = heroes,
-                            "",
-                            false
+                        FavoritesState.LoadedHeroesState<Hero>(
+                            heroes = heroes
                         )
                     )
                 }
@@ -50,4 +49,28 @@ class FavoritesViewModel @Inject constructor(
         }
     }
 
+
+    fun removeFromFavorites(hero: Hero, heroes:List<Hero>) {
+        viewModelScope.launch {
+            try {
+                dropHeroFromFavorites.dropHeroFromFavorites(hero.id)
+                if(heroes.isNotEmpty()) {
+                    _favoritesList_state.postValue(
+                        FavoritesState.LoadedHeroesState<Hero>(
+                            heroes = heroes,
+                        )
+                    )
+                }else{
+                    _favoritesList_state.postValue(
+                        FavoritesState.NoHeroesState("No heroes found")
+                    )
+                }
+
+            } catch (e: Exception) {
+                _favoritesList_state.postValue(FavoritesState.ErrorHeroesState(e.message.toString()))
+            }
+
+        }
+
+    }
 }

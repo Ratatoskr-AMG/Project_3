@@ -7,6 +7,4 @@ class FavoritesContract {
         const val COLUMN_HERO_ID = "heroId"
         const val FAVORITES_TABLE_NAME = "favorites"
     }
-
-
 }

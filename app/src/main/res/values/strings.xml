@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">Project_3</string>
     <string name="title_home">Heroes</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="title_hero">Hero</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_profile">Profile</string>
     <string name="video_string">Video</string>
     <string name="role_string">Role</string>
     <string name="title_attr">Attr</string>
+    <string name="loading">Loading...</string>
+    <string name="heroes_not_found">Heroes not found...</string>
+    <string name="error">Error!</string>
 </resources>

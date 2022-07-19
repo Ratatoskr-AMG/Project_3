@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Изделие_3</string>
+    <string name="title_home">Герои</string>
+    <string name="title_hero">Герой</string>
+    <string name="title_favorites">Избранное</string>
+    <string name="title_profile">Профиль</string>
+    <string name="video_string">Видео</string>
+    <string name="role_string">Роль</string>
+    <string name="title_attr">Атрибут</string>
+    <string name="loading">Загрузка...</string>
+    <string name="heroes_not_found">Герои не найдены...</string>
+    <string name="error">Ошибка!</string>
+</resources>

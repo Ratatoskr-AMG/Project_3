@@ -4,16 +4,14 @@ class Questions {
     companion object {
         fun q1() {
             /*
-                 Если не ошибаюсь, здесь нужно сделать фабрику? распедалить модели по хатам
+
             */
         }
         fun q2() {
             /*
-                Как правильно сделать onDispose, чтобы убрать метод stopPlayer
-                из MainActivity
+
             */
         }
-
         fun qX() {
         /*
             #########
@@ -21,39 +19,29 @@ class Questions {
         }
     }
 }
+
 /* Другие вопросы
-    Архитектура +
-    Позырить developer.huawei.com
-    Название (Dota Heroes Comparing Doheco)
 
-LocalConfiguration.current  (width, height)
-1. получаю ширину
-2. узнаю текущий элемент (scrollState)
-3. переменную делаем mutableState
-4. swipeable модификатор
+1. Как разбить contracts  по фичам
+2. Как правильно работать с темами
+
 */
-
 
 /* Архитектура
 data
     contracts (названия таблиц и столбцов в БД) можно разбить по фичам (!)
     converters (Roles List <-> Roles String)
-    remote (?)
-        implementations
-        services
     dao (база данных, запросы)
 domain
-    base (?)
     di (модули для ktor)
-    helpers (состояния, события, перечень экранов) -
     model (дата классы: героя, избранного, пользователей и т.п.)
     repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)
     useCases (добавить в избранное, получить списки героев, данные о пользователе и т.п.)
+    utils (вспомогательные конструкции)
 presentation
     activity (Точки входа)
     screens (Вёрстка)
     theme (Стили)
-    viewModels(Состояния) разнести по экранам (!)
 */
 /* Задания:
     helpers (состояния, события, перечень экранов) перенести к экранам
@@ -64,6 +52,8 @@ presentation
     Рефакторинг
 */
 /* Пройдено:
+Позырить developer.huawei.com +
+Название (Dota Heroes Comparing DoHeСo) +
 Аккаунт Huawei App Gallery +
 Модуль клиент +
 Карточка героя +
@@ -90,6 +80,12 @@ presentation
 + Как учесть кражу мобилы? (привязка устройств на стороне сервиса)
 + Как обойти снифферы? Оконечное шифрование!
 + Как обойти получение ссылки на видео? Blob(?) blob:// Класть видео в базу, сторонние сервисы
+
+LocalConfiguration.current  (width, height)
+1. получаю ширину
+2. узнаю текущий элемент (scrollState)
+3. переменную делаем mutableState
+4. swipeable модификатор
 
 Google PLay Market: No in-app
 + Huawei App Gallery (Android HMS)

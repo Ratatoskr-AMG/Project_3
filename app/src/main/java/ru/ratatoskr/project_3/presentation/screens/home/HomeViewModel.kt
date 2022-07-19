@@ -36,9 +36,11 @@ class HomeViewModel @Inject constructor(
         _heroesList_state.set(HomeState.LoadingHomeState())
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val heroes = getAllHeroesByStrSortByName("")
+                val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
                 if (heroes!!.isEmpty()) {
                     getAllHeroesFromApi(appSharedPreferences)
+                }else {
+                    getAllHeroesByStrSortByName("")
                 }
             } catch (e: java.lang.Exception) {
                 Log.e("TOHA", "e:" + e.toString())
@@ -47,8 +49,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getAllHeroesByStrSortByName(str: String): List<Hero>?  {
-        lateinit var heroes : List<Hero>
+    fun getAllHeroesByStrSortByName(str: String)  {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesByStrSortByName(str)
@@ -66,7 +67,6 @@ class HomeViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
-        return heroes
     }
 
     suspend fun getAllHeroesFromApi(appSharedPreferences:SharedPreferences) {

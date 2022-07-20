@@ -179,8 +179,8 @@ fun RoleListView(
                 }
             }
 
-            var listRowsCount = heroes.size / listColumnsCount
-            if (heroes.size % listColumnsCount > 0) {
+            var listRowsCount = heroes.size / (listColumnsCount+1)
+            if (heroes.size % (listColumnsCount+1) > 0) {
                 listRowsCount += 1
             }
 
@@ -192,7 +192,7 @@ fun RoleListView(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         for (column in 0..listColumnsCount) {
-                            var index = column + (row * listColumnsCount)
+                            var index = column + (row * (listColumnsCount+1))
                             if (index <= heroes.size - 1) {
                                 var hero = heroes.get(index)
                                 Box(modifier = Modifier

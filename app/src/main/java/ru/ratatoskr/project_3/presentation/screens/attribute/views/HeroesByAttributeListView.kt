@@ -1,13 +1,13 @@
 package ru.ratatoskr.project_3.presentation.screens.attribute.views
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,19 +15,24 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.data.converters.pixelsToDp
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.utils.rememberForeverLazyListState
 
@@ -45,6 +50,9 @@ fun HeroesByAttributeListView(
     val configuration = LocalConfiguration.current
     val heroes = data.mapNotNull { it as? Hero }
     var scrollState = rememberForeverLazyListState(key = "Attr_" + attr)
+    var context = LocalContext.current
+    var scrollIconPosition by remember { mutableStateOf(5F) }
+
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPostScroll(
@@ -57,6 +65,14 @@ fun HeroesByAttributeListView(
             }
         }
     }
+    Log.e("TOHA3","id:"+id)
+    var hero: Hero = heroes[0]
+    heroes.forEach {
+        if (id.toInt() == it.id) {
+            hero=it
+            return@forEach
+        }
+    }
     var listColumnsCount = 4
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
@@ -64,7 +80,7 @@ fun HeroesByAttributeListView(
         }
     }
     var titleValue = ""
-
+    var heroIconPosition by remember { mutableStateOf(5F) }
     val attrsLanguageMap: Map<String, Int> =
         mapOf(
             "baseHealth" to R.string.base_health_attr,
@@ -108,6 +124,7 @@ fun HeroesByAttributeListView(
 
     titleValue = stringResource(attrsLanguageMap[attr]!!)
 
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -125,108 +142,205 @@ fun HeroesByAttributeListView(
 
                 Box(
                     modifier = Modifier
+                        .drawWithContent {
+                            drawContent()
+                            clipRect { // Not needed if you do not care about painting half stroke outside
+                                val strokeWidth = Stroke.DefaultMiter
+                                val y = size.height // strokeWidth
+                                drawLine(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            //Color(0xFF000022),
+                                            //Color(0xFF000022)
+                                        )
+                                    ),
+                                    strokeWidth = strokeWidth,
+                                    cap = StrokeCap.Square,
+                                    start = Offset.Zero.copy(y = y),
+                                    end = Offset(x = size.width, y = y)
+                                )
+                            }
+                        }
                         .fillMaxWidth()
-                        .height(140.dp)
+                        .height(175.dp)
                         .background(Color.Black)
                 ) {
-                    Row(
+
+                    Column(
                         modifier = Modifier
-                            .drawWithContent {
-                                drawContent()
-                                clipRect { // Not needed if you do not care about painting half stroke outside
-                                    val strokeWidth = Stroke.DefaultMiter
-                                    val y = size.height // strokeWidth
-                                    drawLine(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(
-                                                Color(0xFF0d111c),
-                                                Color(0xFF0d111c),
-                                                Color(0xFF0d111c),
-                                                //Color(0xFF000022),
-                                                //Color(0xFF000022)
-                                            )
-                                        ),
-                                        strokeWidth = strokeWidth,
-                                        cap = StrokeCap.Square,
-                                        start = Offset.Zero.copy(y = y),
-                                        end = Offset(x = size.width, y = y)
-                                    )
-                                }
-                            }
-                            .fillMaxSize()
-                            .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+                            .fillMaxWidth()
                     ) {
 
-                        Row() {
+                        Row(
+                            modifier = Modifier
+                                .background(Color.Black)
+                                .height(140.dp)
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+
+                            Row() {
+
+                                Box(contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+
+                                        .size(70.dp)
+                                        .clip(CircleShape)
+                                        .border(1.dp, Color(0x880d111c), CircleShape)
+                                        .clickable {
+                                           navController.popBackStack()
+                                        }
+                                ) {
+                                    Image(
+                                        modifier = Modifier
+                                            .width(13.dp)
+                                            .height(13.dp),
+                                        painter = rememberImagePainter(
+                                            R.drawable.ic_back
+                                        ),
+                                        contentDescription = "Back"
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .padding(start = 15.dp)
+                                        .height(70.dp)
+                                        .width(140.dp),
+                                    contentAlignment = Alignment.CenterStart
+                                ) {
+                                    Box() {
+                                        Text(
+                                            titleValue,
+                                            color = Color.White,
+                                            fontSize = 16.sp,
+                                            lineHeight = 20.sp
+                                        )
+                                    }
+
+                                }
+                            }
 
 
                             Box(contentAlignment = Alignment.Center,
-
                                 modifier = Modifier
 
-                                    .size(70.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Color(0x880d111c), CircleShape)
+                                    .width(20.dp)
+                                    .background(Color.Transparent)
                                     .clickable {
-                                        navController.popBackStack()
+                                        onSortChange(!isSortAsc)
                                     }
                             ) {
                                 Image(
-
                                     modifier = Modifier
                                         .width(13.dp)
-                                        .height(13.dp),
-                                    painter = rememberImagePainter(
-                                        R.drawable.ic_back
-                                    ),
-                                    contentDescription = "Back"
+                                        .height(20.dp),
+                                    painter = if (isSortAsc) rememberImagePainter(R.drawable.ic_down)
+                                    else rememberImagePainter(R.drawable.ic_up),
+                                    contentDescription = "Sort"
                                 )
                             }
+                        }
 
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 15.dp, end = 15.dp)
+
+
+                        ) {
+
+
+                            Box(modifier = Modifier
+                                .height(10.dp)
+                                .fillMaxWidth()
+                                .drawWithContent {
+                                    drawContent()
+                                    clipRect {
+                                        val strokeWidth = Stroke.DefaultMiter
+                                        val y = size.height
+                                        drawLine(
+                                            brush = SolidColor(Color.White),
+                                            strokeWidth = strokeWidth,
+                                            cap = StrokeCap.Square,
+                                            start = Offset.Zero.copy(y = y),
+                                            end = Offset(x = size.width, y = y)
+                                        )
+                                    }
+                                }
+                            )
 
                             Box(
                                 modifier = Modifier
-                                    .padding(start = 15.dp)
-                                    .height(70.dp)
-                                    .width(140.dp),
-                                contentAlignment = Alignment.CenterStart
+                                    .height(15.dp)
+                                    .fillMaxWidth()
+                                    .padding(top = 6.dp, start = scrollIconPosition.dp)
+                                    .onGloballyPositioned {
+                                        var size = it.parentLayoutCoordinates?.size?.toSize()
+                                        var dpSize =
+                                            pixelsToDp.convertPixelsToDp(size!!.width, context)
+                                        var pointWidth = dpSize / heroes.size
+                                        Log.e("TOHA3","dpSize1:"+dpSize)
+                                        Log.e("TOHA3","pointWidth1:"+pointWidth)
+                                        var padding = 8
+                                        if (scrollState.firstVisibleItemIndex > heroes.size / 1.111 ) padding = 20
+                                        scrollIconPosition =
+                                            scrollState.firstVisibleItemIndex * pointWidth + padding
+                                    }
                             ) {
-                                Box() {
-                                    Text(
-                                        titleValue,
-                                        color = Color.White,
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp
-                                    )
-                                }
+
+
+                                Box(modifier = Modifier.width(1.dp).height(7.dp).background(Color.White))
+
 
                             }
 
-                        }
-
-                        Box(contentAlignment = Alignment.Center,
-
-                            modifier = Modifier
-
-                                .width(20.dp)
-                                .background(Color.Transparent)
-                                .clickable {
-                                    onSortChange(!isSortAsc)
-                                }
-                        ) {
-                            Image(
-
+                            Box(
                                 modifier = Modifier
-                                    .width(13.dp)
-                                    .height(20.dp),
-                                painter = if (isSortAsc) rememberImagePainter(R.drawable.ic_down)
-                                else rememberImagePainter(R.drawable.ic_up),
-                                contentDescription = "Sort"
-                            )
+                                    .height(20.dp)
+                                    .fillMaxWidth()
+                                    .padding(top = 2.dp, start = heroIconPosition.dp)
+                                    .onGloballyPositioned {
+                                        var size = it.parentLayoutCoordinates?.size?.toSize()
+                                        var dpSize =
+                                            pixelsToDp.convertPixelsToDp(size!!.width, context)
+                                        var pointWidth = dpSize / heroes.size
+                                        Log.e("TOHA3","dpSize2:"+dpSize)
+                                        Log.e("TOHA3","pointWidth2:"+pointWidth)
+
+                                        var padding = 7
+                                        if (heroes.indexOf(hero) > heroes.size / 1.111) padding = 30
+
+                                        heroIconPosition =
+                                            (heroes.indexOf(hero) * pointWidth).minus(padding)
+
+                                        if(heroIconPosition<0)heroIconPosition= 5F
+
+                                        Log.e("TOHA3","heroIconPosition:"+heroIconPosition)
+                                    }
+                            ) {
+
+
+                                Image(
+                                    rememberImagePainter(hero.icon),
+                                    modifier = Modifier
+                                        .width(20.dp)
+                                        .height(20.dp),
+                                    contentDescription = stringResource(id = R.string.scroll_state),
+                                )
+
+                            }
                         }
+
+
                     }
+
+
                 }
             }
 
@@ -235,7 +349,7 @@ fun HeroesByAttributeListView(
                 var attrValue = ""
                 var rowBackgroundColor = Color.Transparent
                 var rowTextColor = Color.White
-                if(id.toInt()==it.id) {
+                if (id.toInt() == it.id) {
                     rowBackgroundColor = Color(0xFFc98000)
                     rowTextColor = Color.Black
                 }
@@ -315,9 +429,7 @@ fun HeroesByAttributeListView(
                                 .fillMaxWidth()
                                 .padding(start = 20.dp, end = 20.dp)
                                 .height(60.dp)
-                                .clickable {
-                                    onHeroClick.invoke(it)
-                                }
+
                         ) {
                             Row(
                                 modifier = Modifier
@@ -325,13 +437,19 @@ fun HeroesByAttributeListView(
                                 Image(
                                     modifier = Modifier
                                         .width(20.dp)
-                                        .height(20.dp),
+                                        .height(20.dp)
+                                        .clickable {
+                                            onHeroClick.invoke(it)
+                                        },
                                     painter = rememberImagePainter(it.icon),
                                     contentDescription = it.name
                                 )
                                 Text(
                                     modifier = Modifier
-                                        .padding(start = 10.dp),
+                                        .padding(start = 10.dp)
+                                        .clickable {
+                                            onHeroClick.invoke(it)
+                                        },
                                     fontSize = 12.sp,
                                     lineHeight = 50.sp,
                                     color = rowTextColor,

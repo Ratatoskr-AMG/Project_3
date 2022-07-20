@@ -74,4 +74,5 @@
     <string name="drop_from_favorites">Drop from favorites</string>
     <string name="delete">Delete</string>
     <string name="is_hero_favorite">Is hero favorite?</string>
+    <string name="scroll_state">Scroll state</string>
 </resources>

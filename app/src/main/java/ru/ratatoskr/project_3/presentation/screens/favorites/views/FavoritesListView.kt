@@ -199,7 +199,7 @@ fun FavoritesListView(
                                 modifier = Modifier,
                                 fontSize = 12.sp,
                                 color = Color.Black,
-                                text = "Delete"
+                                text = stringResource(R.string.delete)
                             )
                             }
                         }

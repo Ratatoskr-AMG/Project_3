@@ -4,7 +4,9 @@ import androidx.compose.foundation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.attribute.AttributeViewModel
 import ru.ratatoskr.project_3.presentation.screens.attribute.models.AttributeState
 import ru.ratatoskr.project_3.presentation.screens.attribute.views.HeroesByAttributeListView
@@ -35,9 +37,9 @@ fun AttributeScreen(
                 android.util.Log.e("TOHA_test","when")
                 viewModel.switchAttrSortDirection(attr,it)
             })
-        is AttributeState.NoHeroesState -> MessageView("Heroes not found")
-        is AttributeState.LoadingHeroesState -> LoadingView("Heroes loading...")
-        is AttributeState.ErrorHeroesState -> MessageView("Heroes error!")
+        is AttributeState.NoHeroesState -> MessageView(stringResource(id = R.string.heroes_not_found))
+        is AttributeState.LoadingHeroesState -> LoadingView(stringResource(id = R.string.loading))
+        is AttributeState.ErrorHeroesState -> MessageView(stringResource(id = R.string.error))
     }
 
     LaunchedEffect(key1 = Unit, block = {

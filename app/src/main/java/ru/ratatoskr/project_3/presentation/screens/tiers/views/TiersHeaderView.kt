@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -33,7 +34,7 @@ fun TiersHeaderView(
 ) {
     var tierImage by remember { mutableStateOf("http://ratatoskr.ru/app/img/tier/0.png") }
     var tierDescription = "Tier undefined"
-    var tierTitle = "Select your tier"
+    var tierTitle = stringResource(id = R.string.title_tiers)
 
     when (state) {
         is TiersState.IndefinedState -> {

@@ -1,5 +1,6 @@
 package ru.ratatoskr.project_3.presentation.screens.profile.views
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -40,15 +42,17 @@ fun ProfileHeaderView(
 
     when (viewState) {
         is ProfileState.UndefinedState -> {
-            profileTitle = "Profile"
+            profileTitle = stringResource(id = R.string.title_profile)
         }
         is ProfileState.SteamNameIsDefinedState -> {
             profileTitle = viewModel.getPlayerSteamNameFromSP()
         }
     }
 
-    tierImage =
-        "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+    if(player_tier!="undefined") {
+        tierImage =
+            "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+    }
 
     tierDescription = player_tier + " tier"
 
@@ -105,7 +109,7 @@ fun ProfileHeaderView(
                     painter = rememberImagePainter(
                         R.drawable.ic_back
                     ),
-                    contentDescription = "Back"
+                    contentDescription = stringResource(id = R.string.back)
                 )
             }
             Box(

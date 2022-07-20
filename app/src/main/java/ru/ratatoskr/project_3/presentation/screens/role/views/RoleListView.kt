@@ -22,6 +22,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -58,6 +59,24 @@ fun RoleListView(
         Configuration.ORIENTATION_LANDSCAPE -> {
             listColumnsCount = 7
         }
+    }
+    val rolesLanguageMap: Map<String, Int> =
+        mapOf(
+            "Carry" to R.string.carry_role,
+            "Escape" to R.string.escape_role,
+            "Nuker" to R.string.nuker_role,
+            "Support" to R.string.support_role,
+            "Disabler" to R.string.disabler_role,
+            "Jungler" to R.string.jungler_role,
+            "Initiator" to R.string.initiator_role,
+            "Durable" to R.string.durable_role,
+            "Pusher" to R.string.pusher_role,
+        )
+
+    var roleText = if(role in rolesLanguageMap) {
+        stringResource(rolesLanguageMap[role]!!)
+    }else{
+        role
     }
 
     Box(
@@ -146,7 +165,7 @@ fun RoleListView(
                             ) {
                                 Box() {
                                     Text(
-                                        role,
+                                        roleText,
                                         color = Color.White,
                                         fontSize = 16.sp,
                                         lineHeight = 20.sp

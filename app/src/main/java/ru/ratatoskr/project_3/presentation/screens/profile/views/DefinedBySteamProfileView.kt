@@ -16,12 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.utils.rememberForeverLazyListState
 import ru.ratatoskr.project_3.presentation.screens.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.screens.profile.models.ProfileState
+import java.lang.System.exit
 
 @ExperimentalFoundationApi
 @Composable
@@ -92,7 +95,7 @@ fun DefinedBySteamProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Exit"
+                            text = stringResource(id = R.string.exit)
                         )
                     }
 
@@ -141,7 +144,7 @@ fun DefinedBySteamProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Heroes list last modified: " + heroes_list_last_modified
+                            text = stringResource(id = R.string.heroes_list_last_modified) + " " + heroes_list_last_modified
                         )
                     }
 

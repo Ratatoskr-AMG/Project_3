@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -71,9 +72,9 @@ fun HeroScreen(
 
             )
         }
-        is HeroState.NoHeroState -> MessageView("Hero not found")
-        is HeroState.LoadingHeroState -> LoadingView("Hero is loading...")
-        is HeroState.ErrorHeroState -> MessageView("Hero error!")
+        is HeroState.NoHeroState -> MessageView(stringResource(id = R.string.hero_not_found))
+        is HeroState.LoadingHeroState -> LoadingView(stringResource(id = R.string.loading))
+        is HeroState.ErrorHeroState -> MessageView(stringResource(id = R.string.error))
     }
 
     LaunchedEffect(key1 = Unit, block = {

@@ -16,9 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.utils.rememberForeverLazyListState
 import ru.ratatoskr.project_3.presentation.screens.Screens
 import ru.ratatoskr.project_3.presentation.screens.profile.ProfileViewModel
@@ -92,7 +94,7 @@ fun UndefinedProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Sign in with Steam"
+                            text = stringResource(id = R.string.sign_in_with_steam)
                         )
                     }
 
@@ -140,20 +142,11 @@ fun UndefinedProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = "Heroes list last modified: " + heroes_list_last_modified
+                            text = stringResource(id = R.string.heroes_list_last_modified) + " "+ heroes_list_last_modified
                         )
                     }
-
                 }
-
             }
-
-            /*
-            item{
-                topPicks()
-            }
-
-            */
         }
     }
 }

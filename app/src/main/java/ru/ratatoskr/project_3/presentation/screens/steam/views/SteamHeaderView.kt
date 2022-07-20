@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -35,14 +36,21 @@ fun SteamHeaderView(
     var tierDescription by remember { mutableStateOf("Tier undefined") }
     var steamTitle by remember { mutableStateOf("Sign in with Steam") }
 
-    tierImage =
-        "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+    if(player_tier!="undefined") {
+        tierImage =
+            "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
+    }
+
+
 
     tierDescription = player_tier + " tier"
 
     when (state) {
         is SteamState.LoggedIntoSteam -> {
             steamTitle = state.steam_user_name
+        }
+        is SteamState.IndefinedState -> {
+            steamTitle = stringResource(id = R.string.sign_in_with_steam)
         }
     }
 
@@ -119,7 +127,7 @@ fun SteamHeaderView(
                     painter = rememberImagePainter(
                         R.drawable.ic_back
                     ),
-                    contentDescription = "Back"
+                    contentDescription = stringResource(id = R.string.back)
                 )
             }
             Box(

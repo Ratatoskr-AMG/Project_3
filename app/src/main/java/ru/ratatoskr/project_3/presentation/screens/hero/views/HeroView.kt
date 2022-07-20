@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -48,6 +49,59 @@ fun HeroView(
         }
     }
     var scrollState = rememberForeverLazyListState(key = "Hero_" + hero.localizedName)
+    val rolesLanguageMap: Map<String, Int> =
+        mapOf(
+            "Carry" to R.string.carry_role,
+            "Escape" to R.string.escape_role,
+            "Nuker" to R.string.nuker_role,
+            "Support" to R.string.support_role,
+            "Disabler" to R.string.disabler_role,
+            "Jungler" to R.string.jungler_role,
+            "Initiator" to R.string.initiator_role,
+            "Durable" to R.string.durable_role,
+            "Pusher" to R.string.pusher_role,
+        )
+
+    val attrsLanguageMap: Map<String, Int> =
+        mapOf(
+            "baseHealth" to R.string.base_health_attr,
+            "baseMana" to R.string.base_mana_attr,
+            "baseHealthRegen" to R.string.base_health_regen_attr,
+            "baseManaRegen" to R.string.base_mana_regen_attr,
+            "baseArmor" to R.string.base_armor_attr,
+            "baseStr" to R.string.base_str_attr,
+            "baseAgi" to R.string.base_agi_attr,
+            "baseInt" to R.string.base_int_attr,
+            "strGain" to R.string.str_gain_attr,
+            "agiGain" to R.string.agi_gain_attr,
+            "intGain" to R.string.int_gain_attr,
+            "attackRange" to R.string.attack_range_attr,
+            "projectileSpeed" to R.string.projectile_speed_attr,
+            "attackRate" to R.string.attack_rate_attr,
+            "moveSpeed" to R.string.move_speed_attr,
+            "turboPicks" to R.string.turbo_picks_attr,
+            "turboWins" to R.string.turbo_wins_attr,
+            "proBan" to R.string.pro_ban_attr,
+            "proWin" to R.string.pro_win_attr,
+            "proPick" to R.string.pro_pick_attr,
+            "_1Pick" to R.string._1_pick_attr,
+            "_1Win" to R.string._1_win_attr,
+            "_2Pick" to R.string._2_pick_attr,
+            "_2Win" to R.string._2_win_attr,
+            "_3Pick" to R.string._3_pick_attr,
+            "_3Win" to R.string._3_win_attr,
+            "_4Pick" to R.string._4_pick_attr,
+            "_4Win" to R.string._4_win_attr,
+            "_5Pick" to R.string._5_pick_attr,
+            "_5Win" to R.string._5_win_attr,
+            "_6Pick" to R.string._6_pick_attr,
+            "_6Win" to R.string._6_win_attr,
+            "_7Pick" to R.string._7_pick_attr,
+            "_7Win" to R.string._7_win_attr,
+            "_8Pick" to R.string._8_pick_attr,
+            "_8Win" to R.string._8_win_attr
+
+        )
 
     LazyColumn(
         state = scrollState,
@@ -121,9 +175,11 @@ fun HeroView(
                             contentAlignment = Alignment.CenterStart
                         ) {
                             Column(
-                                modifier = Modifier.padding(top = 0.dp).width(160.dp),
+                                modifier = Modifier
+                                    .padding(top = 0.dp)
+                                    .width(200.dp),
                             ) {
-                                Box() {
+                                Box(modifier = Modifier.padding(0.dp,0.dp,0.dp,0.dp)) {
                                     Text(
                                         hero.localizedName,
                                         color = Color.White,
@@ -131,7 +187,6 @@ fun HeroView(
                                         lineHeight = 20.sp
                                     )
                                 }
-
                                 Box() {
                                     for (role in hero.roles) {
                                         val gson = GsonBuilder().create()
@@ -141,16 +196,24 @@ fun HeroView(
 
                                         FlowRow(modifier = Modifier.width(flowRowWidth)) {
                                             for (role in rolesList) {
+
+
+                                                var roleText = if (role in rolesLanguageMap) {
+                                                    stringResource(rolesLanguageMap[role]!!)
+                                                } else {
+                                                    role
+                                                }
+
                                                 Text(
                                                     modifier = Modifier
                                                         .padding(end = 3.dp)
                                                         .clickable {
                                                             onRoleClick(role)
                                                         },
-                                                    fontSize = 13.sp,
-                                                    lineHeight = 18.sp,
+                                                    fontSize = 12.sp,
+                                                    lineHeight = 12.sp,
                                                     color = Color(0xFF474b55),
-                                                    text = role,
+                                                    text = roleText,
                                                 )
                                             }
                                         }
@@ -166,7 +229,7 @@ fun HeroView(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
 
-                            .size(70.dp)
+                            .size(40.dp)
                             .background(Color.Transparent)
                             .border(1.dp, Color(0x880d111c), CircleShape)
                             .clickable {
@@ -177,8 +240,7 @@ fun HeroView(
 
                             modifier = Modifier
                                 .width(20.dp)
-                                .height(20.dp)
-                            ,
+                                .height(20.dp),
                             painter = if (isChecked) rememberImagePainter(R.drawable.ic_hearth_wh) else rememberImagePainter(
                                 R.drawable.ic_hearth_tr
                             ),
@@ -194,7 +256,7 @@ fun HeroView(
             HeroAttributeRowView(
                 hero,
                 "baseHealth",
-                "Health",
+                stringResource(attrsLanguageMap["baseHealth"]!!),
                 hero.baseHealth.toString(), navController
             )
         }
@@ -202,7 +264,7 @@ fun HeroView(
             HeroAttributeRowView(
                 hero,
                 "baseMana",
-                "Mana",
+                stringResource(attrsLanguageMap["baseMana"]!!),
                 hero.baseMana.toString(), navController
             )
         }
@@ -210,20 +272,29 @@ fun HeroView(
             HeroAttributeRowView(
                 hero,
                 "baseHealthRegen",
-                "Health regen",
+                stringResource(attrsLanguageMap["baseHealthRegen"]!!),
                 "+" + hero.baseHealthRegen.toString(),
                 navController
             )
         }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
                 "baseManaRegen",
-                "Mana regen",
+                stringResource(attrsLanguageMap["baseManaRegen"]!!),
                 "+" + hero.baseManaRegen.toString(),
                 navController
             )
         }
-        item { HeroAttributeRowView(hero,"baseArmor", "Armor", hero.baseArmor.toString(), navController) }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "baseArmor",
+                stringResource(attrsLanguageMap["baseArmor"]!!),
+                hero.baseArmor.toString(),
+                navController
+            )
+        }
         /*
         item {
             attributeRow(
@@ -236,96 +307,288 @@ fun HeroView(
         item { attributeRow("baseAttackMin", hero.baseAttackMin.toString()) }
         item { attributeRow("baseAttackMax", hero.baseAttackMax.toString()) }
         */
-        item { HeroAttributeRowView(hero,"baseStr", "Base Strength", hero.baseStr.toString(), navController) }
-        item { HeroAttributeRowView(hero,"baseAgi", "Base Agility", hero.baseAgi.toString(), navController) }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
+                "baseStr",
+                stringResource(attrsLanguageMap["baseStr"]!!),
+                hero.baseStr.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "baseAgi",
+                stringResource(attrsLanguageMap["baseAgi"]!!),
+                hero.baseAgi.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
                 "baseInt",
-                "Base Intelligence",
+                stringResource(attrsLanguageMap["baseInt"]!!),
                 hero.baseInt.toString(),
                 navController
             )
         }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
                 "strGain",
-                "Strength gain",
+                stringResource(attrsLanguageMap["strGain"]!!),
                 "+" + hero.strGain.toString(),
                 navController
             )
         }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
                 "agiGain",
-                "Agility gain",
+                stringResource(attrsLanguageMap["agiGain"]!!),
                 "+" + hero.agiGain.toString(),
                 navController
             )
         }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
                 "intGain",
-                "Intelligence gain",
+                stringResource(attrsLanguageMap["intGain"]!!),
                 "+" + hero.intGain.toString(),
                 navController
             )
         }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
                 "attackRange",
-                "Attack range",
+                stringResource(attrsLanguageMap["attackRange"]!!),
                 hero.attackRange.toString(),
                 navController
             )
         }
         if (hero.projectileSpeed > 0)
             item {
-                HeroAttributeRowView(hero,
+                HeroAttributeRowView(
+                    hero,
                     "projectileSpeed",
-                    "Projectile speed",
+                    stringResource(attrsLanguageMap["projectileSpeed"]!!),
                     hero.projectileSpeed.toString(),
                     navController
                 )
             }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
                 "attackRate",
-                "Attack rate",
+                stringResource(attrsLanguageMap["attackRate"]!!),
                 hero.attackRate.toString(),
                 navController
             )
         }
-        item { HeroAttributeRowView(hero,"moveSpeed", "Move speed", hero.moveSpeed.toString(), navController) }
-        /*item { attributeRow("cmEnabled", "Captains mode enabled", hero.cmEnabled, navController) }*/
-        item { HeroAttributeRowView(hero,"legs", "Legs", hero.legs.toString(), navController) }
         item {
-            HeroAttributeRowView(hero,
+            HeroAttributeRowView(
+                hero,
+                "moveSpeed",
+                stringResource(attrsLanguageMap["moveSpeed"]!!),
+                hero.moveSpeed.toString(),
+                navController
+            )
+        }
+        /*item { attributeRow("cmEnabled", "Captains mode enabled", hero.cmEnabled, navController) }*/
+        item { HeroAttributeRowView(hero, "legs", "Legs", hero.legs.toString(), navController) }
+        item {
+            HeroAttributeRowView(
+                hero,
                 "turboPicks",
-                "Turbo picks",
+                stringResource(attrsLanguageMap["turboPicks"]!!),
                 hero.turboPicks.toString(),
                 navController
             )
         }
-        item { HeroAttributeRowView(hero,"turboWins", "Turbo wins", hero.turboWins.toString(), navController) }
-        item { HeroAttributeRowView(hero,"proBan", "Pro bans", hero.proBan.toString(), navController) }
-        item { HeroAttributeRowView(hero,"proWin", "Pro wins", hero.proWin.toString(), navController) }
-        item { HeroAttributeRowView(hero,"proPick", "Pro picks", hero.proPick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_1Pick", "Herald picks", hero._1Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_1Win", "Herald wins", hero._1Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_2Pick", "Guardian picks", hero._2Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_2Win", "Guardian wins", hero._2Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_3Pick", "Crusader picks", hero._3Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_3Win", "Crusader wins", hero._3Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_4Pick", "Archon picks", hero._4Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_4Win", "Archon wins", hero._4Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_5Pick", "Legend picks", hero._5Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_5Win", "Legend wins", hero._5Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_6Pick", "Ancient picks", hero._6Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_6Win", "Ancient wins", hero._6Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_7Pick", "Divine picks", hero._7Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_7Win", "Divine wins", hero._7Win.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_8Pick", "Immortal picks", hero._8Pick.toString(), navController) }
-        item { HeroAttributeRowView(hero,"_8Win", "Immortal  wins", hero._8Win.toString(), navController) }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "turboWins",
+                stringResource(attrsLanguageMap["turboWins"]!!),
+                hero.turboWins.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "proBan",
+                stringResource(attrsLanguageMap["proBan"]!!),
+                hero.proBan.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "proWin",
+                stringResource(attrsLanguageMap["proWin"]!!),
+                hero.proWin.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "proPick",
+                stringResource(attrsLanguageMap["proPick"]!!),
+                hero.proPick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_1Pick",
+                stringResource(attrsLanguageMap["_1Pick"]!!),
+                hero._1Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_1Win",
+                stringResource(attrsLanguageMap["_1Win"]!!),
+                hero._1Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_2Pick",
+                stringResource(attrsLanguageMap["_2Pick"]!!),
+                hero._2Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_2Win",
+                stringResource(attrsLanguageMap["_2Win"]!!),
+                hero._2Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_3Pick",
+                stringResource(attrsLanguageMap["_3Pick"]!!),
+                hero._3Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_3Win",
+                stringResource(attrsLanguageMap["_3Win"]!!),
+                hero._3Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_4Pick",
+                stringResource(attrsLanguageMap["_4Pick"]!!),
+                hero._4Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_4Win",
+                stringResource(attrsLanguageMap["_4Win"]!!),
+                hero._4Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_5Pick",
+                stringResource(attrsLanguageMap["_5Pick"]!!),
+                hero._5Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_5Win",
+                stringResource(attrsLanguageMap["_5Win"]!!),
+                hero._5Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_6Pick",
+                stringResource(attrsLanguageMap["_6Pick"]!!),
+                hero._6Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_6Win",
+                stringResource(attrsLanguageMap["_6Win"]!!),
+                hero._6Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_7Pick",
+                stringResource(attrsLanguageMap["_7Pick"]!!),
+                hero._7Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_7Win",
+                stringResource(attrsLanguageMap["_7Win"]!!),
+                hero._7Win.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_8Pick",
+                stringResource(attrsLanguageMap["_8Pick"]!!),
+                hero._8Pick.toString(),
+                navController
+            )
+        }
+        item {
+            HeroAttributeRowView(
+                hero,
+                "_8Win",
+                stringResource(attrsLanguageMap["_8Win"]!!),
+                hero._8Win.toString(),
+                navController
+            )
+        }
 
     }
 

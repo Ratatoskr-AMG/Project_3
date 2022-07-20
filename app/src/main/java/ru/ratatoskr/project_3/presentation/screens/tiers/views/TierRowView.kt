@@ -17,9 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.tiers.models.TiersState
 
 @ExperimentalFoundationApi
@@ -50,22 +52,21 @@ fun TierRowView(
 
     var tierImage = "http://ratatoskr.ru/app/img/tier/0.png"
     var tierDescription = "Tier undefined"
-    var tierName = "Undefined"
+    var tierName = stringResource(id = R.string.undefined_tier_title)
     var rowTextColor = Color.White
     var rowBackgroundColor = Color.Transparent
 
     if (tierNum > 0) {
-        tierName = "Tier:" + tierNum
         tierImage = "http://ratatoskr.ru/app/img/tier/$tierNum.png"
         when (tierNum) {
-            1 -> tierName = "Herald"
-            2 -> tierName = "Guardian"
-            3 -> tierName = "Crusader"
-            4 -> tierName = "Archon"
-            5 -> tierName = "Legend"
-            6 -> tierName = "Ancient"
-            7 -> tierName = "Divine"
-            8 -> tierName = "Immortal"
+            1 -> tierName = stringResource(id = R.string.herald_tier_title)
+            2 -> tierName = stringResource(id = R.string.guardian_tier_title)
+            3 -> tierName = stringResource(id = R.string.crusader_tier_title)
+            4 -> tierName = stringResource(id = R.string.archon_tier_title)
+            5 -> tierName = stringResource(id = R.string.legend_tier_title)
+            6 -> tierName = stringResource(id = R.string.ancient_tier_title)
+            7 -> tierName = stringResource(id = R.string.divine_tier_title)
+            8 -> tierName = stringResource(id = R.string.immortal_tier_title)
         }
     }
 

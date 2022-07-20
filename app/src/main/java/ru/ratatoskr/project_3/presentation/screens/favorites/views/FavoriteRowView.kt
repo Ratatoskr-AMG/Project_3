@@ -4,18 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -31,25 +26,6 @@ fun FavoriteRowView(onHeroClick:(Hero)->Unit, it: Hero){
         modifier = Modifier
             .drawWithContent {
                 drawContent()
-                /*clipRect { // Not needed if you do not care about painting half stroke outside
-                    val strokeWidth = Stroke.DefaultMiter
-                    val y = size.height // strokeWidth
-                    drawLine(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color(0xFF0d111c),
-                                Color(0xFF0d111c),
-                                Color(0xFF0d111c),
-                                //Color(0xFF000022),
-                                //Color(0xFF000022)
-                            )
-                        ),
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Square,
-                        start = Offset.Zero.copy(y = y),
-                        end = Offset(x = size.width, y = y)
-
-                } )*/
             }
             .fillMaxWidth()
             .height(50.dp)
@@ -86,13 +62,6 @@ fun FavoriteRowView(onHeroClick:(Hero)->Unit, it: Hero){
                 color = Color.White,
                 text = it.localizedName
             )
-            /*
-            Icon(
-                imageVector = Icons.Default.Clear,
-                contentDescription = null,
-                tint=Color.White
-            )
-            */
             Image(
 
                 modifier = Modifier
@@ -101,7 +70,7 @@ fun FavoriteRowView(onHeroClick:(Hero)->Unit, it: Hero){
                 painter = rememberImagePainter(
                     R.drawable.ic_back
                 ),
-                contentDescription = "Drop from favorites"
+                contentDescription = stringResource(R.string.drop_from_favorites)
             )
         }
 

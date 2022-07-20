@@ -104,7 +104,9 @@ fun FavoritesListView(
                             Box(contentAlignment = Alignment.Center,
 
                                 modifier = Modifier
-
+                                    .clickable {
+                                        navController.popBackStack()
+                                    }
                                     .size(70.dp)
                                     .clip(CircleShape)
                                     .border(1.dp, Color(0x880d111c), CircleShape)

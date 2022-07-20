@@ -157,10 +157,63 @@ fun HeroView(
                                     navController.popBackStack()
                                 }
                         ) {
+
+                            var cScale : ContentScale = ContentScale.Crop
+                            var cAlign : Alignment = Alignment.TopCenter
+
+                            val endAlignHeroesArray: List<String> = listOf(
+                                "Death Prophet",
+                                "Anti-Mage",
+                                "Axe",
+                                "Brewmaster",
+                                "Clockwerk",
+                                "Crystal Maiden",
+                                "Dragon Knight",
+                                "Grimstroke",
+                                "Leshrac",
+                                "Lifestealer",
+                                "Lone Druid",
+                                "Lycan",
+                                "Meepo",
+                                "Necrophos",
+                                "Night Stalker",
+                                "Pangolier",
+                                "Puck",
+                                "Razor",
+                                "Riki",
+                                "Timbersaw",
+                                "Venomancer",
+                                "Weaver",
+                                "Zeus",
+                            )
+                            val startAlignHeroesArray: List<String> = listOf(
+                                "Alchemist",
+                                "Bristleback",
+                                "Drow Ranger",
+                                "Huskar",
+                                "Keeper of the Light",
+                                "Lina",
+                                "Marci",
+                                "Pudge",
+                                "Shadow Shaman",
+                                "Tidehunter",
+                                "Troll Warlord",
+                                "Ursa",
+                            )
+
+                            if(hero.localizedName in endAlignHeroesArray){
+                                cAlign = Alignment.TopEnd
+                            }
+
+                            if(hero.localizedName in startAlignHeroesArray){
+                                cAlign = Alignment.TopStart
+                            }
+
                             Image(
                                 painter = rememberImagePainter(hero.img),
                                 contentDescription = hero.localizedName,
-                                contentScale = ContentScale.Crop,
+                                alignment =  cAlign,
+                                contentScale = cScale,
                                 modifier = Modifier
                                     .width(70.dp)
                                     .height(70.dp)

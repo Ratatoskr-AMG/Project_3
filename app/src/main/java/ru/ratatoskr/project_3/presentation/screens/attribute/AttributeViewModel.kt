@@ -25,7 +25,7 @@ class AttributeViewModel @Inject constructor(
     val heroesListState: LiveData<AttributeState> = _heroesList_state
 
     fun switchAttrSortDirection(attr: String, sortAsc: Boolean) {
-        Log.e("TOHA_test", "switchAttrSortDirection")
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr, sortAsc)
@@ -43,6 +43,7 @@ class AttributeViewModel @Inject constructor(
 
         }
     }
+
     fun getAllHeroesByAttr(attr: String) {
         _heroesList_state.set(newValue = AttributeState.LoadingHeroesState())
         viewModelScope.launch(Dispatchers.IO) {

@@ -1,11 +1,11 @@
 package ru.ratatoskr.project_3.presentation.screens.favorites.models
 
+import ru.ratatoskr.project_3.domain.model.Hero
+
 sealed class FavoritesState {
     class LoadingHeroesState : FavoritesState()
     class LoadedHeroesState<T>(
-        val heroes: List<T>,
-        val searchStr: String,
-        var isSortAsc: Boolean,
+        val heroes: List<Hero>
     ) : FavoritesState(){
 
     }

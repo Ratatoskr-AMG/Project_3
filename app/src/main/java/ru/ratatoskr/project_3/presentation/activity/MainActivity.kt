@@ -32,7 +32,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.ratatoskr.project_3.domain.helpers.Screens
+import ru.ratatoskr.project_3.presentation.screens.Screens
 import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.screens.attribute.AttributeViewModel
 import ru.ratatoskr.project_3.presentation.screens.favorites.FavoritesViewModel
@@ -40,10 +40,11 @@ import ru.ratatoskr.project_3.presentation.screens.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.screens.steam.SteamViewModel
 import ru.ratatoskr.project_3.presentation.screens.tiers.TiersViewModel
 import ru.ratatoskr.project_3.presentation.screens.home.HomeScreen
-import ru.ratatoskr.project_3.presentation.screens.hero.models.HeroViewModel
+import ru.ratatoskr.project_3.presentation.screens.hero.HeroViewModel
+import ru.ratatoskr.project_3.presentation.screens.role.RoleViewModel
 import ru.ratatoskr.project_3.presentation.screens.tiers.TiersScreen
-import ru.ratatoskr.project_3.presentation.viewmodels.HeroesListViewModel
-import ru.ratatoskr.project_3.presentation.viewmodels.VideoViewModel
+import ru.ratatoskr.project_3.presentation.screens.home.HomeViewModel
+import ru.ratatoskr.project_3.presentation.screens.video.VideoViewModel
 
 @AndroidEntryPoint
 class MainActivity() : AppCompatActivity() {
@@ -139,7 +140,7 @@ class MainActivity() : AppCompatActivity() {
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
-                            val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
+                            val heroesListviewModel = hiltViewModel<HomeViewModel>()
                             HomeScreen(
                                 viewModel = heroesListviewModel,
                                 navController = navController,
@@ -156,8 +157,8 @@ class MainActivity() : AppCompatActivity() {
                         }
                         composable(Screens.Role.route + "/{role}") { navBackStack ->
                             val role = navBackStack.arguments?.getString("role")
-                            val heroesListviewModel = hiltViewModel<HeroesListViewModel>()
-                            RoleScreen(role!!, heroesListviewModel, navController)
+                            val roleViewModel = hiltViewModel<RoleViewModel>()
+                            RoleScreen(role!!, roleViewModel, navController)
                         }
                         composable(Screens.Attr.route + "/{attr}/{id}") { navBackStack ->
                             val attr = navBackStack.arguments?.getString("attr")
@@ -176,7 +177,7 @@ class MainActivity() : AppCompatActivity() {
                         }
                         composable(Screens.Steam.route) {
                             val steamViewModel = hiltViewModel<SteamViewModel>()
-                            SteamScreen(navController, steamViewModel, appSharedPreferences)
+                            SteamScreen(navController, steamViewModel)
                         }
                         composable(Screens.Tier.route) {
                             val tiersViewModel = hiltViewModel<TiersViewModel>()

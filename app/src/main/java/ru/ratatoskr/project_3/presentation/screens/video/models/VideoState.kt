@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3.domain.helpers.states
+package ru.ratatoskr.project_3.presentation.screens.video.models
 
 import com.google.android.exoplayer2.SimpleExoPlayer
 

@@ -73,4 +73,5 @@
     <string name="immortal_tier_title">Immortal</string>
     <string name="drop_from_favorites">Drop from favorites</string>
     <string name="delete">Delete</string>
+    <string name="is_hero_favorite">Is hero favorite?</string>
 </resources>

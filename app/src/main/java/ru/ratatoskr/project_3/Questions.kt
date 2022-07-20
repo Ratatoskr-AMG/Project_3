@@ -52,6 +52,9 @@ presentation
     Рефакторинг
 */
 /* Пройдено:
+Убрать кнопки "Назад", где это необходимо
+Кнопка удаления из избранного
+Вёрстка шапки на странице Героя
 Позырить developer.huawei.com +
 Название (Dota Heroes Comparing DoHeСo) +
 Аккаунт Huawei App Gallery +

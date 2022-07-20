@@ -185,6 +185,7 @@ fun HeroesByAttributeListView(
                                 )
                             }
 
+
                             Box(
                                 modifier = Modifier
                                     .padding(start = 15.dp)
@@ -209,9 +210,8 @@ fun HeroesByAttributeListView(
 
                             modifier = Modifier
 
-                                .size(40.dp)
+                                .width(20.dp)
                                 .background(Color.Transparent)
-                                .border(1.dp, Color(0x880d111c), CircleShape)
                                 .clickable {
                                     onSortChange(!isSortAsc)
                                 }

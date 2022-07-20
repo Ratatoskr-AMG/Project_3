@@ -74,4 +74,5 @@
     <string name="immortal_tier_title">Титан</string>
     <string name="drop_from_favorites">Исключить из избранных</string>
     <string name="delete">Удалить</string>
+    <string name="is_hero_favorite">Герой избран?</string>
 </resources>

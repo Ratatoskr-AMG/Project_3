@@ -95,6 +95,31 @@ fun ProfileHeaderView(
                     .width(70.dp)
                     .height(70.dp)
                     .clickable {
+                        navController.navigate(Screens.Tier.route)
+                    }
+                    .border(1.dp, Color(0x880d111c), CircleShape)
+                    .clip(CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = rememberImagePainter(tierImage),
+                    contentDescription = tierDescription,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(70.dp)
+                        .height(70.dp)
+                        .clip(CircleShape)
+                        .border(1.dp, Color(0x880d111c), CircleShape)
+                )
+            }
+
+
+            /*
+            Box(
+                modifier = Modifier
+                    .width(70.dp)
+                    .height(70.dp)
+                    .clickable {
                         navController.popBackStack()
                     }
                     .border(1.dp, Color(0x880d111c), CircleShape)
@@ -112,9 +137,10 @@ fun ProfileHeaderView(
                     contentDescription = stringResource(id = R.string.back)
                 )
             }
+            */
             Box(
                 modifier = Modifier
-                    .padding(start = 30.dp)
+                    .padding(start = 15.dp)
                     .height(70.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -128,6 +154,7 @@ fun ProfileHeaderView(
 
             }
         }
+        /*
         Box(
             modifier = Modifier.clickable { navController.navigate(Screens.Tier.route) },
             contentAlignment = Alignment.Center
@@ -145,6 +172,8 @@ fun ProfileHeaderView(
             )
 
         }
+        */
+
 
     }
 

@@ -228,10 +228,8 @@ fun HeroView(
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-
-                            .size(40.dp)
+                            .size(20.dp)
                             .background(Color.Transparent)
-                            .border(1.dp, Color(0x880d111c), CircleShape)
                             .clickable {
                                 onFavoriteChange(!isChecked)
                             }

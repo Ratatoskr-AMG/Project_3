@@ -108,9 +108,7 @@ fun FavoritesListView(
                                     .size(70.dp)
                                     .clip(CircleShape)
                                     .border(1.dp, Color(0x880d111c), CircleShape)
-                                    .clickable {
-                                        navController.popBackStack()
-                                    }
+
                             ) {
                                 Image(
 
@@ -118,11 +116,13 @@ fun FavoritesListView(
                                         .width(15.dp)
                                         .height(15.dp),
                                     painter = rememberImagePainter(
-                                        R.drawable.ic_back
+                                        R.drawable.ic_hearth_tr
                                     ),
-                                    contentDescription = "Is hero favorite?"
+                                    contentDescription = stringResource(id = R.string.title_favorites)
                                 )
                             }
+
+
 
                             Box(
                                 modifier = Modifier

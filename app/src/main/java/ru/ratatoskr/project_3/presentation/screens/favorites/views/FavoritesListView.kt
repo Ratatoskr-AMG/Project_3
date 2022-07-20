@@ -100,7 +100,6 @@ fun FavoritesListView(
 
                         Row() {
 
-
                             Box(contentAlignment = Alignment.Center,
 
                                 modifier = Modifier
@@ -123,8 +122,6 @@ fun FavoritesListView(
                                     contentDescription = stringResource(id = R.string.title_favorites)
                                 )
                             }
-
-
 
                             Box(
                                 modifier = Modifier

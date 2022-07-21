@@ -31,6 +31,7 @@ fun RoleScreen(
         is RoleState.NoHeroesListState -> MessageView(stringResource(id = R.string.heroes_not_found))
         is RoleState.LoadingHeroesListState -> LoadingView(stringResource(id = R.string.loading))
         is RoleState.ErrorHeroesListState -> MessageView(stringResource(id = R.string.error))
+        else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {

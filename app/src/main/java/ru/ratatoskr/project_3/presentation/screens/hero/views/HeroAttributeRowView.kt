@@ -33,8 +33,7 @@ fun HeroAttributeRowView(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .background(Color(0x55202020))
-            .drawWithContent {
+            /*.drawWithContent {
                 drawContent()
                 clipRect { // Not needed if you do not care about painting half stroke outside
                     val strokeWidth = Stroke.DefaultMiter
@@ -55,7 +54,7 @@ fun HeroAttributeRowView(
                         end = Offset(x = size.width, y = y)
                     )
                 }
-            }
+            }*/
             .fillMaxWidth()
             .height(50.dp)
             .clickable {

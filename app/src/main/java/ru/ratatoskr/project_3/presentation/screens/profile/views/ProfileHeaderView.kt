@@ -47,6 +47,7 @@ fun ProfileHeaderView(
         is ProfileState.SteamNameIsDefinedState -> {
             profileTitle = viewModel.getPlayerSteamNameFromSP()
         }
+        else -> {}
     }
 
     if(player_tier!="undefined") {

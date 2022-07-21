@@ -75,4 +75,6 @@
     <string name="drop_from_favorites">Исключить из избранных</string>
     <string name="delete">Удалить</string>
     <string name="is_hero_favorite">Герой избран?</string>
+    <string name="scroll_state">Состояние прокрутки</string>
+
 </resources>

@@ -40,6 +40,7 @@ fun AttributeScreen(
         is AttributeState.NoHeroesState -> MessageView(stringResource(id = R.string.heroes_not_found))
         is AttributeState.LoadingHeroesState -> LoadingView(stringResource(id = R.string.loading))
         is AttributeState.ErrorHeroesState -> MessageView(stringResource(id = R.string.error))
+        else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {

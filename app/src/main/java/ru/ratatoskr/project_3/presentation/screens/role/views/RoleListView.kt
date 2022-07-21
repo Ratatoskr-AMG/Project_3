@@ -79,157 +79,175 @@ fun RoleListView(
         role
     }
 
-    Box(
+    Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-        LazyColumn(
-            state = scrollState,
+            .fillMaxWidth()){
+
+        Box(
             modifier = Modifier
-                .nestedScroll(nestedScrollConnection)
-                .fillMaxSize()
-                .background(Color(0x55202020))
+                .fillMaxWidth()
+                .height(140.dp)
+                .background(Color.Black)
         ) {
 
-            stickyHeader {
-
-                Box(
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .background(Color.Black)
+            ) {
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(140.dp)
-                        .background(Color.Black)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .drawWithContent {
-                                drawContent()
-                                clipRect { // Not needed if you do not care about painting half stroke outside
-                                    val strokeWidth = Stroke.DefaultMiter
-                                    val y = size.height // strokeWidth
-                                    drawLine(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(
-                                                Color(0xFF0d111c),
-                                                Color(0xFF0d111c),
-                                                Color(0xFF0d111c),
-                                                //Color(0xFF000022),
-                                                //Color(0xFF000022)
-                                            )
-                                        ),
-                                        strokeWidth = strokeWidth,
-                                        cap = StrokeCap.Square,
-                                        start = Offset.Zero.copy(y = y),
-                                        end = Offset(x = size.width, y = y)
-                                    )
-                                }
+                        .drawWithContent {
+                            drawContent()
+                            clipRect { // Not needed if you do not care about painting half stroke outside
+                                val strokeWidth = Stroke.DefaultMiter
+                                val y = size.height // strokeWidth
+                                drawLine(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            Color(0xFF0d111c),
+                                            //Color(0xFF000022),
+                                            //Color(0xFF000022)
+                                        )
+                                    ),
+                                    strokeWidth = strokeWidth,
+                                    cap = StrokeCap.Square,
+                                    start = Offset.Zero.copy(y = y),
+                                    end = Offset(x = size.width, y = y)
+                                )
                             }
-                            .fillMaxSize()
-                            .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
+                        }
+                        .fillMaxSize()
+                        .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
 
-                        Row() {
+                    Row() {
 
 
-                            Box(contentAlignment = Alignment.Center,
+                        Box(contentAlignment = Alignment.Center,
+
+                            modifier = Modifier
+
+                                .size(70.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color(0x880d111c), CircleShape)
+                                .clickable {
+                                    navController.popBackStack()
+                                }
+                        ) {
+                            Image(
 
                                 modifier = Modifier
+                                    .width(15.dp)
+                                    .height(15.dp),
+                                painter = rememberImagePainter(
+                                    R.drawable.ic_back
+                                ),
+                                contentDescription = "Back"
+                            )
+                        }
 
-                                    .size(70.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Color(0x880d111c), CircleShape)
-                                    .clickable {
-                                        navController.popBackStack()
-                                    }
-                            ) {
-                                Image(
-
-                                    modifier = Modifier
-                                        .width(15.dp)
-                                        .height(15.dp),
-                                    painter = rememberImagePainter(
-                                        R.drawable.ic_back
-                                    ),
-                                    contentDescription = "Back"
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 15.dp)
+                                .height(70.dp)
+                                .width(140.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Box() {
+                                Text(
+                                    roleText,
+                                    color = Color.White,
+                                    fontSize = 16.sp,
+                                    lineHeight = 20.sp
                                 )
                             }
 
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = 15.dp)
-                                    .height(70.dp)
-                                    .width(140.dp),
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                Box() {
-                                    Text(
-                                        roleText,
-                                        color = Color.White,
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp
-                                    )
-                                }
-
-                            }
-
                         }
+
                     }
                 }
             }
 
-            var listRowsCount = heroes.size / (listColumnsCount+1)
-            if (heroes.size % (listColumnsCount+1) > 0) {
-                listRowsCount += 1
-            }
+        }
 
-            for (row in 0..listRowsCount - 1) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
+            LazyColumn(
+                state = scrollState,
+                modifier = Modifier
+                    .nestedScroll(nestedScrollConnection)
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    //.background(Color(0x55202020))
+            ) {
 
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        for (column in 0..listColumnsCount) {
-                            var index = column + (row * (listColumnsCount+1))
-                            if (index <= heroes.size - 1) {
-                                var hero = heroes.get(index)
-                                Box(modifier = Modifier
-                                    .clickable {
-                                        onHeroClick(hero)
-                                    }
-                                    .width(70.dp)
-                                    .padding(10.dp)
-                                    .height(35.dp)) {
-                                    Image(
-                                        modifier = Modifier
-                                            .width(70.dp)
-                                            .height(35.dp),
-                                        painter = rememberImagePainter(hero.icon),
-                                        contentDescription = hero.name
-                                    )
-                                }
+                stickyHeader {
 
-                            } else {
-                                Box(
-                                    modifier = Modifier
+
+                }
+
+                var listRowsCount = heroes.size / (listColumnsCount+1)
+                if (heroes.size % (listColumnsCount+1) > 0) {
+                    listRowsCount += 1
+                }
+
+                for (row in 0..listRowsCount - 1) {
+
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            for (column in 0..listColumnsCount) {
+                                var index = column + (row * (listColumnsCount+1))
+                                if (index <= heroes.size - 1) {
+                                    var hero = heroes.get(index)
+                                    Box(modifier = Modifier
+                                        .clickable {
+                                            onHeroClick(hero)
+                                        }
                                         .width(70.dp)
                                         .padding(10.dp)
-                                        .height(35.dp)
-                                ) {
-                                }
-                            }
+                                        .height(35.dp)) {
+                                        Image(
+                                            modifier = Modifier
+                                                .width(70.dp)
+                                                .height(35.dp),
+                                            painter = rememberImagePainter(hero.icon),
+                                            contentDescription = hero.name
+                                        )
+                                    }
 
+                                } else {
+                                    Box(
+                                        modifier = Modifier
+                                            .width(70.dp)
+                                            .padding(10.dp)
+                                            .height(35.dp)
+                                    ) {
+                                    }
+                                }
+
+
+                            }
 
                         }
 
                     }
-
                 }
             }
         }
     }
+
 
 
 }

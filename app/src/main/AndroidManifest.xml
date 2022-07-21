@@ -25,7 +25,8 @@
             android:name=".presentation.activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Project_3.NoActionBar">
+            android:theme="@style/Theme.Project_3.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

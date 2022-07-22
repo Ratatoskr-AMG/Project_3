@@ -28,8 +28,10 @@ fun SteamScreen(
             }
         }
         is SteamState.LoggedIntoSteam -> {
-            SteamLoggedInView(navController, state, state.player_tier)
+            navController.navigate(Screens.Profile.route)
+            //SteamLoggedInView(navController, state, state.player_tier)
         }
+        else -> {}
     }
     LaunchedEffect(key1 = Unit, block = {
     })

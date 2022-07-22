@@ -13,6 +13,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +29,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.utils.rememberForeverLazyListState
 
@@ -97,13 +100,15 @@ fun HomeListView(
                 state = scrollState,
                 modifier = Modifier
                     .nestedScroll(nestedScrollConnection)
-                    .background(brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Transparent
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Transparent
 
+                            )
                         )
-                    ))
+                    )
 
                     .fillMaxSize()
             ) {
@@ -178,12 +183,12 @@ fun HomeListView(
                 }
 
 
-                var listRowsCount = heroes.size / (listColumnsCount+1)
-                if (heroes.size % (listColumnsCount+1) > 0) {
+                var listRowsCount = heroes.size / (listColumnsCount + 1)
+                if (heroes.size % (listColumnsCount + 1) > 0) {
                     listRowsCount += 1
                 }
 
-                for (row in 0..listRowsCount-1) {
+                for (row in 0..listRowsCount - 1) {
 
                     item {
                         Row(
@@ -191,7 +196,7 @@ fun HomeListView(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             for (column in 0..listColumnsCount) {
-                                var index = column + (row * (listColumnsCount+1))
+                                var index = column + (row * (listColumnsCount + 1))
                                 if (index <= heroes.size - 1) {
                                     var hero = heroes.get(index)
                                     Box(modifier = Modifier
@@ -201,6 +206,22 @@ fun HomeListView(
                                         .width(70.dp)
                                         .padding(10.dp)
                                         .height(35.dp)) {
+                                        Row(
+                                            horizontalArrangement = Arrangement.Center,
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                //.padding(top = 7.dp, start = 7.dp)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(R.drawable.ic_comparing_gr),
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .width(15.dp)
+                                                    .height(15.dp)
+                                            )
+                                        }
+
                                         Image(
                                             modifier = Modifier
                                                 .width(70.dp)
@@ -210,8 +231,7 @@ fun HomeListView(
                                         )
                                     }
 
-                                }
-                                else {
+                                } else {
                                     Box(
                                         modifier = Modifier
                                             .width(70.dp)

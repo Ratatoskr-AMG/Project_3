@@ -29,6 +29,7 @@ fun FavoritesScreen(
         }
         is FavoritesState.NoHeroesState -> EmptyFavoritesListView(navController, stringResource(R.string.heroes_not_found))
         is FavoritesState.LoadingHeroesState -> LoadingFavoritesView(navController, stringResource(R.string.title_favorites))
+        else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {

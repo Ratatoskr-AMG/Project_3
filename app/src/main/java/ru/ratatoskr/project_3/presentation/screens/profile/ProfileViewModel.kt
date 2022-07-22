@@ -3,14 +3,20 @@ package ru.ratatoskr.project_3.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.ratatoskr.project_3.R
+import ru.ratatoskr.project_3.domain.useCases.heroes.AddHeroesUserCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
+import ru.ratatoskr.project_3.domain.useCases.heroes.GetAllHeroesSortByNameUseCase
 import ru.ratatoskr.project_3.domain.utils.EventHandler
 import ru.ratatoskr.project_3.presentation.screens.profile.models.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.profile.models.ProfileState
 import ru.ratatoskr.project_3.domain.useCases.user.*
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,6 +24,9 @@ class ProfileViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     private val GetPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
     private val GetPlayerSteamNameFromSPUseCase: GetPlayerSteamNameFromSPUseCase,
+    private val GetAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
+    private val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
+    private val addHeroesUserCase: AddHeroesUserCase,
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
     var appSharedPreferences = appSharedPreferences
@@ -45,12 +54,15 @@ class ProfileViewModel @Inject constructor(
         when (profileState.value) {
             is ProfileState.UndefinedState -> reduce(event)
             is ProfileState.SteamNameIsDefinedState -> reduce(event)
+            else -> {}
         }
     }
 
     private fun reduce(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.OnSteamExit -> exitSteam()
+            is ProfileEvent.OnUpdate -> updateHeroes()
+            else -> {}
         }
     }
 
@@ -104,6 +116,81 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private fun updateHeroes() {
+
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            appSharedPreferences.edit().putLong("heroes_list_last_modified", 0).apply()
+            if(player_steam_name_from_sp=="undefined"){
+                try {
+                    _profile_state.postValue(
+                        ProfileState.UndefinedState(player_tier_from_sp, "0")
+                    )
+                } catch (e: Exception) {
+                    _profile_state.postValue(ProfileState.ErrorProfileState)
+                }
+            }else{
+                try {
+                    _profile_state.postValue(
+                        ProfileState.SteamNameIsDefinedState(
+                            player_tier_from_sp,
+                            player_steam_name_from_sp,
+                            "0"
+                        )
+                    )
+
+                } catch (e: Exception) {
+                    _profile_state.postValue(ProfileState.ErrorProfileState)
+                }
+            }
+
+            Log.e("TOHAR","updateHeroes");
+            try {
+                var heroes = GetAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
+                if(heroes!!.isEmpty()) {
+                    Log.e("TOHAR","isEmpty!")
+                }else {
+                    Log.e("TOHAR","!isEmpty!")
+                    var currTime = Date(System.currentTimeMillis()).time
+                    appSharedPreferences.edit().putLong("heroes_list_last_modified", currTime).apply()
+                    addHeroesUserCase.addHeroes(heroes)
+
+                    if(player_steam_name_from_sp=="undefined"){
+                        try {
+                            _profile_state.postValue(
+                                ProfileState.UndefinedState(player_tier_from_sp, "asd1+"+currTime.toString())
+                            )
+                        } catch (e: Exception) {
+                            _profile_state.postValue(ProfileState.ErrorProfileState)
+                        }
+                    }else{
+                        try {
+                            _profile_state.postValue(
+                                ProfileState.SteamNameIsDefinedState(
+                                    player_tier_from_sp,
+                                    player_steam_name_from_sp,
+                                    "asd2+"+currTime.toString()
+                                )
+                            )
+
+                        } catch (e: Exception) {
+                            _profile_state.postValue(ProfileState.ErrorProfileState)
+                        }
+                    }
+
+                }
+
+            } catch (e: java.lang.Exception) {
+                Log.e("TOHA", "e:" + e.toString())
+                e.printStackTrace()
+            }
+
+
+
+
+        }
+    }
     private fun exitSteam() {
 
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")

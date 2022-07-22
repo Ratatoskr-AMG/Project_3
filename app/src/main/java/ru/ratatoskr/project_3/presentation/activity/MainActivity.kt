@@ -2,6 +2,7 @@ package ru.ratatoskr.project_3.presentation.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
@@ -35,6 +36,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.ratatoskr.project_3.presentation.screens.Screens
 import ru.ratatoskr.project_3.presentation.screens.*
 import ru.ratatoskr.project_3.presentation.screens.attribute.AttributeViewModel
+import ru.ratatoskr.project_3.presentation.screens.comparing.ComparingScreen
+import ru.ratatoskr.project_3.presentation.screens.comparing.ComparingViewModel
 import ru.ratatoskr.project_3.presentation.screens.favorites.FavoritesViewModel
 import ru.ratatoskr.project_3.presentation.screens.profile.ProfileViewModel
 import ru.ratatoskr.project_3.presentation.screens.steam.SteamViewModel
@@ -101,6 +104,7 @@ class MainActivity() : AppCompatActivity() {
                                 listOf(
                                     Screens.Home,
                                     Screens.Favorites,
+                                    Screens.Comparing,
                                     Screens.Profile,
                                     Screens.Video
                                 )
@@ -110,6 +114,12 @@ class MainActivity() : AppCompatActivity() {
                             items.forEach { value ->
                                 val isSelected =
                                     currentDestination?.hierarchy?.any { it.route == value.route } == true
+
+                                Log.e("TOHA3","value.route:"+value.route)
+                                Log.e("TOHA3","isSelected:"+isSelected)
+                                if (isSelected)Log.e("TOHA3","value.icon_wh:"+value.icon_wh)
+                                else Log.e("TOHA3","value.icon_tr:"+value.icon_tr)
+
                                 BottomNavigationItem(
                                     modifier = Modifier
                                         .align(Alignment.CenterVertically)
@@ -170,7 +180,6 @@ class MainActivity() : AppCompatActivity() {
                             val favoritesViewModel = hiltViewModel<FavoritesViewModel>()
                             FavoritesScreen(favoritesViewModel, navController)
                         }
-
                         composable(Screens.Profile.route) {
                             val profileViewModel = hiltViewModel<ProfileViewModel>()
                             ProfileScreen(navController, profileViewModel, appSharedPreferences)
@@ -183,10 +192,13 @@ class MainActivity() : AppCompatActivity() {
                             val tiersViewModel = hiltViewModel<TiersViewModel>()
                             TiersScreen(navController, tiersViewModel, appSharedPreferences)
                         }
-
-                        composable(Screens.Video.route) { navBackStack ->
+                        composable(Screens.Video.route) {
                             val videoViewModel = hiltViewModel<VideoViewModel>()
                             VideoScreen(videoViewModel)
+                        }
+                        composable(Screens.Comparing.route) {
+                            val comparingViewModel = hiltViewModel<ComparingViewModel>()
+                            ComparingScreen(comparingViewModel)
                         }
                     }
                 }

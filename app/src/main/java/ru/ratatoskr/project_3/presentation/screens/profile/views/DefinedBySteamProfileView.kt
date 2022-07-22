@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -34,8 +34,15 @@ fun DefinedBySteamProfileView(
     player_tier: String,
     heroes_list_last_modified: String,
     navController: NavController,
-    onSteamExit: () -> Unit
+    onSteamExit: () -> Unit,
+    onReloadClick: () -> Unit
 ) {
+    var isUpdating = if(heroes_list_last_modified=="01/01/1970 03:00:00") true else false
+    var updateText = if(isUpdating) {
+        stringResource(id = R.string.wait)
+    }else {
+        stringResource(id = R.string.heroes_list_last_modified) + " (" + heroes_list_last_modified + ")";
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,6 +115,7 @@ fun DefinedBySteamProfileView(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
+
                         .drawWithContent {
                             drawContent()
                             clipRect { // Not needed if you do not care about painting half stroke outside
@@ -133,7 +141,9 @@ fun DefinedBySteamProfileView(
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
-                            //navController.navigate(Screens.Steam.route)
+                            if(!isUpdating) {
+                                onReloadClick()
+                            }
                         }
                 ) {
                     Box(
@@ -144,7 +154,7 @@ fun DefinedBySteamProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = stringResource(id = R.string.heroes_list_last_modified) + " " + heroes_list_last_modified
+                            text = updateText
                         )
                     }
 

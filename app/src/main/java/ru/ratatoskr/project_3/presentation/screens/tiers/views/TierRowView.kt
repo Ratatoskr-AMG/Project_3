@@ -46,6 +46,7 @@ fun TierRowView(
                 selectedTier = viewState.player_tier[0] + ""
             }
         }
+        else -> {}
     }
 
     Log.e("TOHA", "selectedTier:" + selectedTier);

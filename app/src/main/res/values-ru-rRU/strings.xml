@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Изделие_3</string>
+    <string name="app_name">DoHeCo</string>
     <string name="title_home">Герои</string>
     <string name="title_hero">Герой</string>
     <string name="title_favorites">Избранное</string>
@@ -59,10 +59,11 @@
     <string name="hero_not_found">Герой не найден</string>
     <string name="back">Назад</string>
     <string name="sign_in_with_steam">Вход со Steam</string>
-    <string name="heroes_list_last_modified">Данные обновлялись: </string>
+    <string name="heroes_list_last_modified">Обновление данных</string>
+    <string name="heroes_list_last_modified_text">Последнее обновление</string>
     <string name="exit">Выйти</string>
     <string name="welcome">Добро пожаловать!</string>
-    <string name="title_tiers">Ваш уровень?</string>
+    <string name="title_tiers">Ваш уровень</string>
     <string name="undefined_tier_title">Неопределённый</string>
     <string name="herald_tier_title">Рекрут</string>
     <string name="guardian_tier_title">Страж</string>
@@ -76,5 +77,7 @@
     <string name="delete">Удалить</string>
     <string name="is_hero_favorite">Герой избран?</string>
     <string name="scroll_state">Состояние прокрутки</string>
+    <string name="comparing_string">Сравнение</string>
+    <string name="wait">Подождите...</string>
 
 </resources>

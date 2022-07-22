@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,7 +19,7 @@ import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.model.Hero
 
 @Composable
-fun FavoriteRowView(onHeroClick:(Hero)->Unit, it: Hero){
+fun FavoriteRowView(onHeroClick: (Hero) -> Unit, it: Hero) {
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -35,29 +36,55 @@ fun FavoriteRowView(onHeroClick:(Hero)->Unit, it: Hero){
     ) {
         Box(
             modifier = Modifier
-                .padding(start=20.dp)
+                .padding(start = 20.dp)
         ) {
-        Image(
-            modifier = Modifier
-                .width(20.dp)
-                .height(20.dp)
-                .clickable {
-                    onHeroClick(it)
-                },
-            painter = rememberImagePainter(it.icon),
-            contentDescription = it.name
-        )
-          }
+            Box(
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(20.dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxSize()
+                    //.padding(top = 7.dp, start = 7.dp)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_comparing_gr),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(15.dp)
+                            .height(15.dp)
+                    )
+                }
+
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            onHeroClick(it)
+                        },
+                    painter = rememberImagePainter(it.icon),
+                    contentDescription = it.name
+                )
+            }
+
+
+        }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(end = 20.dp)
-                .fillMaxWidth()){
+                .fillMaxWidth()
+        ) {
             Text(
-                modifier = Modifier.padding(15.dp,0.dp,20.dp,0.dp).clickable {
-                    onHeroClick(it)
-                },
+                modifier = Modifier
+                    .padding(15.dp, 0.dp, 20.dp, 0.dp)
+                    .clickable {
+                        onHeroClick(it)
+                    },
                 fontSize = 12.sp,
                 color = Color.White,
                 text = it.localizedName

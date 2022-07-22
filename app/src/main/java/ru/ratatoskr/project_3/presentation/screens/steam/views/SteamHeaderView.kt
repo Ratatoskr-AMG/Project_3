@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -152,6 +153,22 @@ fun SteamHeaderView(
                 Screens.Tier.route
             )
         }) {
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxSize()
+                //.padding(top = 7.dp, start = 7.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_comparing_gr),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(25.dp)
+                        .height(25.dp)
+                )
+            }
 
             Image(
                 painter = rememberImagePainter(tierImage),

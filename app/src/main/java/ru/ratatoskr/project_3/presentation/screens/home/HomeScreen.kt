@@ -31,6 +31,7 @@ fun HomeScreen(
         is HomeState.NoHomeState -> MessageView(stringResource(id = R.string.heroes_not_found))
         is HomeState.LoadingHomeState -> LoadingView(stringResource(id = R.string.loading))
         is HomeState.ErrorHomeState -> MessageView(stringResource(id = R.string.error))
+        else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {

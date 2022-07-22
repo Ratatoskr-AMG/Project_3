@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -215,6 +216,22 @@ fun HeroView(
                             cAlign = Alignment.TopStart
                         }
 
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxSize()
+                            //.padding(top = 7.dp, start = 7.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_comparing_gr),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .width(25.dp)
+                                    .height(25.dp)
+                            )
+                        }
+
                         Image(
                             painter = rememberImagePainter(hero.img),
                             contentDescription = hero.localizedName,
@@ -327,7 +344,8 @@ fun HeroView(
                         //verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = 5.dp, start = 20.dp, end = 20.dp)
+                            .padding(top = 0.dp, start = 0.dp, end = 0.dp)
+                            .background(Color(0xFF131313))
                     ) {
                         // display items horizontally
                         items(rolesList.size) { item ->
@@ -338,18 +356,18 @@ fun HeroView(
                             } else {
                                 role
                             }
-                            var paddingStart = if(item==0) 0.dp else 15.dp
+                            var paddingStart = if(item==0) 0.dp else 5.dp
 
                             Box(
                                 modifier = Modifier
-                                    .padding(top = 7.dp, bottom= 7.dp, start = paddingStart)
-                                    .border(1.dp, Color.White, CircleShape)
-                                    .background(Color.Black)
+                                    .padding(top = 8.dp, bottom= 8.dp, start = paddingStart)
+                                    //.border(1.dp, Color.White, CircleShape)
+                                    .background(Color.Transparent)
                             ) {
 
                                 Box(
                                     modifier = Modifier
-                                        .padding(top = 5.dp, bottom= 5.dp, start = 12.dp, end = 12.dp)
+                                        .padding(top = 5.dp, bottom= 5.dp, start = 20.dp, end = 20.dp)
                                         .clickable {
                                             onRoleClick(role)
                                         }

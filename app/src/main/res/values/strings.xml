@@ -58,10 +58,11 @@
     <string name="hero_not_found">Hero not found</string>
     <string name="back">Back</string>
     <string name="sign_in_with_steam">Sign in with Steam</string>
-    <string name="heroes_list_last_modified">Heroes list last modified: </string>
+    <string name="heroes_list_last_modified">Update data</string>
+    <string name="heroes_list_last_modified_text">Last modified</string>
     <string name="exit">Exit</string>
     <string name="welcome">Welcome!</string>
-    <string name="title_tiers">Your tier?</string>
+    <string name="title_tiers">Your tier</string>
     <string name="undefined_tier_title">Undefined</string>
     <string name="herald_tier_title">Herald</string>
     <string name="guardian_tier_title">Guardian</string>
@@ -75,4 +76,6 @@
     <string name="delete">Delete</string>
     <string name="is_hero_favorite">Is hero favorite?</string>
     <string name="scroll_state">Scroll state</string>
+    <string name="comparing_string">Comparing</string>
+    <string name="wait">Wait...</string>
 </resources>

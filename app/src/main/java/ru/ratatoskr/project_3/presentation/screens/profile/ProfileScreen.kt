@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.profile.models.ProfileEvent
 import ru.ratatoskr.project_3.presentation.screens.profile.models.ProfileState
@@ -39,32 +40,8 @@ fun ProfileScreen(
         return null
     }
 
-
-    val player_tier = viewModel.getPlayerTierFromSP()
-    val player_steam_name = viewModel.getPlayerSteamNameFromSP()
-    //val heroes_list_last_modified =
-    //    Date(appSharedPreferences.getLong("heroes_list_last_modified", 0))
-    //        .toString()
-    val secondApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
     val calendarDate = Calendar.getInstance()
-    calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-    val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-    val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-    val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-    val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-    val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-    val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-
-    var date = Date(appSharedPreferences.getLong("heroes_list_last_modified", 0))
-
-    var heroes_list_last_modified =
-        day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
-
-    if (player_steam_name != "undefined") {
-        viewModel.setSteamIsDefinedProfileState()
-    } else {
-        viewModel.setUndefinedProfileState()
-    }
+    val player_tier = viewModel.getPlayerTierFromSP()
 
     val viewState = viewModel.profileState.observeAsState()
 
@@ -72,8 +49,23 @@ fun ProfileScreen(
 
         is ProfileState.UndefinedState -> {
 
-            if(state.heroes_list_last_modified=="0") {
-                heroes_list_last_modified= stringResource(id = R.string.wait)
+            var heroes_list_last_modified = ""
+            if (state.heroes_list_last_modified == "0"
+            ) {
+                heroes_list_last_modified = stringResource(id = R.string.wait)
+            }else{
+                calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
+                //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
+
+                val month = getAbbreviatedFromDateTime(calendarDate, "MM");
+                val day = getAbbreviatedFromDateTime(calendarDate, "dd");
+                val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
+                val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
+                val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
+                val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
+                heroes_list_last_modified =
+                    day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
+
             }
 
             UndefinedProfileView(
@@ -88,9 +80,21 @@ fun ProfileScreen(
 
         }
         is ProfileState.SteamNameIsDefinedState -> {
+            var heroes_list_last_modified = ""
 
-            if(state.heroes_list_last_modified=="0") {
-                heroes_list_last_modified= stringResource(id = R.string.wait)
+            if (state.heroes_list_last_modified == "0") {
+                heroes_list_last_modified = stringResource(id = R.string.wait)
+            }else{
+                calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
+                //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
+                val month = getAbbreviatedFromDateTime(calendarDate, "MM");
+                val day = getAbbreviatedFromDateTime(calendarDate, "dd");
+                val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
+                val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
+                val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
+                val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
+                heroes_list_last_modified =
+                    day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
             }
 
             DefinedBySteamProfileView(
@@ -99,8 +103,8 @@ fun ProfileScreen(
                 player_tier,
                 heroes_list_last_modified,
                 navController,
-                {viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
-                {viewModel.obtainEvent(ProfileEvent.OnUpdate)}
+                { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
+                { viewModel.obtainEvent(ProfileEvent.OnUpdate) }
             )
 
         }

@@ -4,6 +4,10 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.ImageResult
+import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    imageLoader: ImageLoader,
     appSharedPreferences: SharedPreferences,
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
     val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
@@ -27,6 +32,7 @@ class HomeViewModel @Inject constructor(
 ) : AndroidViewModel(Application()) {
 
     var appSharedPreferences = appSharedPreferences
+    var imageLoader = imageLoader
 
     val _heroesList_state: MutableLiveData<HomeState> =
         MutableLiveData<HomeState>(HomeState.LoadingHomeState())
@@ -67,6 +73,20 @@ class HomeViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
+    }
+
+    fun saveHeroImage(request:ImageRequest){
+        viewModelScope.launch(Dispatchers.IO) {
+            imageLoader.execute(request)
+        }
+    }
+
+    fun getHeroImage(request:ImageRequest) : ImageResult {
+        lateinit var imageres : ImageResult
+        viewModelScope.launch(Dispatchers.IO) {
+            imageres = imageLoader.execute(request)
+        }
+        return imageres
     }
 
     suspend fun getAllHeroesFromApi(appSharedPreferences:SharedPreferences) {

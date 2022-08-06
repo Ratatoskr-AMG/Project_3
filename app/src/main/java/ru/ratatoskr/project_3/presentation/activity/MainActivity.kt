@@ -1,9 +1,11 @@
 package ru.ratatoskr.project_3.presentation.activity
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.height
@@ -28,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
@@ -54,6 +57,7 @@ class MainActivity() : AppCompatActivity() {
 
     val APP_SHARED_PREFERENCES_NAME = "app_preferences"
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +68,10 @@ class MainActivity() : AppCompatActivity() {
             APP_SHARED_PREFERENCES_NAME,
             Context.MODE_PRIVATE
         )
+
+        val imageLoader = ImageLoader.Builder(this)
+            .crossfade(true)
+            .build()
 
         setContent {
             rememberSystemUiController().setStatusBarColor(color = Color.Transparent)

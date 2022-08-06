@@ -1,6 +1,8 @@
 package ru.ratatoskr.project_3.presentation.screens.home.views
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,11 +25,15 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
@@ -36,19 +42,69 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.disk.DiskCache
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import coil.size.Size
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.model.Hero
 import ru.ratatoskr.project_3.domain.utils.rememberForeverLazyListState
+import ru.ratatoskr.project_3.presentation.screens.home.HomeViewModel
+
+@Composable
+fun loadPicture(url: String, placeholder: Painter? = null): Painter? {
+
+    var state by remember {
+        mutableStateOf(placeholder)
+    }
+
+    val options: RequestOptions = RequestOptions().autoClone().diskCacheStrategy(DiskCacheStrategy.ALL)
+    val context = LocalContext.current
+    val result = object : CustomTarget<Bitmap>() {
+        override fun onLoadCleared(p: Drawable?) {
+            state = placeholder
+        }
+
+        override fun onResourceReady(
+            resource: Bitmap,
+            transition: Transition<in Bitmap>?,
+        ) {
+            state = BitmapPainter(resource.asImageBitmap())
+        }
+    }
+    try {
+        Glide.with(context)
+            .asBitmap()
+            .load(url)
+            .apply(options)
+            .into(result)
+    } catch (e: Exception) {
+        // Can't use LocalContext in Compose Preview
+    }
+    return state
+}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalFoundationApi
 @Composable
 fun HomeListView(
+    viewModel: HomeViewModel,
+    imageLoader: ImageLoader,
     data: List<Any?>,
     onHeroClick: (Hero) -> Unit,
     onHeroSearch: (String) -> Unit
 ) {
+
+
     val heroes = data.mapNotNull { it as? Hero }
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
@@ -206,12 +262,12 @@ fun HomeListView(
                                         .width(70.dp)
                                         .padding(10.dp)
                                         .height(35.dp)) {
-                                        Row(
+                                        /*Row(
                                             horizontalArrangement = Arrangement.Center,
                                             verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
                                                 .fillMaxSize()
-                                                //.padding(top = 7.dp, start = 7.dp)
+                                            //.padding(top = 7.dp, start = 7.dp)
                                         ) {
                                             Image(
                                                 painter = painterResource(R.drawable.ic_comparing_gr),
@@ -220,15 +276,83 @@ fun HomeListView(
                                                     .width(15.dp)
                                                     .height(15.dp)
                                             )
-                                        }
+                                        }*/
 
-                                        Image(
+                                        val localCurrentContext = LocalContext.current
+
+
+                                        /*AsyncImage(
+                                           model = ImageRequest.Builder(LocalContext.current)
+                                               .data(hero.icon)
+                                               .crossfade(true)
+                                               .memoryCachePolicy(CachePolicy.ENABLED)
+                                               .build(),
+                                           contentDescription = hero.name,
+                                           modifier = Modifier
+                                               .width(70.dp)
+                                               .height(35.dp),
+
+                                       )
+
+*/
+
+
+
+                                        //viewModel.saveHeroImage(request)
+                                        val request = ImageRequest.Builder(localCurrentContext)
+                                            .data(hero.icon)
+                                            //.diskCacheKey(hero.icon)
+                                            /*.target({AsyncImage(
+                                                model = hero.icon,
+                                                contentDescription = hero.name,
+                                                modifier = Modifier
+                                                    .width(70.dp)
+                                                    .height(35.dp)
+                                        )})*/
+                                            .size(Size.ORIGINAL)
+                                            .build()
+
+                                        imageLoader.enqueue(request)
+
+                                        val painter = loadPicture(
+                                            url = hero.icon,
+                                            placeholder = painterResource(id = R.drawable.ic_comparing_gr)
+                                        )
+
+                                        //viewModel.saveHeroImage(request)
+/*
+                                        AsyncImage(
+                                            model = hero.icon,
                                             modifier = Modifier
                                                 .width(70.dp)
                                                 .height(35.dp),
-                                            painter = rememberImagePainter(hero.icon),
-                                            contentDescription = hero.name
+                                            contentDescription = hero.name,
+
+                                        )*/
+
+
+                                        Image(
+                                            contentDescription = hero.name,
+                                            painter = painter!!,
+                                            modifier = Modifier
+                                                .width(70.dp)
+                                                .height(35.dp)
                                         )
+                                        /*Image(
+                                            rememberAsyncImagePainter(
+                                                remember(hero.icon) {
+                                                    ImageRequest.Builder(localCurrentContext)
+                                                        .data(hero.icon)
+                                                        .diskCacheKey(hero.icon)
+                                                        .memoryCacheKey(hero.icon)
+                                                        .diskCachePolicy(CachePolicy.ENABLED)
+                                                        .build()
+                                                }
+                                            ),
+                                            hero.name
+                                        )*/
+
+
                                     }
 
                                 } else {

@@ -4,13 +4,11 @@ class Questions {
     companion object {
         fun q1() {
             /*
-
+                Правильно ли, что через useCase?
             */
         }
         fun q2() {
-            /*
 
-            */
         }
         fun qX() {
         /*
@@ -22,17 +20,27 @@ class Questions {
 
 /* Вопросы
 
-1. Как разбить contracts  по фичам (и для чего это?)
-2. Как правильно работать с темами (стоит ли сводить в переменные одинаковые стили, отступы и т.п.)
-3. Как сохранять иконки и т.п. на телефон?
-4. Как отразить картинки?
-5. Как настроить расписание?
-6. Как реализовать разделение на платный/бесплатный контент?
+1. Как разбить contracts  по фичам (и для чего это?) ГЛЯНУТЬ ПРИМЕРЫ
+2. Как сохранять файлы на телефон? и стоит ли
+https://coil-kt.github.io/coil/image_loaders/#caching
+Composition Local
+3. Как приступить к написанию тестов? Например, как протестировать кнопку "Обновить" (?)
+https://developer.android.com/jetpack/compose/testing
+Firebase Тестирование
+4. Как интегрируется монетизация обновлений?
+Billing Библиотеки
+5. Отражение картинки
+https://github.com/Commit451/coil-transformations
+https://coil-kt.github.io/coil/transformations/
+6. Бизнес аналитика
+Firebase Log Event
+https://www.youtube.com/watch?v=9-emL-Fbvp0
 
 */
+
 /* Архитектура
 data
-    contracts (названия таблиц и столбцов в БД) можно разбить по фичам (!)
+    contracts (названия таблиц и столбцов в БД)
     converters (Roles List <-> Roles String)
     dao (база данных, запросы)
 domain
@@ -46,23 +54,26 @@ presentation
     screens (Вёрстка)
     theme (Стили)
 */
-/* Задания:
-    Список героев по рейтингу юзера
-*/
-/* Пройдено:
-Helpers (состояния, события, перечень экранов) перенести к экранам +
-Кнопка удаления из избранного +
-Русский язык +
-Переделать вёрстку шапок, где необходимо +
-Прижатие изображения на странице героя +
-Исключить дубликаты при генерации списков +
-Листалка скролла +
-Избавиться от stickyHeader, где необходимо +
-Атрибуты во FLowRow на странице героя +
-Фон списков сделать чёрным +
-Заглушки под изображения +
-Кнопка обновления данных +
 
+/* Задания:
+    Helpers (состояния, события, перечень экранов) перенести к экранам +
+    Убрать кнопки "Назад" и переделать вёрстку шапок, где необходимо +
+    Кнопка "Удаления" из избранного +
+    Листалка скролла +
+    Русский язык +
+    Прижатие изображения на странице героя +
+    Исключить дубликаты при генерации списков +
+    Избавиться от stickyHeader +
+    Атрибуты во FLowRow +
+    Фон сделать чёрным +
+    Заглушки под изображения +
+    Кнопка обновления данных +
+    Заблокировать Landscape +
+    Рекомендации по уровням
+    Иконка на эмуляторе (квадрат)
+*/
+
+/* Пройдено:
 Посмотреть developer.huawei.com +
 Название (Dota Heroes Comparing DoHeСo) +
 Аккаунт Huawei App Gallery +
@@ -80,7 +91,9 @@ Helpers (состояния, события, перечень экранов) п
 Авторизация и определение уровня пользователя +
 Страница уровней +
 Возможность обновить данные вручную после установки +
+
 */
+
 /* Разное
 + Куда опубликовать? Huawei
 + Что показывать вместо пустого списка избранных? (добавить быстрое удаление, арт в центр экрана)
@@ -134,6 +147,7 @@ scope http bd converters -> app.scope = @Singleton
 
 */
 /* Ссылки:
+https://coil-kt.github.io/coil/image_loaders/#caching
 https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
 https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
 https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyScreen.kt

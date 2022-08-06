@@ -150,7 +150,8 @@ fun LoadingScreen(text: String, navController: NavController, leftBtnPainter: In
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0x55202020))
+                    //.background(Color(0x55202020))
+                    .background(Color(0x000000))
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),

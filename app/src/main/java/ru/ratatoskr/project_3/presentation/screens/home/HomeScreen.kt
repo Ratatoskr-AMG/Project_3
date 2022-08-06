@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import coil.ImageLoader
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.presentation.screens.Screens
 import ru.ratatoskr.project_3.presentation.screens.home.models.HomeState
@@ -20,8 +21,12 @@ fun HomeScreen(
     navController: NavController,
 ) {
 
+
+
     when (val state = viewModel.homeState.observeAsState().value) {
         is HomeState.LoadedHomeState<*> -> HomeListView(
+            viewModel,
+            viewModel.imageLoader,
             state.heroes, {
                 navController.navigate(Screens.Hero.route + "/" + it.id)
             }, {

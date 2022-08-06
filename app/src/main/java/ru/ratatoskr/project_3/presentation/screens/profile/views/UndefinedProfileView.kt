@@ -57,7 +57,8 @@ fun UndefinedProfileView(
             state = scrollState,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0x55202020))
+                //.background(Color(0x55202020))
+                .background(Color(0x000000))
         ) {
 
             stickyHeader {

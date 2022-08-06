@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.ratatoskr.project_3.Questions
 import ru.ratatoskr.project_3.R
 import ru.ratatoskr.project_3.domain.useCases.heroes.AddHeroesUserCase
 import ru.ratatoskr.project_3.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
@@ -68,6 +69,11 @@ class ProfileViewModel @Inject constructor(
 
     private fun getInitProfileState(): MutableLiveData<ProfileState> {
 
+        viewModelScope.launch(Dispatchers.IO) {
+            Questions.q1()
+            val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
+        }
+
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
         var player_steam_name =
             appSharedPreferences.getString("player_steam_name", "undefined").toString()
@@ -118,9 +124,12 @@ class ProfileViewModel @Inject constructor(
 
     private fun updateHeroes() {
 
-
-
         viewModelScope.launch(Dispatchers.IO) {
+
+            Log.e("TOHAR","Set Wait");
+            player_steam_name_from_sp =
+                GetPlayerSteamNameFromSPUseCase.getPlayerSteamNameFromSP(appSharedPreferences)
+
             appSharedPreferences.edit().putLong("heroes_list_last_modified", 0).apply()
             if(player_steam_name_from_sp=="undefined"){
                 try {
@@ -145,7 +154,8 @@ class ProfileViewModel @Inject constructor(
                 }
             }
 
-            Log.e("TOHAR","updateHeroes");
+            Log.e("TOHAR","Now updateHeroes");
+
             try {
                 var heroes = GetAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
                 if(heroes!!.isEmpty()) {
@@ -159,7 +169,7 @@ class ProfileViewModel @Inject constructor(
                     if(player_steam_name_from_sp=="undefined"){
                         try {
                             _profile_state.postValue(
-                                ProfileState.UndefinedState(player_tier_from_sp, "asd1+"+currTime.toString())
+                                ProfileState.UndefinedState(player_tier_from_sp, currTime.toString())
                             )
                         } catch (e: Exception) {
                             _profile_state.postValue(ProfileState.ErrorProfileState)
@@ -170,7 +180,7 @@ class ProfileViewModel @Inject constructor(
                                 ProfileState.SteamNameIsDefinedState(
                                     player_tier_from_sp,
                                     player_steam_name_from_sp,
-                                    "asd2+"+currTime.toString()
+                                    currTime.toString()
                                 )
                             )
 
@@ -191,6 +201,7 @@ class ProfileViewModel @Inject constructor(
 
         }
     }
+
     private fun exitSteam() {
 
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")

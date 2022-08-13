@@ -3,9 +3,7 @@ package ru.ratatoskr.project_3
 class Questions {
     companion object {
         fun q1() {
-            /*
-                Правильно ли, что через useCase?
-            */
+
         }
         fun q2() {
 
@@ -20,21 +18,9 @@ class Questions {
 
 /* Вопросы
 
-1. Как разбить contracts  по фичам (и для чего это?) ГЛЯНУТЬ ПРИМЕРЫ
-2. Как сохранять файлы на телефон? и стоит ли
-https://coil-kt.github.io/coil/image_loaders/#caching
-Composition Local
-3. Как приступить к написанию тестов? Например, как протестировать кнопку "Обновить" (?)
-https://developer.android.com/jetpack/compose/testing
-Firebase Тестирование
-4. Как интегрируется монетизация обновлений?
-Billing Библиотеки
-5. Отражение картинки
-https://github.com/Commit451/coil-transformations
-https://coil-kt.github.io/coil/transformations/
-6. Бизнес аналитика
-Firebase Log Event
-https://www.youtube.com/watch?v=9-emL-Fbvp0
+1. Coil Cache
+2. MyComposeTest
+3. https://dash.qonversion.io/monitoring?project=vkGq2TLJ&environment=0&realTimeMode=false
 
 */
 
@@ -56,24 +42,29 @@ presentation
 */
 
 /* Задания:
-    Helpers (состояния, события, перечень экранов) перенести к экранам +
-    Убрать кнопки "Назад" и переделать вёрстку шапок, где необходимо +
-    Кнопка "Удаления" из избранного +
-    Листалка скролла +
-    Русский язык +
-    Прижатие изображения на странице героя +
-    Исключить дубликаты при генерации списков +
-    Избавиться от stickyHeader +
-    Атрибуты во FLowRow +
-    Фон сделать чёрным +
-    Заглушки под изображения +
-    Кнопка обновления данных +
-    Заблокировать Landscape +
+    Кэш иконок на главной +
+    Подключить Qonversion +
+    Написать простой тест
+    Подключить Firebase
     Рекомендации по уровням
     Иконка на эмуляторе (квадрат)
+    Сравнялка
 */
 
 /* Пройдено:
+Helpers (состояния, события, перечень экранов) перенести к экранам +
+Убрать кнопки "Назад" и переделать вёрстку шапок, где необходимо +
+Кнопка "Удаления" из избранного +
+Листалка скролла +
+Русский язык +
+Прижатие изображения на странице героя +
+Исключить дубликаты при генерации списков +
+Избавиться от stickyHeader +
+Атрибуты во FLowRow +
+Фон сделать чёрным +
+Заглушки под изображения +
+Кнопка обновления данных +
+Заблокировать Landscape +
 Посмотреть developer.huawei.com +
 Название (Dota Heroes Comparing DoHeСo) +
 Аккаунт Huawei App Gallery +
@@ -95,6 +86,22 @@ presentation
 */
 
 /* Разное
+
++ Как разбить contracts  по фичам (и для чего это?) ГЛЯНУТЬ ПРИМЕРЫ
++ Как сохранять файлы на телефон? и стоит ли
+https://coil-kt.github.io/coil/image_loaders/#caching
+Composition Local
++  Как приступить к написанию тестов? Например, как протестировать кнопку "Обновить" (?)
+https://developer.android.com/jetpack/compose/testing
+Firebase Тестирование
++ Как интегрируется монетизация обновлений?
+Billing Библиотеки
++  Отражение картинки
+https://github.com/Commit451/coil-transformations
+https://coil-kt.github.io/coil/transformations/
++ Бизнес аналитика
+Firebase Log Event
+https://www.youtube.com/watch?v=9-emL-Fbvp0
 + Куда опубликовать? Huawei
 + Что показывать вместо пустого списка избранных? (добавить быстрое удаление, арт в центр экрана)
 + Безопасность exoplayer +

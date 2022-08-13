@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     aaptOptions {
-        additionalParameters =["--warn-manifest-validation"]
+        additionalParameters = ["--warn-manifest-validation"]
     }
     buildTypes {
         release {
@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.test.ext:junit-ktx:1.1.3'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     def foundationVersion = '1.1.1'
@@ -68,12 +69,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
 
     //Coil
-    def coilVersion =   '2.0.0'
+    def coilVersion = '2.0.0'
     implementation "io.coil-kt:coil:$coilVersion"
     implementation "io.coil-kt:coil-compose:$coilVersion"
 
     //Ktor
-    def ktorVersion =   '1.4.0'
+    def ktorVersion = '1.4.0'
     implementation "io.ktor:ktor-client-core:$ktorVersion"
     implementation "io.ktor:ktor-client-android:$ktorVersion"
     implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
@@ -140,5 +141,11 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // Test rules and transitive dependencies:
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+// Needed for createComposeRule, but not createAndroidComposeRule:
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
+
+    implementation 'io.qonversion.android.sdk:sdk:3.+'
 
 }

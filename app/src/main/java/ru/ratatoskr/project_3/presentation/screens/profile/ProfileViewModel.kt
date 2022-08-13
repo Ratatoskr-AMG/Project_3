@@ -70,7 +70,7 @@ class ProfileViewModel @Inject constructor(
     private fun getInitProfileState(): MutableLiveData<ProfileState> {
 
         viewModelScope.launch(Dispatchers.IO) {
-            Questions.q1()
+            //TierHeroes
             val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
         }
 

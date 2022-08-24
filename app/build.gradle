@@ -3,11 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "ru.ratatoskr.project_3"
+        applicationId "ru.ratatoskr.doheco"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
@@ -135,6 +136,9 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:0.17.0"
     implementation "com.google.accompanist:accompanist-flowlayout:0.17.0"
 
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     // Test
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
@@ -143,7 +147,7 @@ dependencies {
 
     // Test rules and transitive dependencies:
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
-// Needed for createComposeRule, but not createAndroidComposeRule:
+    // Needed for createComposeRule, but not createAndroidComposeRule:
     debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
 
     implementation 'io.qonversion.android.sdk:sdk:3.+'

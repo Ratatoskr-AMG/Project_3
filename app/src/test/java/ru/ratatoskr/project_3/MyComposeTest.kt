@@ -1,5 +1,5 @@
-package ru.ratatoskr.project_3
-
+package ru.ratatoskr.doheco
+import ru.ratatoskr.doheco.Questions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 //import androidx.compose.ui.test.junit4.createComposeRule
@@ -10,6 +10,11 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MyComposeTest {
+
+    fun myComposeTest(){
+        ru.ratatoskr.doheco.Questions.q1()
+    }
+
     /*
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -28,6 +33,7 @@ class MyComposeTest {
         composeTestRule.onNodeWithText("Welcome").assertIsDisplayed()
     }
     */
+
 
 
 }

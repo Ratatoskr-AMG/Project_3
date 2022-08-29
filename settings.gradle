@@ -8,6 +8,6 @@ dependencyResolutionManagement {
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
-rootProject.name = "Project_3"
+rootProject.name = "DoHeCo"
 */
 include ':app'

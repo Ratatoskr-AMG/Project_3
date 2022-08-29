@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "712149487805",
+    "project_id": "doheco-766b1",
+    "storage_bucket": "doheco-766b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712149487805:android:524b28174036830efea7d4",
+        "android_client_info": {
+          "package_name": "ru.ratatoskr.doheco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712149487805-bd0u7dggek8osfilqndlc5g81t7mbm76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.ratatoskr.doheco",
+            "certificate_hash": "edef348d21e490a4c4696e394d85aaea10b384aa"
+          }
+        },
+        {
+          "client_id": "712149487805-66s95l8nq1lvvv9go4qmlv4cckbtn6k3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU7Pc1_UhR4eTv2DCs9gTPftTJL81P448"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712149487805-66s95l8nq1lvvv9go4qmlv4cckbtn6k3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

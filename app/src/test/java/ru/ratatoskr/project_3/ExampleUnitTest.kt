@@ -1,4 +1,4 @@
-package ru.ratatoskr.project_3
+package ru.ratatoskr.doheco
 
 import org.junit.Test
 

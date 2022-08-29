@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Project_3</string>
+    <string name="app_name">DoHeCo</string>
     <string name="title_home">Heroes</string>
     <string name="title_hero">Hero</string>
     <string name="title_favorites">Favorites</string>

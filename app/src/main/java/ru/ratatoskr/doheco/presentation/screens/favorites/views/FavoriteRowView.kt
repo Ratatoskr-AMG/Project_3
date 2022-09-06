@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.domain.model.Hero
@@ -65,7 +66,7 @@ fun FavoriteRowView(onHeroClick: (Hero) -> Unit, it: Hero) {
                         .clickable {
                             onHeroClick(it)
                         },
-                    painter = rememberImagePainter(it.icon),
+                    painter = rememberAsyncImagePainter(it.icon),
                     contentDescription = it.name
                 )
             }
@@ -94,7 +95,7 @@ fun FavoriteRowView(onHeroClick: (Hero) -> Unit, it: Hero) {
                 modifier = Modifier
                     .width(10.dp)
                     .height(10.dp),
-                painter = rememberImagePainter(
+                painter = rememberAsyncImagePainter(
                     R.drawable.ic_back
                 ),
                 contentDescription = stringResource(R.string.drop_from_favorites)

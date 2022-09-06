@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.presentation.screens.tiers.models.TiersState
@@ -105,7 +106,7 @@ fun TiersHeaderView(
                     modifier = Modifier
                         .width(15.dp)
                         .height(15.dp),
-                    painter = rememberImagePainter(
+                    painter = rememberAsyncImagePainter(
                         R.drawable.ic_back
                     ),
                     contentDescription = "Back"

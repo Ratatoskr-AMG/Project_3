@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
@@ -63,7 +64,6 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         val appSharedPreferences = this.getSharedPreferences(
             APP_SHARED_PREFERENCES_NAME,
             Context.MODE_PRIVATE
@@ -79,7 +79,7 @@ class MainActivity() : AppCompatActivity() {
                 val navController = rememberNavController()
                 var bottomNavMenuHeight = 80.dp
                 Scaffold(
-                    modifier = Modifier.navigationBarsPadding(),
+                    modifier = Modifier.navigationBarsPadding().background(Color.Black),
                     bottomBar = {
                         BottomNavigation(
                             modifier = Modifier
@@ -108,7 +108,8 @@ class MainActivity() : AppCompatActivity() {
                                 .height(bottomNavMenuHeight),
                             backgroundColor = Color(0xFF000000)
                         ) {
-                            val items =
+
+                            val bottomMenuItems =
                                 listOf(
                                     Screens.Home,
                                     Screens.Favorites,
@@ -116,17 +117,15 @@ class MainActivity() : AppCompatActivity() {
                                     Screens.Profile,
                                     Screens.Video
                                 )
+
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentDestination = navBackStackEntry?.destination
 
-                            items.forEach { value ->
+                            bottomMenuItems.forEach { value ->
                                 val isSelected =
                                     currentDestination?.hierarchy?.any { it.route == value.route } == true
 
-                                Log.e("TOHA3","value.route:"+value.route)
-                                Log.e("TOHA3","isSelected:"+isSelected)
-                                if (isSelected)Log.e("TOHA3","value.icon_wh:"+value.icon_wh)
-                                else Log.e("TOHA3","value.icon_tr:"+value.icon_tr)
+
 
                                 BottomNavigationItem(
                                     modifier = Modifier
@@ -142,7 +141,9 @@ class MainActivity() : AppCompatActivity() {
                                                 .width(20.dp)
                                                 .height(20.dp)
                                                 .align(Alignment.CenterVertically),
-                                            painter = if (isSelected) rememberImagePainter(value.icon_wh) else rememberImagePainter(
+                                            painter = if (isSelected) rememberAsyncImagePainter(
+                                                value.icon_wh
+                                            ) else rememberAsyncImagePainter(
                                                 value.icon_tr
                                             ),
                                             contentDescription = value.description.toString(),
@@ -158,11 +159,14 @@ class MainActivity() : AppCompatActivity() {
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
+
                             val heroesListviewModel = hiltViewModel<HomeViewModel>()
+
                             HomeScreen(
                                 viewModel = heroesListviewModel,
                                 navController = navController,
                             )
+
                         }
                         composable(Screens.Hero.route + "/{id}") { navBackStack ->
                             val id = navBackStack.arguments?.getString("id").toString()
@@ -208,6 +212,12 @@ class MainActivity() : AppCompatActivity() {
                             val comparingViewModel = hiltViewModel<ComparingViewModel>()
                             ComparingScreen(comparingViewModel)
                         }
+                        /*
+                        composable(Screens.ComparingSelect.route) {navBackStack->
+                            val side = navBackStack.arguments?.getString("side")
+                            val comparingSelectViewModel = hiltViewModel<ComparingSelectViewModel>()
+                            ComparingSelectScreen(comparingSelectViewModel,side)
+                        }*/
                     }
                 }
 

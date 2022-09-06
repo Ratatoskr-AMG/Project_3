@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.ratatoskr.doheco.Questions
 import ru.ratatoskr.doheco.domain.utils.EventHandler
 import ru.ratatoskr.doheco.domain.extensions.set
 import ru.ratatoskr.doheco.presentation.screens.hero.models.HeroEvent

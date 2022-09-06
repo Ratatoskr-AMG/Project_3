@@ -13,4 +13,5 @@ sealed class Screens(val route: String, val description: Int = 0, val icon_tr: I
     object Steam : Screens("steam")
     object Tier : Screens("tier")
     object Comparing : Screens("comparing",R.string.comparing_string,R.drawable.ic_comparing_tr,R.drawable.ic_comparing_wh)
+    object ComparingSelect : Screens("comparing_select",R.string.comparing_string,R.drawable.ic_comparing_tr,R.drawable.ic_comparing_wh)
 }

@@ -1,6 +1,7 @@
 package ru.ratatoskr.doheco.presentation.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,11 +52,12 @@ fun HeroScreen(
 
     when (val state = viewState.value) {
         is HeroState.HeroLoadedState -> {
+
             val isChecked = state.isFavorite
             val hero = state.hero
+
             HeroView(
                 hero,
-                navController,
                 isChecked,
                 onFavoriteChange = {
                     viewModel.obtainEvent(
@@ -64,11 +66,14 @@ fun HeroScreen(
                             isChecked
                         )
                     )
-                    /*onCheckedChange(hero.id, isChecked)*/
                 },
                 onRoleClick = {
                     navController.navigate(Screens.Role.route + "/" + it)
-                }
+                },
+                onAttrClick = {
+                    Log.d("TOHA","onAttrClick")
+                },
+                navController
 
             )
         }

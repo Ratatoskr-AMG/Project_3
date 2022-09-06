@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.domain.extensions.toArrayList
@@ -34,7 +35,7 @@ import ru.ratatoskr.doheco.presentation.screens.favorites.FavoritesViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalFoundationApi
 @Composable
-fun FavoritesListView(
+fun FavoritesView(
     viewModel: FavoritesViewModel,
     heroes: List<Hero>,
     navController: NavController,
@@ -96,8 +97,6 @@ fun FavoritesListView(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
 
-                    Row() {
-
                         Box(contentAlignment = Alignment.Center,
 
                             modifier = Modifier
@@ -114,7 +113,7 @@ fun FavoritesListView(
                                 modifier = Modifier
                                     .width(15.dp)
                                     .height(15.dp),
-                                painter = rememberImagePainter(
+                                painter = rememberAsyncImagePainter(
                                     R.drawable.ic_back
                                 ),
                                 contentDescription = stringResource(id = R.string.title_favorites)
@@ -138,7 +137,7 @@ fun FavoritesListView(
 
                         }
 
-                    }
+
                 }
             }
         }

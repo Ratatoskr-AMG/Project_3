@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.presentation.screens.Screens
@@ -121,7 +122,7 @@ fun ProfileHeaderView(
                 }
 
                 Image(
-                    painter = rememberImagePainter(tierImage),
+                    painter = rememberAsyncImagePainter(tierImage),
                     contentDescription = tierDescription,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

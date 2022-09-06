@@ -7,13 +7,17 @@ class Questions {
                 MyComposeTest
             */
         }
-        fun q2() {
 
+        fun q2() {
+            /*
+                HeroViewModel.reduce()
+            */
         }
+
         fun qX() {
-        /*
-            #########
-        */
+            /*
+                #########
+            */
 
         }
     }
@@ -23,24 +27,81 @@ class Questions {
 
 1. Coil Cache
 2. https://dash.qonversion.io/monitoring?project=vkGq2TLJ&environment=0&realTimeMode=false
+3. MVP / MVVM (см. ниже)
+4. Single Responsibility - класс должен иметь только одну причину для изменений
+5. Open|Closed - класс должно быть легко дополнить
+6. Liskov substitution: если x из T, y из S, а T -> S, то q(x) -> q(y)
+7. ISP - Interface Segregation Principle
+8. DIP - Dependency Inversion Principle
+9. MVI - под Intent имеется в виду нечто подобное содержимому HeroViewModel.reduce()? см. q2
+10. Test
+
+*/
+
+/* MVP
+
+data
+    contracts (названия таблиц и столбцов в БД) | Model
+    converters (Roles List <-> Roles String) | Model
+    dao (база данных, запросы) | Model
+domain
+    di (модули для ktor)  | Model
+    model (дата классы: героя, избранного, пользователей и т.п.)  | Model
+    repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)  | Model
+    useCases (добавить в избранное, получить списки героев, данные о пользователе и т.п.) | Presenter
+    utils (вспомогательные конструкции)  | Model
+presentation
+    activity  | View
+    screens | View
+    theme | View
+
+    Если придерживаться MVP, то в ответ на действия пользователя - для получения результатов этих действий
+    и синхронизации представления: View классы использовали бы Presenter классы, которые а) реализовали бы логику
+    использования методов Model классов, б) управляли бы представлением методами интерфейсов View классов
+
+*/
+
+/* MVVM
+
+data
+    contracts (названия таблиц и столбцов в БД) | Model
+    converters (Roles List <-> Roles String) | Model
+    dao (база данных, запросы) | Model
+domain
+    di (модули для ktor)  | Model
+    model (дата классы: героя, избранного, пользователей и т.п.)  | Model
+    repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)  | Model
+    useCases (добавить в избранное, получить списки героев, данные о пользователе и т.п.) | Model
+    utils (вспомогательные конструкции)  | Model
+presentation
+    activity | View
+    screens  | View & ViewModel
+    theme | View
+
+    Т.к. придерживаемся MVVM, то в ответ на действия пользователя - для получения результатов этих действий
+    и синхронизации представления: View классы используют ViewModel классы а) реализующие логику
+    использования методов Model классов и б) управляющие своим состоянием. Управление представления
+    остаётся у View классов, которые в своих алгоритимах используют детерминированные (определённые заранее)
+    результаты наблюдения (observeAsState) за состоянием ViewModel
 
 */
 
 /* Архитектура
+
 data
-    contracts (названия таблиц и столбцов в БД)
-    converters (Roles List <-> Roles String)
-    dao (база данных, запросы)
+contracts (названия таблиц и столбцов в БД)
+converters (Roles List <-> Roles String)
+dao (база данных, запросы)
 domain
-    di (модули для ktor)
-    model (дата классы: героя, избранного, пользователей и т.п.)
-    repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)
-    useCases (добавить в избранное, получить списки героев, данные о пользователе и т.п.)
-    utils (вспомогательные конструкции)
+di (модули для ktor)
+model (дата классы: героя, избранного, пользователей и т.п.)
+repository (запросы: в БД, Steam,  OpenDota, Dotabuff и т.п.)
+useCases (добавить в избранное, получить списки героев, данные о пользователе и т.п.)
+utils (вспомогательные конструкции)
 presentation
-    activity (Точки входа)
-    screens (Вёрстка)
-    theme (Стили)
+activity
+screens
+theme
 */
 
 /* Задания:
@@ -157,6 +218,7 @@ scope http bd converters -> app.scope = @Singleton
 
 */
 /* Ссылки:
+https://startandroid.ru/ru/blog/493-mvp-dlja-nachinajuschih-bez-bibliotek-i-interfejsov.html
 https://coil-kt.github.io/coil/image_loaders/#caching
 https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
 https://github.com/AlexGladkov/JetpackComposeDemo/blob/main/app/src/main/java/ru/alexgladkov/jetpackcomposedemo/screens/daily/DailyViewModel.kt
@@ -294,3 +356,74 @@ windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
             }
 
 */
+/* HomeView:
+    when(configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            listColumnsCount = 7
+            listBannerHeight = 480.dp
+            lazYColumnSpaceBoxHeight = 480.dp
+        }
+    }
+*/
+/*
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current
+    var listBannerHeight: Dp = 240.dp
+    painter = rememberAsyncImagePainter(imageAddr)
+    val localCurrentContext = LocalContext.current
+
+     AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+        .data(hero.icon)
+        .crossfade(true)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .build(),
+         contentDescription = hero.name,
+           modifier = Modifier
+          .width(70.dp)
+         .height(35.dp),
+
+      )
+
+
+viewModel.saveHeroImage(request)
+
+AsyncImage(
+model = hero.icon,
+modifier = Modifier
+                                                .width(70.dp)
+                                                .height(35.dp),
+                                            contentDescription = hero.name,
+
+                                        )
+Image(
+                                        rememberAsyncImagePainter(
+                                            remember(hero.icon) {
+                                                ImageRequest.Builder(localCurrentContext)
+                                                    .data(hero.icon)
+                                                    .diskCacheKey(hero.icon)
+                                                    .memoryCacheKey(hero.icon)
+                                                    .diskCachePolicy(CachePolicy.ENABLED)
+                                                    .build()
+                                            }
+                                        ),
+                                        hero.name
+                                    )
+
+                                    val request = ImageRequest.Builder(localCurrentContext)
+                                        .data(hero.icon)
+                                        .diskCacheKey(hero.icon)
+                                        .target({AsyncImage(
+                                            model = hero.icon,
+                                            contentDescription = hero.name,
+                                            modifier = Modifier
+                                                .width(70.dp)
+                                                .height(35.dp)
+                                    )})
+                                        .size(Size.ORIGINAL)
+                                        .build()
+                                    imageLoader.enqueue(request)
+*/
+
+
+
+

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.presentation.screens.tiers.models.TiersState
@@ -116,7 +117,7 @@ fun TierRowView(
                 modifier = Modifier
                     .width(20.dp)
                     .height(20.dp),
-                painter = rememberImagePainter(tierImage),
+                painter = rememberAsyncImagePainter(tierImage),
                 contentDescription = tierDescription
             )
             Text(

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.data.converters.pixelsToDp
@@ -186,7 +187,7 @@ fun HeroesByAttributeListView(
                             modifier = Modifier
                                 .width(13.dp)
                                 .height(13.dp),
-                            painter = rememberImagePainter(
+                            painter = rememberAsyncImagePainter(
                                 R.drawable.ic_back
                             ),
                             contentDescription = "Back"

@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.domain.utils.appUtilsArrays
@@ -43,25 +42,25 @@ fun ComparingScreen(
             Log.e("TOHAht", state.right.toString())
             HeroesView(
                 {
-                    rightSelected=false
-                    selectMode=true
-                    leftSelected=true
+                    rightSelected = false
+                    selectMode = true
+                    leftSelected = true
                 },
                 {
-                    leftSelected=false
-                    selectMode=true
-                    rightSelected=true
+                    leftSelected = false
+                    selectMode = true
+                    rightSelected = true
                 },
                 {
-                    if(leftSelected) {
-                        left=it
+                    if (leftSelected) {
+                        left = it
                     }
-                    if(rightSelected) {
-                        right=it
+                    if (rightSelected) {
+                        right = it
                     }
-                    selectMode=false
-                    leftSelected=false
-                    rightSelected=false
+                    selectMode = false
+                    leftSelected = false
+                    rightSelected = false
                 },
                 selectMode,
                 leftSelected,
@@ -100,17 +99,17 @@ fun HeroesView(
     var leftImgColor = Color(0xFF00821d)
     var rightImgColor = Color(0xFF6a36a3)
 
-    if(leftSelected==true){
-        leftImgColor= Color(0xFFc98000)
+    if (leftSelected == true) {
+        leftImgColor = Color(0xFFc98000)
     }
-    if(rightSelected==true){
-        rightImgColor= Color(0xFFc98000)
+    if (rightSelected == true) {
+        rightImgColor = Color(0xFFc98000)
     }
-    val listColumnsCount=4
+    val listColumnsCount = 4
 
     Column {
         appHeaderInner {
-            appHeaderUnderlinedCenterVerticalledRow {
+            appHeaderUnderlinedCenterVerticalRow(Arrangement.SpaceBetween) {
                 appHeaderImageBox {
                     appHeaderImage(
                         onLeftClick,
@@ -122,10 +121,10 @@ fun HeroesView(
                 }
                 Column(
                     modifier = Modifier
-                        .width(200.dp)
+                        .width(180.dp)
                         .background(Color.Black)
                 ) {
-                    baseText(left.localizedName)
+                    appHeaderBaseText(left.localizedName)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -133,7 +132,7 @@ fun HeroesView(
                             .background(Color.Black)
                             .border(5.dp, Color.Black)
                     )
-                    baseText(right.localizedName)
+                    appHeaderBaseText(right.localizedName)
                 }
                 appHeaderImageBox {
                     appHeaderImage(
@@ -146,7 +145,7 @@ fun HeroesView(
                 }
             }
         }
-        if(selectMode==false) {
+        if (selectMode == false) {
             LazyColumn(
                 state = scrollState,
                 modifier = Modifier
@@ -406,7 +405,7 @@ fun HeroesView(
                     )
                 }
             }
-        }else{
+        } else {
 
             LazyColumn(
                 state = scrollState,
@@ -414,8 +413,8 @@ fun HeroesView(
                     .background(Color.Black)
                     .fillMaxWidth()
             ) {
-                var listRowsCount = heroes.size / (listColumnsCount+1)
-                if (heroes.size % (listColumnsCount+1) > 0) {
+                var listRowsCount = heroes.size / (listColumnsCount + 1)
+                if (heroes.size % (listColumnsCount + 1) > 0) {
                     listRowsCount += 1
                 }
 
@@ -427,7 +426,7 @@ fun HeroesView(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             for (column in 0..listColumnsCount) {
-                                var index = column + (row * (listColumnsCount+1))
+                                var index = column + (row * (listColumnsCount + 1))
                                 if (index <= heroes.size - 1) {
                                     var hero = heroes.get(index)
                                     Box(modifier = Modifier
@@ -493,17 +492,17 @@ fun ComparingRow(
     var rightBlockWidthFl = valueRight / raz
 
     if (summ == 0f) {
-        leftBlockWidthFl = screenWidth/2.toFloat()
-        rightBlockWidthFl = screenWidth/2.toFloat()
-    }else {
+        leftBlockWidthFl = screenWidth / 2.toFloat()
+        rightBlockWidthFl = screenWidth / 2.toFloat()
+    } else {
         if (leftBlockWidthFl == 0f) leftBlockWidthFl = 8f
         if (rightBlockWidthFl == 0f) rightBlockWidthFl = 8f
     }
 
     var leftBlockWidth = leftBlockWidthFl.dp
     var rightBlockWidth = rightBlockWidthFl.dp
-    var leftBlockColor = Color(0xFF003D0E)
-    var rightBlockColor = Color(0xFF2D0049)
+    var leftBlockColor = Color(0xFF016D19)
+    var rightBlockColor = Color(0xFF633397)
 
     BoxWithConstraints(
         modifier = Modifier
@@ -543,10 +542,16 @@ fun ComparingRow(
                 textAlign = TextAlign.Left,
                 fontSize = 12.sp
             )
-            Text(
-                text = stringResource(textCenterRes),
-                textAlign = TextAlign.Center, color = Color.White
-            )
+            Box(/*modifier = Modifier
+                .background(Color.Black.copy(alpha = 1f))*/) {
+                Text(
+                    modifier = Modifier
+                        .padding(start=20.dp,end=20.dp,top=3.dp,bottom=3.dp),
+                    text = stringResource(textCenterRes),
+                    textAlign = TextAlign.Center, color = Color.White,
+                    fontSize=12.sp
+                )
+            }
             Text(
                 modifier = Modifier.padding(end = 20.dp),
                 text = textRight,

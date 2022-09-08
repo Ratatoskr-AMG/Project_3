@@ -337,6 +337,196 @@ fun HeroView(
                         }
                     }
                 }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "proPick",
+                        stringResource(attrsLanguageMap["proPick"]!!),
+                        hero.proPick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "proWin",
+                        stringResource(attrsLanguageMap["proWin"]!!),
+                        hero.proWin.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_1Pick",
+                        stringResource(attrsLanguageMap["_1Pick"]!!),
+                        hero._1Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_1Win",
+                        stringResource(attrsLanguageMap["_1Win"]!!),
+                        hero._1Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_2Pick",
+                        stringResource(attrsLanguageMap["_2Pick"]!!),
+                        hero._2Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_2Win",
+                        stringResource(attrsLanguageMap["_2Win"]!!),
+                        hero._2Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_3Pick",
+                        stringResource(attrsLanguageMap["_3Pick"]!!),
+                        hero._3Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_3Win",
+                        stringResource(attrsLanguageMap["_3Win"]!!),
+                        hero._3Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_4Pick",
+                        stringResource(attrsLanguageMap["_4Pick"]!!),
+                        hero._4Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_4Win",
+                        stringResource(attrsLanguageMap["_4Win"]!!),
+                        hero._4Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_5Pick",
+                        stringResource(attrsLanguageMap["_5Pick"]!!),
+                        hero._5Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_5Win",
+                        stringResource(attrsLanguageMap["_5Win"]!!),
+                        hero._5Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_6Pick",
+                        stringResource(attrsLanguageMap["_6Pick"]!!),
+                        hero._6Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_6Win",
+                        stringResource(attrsLanguageMap["_6Win"]!!),
+                        hero._6Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_7Pick",
+                        stringResource(attrsLanguageMap["_7Pick"]!!),
+                        hero._7Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_7Win",
+                        stringResource(attrsLanguageMap["_7Win"]!!),
+                        hero._7Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_8Pick",
+                        stringResource(attrsLanguageMap["_8Pick"]!!),
+                        hero._8Pick.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "_8Win",
+                        stringResource(attrsLanguageMap["_8Win"]!!),
+                        hero._8Win.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "turboPicks",
+                        stringResource(attrsLanguageMap["turboPicks"]!!),
+                        hero.turboPicks.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "turboWins",
+                        stringResource(attrsLanguageMap["turboWins"]!!),
+                        hero.turboWins.toString(),
+                        navController
+                    )
+                }
+                item {
+                    HeroAttributeRowView(
+                        hero,
+                        "proBan",
+                        stringResource(attrsLanguageMap["proBan"]!!),
+                        hero.proBan.toString(),
+                        navController
+                    )
+                }
+
 
                 item {
                     HeroAttributeRowView(
@@ -494,195 +684,7 @@ fun HeroView(
                         navController
                     )
                 }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "turboPicks",
-                        stringResource(attrsLanguageMap["turboPicks"]!!),
-                        hero.turboPicks.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "turboWins",
-                        stringResource(attrsLanguageMap["turboWins"]!!),
-                        hero.turboWins.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "proBan",
-                        stringResource(attrsLanguageMap["proBan"]!!),
-                        hero.proBan.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "proWin",
-                        stringResource(attrsLanguageMap["proWin"]!!),
-                        hero.proWin.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "proPick",
-                        stringResource(attrsLanguageMap["proPick"]!!),
-                        hero.proPick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_1Pick",
-                        stringResource(attrsLanguageMap["_1Pick"]!!),
-                        hero._1Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_1Win",
-                        stringResource(attrsLanguageMap["_1Win"]!!),
-                        hero._1Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_2Pick",
-                        stringResource(attrsLanguageMap["_2Pick"]!!),
-                        hero._2Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_2Win",
-                        stringResource(attrsLanguageMap["_2Win"]!!),
-                        hero._2Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_3Pick",
-                        stringResource(attrsLanguageMap["_3Pick"]!!),
-                        hero._3Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_3Win",
-                        stringResource(attrsLanguageMap["_3Win"]!!),
-                        hero._3Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_4Pick",
-                        stringResource(attrsLanguageMap["_4Pick"]!!),
-                        hero._4Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_4Win",
-                        stringResource(attrsLanguageMap["_4Win"]!!),
-                        hero._4Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_5Pick",
-                        stringResource(attrsLanguageMap["_5Pick"]!!),
-                        hero._5Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_5Win",
-                        stringResource(attrsLanguageMap["_5Win"]!!),
-                        hero._5Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_6Pick",
-                        stringResource(attrsLanguageMap["_6Pick"]!!),
-                        hero._6Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_6Win",
-                        stringResource(attrsLanguageMap["_6Win"]!!),
-                        hero._6Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_7Pick",
-                        stringResource(attrsLanguageMap["_7Pick"]!!),
-                        hero._7Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_7Win",
-                        stringResource(attrsLanguageMap["_7Win"]!!),
-                        hero._7Win.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_8Pick",
-                        stringResource(attrsLanguageMap["_8Pick"]!!),
-                        hero._8Pick.toString(),
-                        navController
-                    )
-                }
-                item {
-                    HeroAttributeRowView(
-                        hero,
-                        "_8Win",
-                        stringResource(attrsLanguageMap["_8Win"]!!),
-                        hero._8Win.toString(),
-                        navController
-                    )
-                }
+
 
             }
 

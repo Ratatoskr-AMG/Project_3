@@ -51,6 +51,8 @@ import ru.ratatoskr.doheco.presentation.screens.hero.HeroViewModel
 import ru.ratatoskr.doheco.presentation.screens.role.RoleViewModel
 import ru.ratatoskr.doheco.presentation.screens.tiers.TiersScreen
 import ru.ratatoskr.doheco.presentation.screens.home.HomeViewModel
+import ru.ratatoskr.doheco.presentation.screens.recommendations.RecommendationsScreen
+import ru.ratatoskr.doheco.presentation.screens.recommendations.RecommendationsViewModel
 import ru.ratatoskr.doheco.presentation.screens.video.VideoViewModel
 
 @AndroidEntryPoint
@@ -114,8 +116,8 @@ class MainActivity() : AppCompatActivity() {
                                     Screens.Home,
                                     Screens.Favorites,
                                     Screens.Comparing,
-                                    Screens.Profile,
-                                    Screens.Video
+                                    Screens.Recommendations,
+                                    Screens.Profile
                                 )
 
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -155,7 +157,7 @@ class MainActivity() : AppCompatActivity() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = Screens.Home.route,
+                        startDestination = Screens.Recommendations.route,
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
@@ -212,12 +214,10 @@ class MainActivity() : AppCompatActivity() {
                             val comparingViewModel = hiltViewModel<ComparingViewModel>()
                             ComparingScreen(comparingViewModel)
                         }
-                        /*
-                        composable(Screens.ComparingSelect.route) {navBackStack->
-                            val side = navBackStack.arguments?.getString("side")
-                            val comparingSelectViewModel = hiltViewModel<ComparingSelectViewModel>()
-                            ComparingSelectScreen(comparingSelectViewModel,side)
-                        }*/
+                        composable(Screens.Recommendations.route) {navBackStack->
+                            val recommendationsViewModel = hiltViewModel<RecommendationsViewModel>()
+                            RecommendationsScreen(navController,recommendationsViewModel)
+                        }
                     }
                 }
 

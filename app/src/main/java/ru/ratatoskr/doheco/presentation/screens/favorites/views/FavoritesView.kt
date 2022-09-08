@@ -93,7 +93,7 @@ fun FavoritesView(
                         }
                         .fillMaxSize()
                         .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
 

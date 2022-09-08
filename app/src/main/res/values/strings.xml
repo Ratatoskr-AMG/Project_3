@@ -76,6 +76,16 @@
     <string name="delete">Delete</string>
     <string name="is_hero_favorite">Is hero favorite?</string>
     <string name="scroll_state">Scroll state</string>
-    <string name="comparing_string">Comparing</string>
+    <string name="comparing">Comparing</string>
     <string name="wait">Wait...</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="top_Pro_wins_to_pro_picks">Top-15 Pro wins / picks</string>
+    <string name="top_herald_wins_to_pro_picks">Top-15 Herald wins / picks</string>
+    <string name="top_Guardian_wins_to_pro_picks">Top-15 Guardian wins / picks</string>
+    <string name="top_Crusader_wins_to_pro_picks">Top-15 Crusader wins / picks</string>
+    <string name="top_Archon_wins_to_pro_picks">Top-15 Archon wins / picks</string>
+    <string name="top_Legend_wins_to_pro_picks">Top-15 Legend wins / picks</string>
+    <string name="top_Ancient_wins_to_pro_picks">Top-15 Ancient wins / picks</string>
+    <string name="top_Divine_wins_to_pro_picks">Top-15 Divine wins / picks</string>
+    <string name="top_Immortal_wins_to_pro_picks">Top-15 Immortal wins / picks</string>
 </resources>

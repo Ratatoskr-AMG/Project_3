@@ -343,7 +343,7 @@ fun appHeaderDouble() {
 }
 
 @Composable
-fun appHeaderUnderlinedCenterVerticalledRow(content: @Composable () -> Unit) {
+fun appHeaderUnderlinedCenterVerticalRow(horizontalArrangement:Arrangement.Horizontal, content: @Composable () -> Unit) {
     Row(
         modifier = Modifier
             .drawWithContent {
@@ -368,7 +368,7 @@ fun appHeaderUnderlinedCenterVerticalledRow(content: @Composable () -> Unit) {
             }
             .fillMaxSize()
             .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = horizontalArrangement,
         verticalAlignment = Alignment.CenterVertically) {
         content()
     }
@@ -403,7 +403,7 @@ fun appHeaderImage(onClick: () -> Unit,imageAddr:String, contentDescription:Stri
             .width(70.dp)
             .height(70.dp)
             .clip(CircleShape)
-            .border(4.dp, color, CircleShape)
+            .border(1.dp, color, CircleShape)
             .clickable{
                 onClick()
             }
@@ -411,7 +411,7 @@ fun appHeaderImage(onClick: () -> Unit,imageAddr:String, contentDescription:Stri
 }
 
 @Composable
-fun baseText(text:String){
+fun appHeaderBaseText(text:String){
     Text(
         modifier = Modifier.fillMaxWidth(),
         text = text,
@@ -421,6 +421,19 @@ fun baseText(text:String){
         fontSize = 16.sp
     )
 }
+
+@Composable
+fun appHeaderLeftImgText(text:String){
+    Text(
+        modifier = Modifier.padding(start=20.dp),
+        text = text,
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        lineHeight = 20.sp,
+        fontSize = 16.sp
+    )
+}
+
 //Role, Favorites, Profile
 @Composable
 fun appHeaderSingleLeft() {

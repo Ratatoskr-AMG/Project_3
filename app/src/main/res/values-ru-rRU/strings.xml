@@ -77,7 +77,17 @@
     <string name="delete">Удалить</string>
     <string name="is_hero_favorite">Герой избран?</string>
     <string name="scroll_state">Состояние прокрутки</string>
-    <string name="comparing_string">Сравнение</string>
+    <string name="comparing">Сравнение</string>
     <string name="wait">Подождите...</string>
+    <string name="recommendations">Рекомендации</string>
+    <string name="top_Pro_wins_to_pro_picks">Первые 15 Проф. побед / выбор</string>
+    <string name="top_herald_wins_to_pro_picks">Первые 15 Рекрут побед / выбор</string>
+    <string name="top_Guardian_wins_to_pro_picks">Первые 15 Страж побед / выбор</string>
+    <string name="top_Crusader_wins_to_pro_picks">Первые 15 Рыцарь побед / выбор</string>
+    <string name="top_Archon_wins_to_pro_picks">Первые 15 Герой побед / выбор</string>
+    <string name="top_Legend_wins_to_pro_picks">Первые 15 Легенда побед / выбор</string>
+    <string name="top_Ancient_wins_to_pro_picks">Первые 15 Властелин побед / выбор</string>
+    <string name="top_Divine_wins_to_pro_picks">Первые 15 Божество побед / выбор</string>
+    <string name="top_Immortal_wins_to_pro_picks">Первые 15 Титан побед / выбор</string>
 
 </resources>

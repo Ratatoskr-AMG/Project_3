@@ -1,12 +1,6 @@
 package ru.ratatoskr.doheco.presentation.screens.home.views
 
-import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,6 +30,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
@@ -59,9 +54,7 @@ import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.domain.utils.rememberForeverLazyListState
 import ru.ratatoskr.doheco.presentation.screens.home.HomeViewModel
-import ru.ratatoskr.doheco.presentation.theme.appHeader
-import ru.ratatoskr.doheco.presentation.theme.appHeaderImage
-import ru.ratatoskr.doheco.presentation.theme.loadPicture
+import ru.ratatoskr.doheco.presentation.theme.*
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -74,8 +67,19 @@ fun HomeView(
     onHeroClick: (Hero) -> Unit,
     onHeroSearch: (String) -> Unit
 ) {
-
     val heroes = data.mapNotNull { it as? Hero }
+
+    /*
+    val heroes_base = data.mapNotNull { it as? Hero }
+    var asd = heroes_base.toMutableList()
+    var asdad = asd.sortedBy{it.proWin.toFloat()/it.proPick.toFloat()}
+    var heroes = asdad.reversed().slice(0..9)
+
+    Log.e("TOHAcomp","heroes_base:"+heroes_base.toString())
+    Log.e("TOHAcomp","asdad:"+asdad.toString())
+    Log.e("TOHAcomp","heroes:"+heroes.toString())
+    */
+
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
@@ -98,6 +102,7 @@ fun HomeView(
             }
         }
     }
+
 
     Box(
         modifier = Modifier

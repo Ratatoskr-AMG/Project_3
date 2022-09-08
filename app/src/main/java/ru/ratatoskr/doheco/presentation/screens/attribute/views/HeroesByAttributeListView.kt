@@ -36,6 +36,7 @@ import coil.compose.rememberImagePainter
 import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.data.converters.pixelsToDp
 import ru.ratatoskr.doheco.domain.model.Hero
+import ru.ratatoskr.doheco.domain.utils.appUtilsArrays
 import ru.ratatoskr.doheco.domain.utils.rememberForeverLazyListState
 
 @ExperimentalFoundationApi
@@ -50,10 +51,10 @@ fun HeroesByAttributeListView(
     onSortChange: (Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
+    var context = LocalContext.current
     val heroes = data.mapNotNull { it as? Hero }
     var scrollState = rememberForeverLazyListState(key = "Attr_" + attr)
-    var context = LocalContext.current
-    var scrollIconPosition by remember { mutableStateOf(5F) }
+    var scrollIconPosition by remember { mutableStateOf(0F) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -67,7 +68,6 @@ fun HeroesByAttributeListView(
             }
         }
     }
-    Log.e("TOHA3", "id:" + id)
     var hero: Hero = heroes[0]
     heroes.forEach {
         if (id.toInt() == it.id) {
@@ -75,54 +75,10 @@ fun HeroesByAttributeListView(
             return@forEach
         }
     }
-    var listColumnsCount = 4
-    when (configuration.orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            listColumnsCount = 7
-        }
-    }
+
     var titleValue = ""
     var heroIconPosition by remember { mutableStateOf(5F) }
-    val attrsLanguageMap: Map<String, Int> =
-        mapOf(
-            "baseHealth" to R.string.base_health_attr,
-            "baseMana" to R.string.base_mana_attr,
-            "baseHealthRegen" to R.string.base_health_regen_attr,
-            "baseManaRegen" to R.string.base_mana_regen_attr,
-            "baseArmor" to R.string.base_armor_attr,
-            "baseStr" to R.string.base_str_attr,
-            "baseAgi" to R.string.base_agi_attr,
-            "baseInt" to R.string.base_int_attr,
-            "strGain" to R.string.str_gain_attr,
-            "agiGain" to R.string.agi_gain_attr,
-            "intGain" to R.string.int_gain_attr,
-            "attackRange" to R.string.attack_range_attr,
-            "projectileSpeed" to R.string.projectile_speed_attr,
-            "attackRate" to R.string.attack_rate_attr,
-            "moveSpeed" to R.string.move_speed_attr,
-            "turboPicks" to R.string.turbo_picks_attr,
-            "turboWins" to R.string.turbo_wins_attr,
-            "proBan" to R.string.pro_ban_attr,
-            "proWin" to R.string.pro_win_attr,
-            "proPick" to R.string.pro_pick_attr,
-            "_1Pick" to R.string._1_pick_attr,
-            "_1Win" to R.string._1_win_attr,
-            "_2Pick" to R.string._2_pick_attr,
-            "_2Win" to R.string._2_win_attr,
-            "_3Pick" to R.string._3_pick_attr,
-            "_3Win" to R.string._3_win_attr,
-            "_4Pick" to R.string._4_pick_attr,
-            "_4Win" to R.string._4_win_attr,
-            "_5Pick" to R.string._5_pick_attr,
-            "_5Win" to R.string._5_win_attr,
-            "_6Pick" to R.string._6_pick_attr,
-            "_6Win" to R.string._6_win_attr,
-            "_7Pick" to R.string._7_pick_attr,
-            "_7Win" to R.string._7_win_attr,
-            "_8Pick" to R.string._8_pick_attr,
-            "_8Win" to R.string._8_win_attr
-
-        )
+    val attrsLanguageMap: Map<String, Int> = appUtilsArrays.attrsLanguageMap()
 
     titleValue = stringResource(attrsLanguageMap[attr]!!)
 
@@ -261,7 +217,7 @@ fun HeroesByAttributeListView(
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(start = 14.dp, end = 15.dp, top = 10.dp, bottom = 7.dp)
+                                .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 7.dp)
                         ) {
 
 
@@ -274,8 +230,8 @@ fun HeroesByAttributeListView(
                                         val strokeWidth = Stroke.DefaultMiter
                                         val y = size.height
                                         drawLine(
-                                            brush = SolidColor(Color.White),
-                                            strokeWidth = strokeWidth,
+                                            brush = SolidColor(Color.Black),
+                                            strokeWidth = strokeWidth*2,
                                             cap = StrokeCap.Square,
                                             start = Offset.Zero.copy(y = y),
                                             end = Offset(x = size.width, y = y)
@@ -288,7 +244,7 @@ fun HeroesByAttributeListView(
                                 modifier = Modifier
                                     .height(20.dp)
                                     .fillMaxWidth()
-                                    .padding(top = 9.dp, start = scrollIconPosition.dp)
+                                    .padding(top = 11.dp, start = scrollIconPosition.dp)
                                     .onGloballyPositioned {
                                         var size = it.parentLayoutCoordinates?.size?.toSize()
                                         var dpSize =
@@ -299,16 +255,16 @@ fun HeroesByAttributeListView(
                                         var padding = dpSize / 33
                                         //if (scrollState.firstVisibleItemIndex > heroes.size / 1.111 ) padding = 1
                                         scrollIconPosition =
-                                            scrollState.firstVisibleItemIndex * pointWidth + padding
+                                            scrollState.firstVisibleItemIndex * pointWidth
                                     }
                             ) {
 
 
                                 Box(
                                     modifier = Modifier
-                                        .width(1.dp)
-                                        .height(7.dp)
-                                        .background(Color.White)
+                                        .width(25.dp)
+                                        .height(2.dp)
+                                        .background(Color(0xFFc98000))
                                 )
 
 

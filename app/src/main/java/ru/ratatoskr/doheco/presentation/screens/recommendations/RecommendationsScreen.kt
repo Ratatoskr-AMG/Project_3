@@ -6,7 +6,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import ru.ratatoskr.doheco.R
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.recommendations.models.RecommendationsState
 import ru.ratatoskr.doheco.presentation.screens.recommendations.views.RecommendationsView
 import ru.ratatoskr.doheco.presentation.theme.LoadingView
@@ -21,9 +21,8 @@ fun RecommendationsScreen(
 
     when (val state = viewModel.recommendationsState.observeAsState().value) {
         is RecommendationsState.LoadedRecommendationsState<*> -> RecommendationsView(
-            viewModel,
-            viewModel.imageLoader,
             state.heroes,
+            state.favoriteHeroes,
             state.player_tier, {
                navController.navigate(Screens.Hero.route + "/" + it.id)
             }, {

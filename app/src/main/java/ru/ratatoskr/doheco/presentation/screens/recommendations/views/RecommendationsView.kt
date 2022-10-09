@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -21,8 +20,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
@@ -37,9 +34,8 @@ import ru.ratatoskr.doheco.presentation.theme.*
 @ExperimentalFoundationApi
 @Composable
 fun RecommendationsView(
-    viewModel: RecommendationsViewModel,
-    imageLoader: ImageLoader,
-    data: List<Any?>,
+    heroes: List<Any?>,
+    favoriteHeroes: List<Hero>,
     player_tier: String,
     onHeroClick: (Hero) -> Unit,
     onTierImgClick: () -> Unit
@@ -47,31 +43,66 @@ fun RecommendationsView(
 
     var tierImgAddr = "http://ratatoskr.ru/app/img/tier/0.png"
     var tierBlockNum = 0;
-
     if (player_tier != "undefined") {
         tierImgAddr = "http://ratatoskr.ru/app/img/tier/" + player_tier + ".png"
         tierBlockNum = player_tier.toInt()
-        Log.e("TOHAtier","player_tier:"+player_tier)
-        Log.e("TOHAtier","tierBlockNum:"+tierBlockNum.toString())
     }
-    val heroes = data.mapNotNull { it as? Hero }
 
+    val heroes = heroes.mapNotNull { it as? Hero }
     var allHeroesBase = heroes.toMutableList()
-    var top10ProWinsOnProPicksBase =
-        allHeroesBase.sortedBy { it.proWin.toFloat() / it.proPick.toFloat() }
-    var top10ProWinsOnProPicks = top10ProWinsOnProPicksBase.reversed().slice(0..14)
 
-    //Log.e("TOHAcomp","heroes_base:"+heroes_base.toString())
-    //Log.e("TOHAcomp","asdad:"+asdad.toString())
-    //Log.e("TOHAcomp","heroes:"+heroes.toString())
+    var topProWinsOnPicksBase =
+        allHeroesBase.sortedBy { it.proWin.toFloat() / it.proPick.toFloat() }
+    var topHeraldWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._1Win.toFloat() / it._1Pick.toFloat() }
+    var topGuardianWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._2Win.toFloat() / it._2Pick.toFloat() }
+    var topCrusaderWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._3Win.toFloat() / it._3Pick.toFloat() }
+    var topArchonWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._4Win.toFloat() / it._4Pick.toFloat() }
+    var topLegendWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._5Win.toFloat() / it._5Pick.toFloat() }
+    var topAncientWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._6Win.toFloat() / it._6Pick.toFloat() }
+    var topDivineWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._7Win.toFloat() / it._7Pick.toFloat() }
+    var topImmortalWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._8Win.toFloat() / it._8Pick.toFloat() }
+    var topWinsOnPicksBase =
+        allHeroesBase.sortedBy {
+            (it.turboWins.toFloat()+it.proWin.toFloat()+it._1Win.toFloat()+it._2Win.toFloat()+it._3Win.toFloat()+it._4Win.toFloat()+it._5Win.toFloat()+it._6Win.toFloat()+it._7Win.toFloat()+it._8Win.toFloat())/it.turboPicks.toFloat()+it.proPick.toFloat()+ it._1Pick.toFloat()+it._2Pick.toFloat()+it._3Pick.toFloat()+it._4Pick.toFloat()+it._5Pick.toFloat()+it._6Pick.toFloat()+it._7Pick.toFloat()+it._8Pick.toFloat() }
+    var topProBansBase = allHeroesBase.sortedBy { it.proBan }
+
+    val topProWinsOnPicks = topProWinsOnPicksBase.reversed().slice(0..14)
+    var topHeraldWinsOnPicks=topHeraldWinsOnPicksBase.reversed().slice(0..14)
+    var topGuardianWinsOnPicks =
+        topGuardianWinsOnPicksBase.reversed().slice(0..14)
+    var topCrusaderWinsOnPicks =
+        topCrusaderWinsOnPicksBase.reversed().slice(0..14)
+    var topArchonWinsOnPicks =
+        topArchonWinsOnPicksBase.reversed().slice(0..14)
+    var topLegendWinsOnPicks =
+        topLegendWinsOnPicksBase.reversed().slice(0..14)
+    var topAncientWinsOnPicks =
+        topAncientWinsOnPicksBase.reversed().slice(0..14)
+    var topDivineWinsOnPicks =
+        topDivineWinsOnPicksBase.reversed().slice(0..14)
+    var topImmortalWinsOnPicks =
+        topImmortalWinsOnPicksBase.reversed().slice(0..14)
+    var topWinsOnPicks =
+        topWinsOnPicksBase.reversed().slice(0..14)
+    val topProBans = topProBansBase.reversed().slice(0..14)
+
+    topHeraldWinsOnPicks.forEach{
+        Log.e("TOHAtop",it.localizedName+":"+it._1Win+"/"+it._1Pick+"="+it._1Win.toFloat() / it._1Pick.toFloat())
+    }
 
     var offsetPosition by remember { mutableStateOf(0f) }
-    var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
-    val focusRequesterTop = remember { FocusRequester() }
     var scrollState = rememberForeverLazyListState(key = "Recommendations")
     var listColumnsCount = 4
-    var listRowsCount = top10ProWinsOnProPicks.size / (listColumnsCount + 1)
-    if (top10ProWinsOnProPicks.size % (listColumnsCount + 1) > 0) {
+    var listRowsCount = topProWinsOnPicks.size / (listColumnsCount + 1)
+    if (topProWinsOnPicks.size % (listColumnsCount + 1) > 0) {
         listRowsCount += 1
     }
 
@@ -94,7 +125,7 @@ fun RecommendationsView(
             appHeaderUnderlinedCenterVerticalRow(Arrangement.Start) {
                 appHeaderImageBox {
                     appHeaderImage(
-                        {onTierImgClick()},
+                        { onTierImgClick() },
                         tierImgAddr,
                         "Tier",
                         Alignment.Center,
@@ -127,16 +158,14 @@ fun RecommendationsView(
                 if (tierBlockNum > 0) {
                     when (tierBlockNum) {
                         1 -> {
-                            var top10HeraldWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._1Win.toFloat() / it._1Pick.toFloat() }
-                            var top10HeraldWinsOnProPicks = top10HeraldWinsOnProPicksBase.reversed().slice(0..14)
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_herald_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_herald_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10HeraldWinsOnProPicksBase,
+                                        topHeraldWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -145,16 +174,14 @@ fun RecommendationsView(
                             }
                         }
                         2 -> {
-                            var top10GuardianWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._2Win.toFloat() / it._2Pick.toFloat() }
-                            var top10GuardianWinsOnProPicks = top10GuardianWinsOnProPicksBase.reversed().slice(0..14)
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Guardian_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Guardian_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10GuardianWinsOnProPicksBase,
+                                        topGuardianWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -163,16 +190,15 @@ fun RecommendationsView(
                             }
                         }
                         3 -> {
-                            var top10CrusaderWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._3Win.toFloat() / it._3Pick.toFloat() }
-                            var top10CrusaderWinsOnProPicks = top10CrusaderWinsOnProPicksBase.reversed().slice(0..14)
+
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Crusader_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Crusader_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10CrusaderWinsOnProPicksBase,
+                                        topCrusaderWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -181,16 +207,15 @@ fun RecommendationsView(
                             }
                         }
                         4 -> {
-                            var top10ArchonWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._4Win.toFloat() / it._4Pick.toFloat() }
-                            var top10ArchonWinsOnProPicks = top10ArchonWinsOnProPicksBase.reversed().slice(0..14)
+
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Archon_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Archon_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10ArchonWinsOnProPicksBase,
+                                        topArchonWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -199,16 +224,14 @@ fun RecommendationsView(
                             }
                         }
                         5 -> {
-                            var top10LegendWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._5Win.toFloat() / it._5Pick.toFloat() }
-                            var top10LegendWinsOnProPicks = top10LegendWinsOnProPicksBase.reversed().slice(0..14)
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Legend_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Legend_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10LegendWinsOnProPicksBase,
+                                        topLegendWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -217,16 +240,14 @@ fun RecommendationsView(
                             }
                         }
                         6 -> {
-                            var top10AncientWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._6Win.toFloat() / it._6Pick.toFloat() }
-                            var top10AncientWinsOnProPicks = top10AncientWinsOnProPicksBase.reversed().slice(0..14)
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Ancient_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Ancient_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10AncientWinsOnProPicksBase,
+                                        topAncientWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -235,16 +256,14 @@ fun RecommendationsView(
                             }
                         }
                         7 -> {
-                            var top10DivineWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._7Win.toFloat() / it._7Pick.toFloat() }
-                            var top10DivineWinsOnProPicks = top10DivineWinsOnProPicksBase.reversed().slice(0..14)
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Divine_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Divine_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10DivineWinsOnProPicksBase,
+                                        topDivineWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -253,16 +272,14 @@ fun RecommendationsView(
                             }
                         }
                         8 -> {
-                            var top10ImmortalWinsOnProPicksBase =
-                                allHeroesBase.sortedBy { it._8Win.toFloat() / it._8Pick.toFloat() }
-                            var top10ImmortalWinsOnProPicks = top10ImmortalWinsOnProPicksBase.reversed().slice(0..14)
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Immortal_wins_to_pro_picks))
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Immortal_wins_to_picks))
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
                                     recommendationsHeroesBlock(
-                                        top10ImmortalWinsOnProPicksBase,
+                                        topImmortalWinsOnPicks,
+                                        favoriteHeroes,
                                         listColumnsCount,
                                         row,
                                         onHeroClick
@@ -273,21 +290,53 @@ fun RecommendationsView(
                         else -> {}
                     }
                 }
-                //Pro Wins/Picks Block
+                //Total Wins/Picks Block
                 item {
-                    recommendationsTitleBlock(stringResource(id = R.string.top_Pro_wins_to_pro_picks))
+                    recommendationsTitleBlock(stringResource(id = R.string.top_wins_to_picks))
                 }
                 for (row in 0 until listRowsCount) {
                     item {
                         recommendationsHeroesBlock(
-                            top10ProWinsOnProPicks,
+                            topWinsOnPicks,
+                            favoriteHeroes,
                             listColumnsCount,
                             row,
                             onHeroClick
                         )
                     }
                 }
-                //Best of Agility Wins/Picks Block
+                //Pro Wins/Picks Block
+                item {
+                    recommendationsTitleBlock(stringResource(id = R.string.top_Pro_wins_to_picks))
+                }
+                for (row in 0 until listRowsCount) {
+                    item {
+                        recommendationsHeroesBlock(
+                            topProWinsOnPicks,
+                            favoriteHeroes,
+                            listColumnsCount,
+                            row,
+                            onHeroClick
+                        )
+                    }
+                }
+                //Pro Bans Block
+                /*
+                item {
+                    recommendationsTitleBlock(stringResource(id = R.string.top_pro_bans))
+                }
+                for (row in 0 until listRowsCount) {
+                    item {
+                        recommendationsHeroesBlock(
+                            topProBans,
+                            favoriteHeroes,
+                            listColumnsCount,
+                            row,
+                            onHeroClick
+                        )
+                    }
+                }
+                */
             }
         }
 
@@ -297,75 +346,4 @@ fun RecommendationsView(
     }
 }
 
-@Composable
-fun recommendationsTitleBlock(text: String) {
-    Box(
-        modifier = Modifier
-            .padding(bottom = 10.dp)
-            .fillMaxWidth()
-            .background(Color(0xFF131313))
-    ) {
 
-        Text(
-            modifier = Modifier
-                .padding(
-                    top = 10.dp,
-                    bottom = 10.dp,
-                    start = 20.dp,
-                    end = 20.dp
-                )
-                .fillMaxWidth(),
-            color = Color.White,
-            fontSize = 12.sp,
-            text = text
-        )
-    }
-}
-
-@Composable
-fun recommendationsHeroesBlock(
-    heroes: List<Hero>,
-    listColumnsCount: Int,
-    row: Int,
-    onHeroClick: (Hero) -> Unit
-) {
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        for (column in 0..listColumnsCount) {
-            var index = column + (row * (listColumnsCount + 1))
-            if (index <= heroes.size - 1) {
-                var hero = heroes.get(index)
-                Box(modifier = Modifier
-                    .clickable {
-                        onHeroClick(hero)
-                    }
-                    .width(70.dp)
-                    .padding(10.dp)
-                    .height(35.dp)) {
-                    Image(
-                        contentDescription = hero.name,
-                        painter = loadPicture(
-                            url = hero.icon,
-                            placeholder = painterResource(id = R.drawable.ic_comparing_gr)
-                        ),
-                        modifier = Modifier
-                            .width(70.dp)
-                            .height(35.dp)
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .width(70.dp)
-                        .padding(10.dp)
-                        .height(35.dp)
-                )
-            }
-        }
-
-
-    }
-}

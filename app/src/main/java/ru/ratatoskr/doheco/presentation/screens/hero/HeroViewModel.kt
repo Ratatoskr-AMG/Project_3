@@ -18,6 +18,9 @@ import ru.ratatoskr.doheco.domain.useCases.favorites.InsertHeroToFavoritesUseCas
 import ru.ratatoskr.doheco.domain.useCases.favorites.DropHeroFromFavoritesUseCase
 import ru.ratatoskr.doheco.domain.useCases.heroes.GetHeroByIdUseCase
 import ru.ratatoskr.doheco.domain.useCases.favorites.GetIfHeroIsFavoriteUseCase
+import ru.ratatoskr.doheco.domain.useCases.heroes.GetAllHeroesByAttrUseCase
+import ru.ratatoskr.doheco.domain.useCases.heroes.GetHeroesAttrsMaxUseCase
+import ru.ratatoskr.doheco.domain.utils.AttributeMaximum
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,11 +28,30 @@ class HeroViewModel @Inject constructor(
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
     private val dropHeroFromFavorites: DropHeroFromFavoritesUseCase,
-    private val insertHeroToFavoritesUseCase: InsertHeroToFavoritesUseCase
+    private val insertHeroToFavoritesUseCase: InsertHeroToFavoritesUseCase,
+    private val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
+    private val getHeroesAttrsMaxUseCase: GetHeroesAttrsMaxUseCase
 ) : ViewModel(), EventHandler<HeroEvent> {
 
     private val _heroState: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
     val heroState: LiveData<HeroState> = _heroState
+
+    fun getAttrMax(attr: String): Int {
+
+        var max = 0;
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val heroes = getAllHeroesByAttrUseCase.getAllHeroesByAttr(attr, false)
+            heroes.sortedByDescending { attr }
+            for (hero in heroes) {
+                Log.e("TOHA", "Hero " + hero.localizedName + ", attr:" + hero.proPick.toString())
+            }
+            max = heroes[0].proPick;
+
+        }
+        Log.e("TOHA", "max " + max)
+        return max
+    }
 
     fun getHeroById(id: String) {
 
@@ -39,7 +61,8 @@ class HeroViewModel @Inject constructor(
 
             try {
                 val hero = getHeroByIdUseCase.GetHeroById(id)
-
+                val currentAttrsMax: List<AttributeMaximum> =
+                    getHeroesAttrsMaxUseCase.getHeroesAttrsMax()
 
                 if (hero.id < 1) {
                     //переносим в ЮзКейс трайкетч
@@ -48,7 +71,9 @@ class HeroViewModel @Inject constructor(
                     _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
-                            isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id)
+                            isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id),
+                            "Picks",
+                            currentAttrsMax = currentAttrsMax
                         )
                     )
                 }
@@ -72,21 +97,57 @@ class HeroViewModel @Inject constructor(
         when (event) {
             is HeroEvent.OnFavoriteCLick -> isFavoriteSwitch(
                 currentState.hero,
-                currentState.isFavorite
+                currentState.isFavorite,
+                currentState.currentInfoBlock,
+                currentState.currentAttrsMax,
+            )
+            is HeroEvent.OnInfoBlockSelect -> selectInfoBlock(
+                currentState.hero,
+                currentState.isFavorite,
+                event.infoBlockName,
+                currentState.currentAttrsMax,
             )
         }
     }
 
-    private fun isFavoriteSwitch(hero: Hero, isFavorite: Boolean = false) {
+    private fun selectInfoBlock(
+        hero: Hero,
+        isFavorite: Boolean = false,
+        newInfoBlock: String,
+        currentAttrsMax: List<AttributeMaximum>
+    ) {
+        viewModelScope.launch {
+            _heroState.postValue(
+                HeroState.HeroLoadedState(
+                    hero = hero,
+                    isFavorite = isFavorite,
+                    currentInfoBlock = newInfoBlock,
+                    currentAttrsMax = currentAttrsMax,
+                )
+            )
+        }
+    }
+
+    private fun isFavoriteSwitch(
+        hero: Hero,
+        isFavorite: Boolean = false,
+        currentInfoBlock: String,
+        currentAttrsMax: List<AttributeMaximum>
+    ) {
         viewModelScope.launch {
             if (isFavorite) {
                 try {
                     dropHeroFromFavorites.dropHeroFromFavorites(hero.id)
+
                     _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
-                            isFavorite = false
+                            isFavorite = false,
+                            currentInfoBlock = currentInfoBlock,
+                            currentAttrsMax
                         )
+
+
                     )
                 } catch (e: Exception) {
                     _heroState.postValue(HeroState.ErrorHeroState())
@@ -97,7 +158,9 @@ class HeroViewModel @Inject constructor(
                     _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
-                            isFavorite = true
+                            isFavorite = true,
+                            currentInfoBlock = currentInfoBlock,
+                            currentAttrsMax = currentAttrsMax
                         )
                     )
                 } catch (e: Exception) {

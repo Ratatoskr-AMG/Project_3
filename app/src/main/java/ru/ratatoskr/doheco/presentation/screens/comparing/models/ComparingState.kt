@@ -8,6 +8,8 @@ sealed class ComparingState {
         val left: Hero,
         val right: Hero,
         val heroes: List<Hero>,
+        val favoriteHeroes: List<Hero>,
+        val currentInfoBlock: String
     ) : ComparingState(
 
     )
@@ -17,5 +19,6 @@ sealed class ComparingState {
         val right: Hero,
         val isLeft: Boolean,
         val heroes: List<Hero>,
+
     ) : ComparingState()
 }

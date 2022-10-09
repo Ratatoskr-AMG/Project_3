@@ -38,6 +38,8 @@ import ru.ratatoskr.doheco.data.converters.pixelsToDp
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.domain.utils.appUtilsArrays
 import ru.ratatoskr.doheco.domain.utils.rememberForeverLazyListState
+import ru.ratatoskr.doheco.presentation.screens.recommendations.views.recommendationsHeroesBlock
+import ru.ratatoskr.doheco.presentation.screens.recommendations.views.recommendationsTitleBlock
 
 @ExperimentalFoundationApi
 @Composable
@@ -53,8 +55,10 @@ fun HeroesByAttributeListView(
     val configuration = LocalConfiguration.current
     var context = LocalContext.current
     val heroes = data.mapNotNull { it as? Hero }
+
     var scrollState = rememberForeverLazyListState(key = "Attr_" + attr)
     var scrollIconPosition by remember { mutableStateOf(0F) }
+
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {

@@ -48,9 +48,10 @@ class HeroesRepoImpl @Inject constructor(
 
 
         val URL = "https://api.opendota.com/api/heroStats/";
+        //val URL = "http://ratatoskr.ru/doheco/api/heroStats/";
 
         return try {
-
+            Log.e("TOHA", "client.get(URL)")
             client.get(URL)
 
         } catch (e: Exception) {

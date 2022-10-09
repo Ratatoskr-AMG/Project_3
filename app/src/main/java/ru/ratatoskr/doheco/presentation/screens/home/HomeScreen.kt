@@ -6,7 +6,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import ru.ratatoskr.doheco.R
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.home.models.HomeState
 import ru.ratatoskr.doheco.presentation.screens.home.views.HomeView
 import ru.ratatoskr.doheco.presentation.theme.LoadingView
@@ -24,7 +24,9 @@ fun HomeScreen(
         is HomeState.LoadedHomeState<*> -> HomeView(
             viewModel,
             viewModel.imageLoader,
-            state.heroes, {
+            state.heroes,
+            state.favoriteHeroes,
+            {
                 navController.navigate(Screens.Hero.route + "/" + it.id)
             }, {
                 viewModel.getAllHeroesByStrSortByName(it)

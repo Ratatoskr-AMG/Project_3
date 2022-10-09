@@ -51,10 +51,13 @@ class RecommendationsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesByStrSortByName("")
+                val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
+
                 if (!heroes.isEmpty()) {
                     _recommendations_state.postValue(
                         RecommendationsState.LoadedRecommendationsState(
-                            heroes,player_tier_from_sp
+                            heroes,player_tier_from_sp,
+                            favoriteHeroes
                         )
                     )
                 }

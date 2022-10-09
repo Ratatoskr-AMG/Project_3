@@ -7,7 +7,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import ru.ratatoskr.doheco.R
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.favorites.FavoritesViewModel
 import ru.ratatoskr.doheco.presentation.screens.favorites.models.FavoritesState
 import ru.ratatoskr.doheco.presentation.screens.favorites.views.EmptyFavoritesListView

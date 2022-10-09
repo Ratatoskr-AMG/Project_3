@@ -2,13 +2,10 @@ package ru.ratatoskr.doheco.presentation.theme
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.media.Image
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,14 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.ratatoskr.doheco.domain.model.Hero
 
 private val DarkColorPalette = darkColors(
     primary = BlackFull,
@@ -343,7 +337,10 @@ fun appHeaderDouble() {
 }
 
 @Composable
-fun appHeaderUnderlinedCenterVerticalRow(horizontalArrangement:Arrangement.Horizontal, content: @Composable () -> Unit) {
+fun appHeaderUnderlinedCenterVerticalRow(
+    horizontalArrangement: Arrangement.Horizontal,
+    content: @Composable () -> Unit
+) {
     Row(
         modifier = Modifier
             .drawWithContent {
@@ -373,26 +370,42 @@ fun appHeaderUnderlinedCenterVerticalRow(horizontalArrangement:Arrangement.Horiz
         content()
     }
 }
+
 @Composable
-fun appHeaderImageBox(content: @Composable () -> Unit){
+fun appHeaderImageBox(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .width(70.dp)
             .height(70.dp)
-    ){
+    ) {
         content()
     }
 }
 
 @Composable
-fun appHeaderImage(onClick: () -> Unit,imageAddr:String, contentDescription:String, alignment:Alignment, color:Color){
+fun appHeaderImage(
+    onClick: () -> Unit,
+    imageAddr: String,
+    contentDescription: String,
+    alignment: Alignment,
+    color: Color,
+    innerPainter: Painter? = null,
+) {
 
     var cScale: ContentScale = ContentScale.Crop
+    var placeHolder: Painter = painterResource(id = ru.ratatoskr.doheco.R.drawable.ic_empty_30)
 
-    val painter = loadPicture(
+    var painter = loadPicture(
         url = imageAddr,
-        placeholder = painterResource(id = ru.ratatoskr.doheco.R.drawable.ic_comparing_gr)
+        placeholder = placeHolder
     )
+
+
+    if (innerPainter != null) {
+        painter = innerPainter
+        cScale = ContentScale.Inside
+    }
+
 
     Image(
         painter = painter,
@@ -404,14 +417,14 @@ fun appHeaderImage(onClick: () -> Unit,imageAddr:String, contentDescription:Stri
             .height(70.dp)
             .clip(CircleShape)
             .border(1.dp, color, CircleShape)
-            .clickable{
+            .clickable {
                 onClick()
             }
     )
 }
 
 @Composable
-fun appHeaderBaseText(text:String){
+fun appHeaderBaseText(text: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         text = text,
@@ -423,9 +436,9 @@ fun appHeaderBaseText(text:String){
 }
 
 @Composable
-fun appHeaderLeftImgText(text:String){
+fun appHeaderLeftImgText(text: String) {
     Text(
-        modifier = Modifier.padding(start=20.dp),
+        modifier = Modifier.padding(start = 20.dp),
         text = text,
         color = Color.White,
         textAlign = TextAlign.Center,

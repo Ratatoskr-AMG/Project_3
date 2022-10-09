@@ -7,6 +7,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import ru.ratatoskr.doheco.R
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.role.RoleViewModel
 import ru.ratatoskr.doheco.presentation.screens.role.models.RoleState
 import ru.ratatoskr.doheco.presentation.screens.role.views.RoleListView
@@ -25,9 +26,18 @@ fun RoleScreen(
 
     when (val state = viewState.value) {
 
-        is RoleState.LoadedHeroesListState<*> -> RoleListView(role, state.heroes, navController) {
-            navController.navigate(Screens.Hero.route + "/" + it.id)
-        }
+        is RoleState.LoadedHeroesListState<*> -> RoleListView(
+            role,
+            state.player_tier,
+            state.heroes,
+            state.favoriteHeroes,
+            navController,
+            {
+                navController.navigate(Screens.Hero.route + "/" + it.id)
+            },
+            {
+                navController.navigate(Screens.Tier.route)
+            })
         is RoleState.NoHeroesListState -> MessageView(stringResource(id = R.string.heroes_not_found))
         is RoleState.LoadingHeroesListState -> LoadingView(stringResource(id = R.string.loading))
         is RoleState.ErrorHeroesListState -> MessageView(stringResource(id = R.string.error))

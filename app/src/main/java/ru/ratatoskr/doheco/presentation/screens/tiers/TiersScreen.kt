@@ -25,6 +25,7 @@ fun TiersScreen(
                 viewModel.obtainEvent(
                     TiersEvent.OnTierChange(it)
                 )
+                navController.popBackStack()
             }
         }
         is TiersState.DefinedState -> {
@@ -32,6 +33,7 @@ fun TiersScreen(
                 viewModel.obtainEvent(
                     TiersEvent.OnTierChange(it)
                 )
+                navController.popBackStack()
             }
         }
     }

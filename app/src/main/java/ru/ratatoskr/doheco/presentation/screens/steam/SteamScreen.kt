@@ -1,14 +1,13 @@
 package ru.ratatoskr.doheco.presentation.screens
 
-import android.content.SharedPreferences
 import androidx.compose.foundation.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.steam.models.SteamEvent
 import ru.ratatoskr.doheco.presentation.screens.steam.SteamViewModel
 import ru.ratatoskr.doheco.presentation.screens.steam.models.SteamState
-import ru.ratatoskr.doheco.presentation.screens.steam.views.SteamLoggedInView
 import ru.ratatoskr.doheco.presentation.screens.steam.views.SteamSignInView
 
 @ExperimentalFoundationApi

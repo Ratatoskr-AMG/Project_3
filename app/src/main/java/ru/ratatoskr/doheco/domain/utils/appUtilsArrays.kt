@@ -67,6 +67,63 @@ object appUtilsArrays {
         )
     }
 
+    fun rolesMultipleLanguageMap(): Map<String, Int> {
+        return mapOf(
+            "Carry" to R.string.carry_role_multiple,
+            "Escape" to R.string.escape_role_multiple,
+            "Nuker" to R.string.nuker_role_multiple,
+            "Support" to R.string.support_role_multiple,
+            "Disabler" to R.string.disabler_role_multiple,
+            "Jungler" to R.string.jungler_role_multiple,
+            "Initiator" to R.string.initiator_role_multiple,
+            "Durable" to R.string.durable_role_multiple,
+            "Pusher" to R.string.pusher_role_multiple,
+        )
+    }
+
+    fun heroesAttrs(): List<String> {
+        return listOf(
+            "baseHealth",
+            "baseMana",
+            "baseHealthRegen",
+            "baseManaRegen",
+            "baseArmor",
+            "baseStr",
+            "baseAgi",
+            "baseInt",
+            "strGain",
+            "agiGain",
+            "intGain",
+            "attackRange",
+            "projectileSpeed",
+            "attackRate",
+            "moveSpeed",
+            "turboPicks",
+            "turboWins",
+            "proBan",
+            "proWin",
+            "proPick",
+            "_1Pick",
+            "_1Win",
+            "_2Pick",
+            "_2Win",
+            "_3Pick",
+            "_3Win",
+            "_4Pick",
+            "_4Win",
+            "_5Pick",
+            "_5Win",
+            "_6Pick",
+            "_6Win",
+            "_7Pick",
+            "_7Win",
+            "_8Pick",
+            "_8Win",
+
+        )
+
+    }
+
     fun attrsLanguageMap(): Map<String, Int> {
         return mapOf(
             "baseHealth" to R.string.base_health_attr,
@@ -109,7 +166,7 @@ object appUtilsArrays {
         )
     }
 
-    fun heroImgContentAlign(hero: Hero): Alignment{
+    fun heroImgContentAlign(hero: Hero): Alignment {
         var cAlign: Alignment = Alignment.TopCenter
 
         if (hero.localizedName in endAlignHeroesArray()) {
@@ -118,4 +175,6 @@ object appUtilsArrays {
 
         return cAlign
     }
+
+
 }

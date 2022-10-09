@@ -1,4 +1,4 @@
-package ru.ratatoskr.doheco.presentation.screens
+package ru.ratatoskr.doheco.presentation.base
 
 import ru.ratatoskr.doheco.R
 

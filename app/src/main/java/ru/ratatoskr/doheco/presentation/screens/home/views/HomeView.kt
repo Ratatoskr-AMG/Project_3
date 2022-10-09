@@ -1,13 +1,13 @@
 package ru.ratatoskr.doheco.presentation.screens.home.views
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Surface
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -26,6 +26,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -37,6 +38,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.ConstraintSet
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -63,23 +66,12 @@ import ru.ratatoskr.doheco.presentation.theme.*
 fun HomeView(
     viewModel: HomeViewModel,
     imageLoader: ImageLoader,
-    data: List<Any?>,
+    heroes: List<Any?>,
+    favoriteHeroes: List<Any?>,
     onHeroClick: (Hero) -> Unit,
     onHeroSearch: (String) -> Unit
 ) {
-    val heroes = data.mapNotNull { it as? Hero }
-
-    /*
-    val heroes_base = data.mapNotNull { it as? Hero }
-    var asd = heroes_base.toMutableList()
-    var asdad = asd.sortedBy{it.proWin.toFloat()/it.proPick.toFloat()}
-    var heroes = asdad.reversed().slice(0..9)
-
-    Log.e("TOHAcomp","heroes_base:"+heroes_base.toString())
-    Log.e("TOHAcomp","asdad:"+asdad.toString())
-    Log.e("TOHAcomp","heroes:"+heroes.toString())
-    */
-
+    val heroes = heroes.mapNotNull { it as? Hero }
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
@@ -102,7 +94,6 @@ fun HomeView(
             }
         }
     }
-
 
     Box(
         modifier = Modifier
@@ -134,16 +125,20 @@ fun HomeView(
                         .padding(bottom = 20.dp, top = 16.dp)
                         .background(Color.Transparent)
                 ) {
-
-
                     TextField(
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                contentDescription = null
+                            )
+                        },
                         singleLine = true,
                         textStyle = LocalTextStyle.current.copy(
                             color = Color.Black,
                             lineHeight = 220.sp,
                             textDecoration = TextDecoration.None
                         ),
-
+                        placeholder = { Text(stringResource(R.string.search)) },
                         value = searchState.text,
                         onValueChange = {
                             searchState = TextFieldValue(it, TextRange(it.length))
@@ -183,25 +178,10 @@ fun HomeView(
                         for (column in 0..listColumnsCount) {
                             var index = column + (row * (listColumnsCount + 1))
                             if (index <= heroes.size - 1) {
+                                //var favoriteFlag = favoriteHeroes.isNotEmpty()
                                 var hero = heroes.get(index)
-                                Box(modifier = Modifier
-                                    .clickable {
-                                        onHeroClick(hero)
-                                    }
-                                    .width(70.dp)
-                                    .padding(10.dp)
-                                    .height(35.dp)) {
-                                    Image(
-                                        contentDescription = hero.name,
-                                        painter = loadPicture(
-                                            url = hero.icon,
-                                            placeholder = painterResource(id = R.drawable.ic_comparing_gr)
-                                        ),
-                                        modifier = Modifier
-                                            .width(70.dp)
-                                            .height(35.dp)
-                                    )
-                                }
+                                var favoriteFlag = favoriteHeroes.contains(hero)
+                                heroesListItemBox(onHeroClick,hero,favoriteFlag)
                             } else {
                                 Box(
                                     modifier = Modifier
@@ -211,11 +191,12 @@ fun HomeView(
                                 )
                             }
                         }
-
                     }
                 }
             }
         }
+
+
     }
 
     LaunchedEffect(Unit) {

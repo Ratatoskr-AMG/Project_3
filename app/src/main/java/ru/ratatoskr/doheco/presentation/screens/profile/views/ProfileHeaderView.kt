@@ -1,6 +1,5 @@
 package ru.ratatoskr.doheco.presentation.screens.profile.views
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -22,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import ru.ratatoskr.doheco.R
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.profile.ProfileViewModel
 import ru.ratatoskr.doheco.presentation.screens.profile.models.ProfileState
 
@@ -121,7 +120,7 @@ fun ProfileHeaderView(
                 }
 
                 Image(
-                    painter = rememberImagePainter(tierImage),
+                    painter = rememberAsyncImagePainter(tierImage),
                     contentDescription = tierDescription,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

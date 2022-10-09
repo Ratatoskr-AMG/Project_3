@@ -5,11 +5,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import coil.ImageLoader
 import ru.ratatoskr.doheco.R
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.home.models.HomeState
-import ru.ratatoskr.doheco.presentation.screens.home.views.HomeListView
+import ru.ratatoskr.doheco.presentation.screens.home.views.HomeView
 import ru.ratatoskr.doheco.presentation.theme.LoadingView
 import ru.ratatoskr.doheco.presentation.theme.MessageView
 
@@ -21,13 +20,13 @@ fun HomeScreen(
     navController: NavController,
 ) {
 
-
-
     when (val state = viewModel.homeState.observeAsState().value) {
-        is HomeState.LoadedHomeState<*> -> HomeListView(
+        is HomeState.LoadedHomeState<*> -> HomeView(
             viewModel,
             viewModel.imageLoader,
-            state.heroes, {
+            state.heroes,
+            state.favoriteHeroes,
+            {
                 navController.navigate(Screens.Hero.route + "/" + it.id)
             }, {
                 viewModel.getAllHeroesByStrSortByName(it)

@@ -4,8 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_back.xml" value="0.106" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_chart_869.xml" value="0.1" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_bl.xml" value="0.1225" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_empty.xml" value="0.1525" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_gr.xml" value="0.1525" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_gr_small.xml" value="0.1" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_gr_spaces.xml" value="0.1525" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_or.xml" value="0.1" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_tr.xml" value="0.1225" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_comparing_wh.xml" value="0.1225" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_down.xml" value="0.1" />
@@ -19,6 +24,9 @@
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_human_tr.xml" value="0.116" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_human_wh.xml" value="0.116" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_recommends_tr.xml" value="0.1" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_recommends_wh.xml" value="0.1" />
+        <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_search_svgrepo_com.xml" value="0.1" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_up_svgrepo_com.xml" value="0.1" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_video_tr.xml" value="0.116" />
         <entry key="..\:/Android/Project_3/app/src/main/res/drawable/ic_video_wh.xml" value="0.116" />

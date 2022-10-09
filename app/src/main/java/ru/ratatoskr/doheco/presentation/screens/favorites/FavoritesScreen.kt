@@ -7,11 +7,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import ru.ratatoskr.doheco.R
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.favorites.FavoritesViewModel
 import ru.ratatoskr.doheco.presentation.screens.favorites.models.FavoritesState
 import ru.ratatoskr.doheco.presentation.screens.favorites.views.EmptyFavoritesListView
-import ru.ratatoskr.doheco.presentation.screens.favorites.views.FavoritesListView
+import ru.ratatoskr.doheco.presentation.screens.favorites.views.FavoritesView
 import ru.ratatoskr.doheco.presentation.screens.favorites.views.LoadingFavoritesView
 
 @ExperimentalFoundationApi
@@ -23,7 +23,7 @@ fun FavoritesScreen(
     val viewState = viewModel.favoritesState.observeAsState()
 
     when (val state = viewState.value) {
-        is FavoritesState.LoadedHeroesState<*> -> FavoritesListView(
+        is FavoritesState.LoadedHeroesState<*> -> FavoritesView(
             viewModel, state.heroes, navController
         ) {
             navController.navigate(Screens.Hero.route + "/" + it.id)

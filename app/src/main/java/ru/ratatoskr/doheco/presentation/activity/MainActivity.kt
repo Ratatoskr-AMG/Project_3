@@ -3,7 +3,6 @@ package ru.ratatoskr.doheco.presentation.activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -31,12 +30,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.ratatoskr.doheco.presentation.screens.Screens
+import ru.ratatoskr.doheco.presentation.base.Screens
 import ru.ratatoskr.doheco.presentation.screens.*
 import ru.ratatoskr.doheco.presentation.screens.attribute.AttributeViewModel
 import ru.ratatoskr.doheco.presentation.screens.comparing.ComparingScreen
@@ -50,6 +49,8 @@ import ru.ratatoskr.doheco.presentation.screens.hero.HeroViewModel
 import ru.ratatoskr.doheco.presentation.screens.role.RoleViewModel
 import ru.ratatoskr.doheco.presentation.screens.tiers.TiersScreen
 import ru.ratatoskr.doheco.presentation.screens.home.HomeViewModel
+import ru.ratatoskr.doheco.presentation.screens.recommendations.RecommendationsScreen
+import ru.ratatoskr.doheco.presentation.screens.recommendations.RecommendationsViewModel
 import ru.ratatoskr.doheco.presentation.screens.video.VideoViewModel
 
 @AndroidEntryPoint
@@ -63,7 +64,6 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         val appSharedPreferences = this.getSharedPreferences(
             APP_SHARED_PREFERENCES_NAME,
             Context.MODE_PRIVATE
@@ -79,7 +79,7 @@ class MainActivity() : AppCompatActivity() {
                 val navController = rememberNavController()
                 var bottomNavMenuHeight = 80.dp
                 Scaffold(
-                    modifier = Modifier.navigationBarsPadding(),
+                    modifier = Modifier.navigationBarsPadding().background(Color.Black),
                     bottomBar = {
                         BottomNavigation(
                             modifier = Modifier
@@ -108,25 +108,22 @@ class MainActivity() : AppCompatActivity() {
                                 .height(bottomNavMenuHeight),
                             backgroundColor = Color(0xFF000000)
                         ) {
-                            val items =
+
+                            val bottomMenuItems =
                                 listOf(
                                     Screens.Home,
                                     Screens.Favorites,
                                     Screens.Comparing,
-                                    Screens.Profile,
-                                    Screens.Video
+                                    Screens.Recommendations,
+                                    Screens.Profile
                                 )
+
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentDestination = navBackStackEntry?.destination
 
-                            items.forEach { value ->
+                            bottomMenuItems.forEach { value ->
                                 val isSelected =
                                     currentDestination?.hierarchy?.any { it.route == value.route } == true
-
-                                Log.e("TOHA3","value.route:"+value.route)
-                                Log.e("TOHA3","isSelected:"+isSelected)
-                                if (isSelected)Log.e("TOHA3","value.icon_wh:"+value.icon_wh)
-                                else Log.e("TOHA3","value.icon_tr:"+value.icon_tr)
 
                                 BottomNavigationItem(
                                     modifier = Modifier
@@ -142,7 +139,9 @@ class MainActivity() : AppCompatActivity() {
                                                 .width(20.dp)
                                                 .height(20.dp)
                                                 .align(Alignment.CenterVertically),
-                                            painter = if (isSelected) rememberImagePainter(value.icon_wh) else rememberImagePainter(
+                                            painter = if (isSelected) rememberAsyncImagePainter(
+                                                value.icon_wh
+                                            ) else rememberAsyncImagePainter(
                                                 value.icon_tr
                                             ),
                                             contentDescription = value.description.toString(),
@@ -158,11 +157,14 @@ class MainActivity() : AppCompatActivity() {
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
+
                             val heroesListviewModel = hiltViewModel<HomeViewModel>()
+
                             HomeScreen(
                                 viewModel = heroesListviewModel,
                                 navController = navController,
                             )
+
                         }
                         composable(Screens.Hero.route + "/{id}") { navBackStack ->
                             val id = navBackStack.arguments?.getString("id").toString()
@@ -207,6 +209,10 @@ class MainActivity() : AppCompatActivity() {
                         composable(Screens.Comparing.route) {
                             val comparingViewModel = hiltViewModel<ComparingViewModel>()
                             ComparingScreen(comparingViewModel)
+                        }
+                        composable(Screens.Recommendations.route) { navBackStack->
+                            val recommendationsViewModel = hiltViewModel<RecommendationsViewModel>()
+                            RecommendationsScreen(navController,recommendationsViewModel)
                         }
                     }
                 }

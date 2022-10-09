@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="256dp"
+    android:height="256dp"
+    android:viewportWidth="256"
+    android:viewportHeight="256">
+  <path
+      android:pathData="M65.48,254.31L29.16,254.31c-6.92,0 -12.54,-5.63 -12.54,-12.54L16.61,165.66c0,-6.92 5.63,-12.54 12.54,-12.54l36.32,0c6.92,0 12.54,5.63 12.54,12.54l0,76.11C78.02,248.68 72.4,254.31 65.48,254.31zM29.16,161.46c-2.32,0 -4.2,1.89 -4.2,4.2l0,76.11c0,2.32 1.89,4.2 4.2,4.2l36.32,0c2.32,0 4.21,-1.89 4.21,-4.2L69.68,165.66c0,-2.32 -1.89,-4.2 -4.21,-4.2L29.16,161.46z"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="2.81"
+      android:fillColor="#ffffff"
+      android:fillType="nonZero"
+      android:strokeColor="#ffffff"
+      android:strokeLineCap="butt"/>
+  <path
+      android:pathData="M146.02,254.31L109.7,254.31c-6.92,0 -12.54,-5.63 -12.54,-12.54L97.15,114.59c0,-6.92 5.63,-12.54 12.54,-12.54l36.32,0c6.92,0 12.54,5.63 12.54,12.54l0,127.17C158.56,248.68 152.93,254.31 146.02,254.31zM109.7,110.39c-2.32,0 -4.21,1.89 -4.21,4.21l0,127.17c0,2.32 1.89,4.2 4.21,4.2l36.32,0c2.32,0 4.2,-1.89 4.2,-4.2L150.22,114.59c0,-2.32 -1.89,-4.21 -4.2,-4.21L109.7,110.38z"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="2.81"
+      android:fillColor="#ffffff"
+      android:fillType="nonZero"
+      android:strokeColor="#ffffff"
+      android:strokeLineCap="butt"/>
+  <path
+      android:pathData="M226.56,254.31L190.23,254.31c-6.92,0 -12.54,-5.63 -12.54,-12.54L177.69,13.95C177.69,7.03 183.32,1.41 190.23,1.41l36.32,0c6.92,0 12.54,5.63 12.54,12.54l0,227.82C239.1,248.68 233.47,254.31 226.56,254.31zM190.23,9.74c-2.32,0 -4.2,1.89 -4.2,4.21l0,227.82c0,2.32 1.89,4.2 4.2,4.2l36.32,0c2.32,0 4.21,-1.89 4.21,-4.2L230.76,13.95c0,-2.32 -1.89,-4.21 -4.21,-4.21L190.23,9.74z"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="2.81"
+      android:fillColor="#ffffff"
+      android:fillType="nonZero"
+      android:strokeColor="#ffffff"
+      android:strokeLineCap="butt"/>
+</vector>

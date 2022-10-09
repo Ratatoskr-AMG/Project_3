@@ -1,0 +1,349 @@
+package ru.ratatoskr.doheco.presentation.screens.recommendations.views
+
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import ru.ratatoskr.doheco.R
+import ru.ratatoskr.doheco.domain.model.Hero
+import ru.ratatoskr.doheco.domain.utils.rememberForeverLazyListState
+import ru.ratatoskr.doheco.presentation.screens.recommendations.RecommendationsViewModel
+import ru.ratatoskr.doheco.presentation.theme.*
+
+
+@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalFoundationApi
+@Composable
+fun RecommendationsView(
+    heroes: List<Any?>,
+    favoriteHeroes: List<Hero>,
+    player_tier: String,
+    onHeroClick: (Hero) -> Unit,
+    onTierImgClick: () -> Unit
+) {
+
+    var tierImgAddr = "http://ratatoskr.ru/app/img/tier/0.png"
+    var tierBlockNum = 0;
+    if (player_tier != "undefined") {
+        tierImgAddr = "http://ratatoskr.ru/app/img/tier/" + player_tier + ".png"
+        tierBlockNum = player_tier.toInt()
+    }
+
+    val heroes = heroes.mapNotNull { it as? Hero }
+    var allHeroesBase = heroes.toMutableList()
+
+    var topProWinsOnPicksBase =
+        allHeroesBase.sortedBy { it.proWin.toFloat() / it.proPick.toFloat() }
+    var topHeraldWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._1Win.toFloat() / it._1Pick.toFloat() }
+    var topGuardianWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._2Win.toFloat() / it._2Pick.toFloat() }
+    var topCrusaderWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._3Win.toFloat() / it._3Pick.toFloat() }
+    var topArchonWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._4Win.toFloat() / it._4Pick.toFloat() }
+    var topLegendWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._5Win.toFloat() / it._5Pick.toFloat() }
+    var topAncientWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._6Win.toFloat() / it._6Pick.toFloat() }
+    var topDivineWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._7Win.toFloat() / it._7Pick.toFloat() }
+    var topImmortalWinsOnPicksBase =
+        allHeroesBase.sortedBy { it._8Win.toFloat() / it._8Pick.toFloat() }
+    var topWinsOnPicksBase =
+        allHeroesBase.sortedBy {
+            (it.turboWins.toFloat()+it.proWin.toFloat()+it._1Win.toFloat()+it._2Win.toFloat()+it._3Win.toFloat()+it._4Win.toFloat()+it._5Win.toFloat()+it._6Win.toFloat()+it._7Win.toFloat()+it._8Win.toFloat())/it.turboPicks.toFloat()+it.proPick.toFloat()+ it._1Pick.toFloat()+it._2Pick.toFloat()+it._3Pick.toFloat()+it._4Pick.toFloat()+it._5Pick.toFloat()+it._6Pick.toFloat()+it._7Pick.toFloat()+it._8Pick.toFloat() }
+    var topProBansBase = allHeroesBase.sortedBy { it.proBan }
+
+    val topProWinsOnPicks = topProWinsOnPicksBase.reversed().slice(0..14)
+    var topHeraldWinsOnPicks=topHeraldWinsOnPicksBase.reversed().slice(0..14)
+    var topGuardianWinsOnPicks =
+        topGuardianWinsOnPicksBase.reversed().slice(0..14)
+    var topCrusaderWinsOnPicks =
+        topCrusaderWinsOnPicksBase.reversed().slice(0..14)
+    var topArchonWinsOnPicks =
+        topArchonWinsOnPicksBase.reversed().slice(0..14)
+    var topLegendWinsOnPicks =
+        topLegendWinsOnPicksBase.reversed().slice(0..14)
+    var topAncientWinsOnPicks =
+        topAncientWinsOnPicksBase.reversed().slice(0..14)
+    var topDivineWinsOnPicks =
+        topDivineWinsOnPicksBase.reversed().slice(0..14)
+    var topImmortalWinsOnPicks =
+        topImmortalWinsOnPicksBase.reversed().slice(0..14)
+    var topWinsOnPicks =
+        topWinsOnPicksBase.reversed().slice(0..14)
+    val topProBans = topProBansBase.reversed().slice(0..14)
+
+    topHeraldWinsOnPicks.forEach{
+        Log.e("TOHAtop",it.localizedName+":"+it._1Win+"/"+it._1Pick+"="+it._1Win.toFloat() / it._1Pick.toFloat())
+    }
+
+    var offsetPosition by remember { mutableStateOf(0f) }
+    var scrollState = rememberForeverLazyListState(key = "Recommendations")
+    var listColumnsCount = 4
+    var listRowsCount = topProWinsOnPicks.size / (listColumnsCount + 1)
+    if (topProWinsOnPicks.size % (listColumnsCount + 1) > 0) {
+        listRowsCount += 1
+    }
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val delta = consumed.y
+                offsetPosition += delta
+                return Offset.Zero
+            }
+        }
+    }
+
+    Column {
+        appHeaderInner {
+            appHeaderUnderlinedCenterVerticalRow(Arrangement.Start) {
+                appHeaderImageBox {
+                    appHeaderImage(
+                        { onTierImgClick() },
+                        tierImgAddr,
+                        "Tier",
+                        Alignment.Center,
+                        Color(0x880d111c)
+                    )
+                }
+                appHeaderLeftImgText(stringResource(id = R.string.recommendations))
+            }
+        }
+        Box(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize()
+        ) {
+            LazyColumn(
+                state = scrollState,
+                modifier = Modifier
+                    .nestedScroll(nestedScrollConnection)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Transparent
+                            )
+                        )
+                    )
+                    .fillMaxSize()
+            ) {
+                //Tier Wins/Picks Block
+                if (tierBlockNum > 0) {
+                    when (tierBlockNum) {
+                        1 -> {
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_herald_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topHeraldWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        2 -> {
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Guardian_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topGuardianWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        3 -> {
+
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Crusader_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topCrusaderWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        4 -> {
+
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Archon_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topArchonWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        5 -> {
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Legend_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topLegendWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        6 -> {
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Ancient_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topAncientWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        7 -> {
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Divine_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topDivineWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        8 -> {
+                            item {
+                                recommendationsTitleBlock(stringResource(id = R.string.top_Immortal_wins_to_picks))
+                            }
+                            for (row in 0 until listRowsCount) {
+                                item {
+                                    recommendationsHeroesBlock(
+                                        topImmortalWinsOnPicks,
+                                        favoriteHeroes,
+                                        listColumnsCount,
+                                        row,
+                                        onHeroClick
+                                    )
+                                }
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+                //Total Wins/Picks Block
+                item {
+                    recommendationsTitleBlock(stringResource(id = R.string.top_wins_to_picks))
+                }
+                for (row in 0 until listRowsCount) {
+                    item {
+                        recommendationsHeroesBlock(
+                            topWinsOnPicks,
+                            favoriteHeroes,
+                            listColumnsCount,
+                            row,
+                            onHeroClick
+                        )
+                    }
+                }
+                //Pro Wins/Picks Block
+                item {
+                    recommendationsTitleBlock(stringResource(id = R.string.top_Pro_wins_to_picks))
+                }
+                for (row in 0 until listRowsCount) {
+                    item {
+                        recommendationsHeroesBlock(
+                            topProWinsOnPicks,
+                            favoriteHeroes,
+                            listColumnsCount,
+                            row,
+                            onHeroClick
+                        )
+                    }
+                }
+                //Pro Bans Block
+                /*
+                item {
+                    recommendationsTitleBlock(stringResource(id = R.string.top_pro_bans))
+                }
+                for (row in 0 until listRowsCount) {
+                    item {
+                        recommendationsHeroesBlock(
+                            topProBans,
+                            favoriteHeroes,
+                            listColumnsCount,
+                            row,
+                            onHeroClick
+                        )
+                    }
+                }
+                */
+            }
+        }
+
+    }
+    LaunchedEffect(Unit) {
+
+    }
+}
+
+

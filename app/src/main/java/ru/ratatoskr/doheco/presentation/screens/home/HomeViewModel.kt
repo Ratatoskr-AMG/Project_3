@@ -73,12 +73,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesByStrSortByName(str)
+                val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
                 if (!heroes.isEmpty()) {
                     _heroesList_state.postValue(
                         HomeState.LoadedHomeState(
                             heroes,
                             str,
-                            false
+                            false,
+                            favoriteHeroes
                         )
                     )
                 }
@@ -107,22 +109,26 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.e("TOHA", "getAllHeroesFromApi")
+                Log.e("DOHECO", "getAllHeroesFromApi")
                 var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
+                val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
 
                 if (heroes.isEmpty()) {
+                    Log.e("DOHECO", "heroes isEmpty")
                     _heroesList_state.postValue(HomeState.NoHomeState("Empty Heroes from API list"))
                 } else {
+                    Log.e("DOHECO", "heroes isNotEmpty")
                     addHeroesUserCase.addHeroes(heroes)
                     appSharedPreferences.edit()
                         .putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time)
                         .apply();
-                    Log.e("TOHA", "All heroes updated at:" + Date(System.currentTimeMillis()).time)
+                    Log.e("DOHECO", "All heroes updated at:" + Date(System.currentTimeMillis()).time)
                     _heroesList_state.postValue(
                         HomeState.LoadedHomeState(
                             heroes = heroes.sortedBy { it.localizedName },
                             "",
-                            false
+                            false,
+                            favoriteHeroes
                         )
                     )
                 }

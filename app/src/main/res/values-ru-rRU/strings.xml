@@ -109,4 +109,7 @@
     <string name="no">Нет</string>
     <string name="yes">Да</string>
     <string name="search">Введите имя героя</string>
+    <string name="login_offer">Для обновления данных, пожалуйста, авторизуйтесь через Steam</string>
+    <string name="update_time">Данные обновлялись</string>
+    <string name="time_block">Обновлять данные можно не чаще одного раза в сутки</string>
 </resources>

@@ -14,6 +14,10 @@ class AppUserRepoImpl @Inject constructor(
     private val httpAppClient: HttpClient
 ) {
 
+    fun getPlayerIdFromSP(appSharedPreferences: SharedPreferences):String{
+        return appSharedPreferences.getString("player_id", "undefined").toString()
+    }
+
     fun getPlayerTierFromSP(appSharedPreferences: SharedPreferences):String{
         return appSharedPreferences.getString("player_tier", "undefined").toString()
     }

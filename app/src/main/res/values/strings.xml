@@ -57,7 +57,7 @@
     <string name="_8_win_attr">Immortal wins</string>
     <string name="hero_not_found">Hero not found</string>
     <string name="back">Back</string>
-    <string name="sign_in_with_steam">Sign in with Steam</string>
+    <string name="sign_in_with_steam">Login via Steam</string>
     <string name="heroes_list_last_modified">Update data</string>
     <string name="heroes_list_last_modified_text">Last modified</string>
     <string name="exit">Exit</string>
@@ -108,5 +108,8 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="search">Enter hero name</string>
+    <string name="login_offer">To receive updated data, please, log in via Steam</string>
+    <string name="update_time">"Data has been updated "</string>
+    <string name="time_block">You can update the data no more than once a day</string>
 
 </resources>

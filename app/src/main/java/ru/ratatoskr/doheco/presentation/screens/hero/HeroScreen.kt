@@ -8,6 +8,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import ru.ratatoskr.doheco.R
+import ru.ratatoskr.doheco.domain.utils.rememberForeverLazyListState
 import ru.ratatoskr.doheco.presentation.screens.hero.models.HeroEvent
 import ru.ratatoskr.doheco.presentation.screens.hero.models.HeroState
 import ru.ratatoskr.doheco.presentation.base.Screens
@@ -26,6 +27,7 @@ fun HeroScreen(
 
     val viewState = viewModel.heroState.observeAsState()
 
+
     when (val state = viewState.value) {
         is HeroState.HeroLoadedState -> {
 
@@ -33,6 +35,7 @@ fun HeroScreen(
             val hero = state.hero
             val currentInfoBlock = state.currentInfoBlock
             val currentAttrsMax = state.currentAttrsMax
+            var scrollState = rememberForeverLazyListState(key = "Hero_" + hero.localizedName)
 
             HeroView(
                 viewModel,
@@ -58,12 +61,14 @@ fun HeroScreen(
                     Log.e("TOHA", "InfoblockName:"+it)
                     viewModel.obtainEvent(
                         HeroEvent.OnInfoBlockSelect(
-                            it
+                            it,
+                            scrollState
                         )
                     )
-                },
-                navController
 
+                },
+                navController,
+                scrollState
             )
         }
         is HeroState.NoHeroState -> MessageView(stringResource(id = R.string.hero_not_found))

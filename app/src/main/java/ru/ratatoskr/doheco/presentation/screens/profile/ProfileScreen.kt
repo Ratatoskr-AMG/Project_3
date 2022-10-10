@@ -53,10 +53,13 @@ fun ProfileScreen(
             if (state.heroes_list_last_modified == "0"
             ) {
                 heroes_list_last_modified = stringResource(id = R.string.wait)
-            }else{
+            }
+            if (state.heroes_list_last_modified == "1") {
+                heroes_list_last_modified = stringResource(id = R.string.time_block)
+            }
+            if (state.heroes_list_last_modified != "1" && state.heroes_list_last_modified != "0") {
                 calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
                 //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-
                 val month = getAbbreviatedFromDateTime(calendarDate, "MM");
                 val day = getAbbreviatedFromDateTime(calendarDate, "dd");
                 val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
@@ -84,8 +87,19 @@ fun ProfileScreen(
 
             if (state.heroes_list_last_modified == "0") {
                 heroes_list_last_modified = stringResource(id = R.string.wait)
-            }else{
-                calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
+            }
+            if (state.heroes_list_last_modified == "1") {
+                heroes_list_last_modified = stringResource(id = R.string.time_block)
+            }
+
+            if ((state.heroes_list_last_modified != "1" && state.heroes_list_last_modified != "0") ) {
+
+                if(state.heroes_list_last_modified!="time") {
+                    calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
+                }
+                else{
+                    calendarDate.timeInMillis = 1.toLong()
+                }
                 //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
                 val month = getAbbreviatedFromDateTime(calendarDate, "MM");
                 val day = getAbbreviatedFromDateTime(calendarDate, "dd");
@@ -95,6 +109,12 @@ fun ProfileScreen(
                 val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
                 heroes_list_last_modified =
                     day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
+
+                if(state.heroes_list_last_modified=="time"){
+                    appSharedPreferences.edit().putLong("heroes_list_last_modified", 1).apply()
+                    heroes_list_last_modified="time"
+                }
+
             }
 
             DefinedBySteamProfileView(

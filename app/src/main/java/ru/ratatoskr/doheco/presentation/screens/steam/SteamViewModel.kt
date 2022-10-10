@@ -65,13 +65,13 @@ class SteamViewModel @Inject constructor(
             val part = dotaBuffResponse.substring(index)
             val addr = part.substringBefore('"')
             val index2 = addr.lastIndexOf('/')
-            var part2 = addr.substring(index2 + 1)
-            var openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(part2)
+            var player_id = addr.substring(index2 + 1)
+            var openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(player_id)
 
             if (openDotaResponse.rank_tier != null) {
                 var rank_tier = openDotaResponse.rank_tier.toString()
                 appSharedPreferences.edit().putString("player_tier", rank_tier).apply()
-
+                appSharedPreferences.edit().putString("player_id", player_id).apply()
 
             } else {
                 appSharedPreferences.edit().putString("player_tier", "undefined")

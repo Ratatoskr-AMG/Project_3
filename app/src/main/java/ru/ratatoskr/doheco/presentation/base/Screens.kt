@@ -16,8 +16,8 @@ sealed class Screens(
     object Favorites : Screens(
         "favorites",
         R.string.title_favorites,
-        R.drawable.ic_hearth_tr,
-        R.drawable.ic_hearth_wh
+        R.drawable.ic_star_tr,
+        R.drawable.ic_star_wh
     )
 
     object Profile :
@@ -39,7 +39,7 @@ sealed class Screens(
     object Recommendations : Screens(
         "recommendations",
         R.string.recommendations,
-        R.drawable.ic_recommends_tr,
-        R.drawable.ic_recommends_wh
+        R.drawable.ic_rate_tr,
+        R.drawable.ic_rate_wh
     )
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
@@ -53,15 +54,16 @@ fun HeroView(
     onRoleClick: (String) -> Unit,
     onAttrClick: (String) -> Unit,
     onHeroInfoBlockSelect: (String) -> Unit,
-    navController: NavController
+    navController: NavController,
+    scrollState:LazyListState
 ) {
 
-    var scrollState = rememberForeverLazyListState(key = "Hero_" + hero.localizedName)
+    //var scrollState = rememberForeverLazyListState(key = "Hero_" + hero.localizedName)
     val rolesLanguageMap = appUtilsArrays.rolesLanguageMap()
     val attrsLanguageMap = appUtilsArrays.attrsLanguageMap()
     val gson = GsonBuilder().create()
     val rolesList =
-gson.fromJson<ArrayList<String>>(hero.roles[0], object :
+        gson.fromJson<ArrayList<String>>(hero.roles[0], object :
             TypeToken<ArrayList<String>>() {}.type)
 
     Column(
@@ -194,8 +196,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                         modifier = Modifier
                             .width(20.dp)
                             .height(20.dp),
-                        painter = if (isChecked) rememberAsyncImagePainter(R.drawable.ic_hearth_wh) else rememberAsyncImagePainter(
-                            R.drawable.ic_hearth_tr
+                        painter = if (isChecked) rememberAsyncImagePainter(R.drawable.ic_star_wh) else rememberAsyncImagePainter(
+                            R.drawable.ic_star_tr
                         ),
                         contentDescription = "Is hero favorite?"
                     )
@@ -347,7 +349,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["turboPicks"]!!),
                             hero.turboPicks.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "turboPicks" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "turboPicks" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -465,7 +468,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["turboWins"]!!),
                             hero.turboWins.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "turboWins" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "turboWins" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -587,7 +591,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             "baseHealth",
                             stringResource(attrsLanguageMap["baseHealth"]!!),
                             hero.baseHealth.toString(), navController,
-                            currentAttrsMax.filter { it.name == "baseHealth" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseHealth" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -608,7 +613,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["baseHealthRegen"]!!),
                             "+" + hero.baseHealthRegen.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "baseHealthRegen" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseHealthRegen" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -619,7 +625,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["baseManaRegen"]!!),
                             "+" + hero.baseManaRegen.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "baseManaRegen" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseManaRegen" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -630,7 +637,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["baseArmor"]!!),
                             hero.baseArmor.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "baseArmor" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseArmor" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -713,7 +721,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["attackRange"]!!),
                             hero.attackRange.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "attackRange" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "attackRange" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -725,7 +734,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                                 stringResource(attrsLanguageMap["projectileSpeed"]!!),
                                 hero.projectileSpeed.toString(),
                                 navController,
-                                currentAttrsMax.filter { it.name == "projectileSpeed" }[0].getvalue().toFloat()
+                                currentAttrsMax.filter { it.name == "projectileSpeed" }[0].getvalue()
+                                    .toFloat()
 
                             )
                         }
@@ -736,7 +746,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["attackRate"]!!),
                             hero.attackRate.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "attackRate" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "attackRate" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }
@@ -747,7 +758,8 @@ gson.fromJson<ArrayList<String>>(hero.roles[0], object :
                             stringResource(attrsLanguageMap["moveSpeed"]!!),
                             hero.moveSpeed.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "moveSpeed" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "moveSpeed" }[0].getvalue()
+                                .toFloat()
 
                         )
                     }

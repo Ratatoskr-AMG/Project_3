@@ -39,13 +39,6 @@ fun UndefinedProfileView(
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
 
-    var isUpdating = if(heroes_list_last_modified=="01/01/1970 03:00:00") true else false
-    var updateText = if(isUpdating) {
-        stringResource(id = R.string.wait)
-    }else {
-        stringResource(id = R.string.heroes_list_last_modified) + " (" + heroes_list_last_modified + ")";
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -110,15 +103,12 @@ fun UndefinedProfileView(
                 }
 
             }
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+            item{
+                Box(
                     modifier = Modifier
-                        .clickable {
-                            if(!isUpdating) {
-                                onReloadClick()
-                            }                        }
+                        .height(50.dp)
+                        .padding(start = 20.dp, end = 20.dp)
+                        .fillMaxWidth()
                         .drawWithContent {
                             drawContent()
                             clipRect { // Not needed if you do not care about painting half stroke outside
@@ -140,23 +130,29 @@ fun UndefinedProfileView(
                                     end = Offset(x = size.width, y = y)
                                 )
                             }
-                        }
-                        .fillMaxWidth()
-                        .height(50.dp)
-
+                        }                    ,
+                    contentAlignment = Alignment.CenterStart
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 20.dp, end = 20.dp)
-                            .fillMaxWidth()
-
-                    ) {
-                        Text(
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            text = updateText
-                        )
-                    }
+                    Text(
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        text = stringResource(id = R.string.update_time) + " " + heroes_list_last_modified
+                    )
+                }
+            }
+            item{
+                Box(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .padding(start = 20.dp, end = 20.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        fontSize = 12.sp,
+                        color = Color(0x99FFFFFF),
+                        text = stringResource(id = R.string.login_offer)
+                    )
                 }
             }
         }

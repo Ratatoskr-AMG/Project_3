@@ -110,7 +110,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.e("DOHECO", "getAllHeroesFromApi")
-                var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi()
+                var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("init")
                 val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
 
                 if (heroes.isEmpty()) {

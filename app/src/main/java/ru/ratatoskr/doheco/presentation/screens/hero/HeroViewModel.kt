@@ -1,6 +1,7 @@
 package ru.ratatoskr.doheco.presentation.screens.hero
 
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -106,6 +107,7 @@ class HeroViewModel @Inject constructor(
                 currentState.isFavorite,
                 event.infoBlockName,
                 currentState.currentAttrsMax,
+                event.scrollState
             )
         }
     }
@@ -114,7 +116,8 @@ class HeroViewModel @Inject constructor(
         hero: Hero,
         isFavorite: Boolean = false,
         newInfoBlock: String,
-        currentAttrsMax: List<AttributeMaximum>
+        currentAttrsMax: List<AttributeMaximum>,
+        scrollState:LazyListState
     ) {
         viewModelScope.launch {
             _heroState.postValue(
@@ -125,6 +128,7 @@ class HeroViewModel @Inject constructor(
                     currentAttrsMax = currentAttrsMax,
                 )
             )
+            //scrollState.animateScrollToItem(index = 0)
         }
     }
 

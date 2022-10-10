@@ -1,5 +1,6 @@
 package ru.ratatoskr.doheco.domain.useCases.heroes
 
+import android.util.Log
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.domain.repository.HeroesRepoImpl
 import java.math.BigDecimal
@@ -11,11 +12,12 @@ import javax.inject.Inject
 class GetAllHeroesFromOpendotaUseCase @Inject constructor(
     var opendotaRepoImpl: HeroesRepoImpl,
 ) {
-    suspend fun getAllHeroesFromApi(): List<Hero> {
-        return calculate(opendotaRepoImpl.getAllHeroesListFromAPI())
+    suspend fun getAllHeroesFromApi(steamId:String): List<Hero> {
+        return calculate(opendotaRepoImpl.getAllHeroesListFromAPI(steamId))
     }
 
     fun calculate(heroes: List<Hero>): List<Hero> {
+        Log.e("TOHA","heroessize:"+heroes.size)
         val strHealhMultiplier = 20;
         val strHealhRegenMultiplier = 0.1;
         val intManaMultiplier = 12;

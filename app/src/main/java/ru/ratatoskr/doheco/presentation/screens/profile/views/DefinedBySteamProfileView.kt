@@ -1,5 +1,6 @@
 package ru.ratatoskr.doheco.presentation.screens.profile.views
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,11 +38,15 @@ fun DefinedBySteamProfileView(
     onSteamExit: () -> Unit,
     onReloadClick: () -> Unit
 ) {
+    Log.e("TOHA","heroes_list_last_modifiedXXXXX:"+heroes_list_last_modified)
     var isUpdating = if(heroes_list_last_modified=="01/01/1970 03:00:00") true else false
     var updateText = if(isUpdating) {
         stringResource(id = R.string.wait)
     }else {
         stringResource(id = R.string.heroes_list_last_modified) + " (" + heroes_list_last_modified + ")";
+    }
+    if(heroes_list_last_modified=="time"){
+        updateText= stringResource(id = R.string.time_block)
     }
     Box(
         modifier = Modifier

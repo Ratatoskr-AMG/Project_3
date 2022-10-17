@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import ru.ratatoskr.doheco.domain.extensions.set
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
+import ru.ratatoskr.doheco.domain.useCases.heroes.CurrentInfoBlockUseCase
 import ru.ratatoskr.doheco.domain.useCases.heroes.GetAllHeroesByRoleUseCase
 import ru.ratatoskr.doheco.domain.useCases.heroes.GetAllHeroesSortByNameUseCase
 import ru.ratatoskr.doheco.domain.useCases.heroes.GetHeroByIdUseCase
@@ -27,6 +28,7 @@ class ComparingViewModel @Inject constructor(
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
     val getHeroByIdUseCase: GetHeroByIdUseCase,
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
+    val currentInfoBlockUseCase: CurrentInfoBlockUseCase,
 
     ): ViewModel(), EventHandler<ComparingEvent> {
 
@@ -64,6 +66,9 @@ class ComparingViewModel @Inject constructor(
     }
 
     private fun selectInfoBlock(left: Hero, right: Hero, heroes: List<Hero>, favoriteHeroes: List<Hero>,newInfoBlock:String) {
+
+        currentInfoBlockUseCase.setCurrentInfoBlockComparing(appSharedPreferences,newInfoBlock)
+
         viewModelScope.launch {
             _comparingState.postValue(
                 ComparingState.HeroesState(
@@ -77,8 +82,10 @@ class ComparingViewModel @Inject constructor(
         }
     }
 
-    fun setHeroesState(left: Hero? = null, right: Hero? = null,currentInfoBlock:String) {
+    fun setHeroesState(left: Hero? = null, right: Hero? = null) {
         _comparingState.set(newValue = ComparingState.LoadingState())
+
+        val currentInfoBlock = currentInfoBlockUseCase.getCurrentInfoBlockComparing(appSharedPreferences)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {

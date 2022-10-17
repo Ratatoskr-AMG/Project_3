@@ -111,5 +111,15 @@
     <string name="search">Введите имя героя</string>
     <string name="login_offer">Для обновления данных, пожалуйста, авторизуйтесь через Steam</string>
     <string name="update_time">Данные обновлялись</string>
-    <string name="time_block">Обновлять данные можно не чаще одного раза в сутки</string>
+    <string name="time_block">Обновлять данные можно не чаще раз в 10 сек.</string>
+    <string name="turbo_winrates_attr">Turbo коэф. побед</string>
+    <string name="_1_winrates_attr">Рекрут коэф. побед</string>
+    <string name="_2_winrates_attr">Страж коэф. побед</string>
+    <string name="_3_winrates_attr">Рыцарь коэф. побед</string>
+    <string name="_4_winrates_attr">Герой коэф. побед</string>
+    <string name="_5_winrates_attr">Легенда коэф. побед</string>
+    <string name="_6_winrates_attr">Властелин коэф. побед</string>
+    <string name="_7_winrates_attr">Божество коэф. побед</string>
+    <string name="_8_winrates_attr">Титан коэф. побед</string>
+    <string name="pro_winrates_attr">Проф. коэф. побед</string>
 </resources>

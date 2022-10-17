@@ -44,7 +44,7 @@ fun RecommendationsView(
     var tierImgAddr = "http://ratatoskr.ru/app/img/tier/0.png"
     var tierBlockNum = 0;
     if (player_tier != "undefined") {
-        tierImgAddr = "http://ratatoskr.ru/app/img/tier/" + player_tier + ".png"
+        tierImgAddr = "http://ratatoskr.ru/app/img/tier/" + player_tier[0] + ".png"
         tierBlockNum = player_tier.toInt()
     }
 
@@ -52,30 +52,34 @@ fun RecommendationsView(
     var allHeroesBase = heroes.toMutableList()
 
     var topProWinsOnPicksBase =
-        allHeroesBase.sortedBy { it.proWin.toFloat() / it.proPick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it.proWin.toFloat() / it.proPick.toFloat()) }
     var topHeraldWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._1Win.toFloat() / it._1Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._1Win.toFloat() / it._1Pick.toFloat()) }
     var topGuardianWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._2Win.toFloat() / it._2Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._2Win.toFloat() / it._2Pick.toFloat()) }
     var topCrusaderWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._3Win.toFloat() / it._3Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._3Win.toFloat() / it._3Pick.toFloat()) }
     var topArchonWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._4Win.toFloat() / it._4Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._4Win.toFloat() / it._4Pick.toFloat()) }
     var topLegendWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._5Win.toFloat() / it._5Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._5Win.toFloat() / it._5Pick.toFloat()) }
     var topAncientWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._6Win.toFloat() / it._6Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._6Win.toFloat() / it._6Pick.toFloat()) }
     var topDivineWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._7Win.toFloat() / it._7Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._7Win.toFloat() / it._7Pick.toFloat()) }
     var topImmortalWinsOnPicksBase =
-        allHeroesBase.sortedBy { it._8Win.toFloat() / it._8Pick.toFloat() }
+        allHeroesBase.sortedBy { String.format("%.4f", it._8Win.toFloat() / it._8Pick.toFloat()) }
     var topWinsOnPicksBase =
         allHeroesBase.sortedBy {
-            (it.turboWins.toFloat()+it.proWin.toFloat()+it._1Win.toFloat()+it._2Win.toFloat()+it._3Win.toFloat()+it._4Win.toFloat()+it._5Win.toFloat()+it._6Win.toFloat()+it._7Win.toFloat()+it._8Win.toFloat())/it.turboPicks.toFloat()+it.proPick.toFloat()+ it._1Pick.toFloat()+it._2Pick.toFloat()+it._3Pick.toFloat()+it._4Pick.toFloat()+it._5Pick.toFloat()+it._6Pick.toFloat()+it._7Pick.toFloat()+it._8Pick.toFloat() }
+            (String.format(
+                "%.4f",
+                it.turboWins.toFloat() + it.proWin.toFloat() + it._1Win.toFloat() + it._2Win.toFloat() + it._3Win.toFloat() + it._4Win.toFloat() + it._5Win.toFloat() + it._6Win.toFloat() + it._7Win.toFloat() + it._8Win.toFloat()
+             / it.turboPicks.toFloat() + it.proPick.toFloat() + it._1Pick.toFloat() + it._2Pick.toFloat() + it._3Pick.toFloat() + it._4Pick.toFloat() + it._5Pick.toFloat() + it._6Pick.toFloat() + it._7Pick.toFloat() + it._8Pick.toFloat()))
+        }
     var topProBansBase = allHeroesBase.sortedBy { it.proBan }
 
     val topProWinsOnPicks = topProWinsOnPicksBase.reversed().slice(0..14)
-    var topHeraldWinsOnPicks=topHeraldWinsOnPicksBase.reversed().slice(0..14)
+    var topHeraldWinsOnPicks = topHeraldWinsOnPicksBase.reversed().slice(0..14)
     var topGuardianWinsOnPicks =
         topGuardianWinsOnPicksBase.reversed().slice(0..14)
     var topCrusaderWinsOnPicks =
@@ -94,8 +98,11 @@ fun RecommendationsView(
         topWinsOnPicksBase.reversed().slice(0..14)
     val topProBans = topProBansBase.reversed().slice(0..14)
 
-    topHeraldWinsOnPicks.forEach{
-        Log.e("TOHAtop",it.localizedName+":"+it._1Win+"/"+it._1Pick+"="+it._1Win.toFloat() / it._1Pick.toFloat())
+    topHeraldWinsOnPicks.forEach {
+        Log.e(
+            "TOHAtop",
+            it.localizedName + ":" + it._1Win + "/" + it._1Pick + "=" + it._1Win.toFloat() / it._1Pick.toFloat()
+        )
     }
 
     var offsetPosition by remember { mutableStateOf(0f) }

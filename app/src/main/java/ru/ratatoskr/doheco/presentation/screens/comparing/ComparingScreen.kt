@@ -17,7 +17,6 @@ fun ComparingScreen(
     var selectMode by remember { mutableStateOf(false) }
     var leftSelected by remember { mutableStateOf(false) }
     var rightSelected by remember { mutableStateOf(false) }
-    var currentInfoBlock = "Picks"
 
     when (val state = viewState.value) {
         is ComparingState.HeroesState -> {
@@ -70,7 +69,7 @@ fun ComparingScreen(
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.setHeroesState(currentInfoBlock=currentInfoBlock)
+        viewModel.setHeroesState()
     })
 }
 

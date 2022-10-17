@@ -35,6 +35,7 @@ fun HeroScreen(
             val hero = state.hero
             val currentInfoBlock = state.currentInfoBlock
             val currentAttrsMax = state.currentAttrsMax
+
             var scrollState = rememberForeverLazyListState(key = "Hero_" + hero.localizedName)
 
             HeroView(

@@ -146,7 +146,7 @@ fun ComparingView(
                         modifier = Modifier
                             .layoutId("hero_roles_lazy_row")
                             .fillMaxSize()
-                            .padding(top = 0.dp, start = 2.dp, end = 2.dp,bottom=2.dp)
+                            .padding(top = 0.dp, start = 2.dp, end = 2.dp, bottom = 2.dp)
                             //.background(Color(0xFF131313))
                             .background(Color(0xFF131313))
                     ) {
@@ -486,6 +486,85 @@ fun ComparingView(
                                 )
                             }
                         }
+                    }
+                }
+                if (currentInfoBlock == "Winrates") {
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left.turboWins / left.turboPicks.toDouble()),
+                            String.format("%.4f", right.turboWins / right.turboPicks.toDouble()),
+                            attrsLanguageMap["turboWinrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._1Win / left._1Pick.toDouble()),
+                            String.format("%.4f", right._1Win / right._1Pick.toDouble()),
+                            attrsLanguageMap["_1Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._2Win / left._2Pick.toDouble()),
+                            String.format("%.4f", right._2Win / right._2Pick.toDouble()),
+                            attrsLanguageMap["_2Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._3Win / left._3Pick.toDouble()),
+                            String.format("%.4f", right._3Win / right._3Pick.toDouble()),
+                            attrsLanguageMap["_3Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._4Win / left._4Pick.toDouble()),
+                            String.format("%.4f", right._4Win / right._4Pick.toDouble()),
+                            attrsLanguageMap["_4Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._5Win / left._5Pick.toDouble()),
+                            String.format("%.4f", right._5Win / right._5Pick.toDouble()),
+                            attrsLanguageMap["_5Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._6Win / left._6Pick.toDouble()),
+                            String.format("%.4f", right._6Win / right._6Pick.toDouble()),
+                            attrsLanguageMap["_6Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._7Win / left._7Pick.toDouble()),
+                            String.format("%.4f", right._7Win / right._7Pick.toDouble()),
+                            attrsLanguageMap["_7Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left._8Win / left._8Pick.toDouble()),
+                            String.format("%.4f", right._8Win / right._8Pick.toDouble()),
+                            attrsLanguageMap["_8Winrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            String.format("%.4f", left.proWin / left.proPick.toDouble()),
+                            String.format("%.4f", right.proWin / right.proPick.toDouble()),
+                            attrsLanguageMap["proWinrate"]!!
+                        )
+                    }
+                    item {
+                        ComparingRow(
+                            left.proBan.toString(),
+                            right.proBan.toString(),
+                            attrsLanguageMap["proBan"]!!
+                        )
                     }
                 }
             }

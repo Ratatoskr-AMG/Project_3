@@ -14,25 +14,42 @@ class AppUserRepoImpl @Inject constructor(
     private val httpAppClient: HttpClient
 ) {
 
-    fun getPlayerIdFromSP(appSharedPreferences: SharedPreferences):String{
+    fun getPlayerIdFromSP(appSharedPreferences: SharedPreferences): String {
         return appSharedPreferences.getString("player_id", "undefined").toString()
     }
 
-    fun getPlayerTierFromSP(appSharedPreferences: SharedPreferences):String{
+    fun getPlayerTierFromSP(appSharedPreferences: SharedPreferences): String {
         return appSharedPreferences.getString("player_tier", "undefined").toString()
     }
 
-    fun setPlayerTierToSP(appSharedPreferences: SharedPreferences, tier:String){
-        appSharedPreferences.edit().putString("player_tier",tier)
-            .apply();
+    fun getCurrentInfoBlockHeroPage(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getString("current_infoblock_hero", "Picks").toString()
     }
 
-    fun getPlayerSteamNameFromSP(appSharedPreferences: SharedPreferences):String{
+    fun setCurrentInfoBlockHeroPage(appSharedPreferences: SharedPreferences, currentInfoblock: String) {
+        return appSharedPreferences.edit().putString("current_infoblock_hero", currentInfoblock).apply()
+
+    }
+
+    fun getCurrentInfoBlockComparingPage(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getString("current_infoblock_comparing", "Picks").toString()
+    }
+
+    fun setCurrentInfoBlockComparingPage(appSharedPreferences: SharedPreferences, currentInfoblock: String) {
+        return appSharedPreferences.edit().putString("current_infoblock_comparing", currentInfoblock).apply()
+
+    }
+
+    fun setPlayerTierToSP(appSharedPreferences: SharedPreferences, tier: String) {
+        appSharedPreferences.edit().putString("player_tier", tier).apply();
+    }
+
+    fun getPlayerSteamNameFromSP(appSharedPreferences: SharedPreferences): String {
         return appSharedPreferences.getString("player_steam_name", "undefined").toString()
     }
 
-    fun setPlayerSteamNameToSP(appSharedPreferences: SharedPreferences,name:String){
-        appSharedPreferences.edit().putString("player_steam_name",name)
+    fun setPlayerSteamNameToSP(appSharedPreferences: SharedPreferences, name: String) {
+        appSharedPreferences.edit().putString("player_steam_name", name)
             .apply();
     }
 
@@ -63,15 +80,14 @@ class AppUserRepoImpl @Inject constructor(
 
     fun getResponseFromDotaBuff(steam_user_id: String): String {
 
-        val url = URL("https://www.dotabuff.com/players/"+ steam_user_id)
+        val url = URL("https://www.dotabuff.com/players/" + steam_user_id)
         val urlConnection = url.openConnection() as HttpURLConnection
 
         try {
             return urlConnection.inputStream.bufferedReader().readText()
-        }  catch (e: Exception) {
-            return "e"+e.toString()
-        }
-        finally {
+        } catch (e: Exception) {
+            return "e" + e.toString()
+        } finally {
             urlConnection.disconnect()
         }
 

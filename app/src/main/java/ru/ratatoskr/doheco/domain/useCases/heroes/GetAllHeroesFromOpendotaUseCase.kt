@@ -24,11 +24,13 @@ class GetAllHeroesFromOpendotaUseCase @Inject constructor(
         val intManaRegenMultiplier = 0.05;
         val agiArmorMultiplier = 0.167;
         val mathContext = MathContext(200, RoundingMode.HALF_DOWN)
+        val imagesbaseUrl = "https://cdn.dota2.com"
+        val imagesbaseUrl2 = "http://ratatoskr.ru"
 
         heroes.map {
 
-            it.img = "https://cdn.dota2.com${it.img}"
-            it.icon = "https://cdn.dota2.com${it.icon}"
+            it.img = imagesbaseUrl+it.img
+            it.icon = imagesbaseUrl+it.icon
             it.baseHealth = it.baseHealth + it.baseStr * strHealhMultiplier
             it.baseMana = it.baseMana + it.baseInt * intManaMultiplier
 

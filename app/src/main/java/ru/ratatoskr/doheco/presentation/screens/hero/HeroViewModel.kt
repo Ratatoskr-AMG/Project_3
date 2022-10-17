@@ -1,5 +1,6 @@
 package ru.ratatoskr.doheco.presentation.screens.hero
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.LiveData
@@ -9,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ratatoskr.doheco.Questions
 import ru.ratatoskr.doheco.domain.utils.EventHandler
 import ru.ratatoskr.doheco.domain.extensions.set
 import ru.ratatoskr.doheco.presentation.screens.hero.models.HeroEvent
@@ -17,23 +17,24 @@ import ru.ratatoskr.doheco.presentation.screens.hero.models.HeroState
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.domain.useCases.favorites.InsertHeroToFavoritesUseCase
 import ru.ratatoskr.doheco.domain.useCases.favorites.DropHeroFromFavoritesUseCase
-import ru.ratatoskr.doheco.domain.useCases.heroes.GetHeroByIdUseCase
 import ru.ratatoskr.doheco.domain.useCases.favorites.GetIfHeroIsFavoriteUseCase
-import ru.ratatoskr.doheco.domain.useCases.heroes.GetAllHeroesByAttrUseCase
-import ru.ratatoskr.doheco.domain.useCases.heroes.GetHeroesAttrsMaxUseCase
+import ru.ratatoskr.doheco.domain.useCases.heroes.*
 import ru.ratatoskr.doheco.domain.utils.AttributeMaximum
 import javax.inject.Inject
 
 @HiltViewModel
 class HeroViewModel @Inject constructor(
+    appSharedPreferences: SharedPreferences,
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val getIfHeroIsFavoriteUseCase: GetIfHeroIsFavoriteUseCase,
     private val dropHeroFromFavorites: DropHeroFromFavoritesUseCase,
     private val insertHeroToFavoritesUseCase: InsertHeroToFavoritesUseCase,
     private val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
-    private val getHeroesAttrsMaxUseCase: GetHeroesAttrsMaxUseCase
+    private val getHeroesAttrsMaxUseCase: GetHeroesAttrsMaxUseCase,
+    private val currentInfoBlockUseCase: CurrentInfoBlockUseCase,
 ) : ViewModel(), EventHandler<HeroEvent> {
 
+    var appSharedPreferences = appSharedPreferences
     private val _heroState: MutableLiveData<HeroState> = MutableLiveData<HeroState>()
     val heroState: LiveData<HeroState> = _heroState
 
@@ -61,6 +62,7 @@ class HeroViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
+                val currentInfoBlock = currentInfoBlockUseCase.getCurrentInfoBlockHero(appSharedPreferences)
                 val hero = getHeroByIdUseCase.GetHeroById(id)
                 val currentAttrsMax: List<AttributeMaximum> =
                     getHeroesAttrsMaxUseCase.getHeroesAttrsMax()
@@ -73,7 +75,7 @@ class HeroViewModel @Inject constructor(
                         HeroState.HeroLoadedState(
                             hero = hero,
                             isFavorite = getIfHeroIsFavoriteUseCase.getIfHeroIsFavoriteById(hero.id),
-                            "Picks",
+                            currentInfoBlock,
                             currentAttrsMax = currentAttrsMax
                         )
                     )
@@ -119,6 +121,9 @@ class HeroViewModel @Inject constructor(
         currentAttrsMax: List<AttributeMaximum>,
         scrollState:LazyListState
     ) {
+
+        currentInfoBlockUseCase.setCurrentInfoBlockHero(appSharedPreferences,newInfoBlock)
+
         viewModelScope.launch {
             _heroState.postValue(
                 HeroState.HeroLoadedState(

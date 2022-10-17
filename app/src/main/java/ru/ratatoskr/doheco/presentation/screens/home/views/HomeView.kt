@@ -72,6 +72,12 @@ fun HomeView(
     onHeroSearch: (String) -> Unit
 ) {
     val heroes = heroes.mapNotNull { it as? Hero }
+
+    for(hero in heroes){
+        Log.e("TOHA_extra",hero.img)
+        Log.e("TOHA_extra",hero.icon)
+    }
+
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }

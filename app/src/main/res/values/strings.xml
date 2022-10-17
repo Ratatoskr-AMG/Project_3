@@ -57,7 +57,7 @@
     <string name="_8_win_attr">Immortal wins</string>
     <string name="hero_not_found">Hero not found</string>
     <string name="back">Back</string>
-    <string name="sign_in_with_steam">Login via Steam</string>
+    <string name="sign_in_with_steam">Log in via Steam</string>
     <string name="heroes_list_last_modified">Update data</string>
     <string name="heroes_list_last_modified_text">Last modified</string>
     <string name="exit">Exit</string>
@@ -79,17 +79,17 @@
     <string name="comparing">Comparing</string>
     <string name="wait">Wait...</string>
     <string name="recommendations">Recommendations</string>
-    <string name="top_Pro_wins_to_picks">Top-15 Win Rate Pro tier</string>
-    <string name="top_herald_wins_to_picks">Top-15 Win Rate Herald tier</string>
-    <string name="top_Guardian_wins_to_picks">Top-15 Win Rate Guardian tier</string>
-    <string name="top_Crusader_wins_to_picks">Top-15 Win Rate Crusader tier</string>
-    <string name="top_Archon_wins_to_picks">Top-15 Win Rate Archon tier</string>
-    <string name="top_Legend_wins_to_picks">Top-15 Win Rate Legend tier</string>
-    <string name="top_Ancient_wins_to_picks">Top-15 Win Rate Ancient tier</string>
-    <string name="top_Divine_wins_to_picks">Top-15 Win Rate Divine tier</string>
-    <string name="top_Immortal_wins_to_picks">Top-15 Win Rate Immortal tier</string>
+    <string name="top_Pro_wins_to_picks">Top-15 Winrate Pro tier</string>
+    <string name="top_herald_wins_to_picks">Top-15 Winrate Herald tier</string>
+    <string name="top_Guardian_wins_to_picks">Top-15 Winrate Guardian tier</string>
+    <string name="top_Crusader_wins_to_picks">Top-15 Winrate Crusader tier</string>
+    <string name="top_Archon_wins_to_picks">Top-15 Winrate Archon tier</string>
+    <string name="top_Legend_wins_to_picks">Top-15 Winrate Legend tier</string>
+    <string name="top_Ancient_wins_to_picks">Top-15 Winrate Ancient tier</string>
+    <string name="top_Divine_wins_to_picks">Top-15 Winrate Divine tier</string>
+    <string name="top_Immortal_wins_to_picks">Top-15 Winrate Immortal tier</string>
     <string name="top_pro_bans">Top-15 Pro bans</string>
-    <string name="top_wins_to_picks">Top-15 Win Rate</string>
+    <string name="top_wins_to_picks">Top-15 Total Winrate</string>
     <string name="all_heroes">All</string>
     <string name="carry_role_multiple">Carrier\'s</string>
     <string name="escape_role_multiple">Escaper\'s</string>
@@ -110,6 +110,16 @@
     <string name="search">Enter hero name</string>
     <string name="login_offer">To receive updated data, please, log in via Steam</string>
     <string name="update_time">"Data has been updated "</string>
-    <string name="time_block">You can update the data no more than once a day</string>
+    <string name="time_block">You can update the data no more than once in a 10 sec</string>
+    <string name="turbo_winrates_attr">Turbo winrate</string>
+    <string name="_1_winrates_attr">Herald winrate</string>
+    <string name="_2_winrates_attr">Guardian winrate</string>
+    <string name="_3_winrates_attr">Crusader winrate</string>
+    <string name="_4_winrates_attr">Archon winrate</string>
+    <string name="_5_winrates_attr">Legend winrate</string>
+    <string name="_6_winrates_attr">Ancient winrate</string>
+    <string name="_7_winrates_attr">Divine winrate</string>
+    <string name="_8_winrates_attr">Immortal winrate</string>
+    <string name="pro_winrates_attr">Pro winrate</string>
 
 </resources>

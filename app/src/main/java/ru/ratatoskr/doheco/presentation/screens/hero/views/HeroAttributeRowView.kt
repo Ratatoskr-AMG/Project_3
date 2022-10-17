@@ -1,6 +1,7 @@
 package ru.ratatoskr.doheco.presentation.screens.hero.views
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,14 +12,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ru.ratatoskr.doheco.R
 import ru.ratatoskr.doheco.domain.model.Hero
 import ru.ratatoskr.doheco.presentation.base.Screens
+import ru.ratatoskr.doheco.presentation.theme.appHeader
+import ru.ratatoskr.doheco.presentation.theme.loadPicture
 
 
 @Composable
@@ -28,12 +35,14 @@ fun HeroAttributeRowView(
     name: String,
     value: String,
     navController: NavController,
-    max: Float
+    max: Float,
+    maxImg: String? = null
 ) {
     var rightText = value.toString()
     if (max != null) {
         rightText += "(" + max.toString() + ")"
     }
+
 
     val configuration = LocalConfiguration.current
     var blockHeight = 40.dp
@@ -52,6 +61,14 @@ fun HeroAttributeRowView(
 
     var leftBlockWidth = leftBlockWidthFl.dp
     var leftBlockColor = Color(0xFF016D19)
+
+    /*
+    val painter = loadPicture(
+        url = maxImg,
+        placeholder = painterResource(id = R.drawable.ic_comparing_gr)
+    )
+    */
+
 
     BoxWithConstraints(
         modifier = Modifier
@@ -97,21 +114,67 @@ fun HeroAttributeRowView(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                modifier = Modifier.padding(start = 20.dp),
-                text = name,
-                color = Color.White,
-                textAlign = TextAlign.Left,
-                fontSize = 12.sp
-            )
+            if(name=="_Herald wins"){
+                val tierPainter = loadPicture(
+                    url = "http://ratatoskr.ru/app/img/tier/1.png",
+                    placeholder = painterResource(id = R.drawable.ic_comparing_gr)
+                )
+                Row(){
+                    Box(
+                        modifier = Modifier
+                            .padding(start=10.dp,end = 0.dp),
+                    ) {
+                        Image(
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(20.dp),
+                            painter = tierPainter,
+                            contentDescription = name + " Tierimage"
+                        )
+                    }
+                    Text(
+                        modifier = Modifier.padding(start = 10.dp),
+                        text = name,
+                        color = Color.White,
+                        textAlign = TextAlign.Left,
+                        fontSize = 12.sp
+                    )
+                }
+            }else{
+                Text(
+                    modifier = Modifier.padding(start = 20.dp),
+                    text = name,
+                    color = Color.White,
+                    textAlign = TextAlign.Left,
+                    fontSize = 12.sp
+                )
+            }
 
-            Text(
-                modifier = Modifier.padding(end = 20.dp),
-                text = value,
-                color = Color.White,
-                textAlign = TextAlign.Right,
-                fontSize = 12.sp
-            )
+            Row {
+                Text(
+                    modifier = Modifier.padding(end = 10.dp),
+                    text = value,
+                    color = Color.White,
+                    textAlign = TextAlign.Right,
+                    fontSize = 12.sp
+                )
+                /*
+                Box(
+                    modifier = Modifier
+                        .padding(end = 10.dp),
+                ) {
+                    Image(
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(20.dp),
+                        painter = painter,
+                        contentDescription = "Max " + name + " hero"
+                    )
+                }*/
+
+            }
+
+
         }
     }
 

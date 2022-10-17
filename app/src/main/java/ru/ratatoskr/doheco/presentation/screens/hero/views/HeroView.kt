@@ -55,7 +55,7 @@ fun HeroView(
     onAttrClick: (String) -> Unit,
     onHeroInfoBlockSelect: (String) -> Unit,
     navController: NavController,
-    scrollState:LazyListState
+    scrollState: LazyListState
 ) {
 
     //var scrollState = rememberForeverLazyListState(key = "Hero_" + hero.localizedName)
@@ -349,10 +349,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["turboPicks"]!!),
                             hero.turboPicks.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "turboPicks" }[0].getvalue()
-                                .toFloat()
+                            currentAttrsMax.filter { it.name == "turboPicks" }[0].value.toFloat(),
+                            currentAttrsMax.filter { it.name == "turboPicks" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -361,7 +361,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_1Pick"]!!),
                             hero._1Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_1Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_1Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_1Pick" }[0].img,
                         )
                     }
                     item {
@@ -371,9 +372,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_2Pick"]!!),
                             hero._2Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_2Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_2Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_2Pick" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -382,9 +384,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_3Pick"]!!),
                             hero._3Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_3Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_3Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_3Pick" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -393,9 +396,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_4Pick"]!!),
                             hero._4Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_4Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_4Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_4Pick" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -404,9 +408,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_5Pick"]!!),
                             hero._5Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_5Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_5Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_5Pick" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -415,9 +420,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_6Pick"]!!),
                             hero._6Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_6Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_6Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_6Pick" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -426,7 +432,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_7Pick"]!!),
                             hero._7Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_7Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_7Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_7Pick" }[0].img,
                         )
                     }
                     item {
@@ -436,7 +443,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_8Pick"]!!),
                             hero._8Pick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_8Pick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_8Pick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_8Pick" }[0].img,
                         )
                     }
                     item {
@@ -446,7 +454,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["proPick"]!!),
                             hero.proPick.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "proPick" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "proPick" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "proPick" }[0].img,
                         )
                     }
                     item {
@@ -456,7 +465,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["proBan"]!!),
                             hero.proBan.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "proBan" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "proBan" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "proBan" }[0].img,
                         )
                     }
                 }
@@ -469,8 +479,8 @@ fun HeroView(
                             hero.turboWins.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "turboWins" }[0].getvalue()
-                                .toFloat()
-
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "turboWins" }[0].img
                         )
                     }
                     item {
@@ -480,9 +490,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_1Win"]!!),
                             hero._1Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_1Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_1Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_1Win" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -491,9 +502,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_2Win"]!!),
                             hero._2Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_2Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_2Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_2Win" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -502,9 +514,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_3Win"]!!),
                             hero._3Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_3Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_3Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_3Win" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -513,7 +526,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_4Win"]!!),
                             hero._4Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_4Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_4Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_4Win" }[0].img,
                         )
                     }
                     item {
@@ -523,9 +537,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_5Win"]!!),
                             hero._5Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_5Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_5Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_5Win" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -534,9 +549,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_6Win"]!!),
                             hero._6Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_6Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_6Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_6Win" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -545,9 +561,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_7Win"]!!),
                             hero._7Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_7Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_7Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_7Win" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -556,11 +573,11 @@ fun HeroView(
                             stringResource(attrsLanguageMap["_8Win"]!!),
                             hero._8Win.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "_8Win" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "_8Win" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "_8Win" }[0].img,
 
-                        )
+                            )
                     }
-
                     item {
                         HeroAttributeRowView(
                             hero,
@@ -568,9 +585,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["proWin"]!!),
                             hero.proWin.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "proWin" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "proWin" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "proWin" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -579,9 +597,10 @@ fun HeroView(
                             stringResource(attrsLanguageMap["proBan"]!!),
                             hero.proBan.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "proBan" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "proBan" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "proBan" }[0].img,
 
-                        )
+                            )
                     }
                 }
                 if (currentInfoBlock == "Properties") {
@@ -592,8 +611,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["baseHealth"]!!),
                             hero.baseHealth.toString(), navController,
                             currentAttrsMax.filter { it.name == "baseHealth" }[0].getvalue()
-                                .toFloat()
-
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "baseHealth" }[0].img
                         )
                     }
                     item {
@@ -602,9 +621,11 @@ fun HeroView(
                             "baseMana",
                             stringResource(attrsLanguageMap["baseMana"]!!),
                             hero.baseMana.toString(), navController,
-                            currentAttrsMax.filter { it.name == "baseMana" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseMana" }[0].getvalue()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "baseMana" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -614,7 +635,8 @@ fun HeroView(
                             "+" + hero.baseHealthRegen.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "baseHealthRegen" }[0].getvalue()
-                                .toFloat()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "baseHealthRegen" }[0].img
 
                         )
                     }
@@ -626,9 +648,10 @@ fun HeroView(
                             "+" + hero.baseManaRegen.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "baseManaRegen" }[0].getvalue()
-                                .toFloat()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "baseManaRegen" }[0].img,
 
-                        )
+                            )
                     }
                     item {
                         HeroAttributeRowView(
@@ -638,7 +661,8 @@ fun HeroView(
                             hero.baseArmor.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "baseArmor" }[0].getvalue()
-                                .toFloat()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "baseArmor" }[0].img
 
                         )
                     }
@@ -661,7 +685,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["baseStr"]!!),
                             hero.baseStr.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "baseStr" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseStr" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "baseStr" }[0].img
                         )
                     }
                     item {
@@ -671,7 +696,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["baseAgi"]!!),
                             hero.baseAgi.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "baseAgi" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseAgi" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "baseAgi" }[0].img
                         )
                     }
                     item {
@@ -681,7 +707,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["baseInt"]!!),
                             hero.baseInt.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "baseInt" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "baseInt" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "baseInt" }[0].img
                         )
                     }
                     item {
@@ -691,7 +718,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["strGain"]!!),
                             "+" + hero.strGain.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "strGain" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "strGain" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "strGain" }[0].img
                         )
                     }
                     item {
@@ -701,7 +729,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["agiGain"]!!),
                             "+" + hero.agiGain.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "agiGain" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "agiGain" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "agiGain" }[0].img
                         )
                     }
                     item {
@@ -711,7 +740,8 @@ fun HeroView(
                             stringResource(attrsLanguageMap["intGain"]!!),
                             "+" + hero.intGain.toString(),
                             navController,
-                            currentAttrsMax.filter { it.name == "intGain" }[0].getvalue().toFloat()
+                            currentAttrsMax.filter { it.name == "intGain" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "intGain" }[0].img
                         )
                     }
                     item {
@@ -722,7 +752,8 @@ fun HeroView(
                             hero.attackRange.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "attackRange" }[0].getvalue()
-                                .toFloat()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "attackRange" }[0].img
 
                         )
                     }
@@ -735,7 +766,8 @@ fun HeroView(
                                 hero.projectileSpeed.toString(),
                                 navController,
                                 currentAttrsMax.filter { it.name == "projectileSpeed" }[0].getvalue()
-                                    .toFloat()
+                                    .toFloat(),
+                                currentAttrsMax.filter { it.name == "projectileSpeed" }[0].img
 
                             )
                         }
@@ -747,7 +779,8 @@ fun HeroView(
                             hero.attackRate.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "attackRate" }[0].getvalue()
-                                .toFloat()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "attackRate" }[0].img
 
                         )
                     }
@@ -759,7 +792,8 @@ fun HeroView(
                             hero.moveSpeed.toString(),
                             navController,
                             currentAttrsMax.filter { it.name == "moveSpeed" }[0].getvalue()
-                                .toFloat()
+                                .toFloat(),
+                            currentAttrsMax.filter { it.name == "moveSpeed" }[0].img
 
                         )
                     }
@@ -821,7 +855,157 @@ fun HeroView(
                         }
                     }
                 }
+                if (currentInfoBlock == "Winrates") {
 
+
+                    item {
+                        var value =
+                            String.format("%.4f", hero.turboWins / hero.turboPicks.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "turboWinrate",
+                            stringResource(attrsLanguageMap["turboWinrate"]!!),
+                            value.toString(),
+                            navController,
+                            //currentAttrsMax.filter { it.name == "turboWinrate" }[0].getvalue().toFloat(),
+                            1f,
+                            null
+                        )
+                    }
+                    item {
+                        var value =
+                            String.format("%.4f", hero._1Win / hero._1Pick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "_1Winrate",
+                            stringResource(attrsLanguageMap["_1Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            //currentAttrsMax.filter { it.name == "_1Winrate" }[0].getvalue().toFloat(),
+                            1f,
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._2Win / hero._2Pick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "_2Winrate",
+                            stringResource(attrsLanguageMap["_2Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_2Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._3Win / hero._3Pick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "_3Winrate",
+                            stringResource(attrsLanguageMap["_3Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_3Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._4Win / hero._4Pick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "_4Winrate",
+                            stringResource(attrsLanguageMap["_4Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_4Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._5Win / hero._5Pick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "_5Winrate",
+                            stringResource(attrsLanguageMap["_5Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_5Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._6Win / hero._6Pick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "_6Winrate",
+                            stringResource(attrsLanguageMap["_6Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_6Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._7Win / hero._7Pick.toDouble())
+
+                        HeroAttributeRowView(
+                            hero,
+                            "_7Winrate",
+                            stringResource(attrsLanguageMap["_7Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_7Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value = String.format("%.4f", hero._8Win / hero._8Pick.toDouble())
+
+                        HeroAttributeRowView(
+                            hero,
+                            "_8Winrate",
+                            stringResource(attrsLanguageMap["_8Winrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "_8Winrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        var value =
+                            String.format("%.4f", hero.proWin / hero.proPick.toDouble())
+                        HeroAttributeRowView(
+                            hero,
+                            "turboWinrate",
+                            stringResource(attrsLanguageMap["proWinrate"]!!),
+                            value.toString(),
+                            navController,
+                            1f,
+                            //currentAttrsMax.filter { it.name == "proWinrate" }[0].getvalue().toFloat(),
+                            null
+                        )
+                    }
+                    item {
+                        HeroAttributeRowView(
+                            hero,
+                            "proBan",
+                            stringResource(attrsLanguageMap["proBan"]!!),
+                            hero.proBan.toString(),
+                            navController,
+                            currentAttrsMax.filter { it.name == "proBan" }[0].getvalue().toFloat(),
+                            currentAttrsMax.filter { it.name == "proBan" }[0].img,
+
+                            )
+                    }                    
+                }
             }
         }
 

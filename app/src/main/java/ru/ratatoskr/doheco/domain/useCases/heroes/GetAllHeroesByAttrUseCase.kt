@@ -54,6 +54,16 @@ class GetAllHeroesByAttrUseCase @Inject constructor(
                 "_7Win" -> heroes.sortedByDescending { it._7Win }
                 "_8Pick" -> heroes.sortedByDescending { it._8Pick }
                 "_8Win" -> heroes.sortedByDescending { it._8Win }
+                "turboWinrate" -> heroes.sortedByDescending { String.format("%.4f", it.turboWins.toFloat() / it.turboPicks.toFloat()) }
+                "proWinrate" -> heroes.sortedByDescending { String.format("%.4f", it.proWin.toFloat() / it.proPick.toFloat()) }
+                "_1Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._1Win.toFloat() / it._1Pick.toFloat()) }
+                "_2Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._2Win.toFloat() / it._2Pick.toFloat()) }
+                "_3Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._3Win.toFloat() / it._3Pick.toFloat()) }
+                "_4Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._4Win.toFloat() / it._4Pick.toFloat()) }
+                "_5Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._5Win.toFloat() / it._5Pick.toFloat()) }
+                "_6Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._6Win.toFloat() / it._6Pick.toFloat()) }
+                "_7Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._7Win.toFloat() / it._7Pick.toFloat()) }
+                "_8Winrate" -> heroes.sortedByDescending { String.format("%.4f", it._8Win.toFloat() / it._8Pick.toFloat()) }
                 else -> heroes.sortedBy { it.localizedName }
             }
         }
@@ -98,6 +108,16 @@ class GetAllHeroesByAttrUseCase @Inject constructor(
                 "_7Win" -> heroes.sortedBy { it._7Win }
                 "_8Pick" -> heroes.sortedBy { it._8Pick }
                 "_8Win" -> heroes.sortedBy { it._8Win }
+                "turboWinrate" -> heroes.sortedBy { String.format("%.4f", it.turboWins.toFloat() / it.turboPicks.toFloat()) }
+                "proWinrate" -> heroes.sortedBy { String.format("%.4f", it.proWin.toFloat() / it.proPick.toFloat()) }
+                "_1Winrate" -> heroes.sortedBy { String.format("%.4f", it._1Win.toFloat() / it._1Pick.toFloat()) }
+                "_2Winrate" -> heroes.sortedBy { String.format("%.4f", it._2Win.toFloat() / it._2Pick.toFloat()) }
+                "_3Winrate" -> heroes.sortedBy { String.format("%.4f", it._3Win.toFloat() / it._3Pick.toFloat()) }
+                "_4Winrate" -> heroes.sortedBy { String.format("%.4f", it._4Win.toFloat() / it._4Pick.toFloat()) }
+                "_5Winrate" -> heroes.sortedBy { String.format("%.4f", it._5Win.toFloat() / it._5Pick.toFloat()) }
+                "_6Winrate" -> heroes.sortedBy { String.format("%.4f", it._6Win.toFloat() / it._6Pick.toFloat()) }
+                "_7Winrate" -> heroes.sortedBy { String.format("%.4f", it._7Win.toFloat() / it._7Pick.toFloat()) }
+                "_8Winrate" -> heroes.sortedBy { String.format("%.4f", it._8Win.toFloat() / it._8Pick.toFloat()) }
                 else -> heroes.sortedBy { it.localizedName }
             }
         }

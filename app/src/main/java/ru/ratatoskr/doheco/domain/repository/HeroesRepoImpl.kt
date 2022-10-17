@@ -52,6 +52,7 @@ class HeroesRepoImpl @Inject constructor(
 
         //val URL = "https://api.opendota.com/api/heroStats/";
         val URL = "http://ratatoskr.ru/doheco/api/heroStats/?id="+steamId+"&r="+(1000000..9999999999).random();
+
         try {
             var result : List<Hero> = client.get(URL)
             Log.e("TOHA", "client.get(URL)"+client.get(URL))

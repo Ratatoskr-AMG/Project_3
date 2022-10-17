@@ -364,6 +364,36 @@ fun HeroesByAttributeListView(
                         "_7Win" -> attrValue = it._7Win.toString()
                         "_8Pick" -> attrValue = it._8Pick.toString()
                         "_8Win" -> attrValue = it._8Win.toString()
+                        "turboWinrate" -> {
+                            attrValue = String.format("%.4f", it.turboWins.toFloat() / it.turboPicks.toFloat())
+                        }
+                        "proWinrate" -> {
+                            attrValue = String.format("%.4f", it.proWin.toFloat() / it.proPick.toFloat())
+                        }
+                        "_1Winrate" -> {
+                            attrValue = String.format("%.4f", it._1Win.toFloat() / it._1Pick.toFloat())
+                        }
+                        "_2Winrate" -> {
+                            attrValue = String.format("%.4f", it._2Win.toFloat() / it._2Pick.toFloat())
+                        }
+                        "_3Winrate" -> {
+                            attrValue = String.format("%.3f", it._3Win.toFloat() / it._3Pick.toFloat())
+                        }
+                        "_4Winrate" -> {
+                            attrValue = String.format("%.4f", it._4Win.toFloat() / it._4Pick.toFloat())
+                        }
+                        "_5Winrate" -> {
+                            attrValue = String.format("%.4f", it._5Win.toFloat() / it._5Pick.toFloat())
+                        }
+                        "_6Winrate" -> {
+                            attrValue = String.format("%.4f", it._6Win.toFloat() / it._6Pick.toFloat())
+                        }
+                        "_7Winrate" -> {
+                            attrValue = String.format("%.4f", it._7Win.toFloat() / it._7Pick.toFloat())
+                        }
+                        "_8Winrate" -> {
+                            attrValue = String.format("%.4f", it._8Win.toFloat() / it._8Pick.toFloat())
+                        }
                     }
 
                     if (attrValue != "") {

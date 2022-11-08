@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:712149487805:android:524b28174036830efea7d4",
+        "mobilesdk_app_id": "1:712149487805:android:9fa0c8da1e8feffdfea7d4",
         "android_client_info": {
-          "package_name": "ru.ratatoskr.doheco"
+          "package_name": "net.doheco"
         }
       },
       "oauth_client": [
         {
-          "client_id": "712149487805-bd0u7dggek8osfilqndlc5g81t7mbm76.apps.googleusercontent.com",
+          "client_id": "712149487805-rkgmcmjifaa3h91945h3843g6eoooko8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ru.ratatoskr.doheco",
+            "package_name": "net.doheco",
             "certificate_hash": "edef348d21e490a4c4696e394d85aaea10b384aa"
           }
         },

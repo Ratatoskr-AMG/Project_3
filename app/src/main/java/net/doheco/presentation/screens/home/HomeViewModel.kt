@@ -12,34 +12,27 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.doheco.domain.extensions.set
 import net.doheco.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
 import net.doheco.domain.useCases.heroes.*
 import net.doheco.presentation.screens.home.models.HomeState
 import java.util.*
 import javax.inject.Inject
 
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    mFirebaseAnalytics: FirebaseAnalytics,
-    imageLoader: ImageLoader,
-    appSharedPreferences: SharedPreferences,
+    private var mFirebaseAnalytics: FirebaseAnalytics,
+    var imageLoader: ImageLoader,
+    var appSharedPreferences: SharedPreferences,
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
-    val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
+    private val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
-    val addHeroesUserCase: AddHeroesUserCase,
+    private val addHeroesUserCase: AddHeroesUserCase,
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
     val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
 ) : AndroidViewModel(Application()) {
 
-    var appSharedPreferences = appSharedPreferences
-    var imageLoader = imageLoader
-    var mFirebaseAnalytics = mFirebaseAnalytics
-
-    val _heroesList_state: MutableLiveData<HomeState> =
-        MutableLiveData<HomeState>(HomeState.LoadingHomeState())
-    val homeState: LiveData<HomeState> = _heroesList_state
+    private val _heroesListState: MutableLiveData<HomeState> = MutableLiveData<HomeState>()
+    val homeState: LiveData<HomeState> = _heroesListState
 
     fun registerFirebaseEvent() {
         val bundle = Bundle()
@@ -52,17 +45,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getAllHeroesSortByName() {
-        _heroesList_state.set(HomeState.LoadingHomeState())
+        _heroesListState.value = HomeState.LoadingHomeState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
-                if (heroes!!.isEmpty()) {
+                if (heroes.isEmpty()) {
                     getAllHeroesFromApi(appSharedPreferences)
                 } else {
                     getAllHeroesByStrSortByName("")
                 }
             } catch (e: java.lang.Exception) {
-                Log.e("TOHA", "e:" + e.toString())
+                Log.e("TOHA", "e:$e")
                 e.printStackTrace()
             }
         }
@@ -73,8 +66,8 @@ class HomeViewModel @Inject constructor(
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesByStrSortByName(str)
                 val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
-                if (!heroes.isEmpty()) {
-                    _heroesList_state.postValue(
+                if (heroes.isNotEmpty()) {
+                    _heroesListState.postValue(
                         HomeState.LoadedHomeState(
                             heroes,
                             str,
@@ -84,7 +77,7 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             } catch (e: java.lang.Exception) {
-                Log.e("TOHA", "e:" + e.toString())
+                Log.e("TOHA", "e:$e")
                 e.printStackTrace()
             }
         }
@@ -104,17 +97,17 @@ class HomeViewModel @Inject constructor(
         return imageres
     }
 
-    suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
+    private suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.e("DOHECO", "getAllHeroesFromApi")
-                var heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("init")
+                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("init")
                 val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
 
                 if (heroes.isEmpty()) {
                     Log.e("DOHECO", "heroes isEmpty")
-                    _heroesList_state.postValue(HomeState.NoHomeState("Empty Heroes from API list"))
+                    _heroesListState.postValue(HomeState.NoHomeState("Empty Heroes from API list"))
                 } else {
                     Log.e("DOHECO", "heroes isNotEmpty")
                     addHeroesUserCase.addHeroes(heroes)
@@ -122,7 +115,7 @@ class HomeViewModel @Inject constructor(
                         .putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time)
                         .apply();
                     Log.e("DOHECO", "All heroes updated at:" + Date(System.currentTimeMillis()).time)
-                    _heroesList_state.postValue(
+                    _heroesListState.postValue(
                         HomeState.LoadedHomeState(
                             heroes = heroes.sortedBy { it.localizedName },
                             "",
@@ -134,7 +127,7 @@ class HomeViewModel @Inject constructor(
 
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
-                _heroesList_state.postValue(HomeState.NoHomeState(e.toString()))
+                _heroesListState.postValue(HomeState.NoHomeState(e.toString()))
             }
         }
     }

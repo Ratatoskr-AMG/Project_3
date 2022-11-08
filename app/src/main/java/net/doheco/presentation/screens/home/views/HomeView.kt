@@ -8,8 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -35,7 +35,6 @@ import net.doheco.presentation.screens.home.HomeViewModel
 import net.doheco.presentation.theme.*
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalFoundationApi
 @Composable
 fun HomeView(
@@ -44,7 +43,8 @@ fun HomeView(
     heroes: List<Any?>,
     favoriteHeroes: List<Any?>,
     onHeroClick: (Hero) -> Unit,
-    onHeroSearch: (String) -> Unit
+    onHeroSearch: (String) -> Unit,
+    widthSizeClass: WindowWidthSizeClass
 ) {
     val heroes = heroes.mapNotNull { it as? Hero }
 
@@ -56,8 +56,11 @@ fun HomeView(
     var offsetPosition by remember { mutableStateOf(0f) }
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
-    var scrollState = rememberForeverLazyListState(key = "Home")
+    val scrollState = rememberForeverLazyListState(key = "Home")
     var listColumnsCount = 4
+    if (widthSizeClass == WindowWidthSizeClass.Expanded) {
+        listColumnsCount = 9
+    }
     var listRowsCount = heroes.size / (listColumnsCount + 1)
     if (heroes.size % (listColumnsCount + 1) > 0) {
         listRowsCount += 1

@@ -43,11 +43,11 @@ fun HeroAttributeRowView(
     var blockHeight = 40.dp
     val screenWidth = configuration.screenWidthDp
     val valueLeft = name
-    val attrValue = value.toFloat()
+    val attrValue = value.replace(',','.').toFloat()
 
     val raz = max / screenWidth
 
-    var leftBlockWidthFl = value.toFloat() / raz
+    var leftBlockWidthFl = value.replace(',','.').toFloat() / raz
 
     if (leftBlockWidthFl == 0f) {
         leftBlockWidthFl = 8f

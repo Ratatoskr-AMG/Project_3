@@ -57,6 +57,7 @@ import net.doheco.presentation.screens.video.VideoViewModel
 class MainActivity() : AppCompatActivity() {
 
     val APP_SHARED_PREFERENCES_NAME = "app_preferences"
+    //val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
 
     @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalFoundationApi::class)

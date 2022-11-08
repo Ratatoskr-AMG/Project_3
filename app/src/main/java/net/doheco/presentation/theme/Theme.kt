@@ -321,7 +321,7 @@ fun appHeaderImage(imageAddr: String) {
 
     appHeader {
         Image(
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillHeight,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(appHeaderBoxHeight),

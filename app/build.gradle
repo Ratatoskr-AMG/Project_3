@@ -170,5 +170,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.1.1")
 
     implementation "com.github.alekseyHunter:customviews:0.0.5"
+    implementation "androidx.window:window:1.1.0-alpha03"
 
 }

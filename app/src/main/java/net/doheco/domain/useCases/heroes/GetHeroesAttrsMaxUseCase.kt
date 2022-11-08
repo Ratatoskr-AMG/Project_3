@@ -18,6 +18,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
             when (attr) {
                 "legs" -> {
                     var descendingHeroes = heroes.sortedByDescending { it.legs }
+                    Log.e("TOHAVVV","legs:"+descendingHeroes[0].legs)
                     attributesMaximums.add(
                         AttributeMaximum(
                             "legs", descendingHeroes[0].legs,
@@ -26,6 +27,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                     )
                 }
                 "baseHealth" -> {
+
                     var descendingHeroes = heroes.sortedByDescending { it.baseHealth }
                     attributesMaximums.add(
                         AttributeMaximum(
@@ -383,7 +385,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0].turboWins.toFloat() / descendingHeroes[0].turboPicks.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -401,7 +403,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._1Win.toFloat() / descendingHeroes[0]._1Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -419,7 +421,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._2Win.toFloat() / descendingHeroes[0]._2Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -437,7 +439,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._3Win.toFloat() / descendingHeroes[0]._3Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -455,7 +457,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._4Win.toFloat() / descendingHeroes[0]._4Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -473,7 +475,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._5Win.toFloat() / descendingHeroes[0]._5Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -491,7 +493,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._6Win.toFloat() / descendingHeroes[0]._6Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -509,7 +511,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._7Win.toFloat() / descendingHeroes[0]._7Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -527,7 +529,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0]._8Win.toFloat() / descendingHeroes[0]._8Pick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -545,7 +547,7 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
                             String.format(
                                 "%.4f",
                                 descendingHeroes[0].proWin.toFloat() / descendingHeroes[0].proPick.toFloat()
-                            ).toFloat(),
+                            ).replace(',','.').toFloat(),
                             descendingHeroes[0].icon
                         )
                     )
@@ -554,6 +556,8 @@ class GetHeroesAttrsMaxUseCase @Inject constructor(val localRepoImpl: HeroesRepo
             }
         }
 
+
+        Log.e("TOHAXXX","attributesMaximums:"+attributesMaximums)
         return attributesMaximums
     }
 

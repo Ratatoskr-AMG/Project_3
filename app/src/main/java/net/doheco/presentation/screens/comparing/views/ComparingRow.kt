@@ -23,8 +23,8 @@ fun ComparingRow(
     val configuration = LocalConfiguration.current
     var blockHeight = 40.dp
     val screenWidth = configuration.screenWidthDp
-    val valueLeft = textLeft.toFloat()
-    val valueRight = textRight.toFloat()
+    val valueLeft = textLeft.replace(',','.').toFloat()
+    val valueRight = textRight.replace(',','.').toFloat()
     val summ = valueLeft + valueRight
 
     //Log.e("TOHAcalc textLeft: ", textLeft)

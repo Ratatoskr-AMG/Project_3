@@ -62,15 +62,21 @@ class HeroViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
+                Log.e("TOHAXXX","id2:"+id)
                 val currentInfoBlock = currentInfoBlockUseCase.getCurrentInfoBlockHero(appSharedPreferences)
+                Log.e("TOHAXXX","id3:"+id)
                 val hero = getHeroByIdUseCase.GetHeroById(id)
+                Log.e("TOHAXXX","id4:"+id)
+                Log.e("TOHAXXX","hero:"+hero)
                 val currentAttrsMax: List<AttributeMaximum> =
                     getHeroesAttrsMaxUseCase.getHeroesAttrsMax()
-
+                Log.e("TOHAXXX","currentAttrsMax:"+currentAttrsMax)
                 if (hero.id < 1) {
                     //переносим в ЮзКейс трайкетч
+                    Log.e("TOHAXXX","postValue:mid")
                     _heroState.postValue(HeroState.NoHeroState())
                 } else {
+                    Log.e("TOHAXXX","postValue:begin")
                     _heroState.postValue(
                         HeroState.HeroLoadedState(
                             hero = hero,
@@ -78,7 +84,9 @@ class HeroViewModel @Inject constructor(
                             currentInfoBlock,
                             currentAttrsMax = currentAttrsMax
                         )
+
                     )
+                    Log.e("TOHAXXX","postValue:end")
                 }
             } catch (e: java.lang.Exception) {
                 /*

@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getAllHeroesSortByName() {
-        _heroesListState.value = HomeState.LoadingHomeState()
+        //_heroesListState.value = HomeState.LoadingHomeState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()

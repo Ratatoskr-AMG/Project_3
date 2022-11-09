@@ -1,5 +1,6 @@
 package net.doheco.presentation.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
@@ -22,26 +23,41 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavController,
     widthSizeClass: WindowWidthSizeClass
+   // splashFun: (Boolean) -> Unit
 ) {
     when (val state = viewModel.homeState.observeAsState().value) {
-        is HomeState.LoadedHomeState<*> -> HomeView(
-            viewModel,
-            viewModel.imageLoader,
-            state.heroes,
-            state.favoriteHeroes,
-            {
-                navController.navigate(Screens.Hero.route + "/" + it.id)
-            }, {
-                viewModel.getAllHeroesByStrSortByName(it)
-            },
-            widthSizeClass
-        )
-        is HomeState.NoHomeState -> MessageView(stringResource(id = R.string.heroes_not_found))
-        is HomeState.LoadingHomeState -> LoadingBlack()
-        is HomeState.ErrorHomeState -> MessageView(stringResource(id = R.string.error))
+        is HomeState.LoadedHomeState<*> -> {
+            //splashFun(false)
+            Log.e("TOHARUS", "LoadedHomeState")
+            HomeView(
+                viewModel,
+                viewModel.imageLoader,
+                state.heroes,
+                state.favoriteHeroes,
+                {
+                    navController.navigate(Screens.Hero.route + "/" + it.id)
+                }, {
+                    viewModel.getAllHeroesByStrSortByName(it)
+                },
+                widthSizeClass
+            )
+        }
+        is HomeState.NoHomeState -> {
+            Log.e("TOHARUS", "NoHomeState")
+            MessageView(stringResource(id = R.string.heroes_not_found))
+        }
+        is HomeState.LoadingHomeState -> {
+            Log.e("TOHARUS", "LoadingHomeState")
+            LoadingBlack()
+        }
+        is HomeState.ErrorHomeState -> {
+            Log.e("TOHARUS", "ErrorHomeState")
+            MessageView(stringResource(id = R.string.error))
+        }
         else -> {}
     }
     LaunchedEffect(key1 = Unit, block = {
+        Log.e("TOHARUS","LaunchedEffect")
         viewModel.getAllHeroesSortByName()
         //viewModel.registerFirebaseEvent()
     })

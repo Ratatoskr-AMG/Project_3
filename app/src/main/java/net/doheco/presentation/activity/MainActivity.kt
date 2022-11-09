@@ -68,7 +68,9 @@ class MainActivity() : AppCompatActivity() {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         installSplashScreen().apply {
+
             var state = true
             homeViewModel.homeState.observe(
                 this@MainActivity
@@ -76,7 +78,9 @@ class MainActivity() : AppCompatActivity() {
             setKeepOnScreenCondition {
                 state
             }
+
         }
+
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val appSharedPreferences = this.getSharedPreferences(
@@ -89,6 +93,7 @@ class MainActivity() : AppCompatActivity() {
             .build()
 
         setContent {
+
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             rememberSystemUiController().setStatusBarColor(color = Color.Transparent)
             ProvideWindowInsets {

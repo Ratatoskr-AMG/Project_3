@@ -58,7 +58,7 @@ fun HomeView(
     val focusRequesterTop = remember { FocusRequester() }
     val scrollState = rememberForeverLazyListState(key = "Home")
     var listColumnsCount = 4
-    if (widthSizeClass == WindowWidthSizeClass.Expanded) {
+    if (widthSizeClass == WindowWidthSizeClass.Expanded || widthSizeClass == WindowWidthSizeClass.Medium) {
         listColumnsCount = 9
     }
     var listRowsCount = heroes.size / (listColumnsCount + 1)

@@ -271,6 +271,7 @@ Java Concurrency in Practiсe
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
  */
+
 /* .drawBehind {
     val strokeWidth = density
     val y = size.height - strokeWidth / 1

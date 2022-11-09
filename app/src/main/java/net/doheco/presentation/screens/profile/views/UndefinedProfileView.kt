@@ -26,7 +26,6 @@ import net.doheco.presentation.base.Screens
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileState
 
-
 @ExperimentalFoundationApi
 @Composable
 fun UndefinedProfileView(
@@ -34,10 +33,16 @@ fun UndefinedProfileView(
     viewModel: ProfileViewModel,
     navController: NavController,
     player_tier: String,
-    heroes_list_last_modified: String,
+    updatingDataButtonText: String,
     onReloadClick: () -> Unit
 ) {
     var scrollState = rememberForeverLazyListState(key = "Profile")
+    var isUpdating = if(updatingDataButtonText=="01/01/1970 03:00:00") true else false
+    /*var updateText = if(isUpdating) {
+        stringResource(id = R.string.wait)
+    }else {
+        stringResource(id = R.string.heroes_list_last_modified) + " (" + updatingDataButtonText + ")";
+    }*/
 
     Box(
         modifier = Modifier
@@ -103,7 +108,7 @@ fun UndefinedProfileView(
                 }
 
             }
-            item{
+            item {
                 Box(
                     modifier = Modifier
                         .height(50.dp)
@@ -130,17 +135,22 @@ fun UndefinedProfileView(
                                     end = Offset(x = size.width, y = y)
                                 )
                             }
-                        }                    ,
+                        }
+                        .clickable {
+                            //if (!isUpdating) {
+                                onReloadClick()
+                            //}
+                        },
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Text(
                         fontSize = 12.sp,
                         color = Color.White,
-                        text = stringResource(id = R.string.update_time) + " " + heroes_list_last_modified
+                        text = updatingDataButtonText
                     )
                 }
             }
-            item{
+            item {
                 Box(
                     modifier = Modifier
                         .height(50.dp)
@@ -155,6 +165,7 @@ fun UndefinedProfileView(
                     )
                 }
             }
+
         }
     }
 }

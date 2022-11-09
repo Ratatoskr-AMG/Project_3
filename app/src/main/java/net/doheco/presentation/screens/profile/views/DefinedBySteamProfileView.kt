@@ -25,7 +25,6 @@ import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileState
-import java.lang.System.exit
 
 @ExperimentalFoundationApi
 @Composable
@@ -33,21 +32,25 @@ fun DefinedBySteamProfileView(
     state: ProfileState.SteamNameIsDefinedState,
     viewModel: ProfileViewModel,
     player_tier: String,
-    heroes_list_last_modified: String,
+    updatingDataButtonText: String,
     navController: NavController,
     onSteamExit: () -> Unit,
     onReloadClick: () -> Unit
 ) {
-    Log.e("TOHA","heroes_list_last_modifiedXXXXX:"+heroes_list_last_modified)
-    var isUpdating = if(heroes_list_last_modified=="01/01/1970 03:00:00") true else false
-    var updateText = if(isUpdating) {
+    Log.e("TOHA","heroes_list_last_modifiedXXXXX:"+updatingDataButtonText)
+    var isUpdating = if(updatingDataButtonText=="01/01/1970 03:00:00") true else false
+
+    /*var updateText = if(isUpdating) {
         stringResource(id = R.string.wait)
     }else {
-        stringResource(id = R.string.heroes_list_last_modified) + " (" + heroes_list_last_modified + ")";
+        stringResource(id = R.string.heroes_list_last_modified) + " (" + updatingDataButtonText + ")"
     }
-    if(heroes_list_last_modified=="time"){
+    */
+
+    /*if(updatingDataButtonText=="time"){
         updateText= stringResource(id = R.string.time_block)
-    }
+    }*/
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -115,7 +118,6 @@ fun DefinedBySteamProfileView(
                 }
 
             }
-
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -147,9 +149,9 @@ fun DefinedBySteamProfileView(
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
-                            if(!isUpdating) {
+                            //if(!isUpdating) {
                                 onReloadClick()
-                            }
+                            //}
                         }
                 ) {
                     Box(
@@ -160,7 +162,7 @@ fun DefinedBySteamProfileView(
                         Text(
                             fontSize = 12.sp,
                             color = Color.White,
-                            text = updateText
+                            text = updatingDataButtonText
                         )
                     }
 

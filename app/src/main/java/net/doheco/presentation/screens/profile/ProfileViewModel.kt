@@ -172,7 +172,7 @@ class ProfileViewModel @Inject constructor(
                                     "time"
                                 )
                             )
-
+                            appSharedPreferences.edit().putLong("heroes_list_last_modified", 1).apply()
                         } catch (e: Exception) {
                             _profile_state.postValue(ProfileState.ErrorProfileState)
                         }

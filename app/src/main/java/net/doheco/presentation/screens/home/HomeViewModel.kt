@@ -44,7 +44,12 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    init {
+        getAllHeroesSortByName()
+    }
+
     fun getAllHeroesSortByName() {
+        Log.e("WHAT", "get heroes")
         //_heroesListState.value = HomeState.LoadingHomeState()
         viewModelScope.launch(Dispatchers.IO) {
             try {

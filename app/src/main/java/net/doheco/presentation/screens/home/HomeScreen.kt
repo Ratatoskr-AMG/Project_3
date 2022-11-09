@@ -15,6 +15,7 @@ import net.doheco.R
 import net.doheco.presentation.base.Screens
 import net.doheco.presentation.screens.home.models.HomeState
 import net.doheco.presentation.screens.home.views.HomeView
+import net.doheco.presentation.theme.LoadingView
 import net.doheco.presentation.theme.MessageView
 
 @ExperimentalFoundationApi
@@ -23,7 +24,6 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navController: NavController,
     widthSizeClass: WindowWidthSizeClass
-   // splashFun: (Boolean) -> Unit
 ) {
     when (val state = viewModel.homeState.observeAsState().value) {
         is HomeState.LoadedHomeState<*> -> {
@@ -56,11 +56,11 @@ fun HomeScreen(
         }
         else -> {}
     }
-    LaunchedEffect(key1 = Unit, block = {
-        Log.e("TOHARUS","LaunchedEffect")
-        viewModel.getAllHeroesSortByName()
-        //viewModel.registerFirebaseEvent()
-    })
+//    LaunchedEffect(key1 = Unit, block = {
+//        Log.e("WHAT", "launchedEffect")
+//        viewModel.getAllHeroesSortByName()
+//        //viewModel.registerFirebaseEvent()
+//    })
 }
 
 @Composable

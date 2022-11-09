@@ -178,7 +178,7 @@ class MainActivity() : AppCompatActivity() {
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
-                            val heroesListviewModel = hiltViewModel<HomeViewModel>()
+                           // val heroesListviewModel = hiltViewModel<HomeViewModel>()
                             HomeScreen(
                                 viewModel = homeViewModel,
                                 navController = navController,

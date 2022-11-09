@@ -89,7 +89,7 @@ fun TiersHeaderView(
     ) {
 
 
-        Row(modifier = Modifier.width(240.dp)) {
+        Row(modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .width(70.dp)
@@ -112,6 +112,7 @@ fun TiersHeaderView(
                     contentDescription = "Back"
                 )
             }
+
             Box(
                 modifier = Modifier
                     .padding(start = 15.dp)
@@ -128,10 +129,12 @@ fun TiersHeaderView(
 
             }
         }
+
         Box(
             contentAlignment = Alignment.Center
         ) {
 
+            /*
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -146,7 +149,7 @@ fun TiersHeaderView(
                         .width(25.dp)
                         .height(25.dp)
                 )
-            }
+            }*/
 
             Image(
                 painter = rememberImagePainter(tierImage),

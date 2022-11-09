@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +25,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -49,6 +53,7 @@ import net.doheco.presentation.screens.hero.HeroViewModel
 import net.doheco.presentation.screens.role.RoleViewModel
 import net.doheco.presentation.screens.tiers.TiersScreen
 import net.doheco.presentation.screens.home.HomeViewModel
+import net.doheco.presentation.screens.home.models.HomeState
 import net.doheco.presentation.screens.recommendations.RecommendationsScreen
 import net.doheco.presentation.screens.recommendations.RecommendationsViewModel
 import net.doheco.presentation.screens.video.VideoViewModel
@@ -56,13 +61,26 @@ import net.doheco.presentation.screens.video.VideoViewModel
 @AndroidEntryPoint
 class MainActivity() : AppCompatActivity() {
 
-    val APP_SHARED_PREFERENCES_NAME = "app_preferences"
-    //val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
+    private val APP_SHARED_PREFERENCES_NAME = "app_preferences"
+    private val homeViewModel: HomeViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @OptIn(ExperimentalFoundationApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().apply {
+
+            var state = true
+            homeViewModel.homeState.observe(
+                this@MainActivity
+            ) { if (it != HomeState.LoadingHomeState()) state = false }
+            setKeepOnScreenCondition {
+                state
+            }
+
+        }
+
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val appSharedPreferences = this.getSharedPreferences(
@@ -75,6 +93,8 @@ class MainActivity() : AppCompatActivity() {
             .build()
 
         setContent {
+
+            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             rememberSystemUiController().setStatusBarColor(color = Color.Transparent)
             ProvideWindowInsets {
                 val navController = rememberNavController()
@@ -158,14 +178,12 @@ class MainActivity() : AppCompatActivity() {
                         modifier = Modifier.padding(it)
                     ) {
                         composable(Screens.Home.route) {
-
-                            val heroesListviewModel = hiltViewModel<HomeViewModel>()
-
+                           // val heroesListviewModel = hiltViewModel<HomeViewModel>()
                             HomeScreen(
-                                viewModel = heroesListviewModel,
+                                viewModel = homeViewModel,
                                 navController = navController,
+                                widthSizeClass = widthSizeClass,
                             )
-
                         }
                         composable(Screens.Hero.route + "/{id}") { navBackStack ->
                             val id = navBackStack.arguments?.getString("id").toString()
@@ -217,7 +235,6 @@ class MainActivity() : AppCompatActivity() {
                         }
                     }
                 }
-
             }
         }
     }

@@ -128,7 +128,7 @@ fun HeroesByAttributeListView(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
-                Row() {
+                Row(horizontalArrangement = Arrangement.Start) {
 
                     Box(contentAlignment = Alignment.Center,
                         modifier = Modifier

@@ -189,48 +189,48 @@ fun RoleListView(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
 
-
-                        Box(contentAlignment = Alignment.Center,
-
-                            modifier = Modifier
-
-                                .size(70.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, Color(0x880d111c), CircleShape)
-                                .clickable {
-                                    navController.popBackStack()
-                                }
-                        ) {
-                            Image(
+                        Row(horizontalArrangement = Arrangement.Start) {
+                            Box(contentAlignment = Alignment.Center,
 
                                 modifier = Modifier
-                                    .width(15.dp)
-                                    .height(15.dp),
-                                painter = rememberAsyncImagePainter(
-                                    R.drawable.ic_back
-                                ),
-                                contentDescription = "Back"
-                            )
-                        }
 
-                        Box(
-                            modifier = Modifier
-                                .padding(start = 15.dp)
-                                .height(70.dp)
-                                .width(140.dp),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Box() {
-                                Text(
-                                    roleMultipleText,
-                                    color = Color.White,
-                                    fontSize = 16.sp,
-                                    lineHeight = 20.sp
+                                    .size(70.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color(0x880d111c), CircleShape)
+                                    .clickable {
+                                        navController.popBackStack()
+                                    }
+                            ) {
+                                Image(
+
+                                    modifier = Modifier
+                                        .width(15.dp)
+                                        .height(15.dp),
+                                    painter = rememberAsyncImagePainter(
+                                        R.drawable.ic_back
+                                    ),
+                                    contentDescription = "Back"
                                 )
                             }
 
-                        }
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = 15.dp)
+                                    .height(70.dp)
+                                    .width(140.dp),
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                Box() {
+                                    Text(
+                                        roleMultipleText,
+                                        color = Color.White,
+                                        fontSize = 16.sp,
+                                        lineHeight = 20.sp
+                                    )
+                                }
 
+                            }
+                        }
                         appHeaderImageBox {
                             appHeaderImage(
                                 { onTierImgClick() },
@@ -266,8 +266,10 @@ fun RoleListView(
                     when (tierBlockNum) {
                         1 -> {
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_herald_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_herald_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -283,8 +285,10 @@ fun RoleListView(
                         }
                         2 -> {
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Guardian_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Guardian_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -301,8 +305,10 @@ fun RoleListView(
                         3 -> {
 
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Crusader_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Crusader_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -319,8 +325,10 @@ fun RoleListView(
                         4 -> {
 
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Archon_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Archon_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -336,8 +344,10 @@ fun RoleListView(
                         }
                         5 -> {
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Legend_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Legend_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -353,8 +363,10 @@ fun RoleListView(
                         }
                         6 -> {
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Ancient_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Ancient_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -370,8 +382,10 @@ fun RoleListView(
                         }
                         7 -> {
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Divine_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Divine_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -387,8 +401,10 @@ fun RoleListView(
                         }
                         8 -> {
                             item {
-                                recommendationsTitleBlock(stringResource(id = R.string.top_Immortal_wins_to_picks) + " " +
-                                        roleMultipleText)
+                                recommendationsTitleBlock(
+                                    stringResource(id = R.string.top_Immortal_wins_to_picks) + " " +
+                                            roleMultipleText
+                                )
                             }
                             for (row in 0 until listRowsCount) {
                                 item {
@@ -426,7 +442,7 @@ fun RoleListView(
                 }
                 //All
                 item {
-                    roleRecommendationsTitleBlock(stringResource(id = R.string.all_heroes)+" "+roleMultipleText)
+                    roleRecommendationsTitleBlock(stringResource(id = R.string.all_heroes) + " " + roleMultipleText)
                 }
                 listRowsCount = heroes.size / (listColumnsCount + 1)
                 if (heroes.size % (listColumnsCount + 1) > 0) {
@@ -444,7 +460,7 @@ fun RoleListView(
                                 if (index <= heroes.size - 1) {
                                     var hero = heroes.get(index)
                                     var favoriteFlag = favoriteHeroes.contains(hero)
-                                    heroesListItemBox(onHeroClick,hero,favoriteFlag)
+                                    heroesListItemBox(onHeroClick, hero, favoriteFlag)
                                     /*
                                     Box(modifier = Modifier
                                         .clickable {

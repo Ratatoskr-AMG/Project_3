@@ -57,10 +57,9 @@ fun HomeView(
     var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
     val scrollState = rememberForeverLazyListState(key = "Home")
-    var listColumnsCount = 4
-    if (widthSizeClass == WindowWidthSizeClass.Expanded || widthSizeClass == WindowWidthSizeClass.Medium) {
-        listColumnsCount = 9
-    }
+    val listColumnsCount = if (widthSizeClass == WindowWidthSizeClass.Expanded ||
+        widthSizeClass == WindowWidthSizeClass.Medium) 9 else 4
+
     var listRowsCount = heroes.size / (listColumnsCount + 1)
     if (heroes.size % (listColumnsCount + 1) > 0) {
         listRowsCount += 1

@@ -70,7 +70,6 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {
-
             var state = true
             homeViewModel.homeState.observe(
                 this@MainActivity
@@ -78,7 +77,6 @@ class MainActivity() : AppCompatActivity() {
             setKeepOnScreenCondition {
                 state
             }
-
         }
 
 
@@ -93,8 +91,8 @@ class MainActivity() : AppCompatActivity() {
             .build()
 
         setContent {
-
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
+
             rememberSystemUiController().setStatusBarColor(color = Color.Transparent)
             ProvideWindowInsets {
                 val navController = rememberNavController()
@@ -197,7 +195,7 @@ class MainActivity() : AppCompatActivity() {
                         composable(Screens.Role.route + "/{role}") { navBackStack ->
                             val role = navBackStack.arguments?.getString("role")
                             val roleViewModel = hiltViewModel<RoleViewModel>()
-                            RoleScreen(role!!, roleViewModel, navController)
+                            RoleScreen(role!!, roleViewModel, navController, widthSizeClass)
                         }
                         composable(Screens.Attr.route + "/{attr}/{id}") { navBackStack ->
                             val attr = navBackStack.arguments?.getString("attr")
@@ -227,11 +225,11 @@ class MainActivity() : AppCompatActivity() {
                         }
                         composable(Screens.Comparing.route) {
                             val comparingViewModel = hiltViewModel<ComparingViewModel>()
-                            ComparingScreen(comparingViewModel)
+                            ComparingScreen(comparingViewModel, widthSizeClass)
                         }
                         composable(Screens.Recommendations.route) { navBackStack->
                             val recommendationsViewModel = hiltViewModel<RecommendationsViewModel>()
-                            RecommendationsScreen(navController,recommendationsViewModel)
+                            RecommendationsScreen(navController,recommendationsViewModel, widthSizeClass)
                         }
                     }
                 }

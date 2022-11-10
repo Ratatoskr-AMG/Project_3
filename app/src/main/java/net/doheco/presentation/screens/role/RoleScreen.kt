@@ -1,6 +1,7 @@
 package net.doheco.presentation.screens
 
 import androidx.compose.foundation.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
@@ -19,7 +20,8 @@ import net.doheco.R
 fun RoleScreen(
     role: String,
     viewModel: RoleViewModel,
-    navController: NavController
+    navController: NavController,
+    widthSizeClass: WindowWidthSizeClass
 ) {
     val viewState = viewModel.roleState.observeAsState()
 
@@ -32,12 +34,10 @@ fun RoleScreen(
             state.heroes,
             state.favoriteHeroes,
             navController,
-            {
-                navController.navigate(Screens.Hero.route + "/" + it.id)
-            },
-            {
-                navController.navigate(Screens.Tier.route)
-            })
+            { navController.navigate(Screens.Hero.route + "/" + it.id) },
+            { navController.navigate(Screens.Tier.route) },
+            widthSizeClass
+        )
         is RoleState.NoHeroesListState -> MessageView(stringResource(id = R.string.heroes_not_found))
         is RoleState.LoadingHeroesListState -> LoadingView(stringResource(id = R.string.loading))
         is RoleState.ErrorHeroesListState -> MessageView(stringResource(id = R.string.error))

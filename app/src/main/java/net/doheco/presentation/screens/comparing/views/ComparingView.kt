@@ -74,7 +74,9 @@ fun ComparingView(
 
     var imgAddrLeft = left.img
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(Color.Black)) {
         appHeaderInner {
             appHeaderUnderlinedCenterVerticalRow(Arrangement.SpaceBetween) {
                 appHeaderImageBox {
@@ -96,7 +98,6 @@ fun ComparingView(
                             leftImgColor
                         )
                     }
-
                 }
                 Column(
                     modifier = Modifier
@@ -571,7 +572,6 @@ fun ComparingView(
                 }
             }
         } else {
-
             LazyColumn(
                 state = scrollState,
                 modifier = Modifier
@@ -606,12 +606,8 @@ fun ComparingView(
                                     ) {
                                     }
                                 }
-
-
                             }
-
                         }
-
                     }
                 }
             }

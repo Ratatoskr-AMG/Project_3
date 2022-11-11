@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +26,6 @@ import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileState
-import java.lang.System.exit
 
 @ExperimentalFoundationApi
 @Composable
@@ -33,19 +33,21 @@ fun DefinedBySteamProfileView(
     state: ProfileState.SteamNameIsDefinedState,
     viewModel: ProfileViewModel,
     player_tier: String,
-    heroes_list_last_modified: String,
+    heroesListLastModified: String,
     navController: NavController,
+    dialogState: MutableState<Boolean>,
     onSteamExit: () -> Unit,
     onReloadClick: () -> Unit
 ) {
-    Log.e("TOHA","heroes_list_last_modifiedXXXXX:"+heroes_list_last_modified)
-    var isUpdating = if(heroes_list_last_modified=="01/01/1970 03:00:00") true else false
+    Log.e("TOHA", "heroes_list_last_modifiedXXXXX:$heroesListLastModified")
+    val isUpdating = heroesListLastModified=="01/01/1970 03:00:00"
+
     var updateText = if(isUpdating) {
         stringResource(id = R.string.wait)
     }else {
-        stringResource(id = R.string.heroes_list_last_modified) + " (" + heroes_list_last_modified + ")";
+        stringResource(id = R.string.heroes_list_last_modified) + " (" + heroesListLastModified + ")";
     }
-    if(heroes_list_last_modified=="time"){
+    if(heroesListLastModified=="time"){
         updateText= stringResource(id = R.string.time_block)
     }
     Box(
@@ -69,28 +71,6 @@ fun DefinedBySteamProfileView(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .drawWithContent {
-                            drawContent()
-                            clipRect { // Not needed if you do not care about painting half stroke outside
-                                val strokeWidth = Stroke.DefaultMiter
-                                val y = size.height // strokeWidth
-                                drawLine(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            //Color(0xFF000022),
-                                            //Color(0xFF000022)
-                                        )
-                                    ),
-                                    strokeWidth = strokeWidth,
-                                    cap = StrokeCap.Square,
-                                    start = Offset.Zero.copy(y = y),
-                                    end = Offset(x = size.width, y = y)
-                                )
-                            }
-                        }
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
@@ -111,39 +91,39 @@ fun DefinedBySteamProfileView(
                             text = stringResource(id = R.string.exit)
                         )
                     }
-
                 }
-
+                Divider(color = Color(0xFF0d111c))
             }
-
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-
-                        .drawWithContent {
-                            drawContent()
-                            clipRect { // Not needed if you do not care about painting half stroke outside
-                                val strokeWidth = Stroke.DefaultMiter
-                                val y = size.height // strokeWidth
-                                drawLine(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            //Color(0xFF000022),
-                                            //Color(0xFF000022)
-                                        )
-                                    ),
-                                    strokeWidth = strokeWidth,
-                                    cap = StrokeCap.Square,
-                                    start = Offset.Zero.copy(y = y),
-                                    end = Offset(x = size.width, y = y)
-                                )
-                            }
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clickable {
+                            dialogState.value = true
                         }
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            text = stringResource(id = R.string.send_offer)
+                        )
+                    }
+                }
+                Divider(color = Color(0xFF0d111c))
+            }
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
@@ -165,9 +145,8 @@ fun DefinedBySteamProfileView(
                     }
 
                 }
-
+                Divider(color = Color(0xFF0d111c))
             }
-
         }
     }
 }

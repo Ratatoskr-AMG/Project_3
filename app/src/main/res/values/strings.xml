@@ -121,5 +121,10 @@
     <string name="_7_winrates_attr">Divine winrate</string>
     <string name="_8_winrates_attr">Immortal winrate</string>
     <string name="pro_winrates_attr">Pro winrate</string>
-
+    <string name="close">Close</string>
+    <string name="send">Send</string>
+    <string name="message">Message</string>
+    <string name="title">Topic</string>
+    <string name="offer">Offer</string>
+    <string name="send_offer">Submit an offer</string>
 </resources>

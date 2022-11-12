@@ -122,4 +122,10 @@
     <string name="_7_winrates_attr">Божество коэф. побед</string>
     <string name="_8_winrates_attr">Титан коэф. побед</string>
     <string name="pro_winrates_attr">Проф. коэф. побед</string>
+    <string name="close">Закрыть</string>
+    <string name="send">Отправить</string>
+    <string name="message">Сообщение</string>
+    <string name="title">Тема</string>
+    <string name="offer">Предложение</string>
+    <string name="send_offer">Отправить предложение</string>
 </resources>

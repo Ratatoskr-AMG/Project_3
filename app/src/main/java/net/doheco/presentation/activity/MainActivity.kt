@@ -79,7 +79,6 @@ class MainActivity() : AppCompatActivity() {
             }
         }
 
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val appSharedPreferences = this.getSharedPreferences(
             APP_SHARED_PREFERENCES_NAME,

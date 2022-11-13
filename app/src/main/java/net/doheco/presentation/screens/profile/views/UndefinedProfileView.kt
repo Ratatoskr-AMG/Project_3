@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,10 +31,9 @@ fun UndefinedProfileView(
     navController: NavController,
     player_tier: String,
     dialogState: MutableState<Boolean>,
-    updatingDataButtonText: String,
     onReloadClick: () -> Unit
 ) {
-    var isUpdating = if(updatingDataButtonText=="01/01/1970 03:00:00") true else false
+    //var isUpdating = if(updatingDataButtonText=="01/01/1970 03:00:00") true else false
     /*var updateText = if(isUpdating) {
         stringResource(id = R.string.wait)
     }else {
@@ -85,6 +83,7 @@ fun UndefinedProfileView(
                 }
                 Divider(color = Color(0xFF0d111c))
             }
+            /*UPDATING BUTTON*/
             item {
                 Box(
                     modifier = Modifier
@@ -97,7 +96,8 @@ fun UndefinedProfileView(
                         fontSize = 12.sp,
                         color = Color.White,
                         //text = stringResource(id = R.string.update_time) + " " + heroesListLastModified
-                        text = updatingDataButtonText
+                        //text = updatingDataButtonText
+                        text = state.btnText
                     )
                 }
                 Divider(color = Color(0xFF0d111c))

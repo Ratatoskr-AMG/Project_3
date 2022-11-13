@@ -5,11 +5,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import net.doheco.domain.utils.GetResource
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SinceKotlin::class)
+@InstallIn(SingletonComponent::class)
 class ProvideResources {
 
     @Singleton

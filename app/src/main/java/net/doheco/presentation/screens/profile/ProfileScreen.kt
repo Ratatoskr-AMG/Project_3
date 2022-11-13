@@ -29,7 +29,7 @@ import net.doheco.presentation.screens.profile.views.UndefinedProfileView
 import java.text.SimpleDateFormat
 import java.util.*
 
-    fun getAbbreviatedFromDateTime(dateTime: Calendar, field: String): String? {
+fun getAbbreviatedFromDateTime(dateTime: Calendar, field: String): String? {
         val output = SimpleDateFormat(field)
         try {
             return output.format(dateTime.time)    // format output
@@ -39,9 +39,10 @@ import java.util.*
 
     return null
 }
-
+/*
 @Composable
 fun getUpdatingButtonText(calendarDate:Calendar, heroes_list_last_modified:String) : String{
+
     var result = ""
 
     if (heroes_list_last_modified == "0"
@@ -69,7 +70,7 @@ fun getUpdatingButtonText(calendarDate:Calendar, heroes_list_last_modified:Strin
     }
     return result
 }
-
+*/
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
@@ -92,7 +93,7 @@ fun ProfileScreen(
 
         is ProfileState.UndefinedState -> {
 
-            var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
+            //var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
 
             /*
             if (state.heroes_list_last_modified == "0"
@@ -122,8 +123,8 @@ fun ProfileScreen(
                 viewModel,
                 navController,
                 playerTier,
-                dialogState = openDialog,
-                updatingDataButtonText
+                dialogState = openDialog
+
             ) {
                 viewModel.obtainEvent(ProfileEvent.OnUpdate)
             }
@@ -131,7 +132,7 @@ fun ProfileScreen(
         }
         is ProfileState.SteamNameIsDefinedState -> {
 
-            var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
+            //var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
 
             /*var heroes_list_last_modified = ""
 
@@ -173,7 +174,6 @@ fun ProfileScreen(
                 state,
                 viewModel,
                 playerTier,
-                updatingDataButtonText,
                 navController,
                 dialogState = openDialog,
                 { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
@@ -186,14 +186,16 @@ fun ProfileScreen(
 
     if (openDialog.value) {
         AlertDialog(
+            modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {
                 openDialog.value = false
             },
-            backgroundColor = Color.Black,
+            backgroundColor = Color(0xFF131313),
             text = {
-                Column() {
-                    Text(text = stringResource(id = R.string.offer), color = Color.White)
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.offer), color = Color.White)
                     OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
                         value = titleText,
                         onValueChange = { titleText = it},
                         singleLine = true,
@@ -210,7 +212,7 @@ fun ProfileScreen(
                         value = messageText,
                         onValueChange = { messageText = it},
                         label = { Text(text = stringResource(id = R.string.message)) },
-                        modifier = Modifier.height(150.dp),
+                        modifier = Modifier.height(150.dp).fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             textColor = Color.White,
                             focusedBorderColor = Color.White,

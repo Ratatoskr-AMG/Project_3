@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,8 @@ fun ComparingView(
     right: Hero,
     heroes: List<Hero>,
     favoriteHeroes: List<Hero>,
-    currentInfoBlock: String
+    currentInfoBlock: String,
+    widthSizeClass: WindowWidthSizeClass
 ) {
     var scrollState = rememberForeverLazyListState(key = "ComparingHeroesList")
     var cAlignLeft = appUtilsArrays.heroImgContentAlign(left)
@@ -57,20 +59,24 @@ fun ComparingView(
     var rightText = right.localizedName
     val gson = GsonBuilder().create()
 
-    if (leftSelected == true) {
+    if (leftSelected) {
         //leftImgColor = Color(0xFFc98000)
         leftImgColor = Color(0xFF000000)
         leftText = stringResource(id = R.string.choose)
     }
-    if (rightSelected == true) {
+    if (rightSelected) {
         //rightImgColor = Color(0xFFc98000)
         rightImgColor = Color(0xFF000000)
         rightText = stringResource(id = R.string.choose)
     }
-    val listColumnsCount = 4
+    val listColumnsCount = if (widthSizeClass == WindowWidthSizeClass.Expanded ||
+        widthSizeClass == WindowWidthSizeClass.Medium) 9 else 4
+
     var imgAddrLeft = left.img
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(Color.Black)) {
         appHeaderInner {
             appHeaderUnderlinedCenterVerticalRow(Arrangement.SpaceBetween) {
                 appHeaderImageBox {
@@ -92,7 +98,6 @@ fun ComparingView(
                             leftImgColor
                         )
                     }
-
                 }
                 Column(
                     modifier = Modifier
@@ -132,7 +137,7 @@ fun ComparingView(
                 }
             }
         }
-        if (selectMode == false) {
+        if (!selectMode) {
             LazyColumn(
                 state = scrollState,
                 modifier = Modifier
@@ -567,7 +572,6 @@ fun ComparingView(
                 }
             }
         } else {
-
             LazyColumn(
                 state = scrollState,
                 modifier = Modifier
@@ -602,12 +606,8 @@ fun ComparingView(
                                     ) {
                                     }
                                 }
-
-
                             }
-
                         }
-
                     }
                 }
             }

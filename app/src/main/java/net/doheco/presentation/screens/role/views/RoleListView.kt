@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,19 +48,20 @@ fun RoleListView(
     favoriteHeroes: List<Hero>,
     navController: NavController,
     onHeroClick: (Hero) -> Unit,
-    onTierImgClick: () -> Unit
+    onTierImgClick: () -> Unit,
+    widthSizeClass: WindowWidthSizeClass
 ) {
 
     var tierImgAddr = "https://doheco.net/app/img/tier/0.png"
     var tierBlockNum = 0;
     if (player_tier != "undefined") {
-        tierImgAddr = "https://doheco.net/app/img/tier/" + player_tier + ".png"
+        tierImgAddr = "https://doheco.net/app/img/tier/$player_tier.png"
         tierBlockNum = player_tier.toInt()
     }
 
     val configuration = LocalConfiguration.current
     val heroes = heroes.mapNotNull { it as? Hero }
-    var scrollState = rememberForeverLazyListState(key = "Role_" + role)
+    var scrollState = rememberForeverLazyListState(key = "Role_$role")
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPostScroll(
@@ -71,7 +74,8 @@ fun RoleListView(
             }
         }
     }
-    var listColumnsCount = 4
+    val listColumnsCount = if (widthSizeClass == WindowWidthSizeClass.Expanded ||
+        widthSizeClass == WindowWidthSizeClass.Medium) 9 else 4
 
     var allHeroesBase = heroes.toMutableList()
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -21,8 +22,6 @@ import net.doheco.domain.model.Hero
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.theme.*
 
-
-@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalFoundationApi
 @Composable
 fun RecommendationsView(
@@ -30,13 +29,14 @@ fun RecommendationsView(
     favoriteHeroes: List<Hero>,
     player_tier: String,
     onHeroClick: (Hero) -> Unit,
-    onTierImgClick: () -> Unit
+    onTierImgClick: () -> Unit,
+    widthSizeClass: WindowWidthSizeClass
 ) {
 
     var tierImgAddr = "https://doheco.net/app/img/tier/0.png"
     var tierBlockNum = 0;
     if (player_tier != "undefined") {
-        tierImgAddr = "https://doheco.net/app/img/tier/" + player_tier[0] + ".png"
+        tierImgAddr = "https://doheco.net/app/img/tier/${player_tier[0]} .png"
         tierBlockNum = player_tier.toInt()
     }
 
@@ -99,7 +99,10 @@ fun RecommendationsView(
 
     var offsetPosition by remember { mutableStateOf(0f) }
     var scrollState = rememberForeverLazyListState(key = "Recommendations")
-    var listColumnsCount = 4
+
+    val listColumnsCount = if (widthSizeClass == WindowWidthSizeClass.Expanded ||
+        widthSizeClass == WindowWidthSizeClass.Medium) 9 else 4
+
     var listRowsCount = topProWinsOnPicks.size / (listColumnsCount + 1)
     if (topProWinsOnPicks.size % (listColumnsCount + 1) > 0) {
         listRowsCount += 1

@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileState
+import java.lang.System.exit
 
 @ExperimentalFoundationApi
 @Composable
@@ -34,6 +36,7 @@ fun DefinedBySteamProfileView(
     player_tier: String,
     updatingDataButtonText: String,
     navController: NavController,
+    dialogState: MutableState<Boolean>,
     onSteamExit: () -> Unit,
     onReloadClick: () -> Unit
 ) {
@@ -72,28 +75,6 @@ fun DefinedBySteamProfileView(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .drawWithContent {
-                            drawContent()
-                            clipRect { // Not needed if you do not care about painting half stroke outside
-                                val strokeWidth = Stroke.DefaultMiter
-                                val y = size.height // strokeWidth
-                                drawLine(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            //Color(0xFF000022),
-                                            //Color(0xFF000022)
-                                        )
-                                    ),
-                                    strokeWidth = strokeWidth,
-                                    cap = StrokeCap.Square,
-                                    start = Offset.Zero.copy(y = y),
-                                    end = Offset(x = size.width, y = y)
-                                )
-                            }
-                        }
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
@@ -114,38 +95,39 @@ fun DefinedBySteamProfileView(
                             text = stringResource(id = R.string.exit)
                         )
                     }
-
                 }
-
+                Divider(color = Color(0xFF0d111c))
             }
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-
-                        .drawWithContent {
-                            drawContent()
-                            clipRect { // Not needed if you do not care about painting half stroke outside
-                                val strokeWidth = Stroke.DefaultMiter
-                                val y = size.height // strokeWidth
-                                drawLine(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            Color(0xFF0d111c),
-                                            //Color(0xFF000022),
-                                            //Color(0xFF000022)
-                                        )
-                                    ),
-                                    strokeWidth = strokeWidth,
-                                    cap = StrokeCap.Square,
-                                    start = Offset.Zero.copy(y = y),
-                                    end = Offset(x = size.width, y = y)
-                                )
-                            }
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clickable {
+                            dialogState.value = true
                         }
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            text = stringResource(id = R.string.send_offer)
+                        )
+                    }
+                }
+                Divider(color = Color(0xFF0d111c))
+            }
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
@@ -167,9 +149,8 @@ fun DefinedBySteamProfileView(
                     }
 
                 }
-
+                Divider(color = Color(0xFF0d111c))
             }
-
         }
     }
 }

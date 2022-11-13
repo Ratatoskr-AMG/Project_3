@@ -1,6 +1,7 @@
 package net.doheco.presentation.screens.recommendations
 
 import androidx.compose.foundation.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
@@ -16,18 +17,18 @@ import net.doheco.presentation.theme.LoadingView
 @Composable
 fun RecommendationsScreen(
     navController: NavController,
-    viewModel: RecommendationsViewModel
+    viewModel: RecommendationsViewModel,
+    widthSizeClass: WindowWidthSizeClass
 ) {
 
     when (val state = viewModel.recommendationsState.observeAsState().value) {
         is RecommendationsState.LoadedRecommendationsState<*> -> RecommendationsView(
             state.heroes,
             state.favoriteHeroes,
-            state.player_tier, {
-               navController.navigate(Screens.Hero.route + "/" + it.id)
-            }, {
-                navController.navigate(Screens.Tier.route)
-            }
+            state.player_tier,
+            { navController.navigate(Screens.Hero.route + "/" + it.id) },
+            { navController.navigate(Screens.Tier.route) },
+            widthSizeClass
         )
         is RecommendationsState.LoadingRecommendationsState -> LoadingView(stringResource(id = R.string.loading))
         else -> {}

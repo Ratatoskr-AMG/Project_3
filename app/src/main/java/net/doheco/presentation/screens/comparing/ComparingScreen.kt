@@ -2,6 +2,7 @@ package net.doheco.presentation.screens.comparing
 
 import android.util.Log
 import androidx.compose.foundation.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import net.doheco.presentation.screens.comparing.models.ComparingEvent
@@ -11,7 +12,8 @@ import net.doheco.presentation.screens.comparing.views.ComparingView
 @ExperimentalFoundationApi
 @Composable
 fun ComparingScreen(
-    viewModel: ComparingViewModel
+    viewModel: ComparingViewModel,
+    widthSizeClass: WindowWidthSizeClass
 ) {
     val viewState = viewModel.comparingState.observeAsState()
     var selectMode by remember { mutableStateOf(false) }
@@ -60,7 +62,8 @@ fun ComparingScreen(
                 right,
                 state.heroes,
                 state.favoriteHeroes,
-                state.currentInfoBlock
+                state.currentInfoBlock,
+                widthSizeClass
             )
         }
         is ComparingState.LoadingState -> {

@@ -31,10 +31,16 @@ fun UndefinedProfileView(
     viewModel: ProfileViewModel,
     navController: NavController,
     player_tier: String,
-    heroesListLastModified: String,
     dialogState: MutableState<Boolean>,
-    onReloadClick: () -> Unit,
+    updatingDataButtonText: String,
+    onReloadClick: () -> Unit
 ) {
+    var isUpdating = if(updatingDataButtonText=="01/01/1970 03:00:00") true else false
+    /*var updateText = if(isUpdating) {
+        stringResource(id = R.string.wait)
+    }else {
+        stringResource(id = R.string.heroes_list_last_modified) + " (" + updatingDataButtonText + ")";
+    }*/
     val scrollState = rememberForeverLazyListState(key = "Profile")
 
     Box(
@@ -79,7 +85,7 @@ fun UndefinedProfileView(
                 }
                 Divider(color = Color(0xFF0d111c))
             }
-            item{
+            item {
                 Box(
                     modifier = Modifier
                         .height(50.dp)
@@ -90,7 +96,8 @@ fun UndefinedProfileView(
                     Text(
                         fontSize = 12.sp,
                         color = Color.White,
-                        text = stringResource(id = R.string.update_time) + " " + heroesListLastModified
+                        //text = stringResource(id = R.string.update_time) + " " + heroesListLastModified
+                        text = updatingDataButtonText
                     )
                 }
                 Divider(color = Color(0xFF0d111c))
@@ -120,7 +127,7 @@ fun UndefinedProfileView(
                 }
                 Divider(color = Color(0xFF0d111c), modifier = Modifier.padding(end = 20.dp, start = 20.dp))
             }
-            item{
+            item {
                 Box(
                     modifier = Modifier
                         .height(50.dp)
@@ -135,6 +142,7 @@ fun UndefinedProfileView(
                     )
                 }
             }
+
         }
     }
 }

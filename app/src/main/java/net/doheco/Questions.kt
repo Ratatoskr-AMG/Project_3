@@ -23,6 +23,9 @@ class Questions {
 
 /* Задания
 
+    Обновлялка
+    Дизайн формы обратной связи
+
     План статьи, сценарий (о чём статья, тема сисек в чём), целевая аудитория, возможности развития темы.
 
     KTLINT
@@ -253,6 +256,7 @@ presentation
 */
 
 /* Ссылки:
+https://foso.github.io/Jetpack-Compose-Playground/material/divider/
 https://startandroid.ru/ru/blog/493-mvp-dlja-nachinajuschih-bez-bibliotek-i-interfejsov.html
 https://coil-kt.github.io/coil/image_loaders/#caching
 https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
@@ -270,6 +274,7 @@ Java Concurrency in Practiсe
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
  */
+
 /* .drawBehind {
     val strokeWidth = density
     val y = size.height - strokeWidth / 1

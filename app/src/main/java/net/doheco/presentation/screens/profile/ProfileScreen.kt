@@ -29,6 +29,47 @@ import net.doheco.presentation.screens.profile.views.UndefinedProfileView
 import java.text.SimpleDateFormat
 import java.util.*
 
+    fun getAbbreviatedFromDateTime(dateTime: Calendar, field: String): String? {
+        val output = SimpleDateFormat(field)
+        try {
+            return output.format(dateTime.time)    // format output
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    return null
+}
+
+@Composable
+fun getUpdatingButtonText(calendarDate:Calendar, heroes_list_last_modified:String) : String{
+    var result = ""
+
+    if (heroes_list_last_modified == "0"
+    ) {
+        result = stringResource(id = R.string.wait)
+    }
+    if (heroes_list_last_modified == "1" || heroes_list_last_modified=="time") {
+        result = stringResource(id = R.string.time_block)
+    }
+    if (heroes_list_last_modified != "1" && heroes_list_last_modified != "0" && heroes_list_last_modified != "time") {
+        calendarDate.timeInMillis = heroes_list_last_modified.toLong()
+        //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
+        val month = getAbbreviatedFromDateTime(calendarDate, "MM");
+        val day = getAbbreviatedFromDateTime(calendarDate, "dd");
+        val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
+        val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
+        val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
+        val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
+        var date = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
+        if(date=="01/01/1970 03:00:00"){
+            result = stringResource(id = R.string.wait)
+        }else{
+            result = stringResource(id = R.string.heroes_list_last_modified) + " (" + date + ")"
+        }
+    }
+    return result
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
@@ -42,17 +83,6 @@ fun ProfileScreen(
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
 
-    fun getAbbreviatedFromDateTime(dateTime: Calendar, field: String): String? {
-        val output = SimpleDateFormat(field)
-        try {
-            return output.format(dateTime.time)    // format output
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return null
-    }
-
     val calendarDate = Calendar.getInstance()
     val playerTier = viewModel.getPlayerTierFromSP()
 
@@ -62,7 +92,9 @@ fun ProfileScreen(
 
         is ProfileState.UndefinedState -> {
 
-            var heroesListLastModified = ""
+            var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
+
+            /*
             if (state.heroes_list_last_modified == "0"
             ) {
                 heroesListLastModified = stringResource(id = R.string.wait)
@@ -83,21 +115,25 @@ fun ProfileScreen(
                     "$day/$month/$year $hours:$minutes:$seconds"
 
             }
+            */
 
             UndefinedProfileView(
                 state,
                 viewModel,
                 navController,
                 playerTier,
-                heroesListLastModified,
-                dialogState = openDialog
+                dialogState = openDialog,
+                updatingDataButtonText
             ) {
                 viewModel.obtainEvent(ProfileEvent.OnUpdate)
             }
 
         }
         is ProfileState.SteamNameIsDefinedState -> {
-            var heroesListLastModified = ""
+
+            var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
+
+            /*var heroes_list_last_modified = ""
 
             if (state.heroes_list_last_modified == "0") {
                 heroesListLastModified = stringResource(id = R.string.wait)
@@ -128,18 +164,22 @@ fun ProfileScreen(
                     appSharedPreferences.edit().putLong("heroes_list_last_modified", 1).apply()
                     heroesListLastModified="time"
                 }
+
             }
+
+             */
 
             DefinedBySteamProfileView(
                 state,
                 viewModel,
                 playerTier,
-                heroesListLastModified,
+                updatingDataButtonText,
                 navController,
                 dialogState = openDialog,
                 { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
                 { viewModel.obtainEvent(ProfileEvent.OnUpdate) }
             )
+
         }
         else -> {}
     }

@@ -122,8 +122,8 @@ fun ProfileScreen(
                 viewModel,
                 navController,
                 playerTier,
-                updatingDataButtonText,
-                dialogState = openDialog
+                dialogState = openDialog,
+                updatingDataButtonText
             ) {
                 viewModel.obtainEvent(ProfileEvent.OnUpdate)
             }

@@ -125,7 +125,7 @@
     <string name="close">Закрыть</string>
     <string name="send">Отправить</string>
     <string name="message">Сообщение</string>
-    <string name="title">Тема</string>
-    <string name="offer">Предложение</string>
+    <string name="send_name">Имя</string>
+    <string name="offer">Привет!\nБлагодарим вас за использование DoHeCo! Если у вас есть замечания, предложения или какие-либо пожелания к работе приложения, пожалуйста, напишите нам об этом!</string>
     <string name="send_offer">Отправить предложение</string>
 </resources>

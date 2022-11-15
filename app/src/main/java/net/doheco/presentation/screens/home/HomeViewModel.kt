@@ -118,7 +118,7 @@ class HomeViewModel @Inject constructor(
                     addHeroesUserCase.addHeroes(heroes)
                     appSharedPreferences.edit()
                         .putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time)
-                        .apply();
+                        .apply()
                     Log.e("DOHECO", "All heroes updated at:" + Date(System.currentTimeMillis()).time)
                     _heroesListState.postValue(
                         HomeState.LoadedHomeState(

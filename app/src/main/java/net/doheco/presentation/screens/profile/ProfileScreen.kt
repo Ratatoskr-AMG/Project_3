@@ -84,7 +84,6 @@ fun ProfileScreen(
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
 
-    val calendarDate = Calendar.getInstance()
     val playerTier = viewModel.getPlayerTierFromSP()
 
     val viewState = viewModel.profileState.observeAsState()
@@ -92,31 +91,6 @@ fun ProfileScreen(
     when (val state = viewState.value) {
 
         is ProfileState.UndefinedState -> {
-
-            //var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
-
-            /*
-            if (state.heroes_list_last_modified == "0"
-            ) {
-                heroesListLastModified = stringResource(id = R.string.wait)
-            }
-            if (state.heroes_list_last_modified == "1") {
-                heroesListLastModified = stringResource(id = R.string.time_block)
-            }
-            if (state.heroes_list_last_modified != "1" && state.heroes_list_last_modified != "0") {
-                calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
-                //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-                val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-                val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-                val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-                val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-                val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-                val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-                heroesListLastModified =
-                    "$day/$month/$year $hours:$minutes:$seconds"
-
-            }
-            */
 
             UndefinedProfileView(
                 state,
@@ -131,44 +105,6 @@ fun ProfileScreen(
 
         }
         is ProfileState.SteamNameIsDefinedState -> {
-
-            //var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
-
-            /*var heroes_list_last_modified = ""
-
-            if (state.heroes_list_last_modified == "0") {
-                heroesListLastModified = stringResource(id = R.string.wait)
-            }
-            if (state.heroes_list_last_modified == "1") {
-                heroesListLastModified = stringResource(id = R.string.time_block)
-            }
-
-            if ((state.heroes_list_last_modified != "1" && state.heroes_list_last_modified != "0") ) {
-
-                if(state.heroes_list_last_modified!="time") {
-                    calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
-                }
-                else{
-                    calendarDate.timeInMillis = 1.toLong()
-                }
-                //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-                val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-                val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-                val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-                val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-                val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-                val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-                heroesListLastModified =
-                    "$day/$month/$year $hours:$minutes:$seconds"
-
-                if(state.heroes_list_last_modified=="time"){
-                    appSharedPreferences.edit().putLong("heroes_list_last_modified", 1).apply()
-                    heroesListLastModified="time"
-                }
-
-            }
-
-             */
 
             DefinedBySteamProfileView(
                 state,

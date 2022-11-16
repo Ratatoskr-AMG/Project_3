@@ -108,9 +108,10 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="search">Enter hero name</string>
-    <string name="login_offer">To receive updated data, please, log in via Steam</string>
+    <string name="login_offer">To receive updated data more often, please, log in via Steam</string>
     <string name="update_time">"Data has been updated "</string>
-    <string name="time_block">You can update the data no more than once in a 10 sec</string>
+    <string name="time_block">You can update the data no more than once in a day</string>
+    <string name="time_block2">You can update the data no more than once in an hour</string>
     <string name="turbo_winrates_attr">Turbo winrate</string>
     <string name="_1_winrates_attr">Herald winrate</string>
     <string name="_2_winrates_attr">Guardian winrate</string>

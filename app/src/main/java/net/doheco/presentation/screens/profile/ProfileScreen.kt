@@ -29,48 +29,6 @@ import net.doheco.presentation.screens.profile.views.UndefinedProfileView
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun getAbbreviatedFromDateTime(dateTime: Calendar, field: String): String? {
-        val output = SimpleDateFormat(field)
-        try {
-            return output.format(dateTime.time)    // format output
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    return null
-}
-/*
-@Composable
-fun getUpdatingButtonText(calendarDate:Calendar, heroes_list_last_modified:String) : String{
-
-    var result = ""
-
-    if (heroes_list_last_modified == "0"
-    ) {
-        result = stringResource(id = R.string.wait)
-    }
-    if (heroes_list_last_modified == "1" || heroes_list_last_modified=="time") {
-        result = stringResource(id = R.string.time_block)
-    }
-    if (heroes_list_last_modified != "1" && heroes_list_last_modified != "0" && heroes_list_last_modified != "time") {
-        calendarDate.timeInMillis = heroes_list_last_modified.toLong()
-        //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-        val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-        val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-        val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-        val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-        val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-        val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-        var date = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
-        if(date=="01/01/1970 03:00:00"){
-            result = stringResource(id = R.string.wait)
-        }else{
-            result = stringResource(id = R.string.heroes_list_last_modified) + " (" + date + ")"
-        }
-    }
-    return result
-}
-*/
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
@@ -100,7 +58,7 @@ fun ProfileScreen(
                 dialogState = openDialog
 
             ) {
-                viewModel.obtainEvent(ProfileEvent.OnUpdate)
+                viewModel.obtainEvent(ProfileEvent.OnUndefinedProfileUpdate)
             }
 
         }
@@ -165,7 +123,10 @@ fun ProfileScreen(
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false }
+                        onClick = {
+                            viewModel.obtainEvent(ProfileEvent.OnSendFeedback(titleText,messageText))
+                            //openDialog.value = false
+                        }
                     ) {
                         Text(text = stringResource(id = R.string.send))
                     }

@@ -3,7 +3,10 @@ package net.doheco.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,11 +14,11 @@ import net.doheco.R
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesSortByNameUseCase
+import net.doheco.domain.useCases.user.*
 import net.doheco.domain.utils.EventHandler
+import net.doheco.domain.utils.GetResource
 import net.doheco.presentation.screens.profile.models.ProfileEvent
 import net.doheco.presentation.screens.profile.models.ProfileState
-import net.doheco.domain.useCases.user.*
-import net.doheco.domain.utils.GetResource
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -23,10 +26,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
+    private val getHeroesBaseLastModifiedFromSPUseCase: GetHeroesBaseLastModifiedFromSPUseCase,
     private val getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
     private val getPlayerSteamNameFromSPUseCase: GetPlayerSteamNameFromSPUseCase,
     private val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
-    private val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
+    private val sendFeedbackUseCase: SendFeedbackUseCase,
     private val getPlayerIdFromSP: GetPlayerIdFromSP,
     private val addHeroesUserCase: AddHeroesUserCase,
     private val getResource: GetResource,
@@ -34,56 +38,8 @@ class ProfileViewModel @Inject constructor(
 
     var appSharedPreferences = appSharedPreferences
 
-    var player_tier_from_sp = getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
-    var player_steam_name_from_sp =
-        getPlayerSteamNameFromSPUseCase.getPlayerSteamNameFromSP(appSharedPreferences)
-
-    var sp_heroes_list_last_modified =
-        appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
-
-    var btnText = getUpdateBtnText()
-
-    private val _profile_state: MutableLiveData<ProfileState> = getInitProfileState()
-
-    fun getUpdateBtnText(): String {
-
-        var updateStatus = "wait"
-        var result = ""
-
-        if (updateStatus == "wait") {
-            result = getResource.getString(id = R.string.wait)
-        }
-
-        if (updateStatus == "timeBlock") {
-            result = getResource.getString(id = R.string.time_block)
-        }
-
-        if (updateStatus != "timeBlock" && updateStatus != "wait") {
-
-            var simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss aaa z")
-            val currUpdateDate = appSharedPreferences.getLong("heroes_list_last_modified",0)
-            var formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
-
-            result =
-                getResource.getString(id = R.string.heroes_list_last_modified) + " (" + formatedDateTime + ")"
-        }
-
-        return result
-    }
-
-    fun getPlayerTierFromSP(): String {
-        return getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
-    }
-
-    fun getPlayerIdFromSP(): String {
-        return getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
-    }
-
-    fun getPlayerSteamNameFromSP(): String {
-        return getPlayerSteamNameFromSPUseCase.getPlayerSteamNameFromSP(appSharedPreferences)
-    }
-
-    val profileState: LiveData<ProfileState> = _profile_state
+    private val _profileState: MutableLiveData<ProfileState> = getInitProfileState()
+    val profileState: LiveData<ProfileState> = _profileState
 
     override fun obtainEvent(event: ProfileEvent) {
         when (profileState.value) {
@@ -96,163 +52,194 @@ class ProfileViewModel @Inject constructor(
     private fun reduce(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.OnSteamExit -> exitSteam()
-            is ProfileEvent.OnUpdate -> updateHeroes()
+            is ProfileEvent.OnUpdate -> updateHeroesByDefinedUser()
+            is ProfileEvent.OnUndefinedProfileUpdate -> updateHeroesByUndefinedUser()
+            is ProfileEvent.OnSendFeedback -> sendFeedback(event)
             else -> {}
         }
     }
 
     private fun getInitProfileState(): MutableLiveData<ProfileState> {
 
-        viewModelScope.launch(Dispatchers.IO) {
-            //TierHeroes
-            val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
-        }
-
-        var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
-        var playerSteamName =
-            appSharedPreferences.getString("player_steam_name", "undefined").toString()
-
-        if (playerSteamName != "undefined") {
+        if (getPlayerSteamNameFromSP() != "undefined") {
             return MutableLiveData<ProfileState>(
                 ProfileState.SteamNameIsDefinedState(
-                    sp_tier!!,
-                    playerSteamName,
-                    sp_heroes_list_last_modified,
-                    btnText
+                    getPlayerTierFromSP()!!,
+                    getPlayerSteamNameFromSP(),
+                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getUpdateBtnText()
                 )
             )
         } else {
             return MutableLiveData<ProfileState>(
                 ProfileState.UndefinedState(
-                    sp_tier!!,
-                    sp_heroes_list_last_modified,
-                    btnText
+                    getPlayerTierFromSP()!!,
+                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getUpdateBtnText()
                 )
             )
         }
     }
 
-    fun setSteamIsDefinedProfileState() {
-        //Log.e("TOHA", "setSteamIsDefinedProfileState")
-        try {
-            _profile_state.postValue(
-                ProfileState.SteamNameIsDefinedState(
-                    player_tier_from_sp,
-                    player_steam_name_from_sp,
-                    sp_heroes_list_last_modified!!,
-                    btnText
-                )
-            )
-        } catch (e: Exception) {
-            _profile_state.postValue(ProfileState.ErrorProfileState)
-        }
-    }
+    private fun updateHeroesByUndefinedUser() {
 
-    fun setUndefinedProfileState() {
-        Log.e("TOHA", "setUndefinedProfileState")
+        Log.e("TOHA.1", "updateHeroesByUndefinedUser")
+
+        appSharedPreferences.edit().putString("heroes_update_status", "wait").apply()
+
         try {
-            _profile_state.postValue(
+            _profileState.postValue(
                 ProfileState.UndefinedState(
-                    player_tier_from_sp, sp_heroes_list_last_modified!!,
-                    btnText
+                    getPlayerTierFromSP(),
+                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getUpdateBtnText()
                 )
             )
         } catch (e: Exception) {
-            _profile_state.postValue(ProfileState.ErrorProfileState)
+            _profileState.postValue(ProfileState.ErrorProfileState)
+        }
+
+        Log.e("TOHA.1", "sp_heroes_list_last_modified:"+getHeroesBaseLastModifiedFromSharedPreferences())
+        Log.e("TOHA.1", "curr_time:"+ Date(System.currentTimeMillis()).time)
+
+        var simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+        val currUpdateDate = appSharedPreferences.getLong("heroes_list_last_modified", 0)
+        var formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
+        val oldDate: Date = simpleDateFormat.parse(formatedDateTime)
+
+        var diff = Date(System.currentTimeMillis()).time - oldDate.time
+        val seconds: Long = diff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+
+        if (days < 1) {
+
+            appSharedPreferences.edit().putString("heroes_update_status", "time").apply()
+            try {
+                _profileState.postValue(
+                    ProfileState.UndefinedState(
+                        getPlayerTierFromSP(),
+                        getHeroesBaseLastModifiedFromSharedPreferences(),
+                        getUpdateBtnText()
+                    )
+                )
+            } catch (e: Exception) {
+                _profileState.postValue(ProfileState.ErrorProfileState)
+            }
+            appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
+
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    var heroes =
+                        getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("undefined")
+                    if (heroes!!.isEmpty()) {
+                        appSharedPreferences.edit().putString("heroes_update_status", "error")
+                            .apply()
+                        try {
+                            _profileState.postValue(
+                                ProfileState.UndefinedState(
+                                    getPlayerTierFromSP(),
+                                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                                    getUpdateBtnText()
+                                )
+                            )
+                        } catch (e: Exception) {
+                            _profileState.postValue(ProfileState.ErrorProfileState)
+                        }
+                    } else {
+                        var currTime = Date(System.currentTimeMillis()).time
+                        addHeroesUserCase.addHeroes(heroes)
+                        appSharedPreferences.edit().putLong("heroes_list_last_modified", currTime)
+                            .apply()
+                        appSharedPreferences.edit().putString("heroes_update_status", "updated")
+                            .apply()
+
+                        try {
+                            _profileState.postValue(
+                                ProfileState.UndefinedState(
+                                    getPlayerTierFromSP(),
+                                    currTime.toString(),
+                                    getUpdateBtnText()
+                                )
+                            )
+                        } catch (e: Exception) {
+                            _profileState.postValue(ProfileState.ErrorProfileState)
+                        }
+
+                    }
+                } catch (e: Exception) {
+                    _profileState.postValue(ProfileState.ErrorProfileState)
+                }
+            }
         }
     }
 
-    private fun updateHeroes() {
+    private fun updateHeroesByDefinedUser() {
+
+        appSharedPreferences.edit().putString("heroes_update_status", "wait").apply()
+
+        try {
+            _profileState.postValue(
+                ProfileState.SteamNameIsDefinedState(
+                    getPlayerTierFromSP(),
+                    getPlayerSteamNameFromSP(),
+                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getUpdateBtnText()
+                )
+            )
+        } catch (e: Exception) {
+            _profileState.postValue(ProfileState.ErrorProfileState)
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
 
             var player_id_from_sp = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
-            Log.e("TOHA", "player_id_from_sp:" + player_id_from_sp)
+
             if (player_id_from_sp != "undefined") {
-                Log.e("TOHAR", "Set Wait");
-                appSharedPreferences.edit().putLong("heroes_list_last_modified", 0).apply()
-                /*
-                if(player_steam_name_from_sp=="undefined"){
-                    try {
-                        _profile_state.postValue(
-                            ProfileState.UndefinedState(player_tier_from_sp, "0")
-                        )
-                    } catch (e: Exception) {
-                        _profile_state.postValue(ProfileState.ErrorProfileState)
-                    }
-                }
-                */
-                try {
-                    _profile_state.postValue(
-                        ProfileState.SteamNameIsDefinedState(
-                            player_tier_from_sp,
-                            getPlayerSteamNameFromSPUseCase.getPlayerSteamNameFromSP(
-                                appSharedPreferences
-                            ),
-                            "0",
-                            btnText
-                        )
-                    )
-
-                } catch (e: Exception) {
-                    _profile_state.postValue(ProfileState.ErrorProfileState)
-                }
-
-                Log.e("TOHAR", "Now updateHeroes");
-
                 try {
                     var heroes =
                         getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(player_id_from_sp)
                     if (heroes!!.isEmpty()) {
-                        Log.e("TOHAR", "isEmpty!")
-                        //appSharedPreferences.edit().putLong("heroes_list_last_modified", 1).apply()
+                        Log.e("TOHA.2", "isEmpty")
+                        appSharedPreferences.edit().putString("heroes_update_status", "time")
+                            .apply()
                         try {
-                            _profile_state.postValue(
+                            _profileState.postValue(
                                 ProfileState.SteamNameIsDefinedState(
-                                    player_tier_from_sp,
-                                    player_steam_name_from_sp,
+                                    getPlayerTierFromSP(),
+                                    getPlayerSteamNameFromSP(),
                                     "time",
-                                    btnText
+                                    getUpdateBtnText()
                                 )
                             )
-                            appSharedPreferences.edit().putLong("heroes_list_last_modified", 1)
-                                .apply()
+
                         } catch (e: Exception) {
-                            _profile_state.postValue(ProfileState.ErrorProfileState)
+                            _profileState.postValue(ProfileState.ErrorProfileState)
                         }
                     } else {
-                        Log.e("TOHAR", "!isEmpty!")
+                        Log.e("TOHA.2", "!isEmpty")
+                        appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
                         var currTime = Date(System.currentTimeMillis()).time
-                        appSharedPreferences.edit().putLong("heroes_list_last_modified", currTime)
+                        appSharedPreferences.edit()
+                            .putLong("heroes_list_last_modified", currTime)
                             .apply()
                         addHeroesUserCase.addHeroes(heroes)
-
-                        if (player_steam_name_from_sp == "undefined") {
                             try {
-                                _profile_state.postValue(
-                                    ProfileState.UndefinedState(
-                                        player_tier_from_sp, currTime.toString(),
-                                        btnText
-                                    )
-                                )
-                            } catch (e: Exception) {
-                                _profile_state.postValue(ProfileState.ErrorProfileState)
-                            }
-                        } else {
-                            try {
-                                _profile_state.postValue(
+                                _profileState.postValue(
                                     ProfileState.SteamNameIsDefinedState(
-                                        player_tier_from_sp,
-                                        player_steam_name_from_sp,
+                                        getPlayerTierFromSP(),
+                                        getPlayerSteamNameFromSP(),
                                         currTime.toString(),
-                                        btnText
+                                        getUpdateBtnText()
                                     )
                                 )
 
                             } catch (e: Exception) {
-                                _profile_state.postValue(ProfileState.ErrorProfileState)
+                                _profileState.postValue(ProfileState.ErrorProfileState)
                             }
-                        }
+
 
                     }
 
@@ -264,8 +251,54 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private fun getUpdateBtnText(): String {
+
+        var result = ""
+
+        var updateStatus =
+            appSharedPreferences.getString("heroes_update_status", "updated").toString()
+
+        if (updateStatus == "error") {
+            result = getResource.getString(id = R.string.error)
+        }
+
+        if (updateStatus == "wait") {
+            result = getResource.getString(id = R.string.wait)
+        }
+
+        if (updateStatus == "time") {
+            if (appSharedPreferences.getString("player_steam_name", "undefined").toString() == "undefined") {
+                result = getResource.getString(id = R.string.time_block)
+            }else{
+                result = getResource.getString(id = R.string.time_block2)
+            }
+        }
+
+        if (updateStatus == "updated") {
+
+            var simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+            val currUpdateDate = appSharedPreferences.getLong("heroes_list_last_modified", 0)
+            var formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
+
+            result =
+                getResource.getString(id = R.string.heroes_list_last_modified) + " (" + formatedDateTime + ")"
+        }
+
+        return result
+    }
+
+    private fun sendFeedback(event:ProfileEvent.OnSendFeedback){
+        var name = event.name
+        var text = event.text
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = sendFeedbackUseCase.sendFeedbackUseCase(name,text)
+            Log.e("TOHA","result:"+result)
+        }
+    }
+
     private fun exitSteam() {
 
+        appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
         var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
         appSharedPreferences.edit().putString("player_steam_name", "undefined")
             .apply();
@@ -279,17 +312,29 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _profile_state.postValue(
+                _profileState.postValue(
                     ProfileState.UndefinedState(
                         sp_tier!!, sp_heroes_list_last_modified!!,
-                        btnText
+                        getUpdateBtnText()
                     )
                 )
             } catch (e: Exception) {
-                _profile_state.postValue(ProfileState.ErrorProfileState)
+                _profileState.postValue(ProfileState.ErrorProfileState)
             }
             Log.e("TOHA", "exitSteam")
         }
+    }
+
+    fun getHeroesBaseLastModifiedFromSharedPreferences(): String {
+        return getHeroesBaseLastModifiedFromSPUseCase.getHeroesBaseLastModifiedFromSPUseCase(appSharedPreferences)
+    }
+
+    fun getPlayerTierFromSP(): String {
+        return getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
+    }
+
+    fun getPlayerSteamNameFromSP(): String {
+        return getPlayerSteamNameFromSPUseCase.getPlayerSteamNameFromSP(appSharedPreferences)
     }
 }
 

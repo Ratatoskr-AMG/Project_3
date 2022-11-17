@@ -88,19 +88,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun saveHeroImage(request: ImageRequest) {
-        viewModelScope.launch(Dispatchers.IO) {
-            imageLoader.execute(request)
-        }
-    }
 
-    fun getHeroImage(request: ImageRequest): ImageResult {
-        lateinit var imageres: ImageResult
-        viewModelScope.launch(Dispatchers.IO) {
-            imageres = imageLoader.execute(request)
-        }
-        return imageres
-    }
 
     private suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
 
@@ -118,7 +106,7 @@ class HomeViewModel @Inject constructor(
                     addHeroesUserCase.addHeroes(heroes)
                     appSharedPreferences.edit()
                         .putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time)
-                        .apply();
+                        .apply()
                     Log.e("DOHECO", "All heroes updated at:" + Date(System.currentTimeMillis()).time)
                     _heroesListState.postValue(
                         HomeState.LoadedHomeState(

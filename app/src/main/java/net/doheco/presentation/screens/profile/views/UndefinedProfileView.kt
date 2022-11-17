@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,15 +31,9 @@ fun UndefinedProfileView(
     navController: NavController,
     player_tier: String,
     dialogState: MutableState<Boolean>,
-    updatingDataButtonText: String,
     onReloadClick: () -> Unit
 ) {
-    var isUpdating = if(updatingDataButtonText=="01/01/1970 03:00:00") true else false
-    /*var updateText = if(isUpdating) {
-        stringResource(id = R.string.wait)
-    }else {
-        stringResource(id = R.string.heroes_list_last_modified) + " (" + updatingDataButtonText + ")";
-    }*/
+
     val scrollState = rememberForeverLazyListState(key = "Profile")
 
     Box(
@@ -86,23 +79,6 @@ fun UndefinedProfileView(
                 Divider(color = Color(0xFF0d111c))
             }
             item {
-                Box(
-                    modifier = Modifier
-                        .height(50.dp)
-                        .padding(start = 20.dp, end = 20.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Text(
-                        fontSize = 12.sp,
-                        color = Color.White,
-                        //text = stringResource(id = R.string.update_time) + " " + heroesListLastModified
-                        text = updatingDataButtonText
-                    )
-                }
-                Divider(color = Color(0xFF0d111c))
-            }
-            item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -126,6 +102,25 @@ fun UndefinedProfileView(
                     }
                 }
                 Divider(color = Color(0xFF0d111c), modifier = Modifier.padding(end = 20.dp, start = 20.dp))
+            }
+            item {
+                Box(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .padding(start = 20.dp, end = 20.dp)
+                        .fillMaxWidth()
+                        .clickable { onReloadClick() },
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        //text = stringResource(id = R.string.update_time) + " " + heroesListLastModified
+                        //text = updatingDataButtonText
+                        text = state.btnText
+                    )
+                }
+                Divider(color = Color(0xFF0d111c))
             }
             item {
                 Box(

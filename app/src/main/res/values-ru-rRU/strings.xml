@@ -111,7 +111,8 @@
     <string name="search">Введите имя героя</string>
     <string name="login_offer">Для обновления данных, пожалуйста, авторизуйтесь через Steam</string>
     <string name="update_time">Данные обновлялись</string>
-    <string name="time_block">Обновлять данные можно не чаще раз в 10 сек.</string>
+    <string name="time_block">Обновлять данные можно не чаще одного раза в день</string>
+    <string name="time_block2">Обновлять данные можно не чаще чем 1 раз в час</string>
     <string name="turbo_winrates_attr">Turbo коэф. побед</string>
     <string name="_1_winrates_attr">Рекрут коэф. побед</string>
     <string name="_2_winrates_attr">Страж коэф. побед</string>

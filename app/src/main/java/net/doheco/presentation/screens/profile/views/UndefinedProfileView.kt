@@ -101,7 +101,7 @@ fun UndefinedProfileView(
                         )
                     }
                 }
-                Divider(color = Color(0xFF0d111c), modifier = Modifier.padding(end = 20.dp, start = 20.dp))
+                Divider(color = Color(0xFF0d111c))
             }
             item {
                 Box(

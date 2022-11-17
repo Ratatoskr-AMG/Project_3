@@ -22,6 +22,10 @@ class AppUserRepoImpl @Inject constructor(
         return appSharedPreferences.getString("player_tier", "undefined").toString()
     }
 
+    fun getHeroesBaseLastModifiedFromSPUseCase(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
+    }
+
     fun getCurrentInfoBlockHeroPage(appSharedPreferences: SharedPreferences): String {
         return appSharedPreferences.getString("current_infoblock_hero", "Picks").toString()
     }
@@ -51,6 +55,16 @@ class AppUserRepoImpl @Inject constructor(
     fun setPlayerSteamNameToSP(appSharedPreferences: SharedPreferences, name: String) {
         appSharedPreferences.edit().putString("player_steam_name", name)
             .apply();
+    }
+
+    suspend fun sendFeedback(name: String,text: String): String {
+        val Url = "https://doheco.net/api/feedback/?name="+name+"&text="+text;
+
+        return try {
+            httpAppClient.get(Url)
+        } catch (e: Exception) {
+            error(e)
+        }
     }
 
     suspend fun getResponseFromOpenDota(steam_user_id: String): OpenDotaResponse {

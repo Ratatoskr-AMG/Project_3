@@ -29,47 +29,6 @@ import net.doheco.presentation.screens.profile.views.UndefinedProfileView
 import java.text.SimpleDateFormat
 import java.util.*
 
-    fun getAbbreviatedFromDateTime(dateTime: Calendar, field: String): String? {
-        val output = SimpleDateFormat(field)
-        try {
-            return output.format(dateTime.time)    // format output
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    return null
-}
-
-@Composable
-fun getUpdatingButtonText(calendarDate:Calendar, heroes_list_last_modified:String) : String{
-    var result = ""
-
-    if (heroes_list_last_modified == "0"
-    ) {
-        result = stringResource(id = R.string.wait)
-    }
-    if (heroes_list_last_modified == "1" || heroes_list_last_modified=="time") {
-        result = stringResource(id = R.string.time_block)
-    }
-    if (heroes_list_last_modified != "1" && heroes_list_last_modified != "0" && heroes_list_last_modified != "time") {
-        calendarDate.timeInMillis = heroes_list_last_modified.toLong()
-        //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-        val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-        val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-        val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-        val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-        val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-        val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-        var date = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds
-        if(date=="01/01/1970 03:00:00"){
-            result = stringResource(id = R.string.wait)
-        }else{
-            result = stringResource(id = R.string.heroes_list_last_modified) + " (" + date + ")"
-        }
-    }
-    return result
-}
-
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
@@ -83,7 +42,6 @@ fun ProfileScreen(
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
 
-    val calendarDate = Calendar.getInstance()
     val playerTier = viewModel.getPlayerTierFromSP()
 
     val viewState = viewModel.profileState.observeAsState()
@@ -92,88 +50,24 @@ fun ProfileScreen(
 
         is ProfileState.UndefinedState -> {
 
-            var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
-
-            /*
-            if (state.heroes_list_last_modified == "0"
-            ) {
-                heroesListLastModified = stringResource(id = R.string.wait)
-            }
-            if (state.heroes_list_last_modified == "1") {
-                heroesListLastModified = stringResource(id = R.string.time_block)
-            }
-            if (state.heroes_list_last_modified != "1" && state.heroes_list_last_modified != "0") {
-                calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
-                //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-                val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-                val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-                val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-                val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-                val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-                val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-                heroesListLastModified =
-                    "$day/$month/$year $hours:$minutes:$seconds"
-
-            }
-            */
-
             UndefinedProfileView(
                 state,
                 viewModel,
                 navController,
                 playerTier,
-                dialogState = openDialog,
-                updatingDataButtonText
+                dialogState = openDialog
+
             ) {
-                viewModel.obtainEvent(ProfileEvent.OnUpdate)
+                viewModel.obtainEvent(ProfileEvent.OnUndefinedProfileUpdate)
             }
 
         }
         is ProfileState.SteamNameIsDefinedState -> {
 
-            var updatingDataButtonText=getUpdatingButtonText(calendarDate,state.heroes_list_last_modified)
-
-            /*var heroes_list_last_modified = ""
-
-            if (state.heroes_list_last_modified == "0") {
-                heroesListLastModified = stringResource(id = R.string.wait)
-            }
-            if (state.heroes_list_last_modified == "1") {
-                heroesListLastModified = stringResource(id = R.string.time_block)
-            }
-
-            if ((state.heroes_list_last_modified != "1" && state.heroes_list_last_modified != "0") ) {
-
-                if(state.heroes_list_last_modified!="time") {
-                    calendarDate.timeInMillis = state.heroes_list_last_modified.toLong()
-                }
-                else{
-                    calendarDate.timeInMillis = 1.toLong()
-                }
-                //calendarDate.timeInMillis = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-                val month = getAbbreviatedFromDateTime(calendarDate, "MM");
-                val day = getAbbreviatedFromDateTime(calendarDate, "dd");
-                val year = getAbbreviatedFromDateTime(calendarDate, "YYYY");
-                val hours = getAbbreviatedFromDateTime(calendarDate, "HH");
-                val minutes = getAbbreviatedFromDateTime(calendarDate, "mm");
-                val seconds = getAbbreviatedFromDateTime(calendarDate, "ss");
-                heroesListLastModified =
-                    "$day/$month/$year $hours:$minutes:$seconds"
-
-                if(state.heroes_list_last_modified=="time"){
-                    appSharedPreferences.edit().putLong("heroes_list_last_modified", 1).apply()
-                    heroesListLastModified="time"
-                }
-
-            }
-
-             */
-
             DefinedBySteamProfileView(
                 state,
                 viewModel,
                 playerTier,
-                updatingDataButtonText,
                 navController,
                 dialogState = openDialog,
                 { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
@@ -186,14 +80,16 @@ fun ProfileScreen(
 
     if (openDialog.value) {
         AlertDialog(
+            modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {
                 openDialog.value = false
             },
-            backgroundColor = Color.Black,
+            backgroundColor = Color(0xFF131313),
             text = {
-                Column() {
-                    Text(text = stringResource(id = R.string.offer), color = Color.White)
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.offer), color = Color.White)
                     OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
                         value = titleText,
                         onValueChange = { titleText = it},
                         singleLine = true,
@@ -210,7 +106,7 @@ fun ProfileScreen(
                         value = messageText,
                         onValueChange = { messageText = it},
                         label = { Text(text = stringResource(id = R.string.message)) },
-                        modifier = Modifier.height(150.dp),
+                        modifier = Modifier.height(150.dp).fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             textColor = Color.White,
                             focusedBorderColor = Color.White,
@@ -227,7 +123,10 @@ fun ProfileScreen(
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false }
+                        onClick = {
+                            viewModel.obtainEvent(ProfileEvent.OnSendFeedback(titleText,messageText))
+                            //openDialog.value = false
+                        }
                     ) {
                         Text(text = stringResource(id = R.string.send))
                     }

@@ -1,7 +1,9 @@
 package net.doheco.presentation.screens
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +49,7 @@ fun ProfileScreen(
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
     val playerTier = viewModel.getPlayerTierFromSP()
 
     val viewState = viewModel.profileState.observeAsState()
@@ -93,9 +97,10 @@ fun ProfileScreen(
             text = {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        modifier = Modifier.fillMaxWidth(),text = stringResource(id = R.string.offer),
+                        text = stringResource(id = R.string.offer),
                         color = Color.White,
-                        modifier = Modifier.padding(bottom = 24.dp)
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(bottom = 24.dp),
                     )
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
@@ -134,7 +139,8 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             viewModel.obtainEvent(ProfileEvent.OnSendFeedback(titleText,messageText))
-                            //openDialog.value = false
+                            openDialog.value = false
+                            Toast.makeText(context, "Спасибо за отзыв", Toast.LENGTH_SHORT).show()
                         },
                         enabled = titleText.isNotEmpty() && messageText.isNotEmpty(),
                         colors = ButtonDefaults.buttonColors(

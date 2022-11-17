@@ -125,7 +125,7 @@
     <string name="close">Close</string>
     <string name="send">Send</string>
     <string name="message">Message</string>
-    <string name="title">Topic</string>
-    <string name="offer">Offer</string>
+    <string name="send_name">Name</string>
+    <string name="offer">Hello!\nThank you for using DoHeCo! If you have any comments, suggestions or any wishes for the application, please write to us about it!</string>
     <string name="send_offer">Submit an offer</string>
 </resources>

@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import net.doheco.R
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
-import net.doheco.domain.useCases.heroes.GetAllHeroesSortByNameUseCase
 import net.doheco.domain.useCases.user.*
 import net.doheco.domain.utils.EventHandler
 import net.doheco.domain.utils.GetResource
@@ -66,7 +65,7 @@ class ProfileViewModel @Inject constructor(
                 ProfileState.SteamNameIsDefinedState(
                     getPlayerTierFromSP()!!,
                     getPlayerSteamNameFromSP(),
-                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getHeroesBaseLastModifiedFromSP(),
                     getUpdateBtnText()
                 )
             )
@@ -74,7 +73,7 @@ class ProfileViewModel @Inject constructor(
             return MutableLiveData<ProfileState>(
                 ProfileState.UndefinedState(
                     getPlayerTierFromSP()!!,
-                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getHeroesBaseLastModifiedFromSP(),
                     getUpdateBtnText()
                 )
             )
@@ -91,7 +90,7 @@ class ProfileViewModel @Inject constructor(
             _profileState.postValue(
                 ProfileState.UndefinedState(
                     getPlayerTierFromSP(),
-                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getHeroesBaseLastModifiedFromSP(),
                     getUpdateBtnText()
                 )
             )
@@ -99,7 +98,7 @@ class ProfileViewModel @Inject constructor(
             _profileState.postValue(ProfileState.ErrorProfileState)
         }
 
-        Log.e("TOHA.1", "sp_heroes_list_last_modified:"+getHeroesBaseLastModifiedFromSharedPreferences())
+        Log.e("TOHA.1", "sp_heroes_list_last_modified:"+getHeroesBaseLastModifiedFromSP())
         Log.e("TOHA.1", "curr_time:"+ Date(System.currentTimeMillis()).time)
 
         var simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
@@ -120,7 +119,7 @@ class ProfileViewModel @Inject constructor(
                 _profileState.postValue(
                     ProfileState.UndefinedState(
                         getPlayerTierFromSP(),
-                        getHeroesBaseLastModifiedFromSharedPreferences(),
+                        getHeroesBaseLastModifiedFromSP(),
                         getUpdateBtnText()
                     )
                 )
@@ -141,7 +140,7 @@ class ProfileViewModel @Inject constructor(
                             _profileState.postValue(
                                 ProfileState.UndefinedState(
                                     getPlayerTierFromSP(),
-                                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                                    getHeroesBaseLastModifiedFromSP(),
                                     getUpdateBtnText()
                                 )
                             )
@@ -185,7 +184,7 @@ class ProfileViewModel @Inject constructor(
                 ProfileState.SteamNameIsDefinedState(
                     getPlayerTierFromSP(),
                     getPlayerSteamNameFromSP(),
-                    getHeroesBaseLastModifiedFromSharedPreferences(),
+                    getHeroesBaseLastModifiedFromSP(),
                     getUpdateBtnText()
                 )
             )
@@ -325,7 +324,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun getHeroesBaseLastModifiedFromSharedPreferences(): String {
+    fun getHeroesBaseLastModifiedFromSP(): String {
         return getHeroesBaseLastModifiedFromSPUseCase.getHeroesBaseLastModifiedFromSPUseCase(appSharedPreferences)
     }
 

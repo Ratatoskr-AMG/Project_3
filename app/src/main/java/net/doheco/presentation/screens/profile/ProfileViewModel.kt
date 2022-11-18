@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    appSharedPreferences: SharedPreferences,
+    private var appSharedPreferences: SharedPreferences,
     private val getHeroesBaseLastModifiedFromSPUseCase: GetHeroesBaseLastModifiedFromSPUseCase,
     private val getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
     private val getPlayerSteamNameFromSPUseCase: GetPlayerSteamNameFromSPUseCase,
@@ -33,9 +33,8 @@ class ProfileViewModel @Inject constructor(
     private val getPlayerIdFromSP: GetPlayerIdFromSP,
     private val addHeroesUserCase: AddHeroesUserCase,
     private val getResource: GetResource,
+    private val getAllMatchesUseCase: GetAllMatchesUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
-
-    var appSharedPreferences = appSharedPreferences
 
     private val _profileState: MutableLiveData<ProfileState> = getInitProfileState()
     val profileState: LiveData<ProfileState> = _profileState
@@ -101,12 +100,12 @@ class ProfileViewModel @Inject constructor(
         Log.e("TOHA.1", "sp_heroes_list_last_modified:"+getHeroesBaseLastModifiedFromSP())
         Log.e("TOHA.1", "curr_time:"+ Date(System.currentTimeMillis()).time)
 
-        var simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
         val currUpdateDate = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-        var formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
+        val formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
         val oldDate: Date = simpleDateFormat.parse(formatedDateTime)
 
-        var diff = Date(System.currentTimeMillis()).time - oldDate.time
+        val diff = Date(System.currentTimeMillis()).time - oldDate.time
         val seconds: Long = diff / 1000
         val minutes = seconds / 60
         val hours = minutes / 60
@@ -131,9 +130,9 @@ class ProfileViewModel @Inject constructor(
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    var heroes =
+                    val heroes =
                         getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("undefined")
-                    if (heroes!!.isEmpty()) {
+                    if (heroes.isEmpty()) {
                         appSharedPreferences.edit().putString("heroes_update_status", "error")
                             .apply()
                         try {
@@ -141,14 +140,14 @@ class ProfileViewModel @Inject constructor(
                                 ProfileState.UndefinedState(
                                     getPlayerTierFromSP(),
                                     getHeroesBaseLastModifiedFromSP(),
-                                    getUpdateBtnText()
+                                    getUpdateBtnText(),
                                 )
                             )
                         } catch (e: Exception) {
                             _profileState.postValue(ProfileState.ErrorProfileState)
                         }
                     } else {
-                        var currTime = Date(System.currentTimeMillis()).time
+                        val currTime = Date(System.currentTimeMillis()).time
                         addHeroesUserCase.addHeroes(heroes)
                         appSharedPreferences.edit().putLong("heroes_list_last_modified", currTime)
                             .apply()
@@ -194,13 +193,17 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            var player_id_from_sp = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
+            val playerIdFromSp = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
 
-            if (player_id_from_sp != "undefined") {
+            if (playerIdFromSp != "undefined") {
                 try {
-                    var heroes =
-                        getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(player_id_from_sp)
-                    if (heroes!!.isEmpty()) {
+                    /**
+                     * id подставил для теста, потом будем брать с SP
+                     */
+                    val matches = getAllMatchesUseCase.getMatches("205343070")
+                    val heroes =
+                        getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(playerIdFromSp)
+                    if (heroes.isEmpty()) {
                         Log.e("TOHA.2", "isEmpty")
                         appSharedPreferences.edit().putString("heroes_update_status", "time")
                             .apply()
@@ -210,17 +213,17 @@ class ProfileViewModel @Inject constructor(
                                     getPlayerTierFromSP(),
                                     getPlayerSteamNameFromSP(),
                                     "time",
-                                    getUpdateBtnText()
+                                    getUpdateBtnText(),
+                                    matches
                                 )
                             )
-
                         } catch (e: Exception) {
                             _profileState.postValue(ProfileState.ErrorProfileState)
                         }
                     } else {
                         Log.e("TOHA.2", "!isEmpty")
                         appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
-                        var currTime = Date(System.currentTimeMillis()).time
+                        val currTime = Date(System.currentTimeMillis()).time
                         appSharedPreferences.edit()
                             .putLong("heroes_list_last_modified", currTime)
                             .apply()
@@ -231,19 +234,17 @@ class ProfileViewModel @Inject constructor(
                                         getPlayerTierFromSP(),
                                         getPlayerSteamNameFromSP(),
                                         currTime.toString(),
-                                        getUpdateBtnText()
+                                        getUpdateBtnText(),
+                                        matches
                                     )
                                 )
-
                             } catch (e: Exception) {
                                 _profileState.postValue(ProfileState.ErrorProfileState)
                             }
-
-
                     }
 
                 } catch (e: java.lang.Exception) {
-                    Log.e("TOHA", "e:" + e.toString())
+                    Log.e("TOHA", "e:$e")
                     e.printStackTrace()
                 }
             }
@@ -254,7 +255,7 @@ class ProfileViewModel @Inject constructor(
 
         var result = ""
 
-        var updateStatus =
+        val updateStatus =
             appSharedPreferences.getString("heroes_update_status", "updated").toString()
 
         if (updateStatus == "error") {
@@ -266,54 +267,53 @@ class ProfileViewModel @Inject constructor(
         }
 
         if (updateStatus == "time") {
-            if (appSharedPreferences.getString("player_steam_name", "undefined").toString() == "undefined") {
-                result = getResource.getString(id = R.string.time_block)
+            result = if (appSharedPreferences.getString("player_steam_name", "undefined").toString() == "undefined") {
+                getResource.getString(id = R.string.time_block)
             }else{
-                result = getResource.getString(id = R.string.time_block2)
+                getResource.getString(id = R.string.time_block2)
             }
         }
 
         if (updateStatus == "updated") {
 
-            var simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
             val currUpdateDate = appSharedPreferences.getLong("heroes_list_last_modified", 0)
-            var formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
+            val formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
 
-            result =
-                getResource.getString(id = R.string.heroes_list_last_modified) + " (" + formatedDateTime + ")"
+            result = getResource.getString(id = R.string.heroes_list_last_modified) + " (" + formatedDateTime + ")"
         }
 
         return result
     }
 
     private fun sendFeedback(event:ProfileEvent.OnSendFeedback){
-        var name = event.name
-        var text = event.text
+        val name = event.name
+        val text = event.text
         viewModelScope.launch(Dispatchers.IO) {
-            var result = sendFeedbackUseCase.sendFeedbackUseCase(name,text)
-            Log.e("TOHA","result:"+result)
+            val result = sendFeedbackUseCase.sendFeedbackUseCase(name,text)
+            Log.e("TOHA", "result:$result")
         }
     }
 
     private fun exitSteam() {
 
         appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
-        var sp_tier = appSharedPreferences.getString("player_tier", "undefined")
+        val spTier = appSharedPreferences.getString("player_tier", "undefined")
         appSharedPreferences.edit().putString("player_steam_name", "undefined")
             .apply();
-        var steam_name_now =
+        val steamNameNow =
             appSharedPreferences.getString("player_steam_name", "undefined").toString()
 
-        Log.e("TOHA", "steam_name_now:" + steam_name_now)
+        Log.e("TOHA", "steam_name_now:$steamNameNow")
 
-        var sp_heroes_list_last_modified =
+        val spHeroesListLastModified =
             appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _profileState.postValue(
                     ProfileState.UndefinedState(
-                        sp_tier!!, sp_heroes_list_last_modified!!,
+                        spTier!!, spHeroesListLastModified!!,
                         getUpdateBtnText()
                     )
                 )
@@ -324,7 +324,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun getHeroesBaseLastModifiedFromSP(): String {
+    private fun getHeroesBaseLastModifiedFromSP(): String {
         return getHeroesBaseLastModifiedFromSPUseCase.getHeroesBaseLastModifiedFromSPUseCase(appSharedPreferences)
     }
 

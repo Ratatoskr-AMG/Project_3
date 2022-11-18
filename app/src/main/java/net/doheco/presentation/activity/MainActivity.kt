@@ -56,6 +56,7 @@ import net.doheco.presentation.screens.home.HomeViewModel
 import net.doheco.presentation.screens.home.models.HomeState
 import net.doheco.presentation.screens.recommendations.RecommendationsScreen
 import net.doheco.presentation.screens.recommendations.RecommendationsViewModel
+import net.doheco.presentation.screens.steam.SteamScreen
 import net.doheco.presentation.screens.video.VideoViewModel
 
 @AndroidEntryPoint

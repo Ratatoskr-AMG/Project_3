@@ -71,7 +71,6 @@ fun ProfileScreen(
 
         }
         is ProfileState.SteamNameIsDefinedState -> {
-
             DefinedBySteamProfileView(
                 state,
                 viewModel,
@@ -81,11 +80,9 @@ fun ProfileScreen(
                 { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
                 { viewModel.obtainEvent(ProfileEvent.OnUpdate) }
             )
-
         }
         else -> {}
     }
-
     if (openDialog.value) {
         AlertDialog(
             modifier = Modifier.fillMaxWidth(),
@@ -169,86 +166,4 @@ fun ProfileScreen(
             }
         )
     }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-fun Prew() {
-    val openDialog = remember { mutableStateOf(false) }
-    var titleText by remember { mutableStateOf("") }
-    var messageText by remember { mutableStateOf("") }
-    AlertDialog(
-        onDismissRequest = {
-            openDialog.value = false
-        },
-        backgroundColor = Color(0xFF131313),
-        shape = RoundedCornerShape(10.dp),
-        text = {
-            Column() {
-                Text(
-                    text = stringResource(id = R.string.offer),
-                    color = Color.White,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-                OutlinedTextField(
-                    value = titleText,
-                    onValueChange = { titleText = it},
-                    singleLine = true,
-                    label = { Text(text = stringResource(id = R.string.send_name))},
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.White,
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.White,
-                        focusedLabelColor = Color.White,
-                        unfocusedLabelColor = Color.White
-                    )
-                )
-                OutlinedTextField(
-                    value = messageText,
-                    onValueChange = { messageText = it},
-                    label = { Text(text = stringResource(id = R.string.message)) },
-                    modifier = Modifier.height(150.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.White,
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.White,
-                        focusedLabelColor = Color.White,
-                        unfocusedLabelColor = Color.White
-                    )
-                )
-            }
-        },
-        buttons = {
-            Column(
-                modifier = Modifier.padding(horizontal = 24.dp),
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { openDialog.value = false },
-                    enabled = titleText.isNotEmpty() && messageText.isNotEmpty(),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF00821d),
-                        disabledBackgroundColor = Color(0xFF6a36a3),
-                        contentColor = Color.White,
-                        disabledContentColor = Color.White
-                    )
-                ) {
-                    Text(text = stringResource(id = R.string.send))
-                }
-                OutlinedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 26.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color.White,
-                        backgroundColor = Color(0xFF131313)
-                    ),
-                    onClick = { openDialog.value = false }
-                ) {
-                    Text(text = stringResource(id = R.string.close))
-                }
-            }
-        }
-    )
 }

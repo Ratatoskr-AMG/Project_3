@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -19,6 +20,7 @@ import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileState
+
 
 @ExperimentalFoundationApi
 @Composable
@@ -142,6 +144,15 @@ fun DefinedBySteamProfileView(
                 }
                 Divider(color = Color(0xFF0d111c))
             }
+           if (state.matchesList != null) {
+               items(state.matchesList!!) { item ->
+                   Text(
+                       text = item.matchId.toString(),
+                       color =  Color.White,
+                       modifier = Modifier.padding(20.dp)
+                   )
+               }
+           }
         }
     }
 }

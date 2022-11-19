@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import net.doheco.data.contracts.HeroesContract
 import net.doheco.data.dao.FavoritesDao
 import net.doheco.data.dao.HeroesDao
+import net.doheco.data.dao.MatchDao
 import net.doheco.data.dao.RoomAppDatabase
 import javax.inject.Singleton
 
@@ -33,11 +34,15 @@ class RoomModule {
     fun provideHeroesDao(db: RoomAppDatabase): HeroesDao {
         return db.heroesDao()
     }
-
     @Provides
     @Singleton
     fun provideFavoriteDao(db: RoomAppDatabase): FavoritesDao {
         return db.favoritesDao()
+    }
+    @Provides
+    @Singleton
+    fun provideMatchDao(db: RoomAppDatabase): MatchDao {
+        return db.matchDao()
     }
 
 }

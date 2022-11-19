@@ -3,7 +3,10 @@ package net.doheco.domain.repository
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
+import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.data.dao.HeroesDao
+import net.doheco.data.dao.MatchDao
+import net.doheco.domain.model.DotaMatch
 import net.doheco.domain.model.Hero
 import net.doheco.domain.model.opendota.OpenDotaMatch
 import javax.inject.Inject
@@ -11,7 +14,8 @@ import kotlin.Exception
 
 class HeroesRepoImpl @Inject constructor(
     private val dao: HeroesDao,
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val matchDao: MatchDao
 ) {
     fun getAllHeroesList(): List<Hero> {
         return dao.all
@@ -59,15 +63,39 @@ class HeroesRepoImpl @Inject constructor(
         }
     }
 
-    suspend fun getMatchesFormApi(steamId: String): List<OpenDotaMatch> {
+    suspend fun getMatchesFormApi(steamId: String): List<DotaMatch> {
         val url = "https://api.opendota.com/api/players/$steamId/matches"
         try {
-            return client.get(url)
+
+            val fromDb = matchDao.getAll()
+
+            if (fromDb.isEmpty()) {
+                val fromApi: List<OpenDotaMatch> = client.get(url)
+                val newList = fromApi.map { DotaMatchesConverter.doForward(it) }
+                matchDao.insertAll(newList)
+            }
+
+            return matchDao.getAll()
         } catch (e: Exception) {
             error(e)
         }
     }
 
+    suspend fun addToDb(list: List<DotaMatch>) {
+        matchDao.insertAll(list)
+    }
+
+    suspend fun getFromDb(): List<DotaMatch> {
+        return matchDao.getAll()
+    }
+
+    suspend fun getFromDbInId(id: Long): DotaMatch {
+        return matchDao.getFromId(id)
+    }
+
+    suspend fun deleteAllMatchesFromDb() {
+        matchDao.deleteAll()
+    }
 }
 
 

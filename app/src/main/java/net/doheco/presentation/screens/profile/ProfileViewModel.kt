@@ -36,7 +36,7 @@ class ProfileViewModel @Inject constructor(
     private val getAllMatchesUseCase: GetAllMatchesUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
-    private val _profileState: MutableLiveData<ProfileState> = getInitProfileState()
+    private val _profileState: MutableLiveData<ProfileState> = MutableLiveData()
     val profileState: LiveData<ProfileState> = _profileState
 
     override fun obtainEvent(event: ProfileEvent) {
@@ -45,6 +45,10 @@ class ProfileViewModel @Inject constructor(
             is ProfileState.SteamNameIsDefinedState -> reduce(event)
             else -> {}
         }
+    }
+
+    init {
+        getInitProfileState()
     }
 
     private fun reduce(event: ProfileEvent) {
@@ -57,25 +61,28 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun getInitProfileState(): MutableLiveData<ProfileState> {
-
-        if (getPlayerSteamNameFromSP() != "undefined") {
-            return MutableLiveData<ProfileState>(
-                ProfileState.SteamNameIsDefinedState(
-                    getPlayerTierFromSP()!!,
-                    getPlayerSteamNameFromSP(),
-                    getHeroesBaseLastModifiedFromSP(),
-                    getUpdateBtnText()
+    private fun getInitProfileState() {
+        viewModelScope.launch {
+            val matches = getAllMatchesUseCase.getMatches("205343070")
+            if (getPlayerSteamNameFromSP() != "undefined") {
+                _profileState.postValue(
+                    ProfileState.SteamNameIsDefinedState(
+                        getPlayerTierFromSP()!!,
+                        getPlayerSteamNameFromSP(),
+                        getHeroesBaseLastModifiedFromSP(),
+                        getUpdateBtnText(),
+                        matches
+                    )
                 )
-            )
-        } else {
-            return MutableLiveData<ProfileState>(
-                ProfileState.UndefinedState(
-                    getPlayerTierFromSP()!!,
-                    getHeroesBaseLastModifiedFromSP(),
-                    getUpdateBtnText()
+            } else {
+                _profileState.postValue(
+                    ProfileState.UndefinedState(
+                        getPlayerTierFromSP()!!,
+                        getHeroesBaseLastModifiedFromSP(),
+                        getUpdateBtnText()
+                    )
                 )
-            )
+            }
         }
     }
 

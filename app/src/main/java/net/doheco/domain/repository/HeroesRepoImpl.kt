@@ -3,7 +3,6 @@ package net.doheco.domain.repository
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
-import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.data.dao.HeroesDao
 import net.doheco.data.dao.MatchDao
 import net.doheco.domain.model.DotaMatch
@@ -21,11 +20,11 @@ class HeroesRepoImpl @Inject constructor(
         return dao.all
     }
 
-    suspend fun getAllHeroesListByStr(str:String): List<Hero> {
-        if(str!="") {
-            return dao.fetchHeroesByStr("$str%")
-        }else{
-            return dao.all
+    suspend fun getAllHeroesListByStr(str: String): List<Hero> {
+        return if (str != "") {
+            dao.fetchHeroesByStr("$str%")
+        } else {
+            dao.all
         }
     }
 
@@ -41,20 +40,21 @@ class HeroesRepoImpl @Inject constructor(
                 dao.insertHero(Hero)
             } catch (e: Exception) {
                 Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
-            }finally{
+            } finally {
                 Log.e("TOHA", "updateSqliteTable")
             }
         }
     }
 
-    suspend fun getAllHeroesListFromAPI(steamId:String): List<Hero> {
+    suspend fun getAllHeroesListFromAPI(steamId: String): List<Hero> {
         //val URL = "https://api.opendota.com/api/heroStats/";
         //val URL = "https://api.opendota.com/api/players/{account_id}/recentMatches";
-        val URL = "https://doheco.net/api/heroStats/?id="+steamId+"&r="+(1000000..9999999999).random();
+        val URL =
+            "https://doheco.net/api/heroStats/?id=" + steamId + "&r=" + (1000000..9999999999).random();
 
         try {
-            val result : List<Hero> = client.get(URL)
-            Log.e("TOHA", "client.get(URL)"+client.get(URL))
+            val result: List<Hero> = client.get(URL)
+            Log.e("TOHA", "client.get(URL)" + client.get(URL))
             Log.e("TOHA", "client.get(URL)result$result")
             return result
         } catch (e: Exception) {
@@ -63,19 +63,10 @@ class HeroesRepoImpl @Inject constructor(
         }
     }
 
-    suspend fun getMatchesFormApi(steamId: String): List<DotaMatch> {
+    suspend fun getMatchesFormApi(steamId: String): List<OpenDotaMatch> {
         val url = "https://api.opendota.com/api/players/$steamId/matches"
         try {
-
-            val fromDb = matchDao.getAll()
-
-            if (fromDb.isEmpty()) {
-                val fromApi: List<OpenDotaMatch> = client.get(url)
-                val newList = fromApi.map { DotaMatchesConverter.doForward(it) }
-                matchDao.insertAll(newList)
-            }
-
-            return matchDao.getAll()
+            return client.get(url)
         } catch (e: Exception) {
             error(e)
         }

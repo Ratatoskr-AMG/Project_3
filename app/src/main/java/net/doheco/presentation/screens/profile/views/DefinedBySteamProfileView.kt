@@ -1,17 +1,26 @@
 package net.doheco.presentation.screens.profile.views
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -19,6 +28,8 @@ import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileState
+import net.doheco.presentation.theme.loadPicture
+
 
 @ExperimentalFoundationApi
 @Composable
@@ -123,7 +134,7 @@ fun DefinedBySteamProfileView(
                         .height(50.dp)
                         .clickable {
                             //if(!isUpdating) {
-                                onReloadClick()
+                            onReloadClick()
                             //}
                         }
                 ) {
@@ -141,6 +152,100 @@ fun DefinedBySteamProfileView(
 
                 }
                 Divider(color = Color(0xFF0d111c))
+            }
+            if (state.matchesList != null) {
+                items(state.matchesList!!) { item ->
+                    var bgColor = Color(0xFF7E0000)
+                    if (item.radiantWin!! && item.playerSlot!! < 127) {
+                        bgColor = Color(0xFF007E00)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, end = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxHeight(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+
+
+                            Image(
+                                contentDescription = item.matchId.toString(),
+                                painter = loadPicture(
+                                    url = item.heroIcon,
+                                    placeholder = painterResource(id = R.drawable.ic_comparing_gr)
+                                ),
+                                modifier = Modifier
+                                    .width(60.dp)
+                                    .height(35.dp)
+                                    .padding(top = 5.dp, bottom = 5.dp, end=15.dp)
+
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .background(bgColor)
+                            )
+
+                            Text(
+                                text = item.startTimeFormatted,
+                                color = Color.White,
+                                modifier = Modifier.padding(start = 15.dp)
+                            )
+                            Text(
+                                text = item.durationFormatted,
+                                color = Color.White,
+                                modifier = Modifier.padding(start = 15.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxHeight(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Box(modifier = Modifier.width(40.dp)) {
+
+                                Text(
+                                    text = item.kills.toString(),
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.align(Center)
+                                )
+                            }
+                            Box(modifier = Modifier.width(40.dp)) {
+
+                                Text(
+                                    text = item.deaths.toString(),
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.align(Center)
+                                )
+                            }
+                            Box(
+                                modifier = Modifier.width(40.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+
+                                Text(
+                                    text = item.assists.toString(),
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.align(Center)
+                                )
+                            }
+                        }
+                    }
+
+
+                }
             }
         }
     }

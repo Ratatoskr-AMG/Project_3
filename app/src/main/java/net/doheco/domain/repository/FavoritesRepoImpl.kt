@@ -1,23 +1,21 @@
 package net.doheco.domain.repository
 
 import android.util.Log
-import net.doheco.data.dao.RoomAppDatabase
+import net.doheco.data.dao.FavoritesDao
 import net.doheco.domain.model.Favorites
 import java.lang.Exception
 import javax.inject.Inject
 
 class FavoritesRepoImpl @Inject constructor(
-    private val roomAppDatabase: RoomAppDatabase,
+    private val dao: FavoritesDao,
 ) {
-
     suspend fun dropHeroFromFavorites(heroId: Int){
-        roomAppDatabase.favoritesDao().dropFavorite(heroId!!)
+        dao.dropFavorite(heroId)
     }
-
     suspend fun addHeroToFavoritesById(heroId: Int) {
         try {
             Log.e("TOHA", "addHeroToFavoritesById " + heroId)
-            roomAppDatabase.favoritesDao().insertFavorites(Favorites(null,heroId))
+            dao.insertFavorites(Favorites(null,heroId))
         } catch (e: Exception) {
             Log.e(
                 "TOHA",
@@ -25,16 +23,11 @@ class FavoritesRepoImpl @Inject constructor(
             )
         }
     }
-
     fun getAllFavorites(): List<Favorites> {
-
-        return roomAppDatabase.favoritesDao().all
-
+        return dao.all
     }
 
     suspend fun getIfHeroIsFavoriteById(heroId: Int): Boolean {
-
-        return roomAppDatabase.favoritesDao().fetchHeroId(heroId)!=null
-
+        return dao.fetchHeroId(heroId)!=null
     }
 }

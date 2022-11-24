@@ -56,6 +56,7 @@ import net.doheco.presentation.screens.home.HomeViewModel
 import net.doheco.presentation.screens.home.models.HomeState
 import net.doheco.presentation.screens.recommendations.RecommendationsScreen
 import net.doheco.presentation.screens.recommendations.RecommendationsViewModel
+import net.doheco.presentation.screens.steam.SteamScreen
 import net.doheco.presentation.screens.video.VideoViewModel
 
 @AndroidEntryPoint
@@ -172,7 +173,7 @@ class MainActivity() : AppCompatActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Screens.Home.route,
-                        modifier = Modifier.padding(it)
+                        modifier = Modifier.padding(it).background(Color.Black)
                     ) {
                         composable(Screens.Home.route) {
                            // val heroesListviewModel = hiltViewModel<HomeViewModel>()

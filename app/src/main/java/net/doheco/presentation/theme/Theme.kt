@@ -36,6 +36,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import net.doheco.R
 
 private val DarkColorPalette = darkColors(
     primary = BlackFull,
@@ -233,7 +234,7 @@ fun BGBox(content: @Composable () -> Unit) {
 @Composable
 fun MessageView(text: String) {
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -243,12 +244,15 @@ fun MessageView(text: String) {
                         Color(0x00000039)
                     )
                 )
-            )
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            textAlign = TextAlign.Center,
             text = text,
-            color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 14.sp
+            color = Color.White,
+            modifier = Modifier.padding(start = 50.dp, end = 50.dp ),
+            textAlign = TextAlign.Center
         )
     }
 }

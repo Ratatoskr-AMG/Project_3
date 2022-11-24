@@ -66,13 +66,12 @@ fun HeroScreen(
                             scrollState
                         )
                     )
-
                 },
                 navController,
                 scrollState
             )
         }
-        is HeroState.NoHeroState -> MessageView(stringResource(id = R.string.hero_not_found))
+        is HeroState.NoHeroState -> MessageView(stringResource(id = R.string.error_connection))
         is HeroState.LoadingHeroState -> LoadingView(stringResource(id = R.string.loading))
         is HeroState.ErrorHeroState -> MessageView(stringResource(id = R.string.error))
     }

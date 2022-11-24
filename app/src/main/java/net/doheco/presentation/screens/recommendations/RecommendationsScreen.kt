@@ -11,6 +11,7 @@ import net.doheco.presentation.base.Screens
 import net.doheco.presentation.screens.recommendations.models.RecommendationsState
 import net.doheco.presentation.screens.recommendations.views.RecommendationsView
 import net.doheco.presentation.theme.LoadingView
+import net.doheco.presentation.theme.MessageView
 
 
 @ExperimentalFoundationApi
@@ -30,7 +31,7 @@ fun RecommendationsScreen(
             { navController.navigate(Screens.Tier.route) },
             widthSizeClass
         )
-        is RecommendationsState.LoadingRecommendationsState -> LoadingView(stringResource(id = R.string.loading))
+        is RecommendationsState.LoadingRecommendationsState -> MessageView(stringResource(id = R.string.error_connection))
         else -> {}
     }
 

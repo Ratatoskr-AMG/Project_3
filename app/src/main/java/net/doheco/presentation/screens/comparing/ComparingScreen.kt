@@ -2,9 +2,22 @@ package net.doheco.presentation.screens.comparing
 
 import android.util.Log
 import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import net.doheco.R
 import net.doheco.presentation.screens.comparing.models.ComparingEvent
 import net.doheco.presentation.screens.comparing.models.ComparingState
 import net.doheco.presentation.screens.comparing.views.ComparingView
@@ -68,7 +81,21 @@ fun ComparingScreen(
         }
         is ComparingState.LoadingState -> {
             Log.e("TOHAht", "LoadingState")
-        }
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+
+                        text = stringResource(id = R.string.error_connection),
+                        color = Color.White,
+                        modifier = Modifier.padding(start = 50.dp, end = 50.dp ),
+                        textAlign = TextAlign.Center
+                    )
+                }
+         }
     }
 
     LaunchedEffect(key1 = Unit, block = {

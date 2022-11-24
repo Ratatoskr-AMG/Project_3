@@ -16,27 +16,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SteamViewModel @Inject constructor(
-    appSharedPreferences: SharedPreferences,
+    private var appSharedPreferences: SharedPreferences,
     private val getSteamUserUseCase: GetSteamUserUseCase,
     private val getOpenDotaUserUseCase: GetOpenDotaUserUseCase,
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase,
     private val getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
-    setPlayerTierToSPUseCase: SetPlayerTierToSPUseCase,
-    setPlayerSteamNameToSPUseCase: SetPlayerSteamNameToSPUseCase
+    private var setPlayerTierToSPUseCase: SetPlayerTierToSPUseCase,
+    private var setPlayerSteamNameToSPUseCase: SetPlayerSteamNameToSPUseCase
 ) : AndroidViewModel(Application()), EventHandler<SteamEvent> {
 
-    var appSharedPreferences = appSharedPreferences
-    var setPlayerTierToSPUseCase = setPlayerTierToSPUseCase
-    var setPlayerSteamNameToSPUseCase = setPlayerSteamNameToSPUseCase
-    private val player_tier_from_sp =
+    private val playerTierFromSp =
         getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
 
-    private val _steam_state: MutableLiveData<SteamState> =
+    private val _steamState: MutableLiveData<SteamState> =
         MutableLiveData<SteamState>(
-            SteamState.IndefinedState(player_tier_from_sp)
+            SteamState.IndefinedState(playerTierFromSp)
         )
 
-    val steamState: LiveData<SteamState> = _steam_state
+    val steamState: LiveData<SteamState> = _steamState
 
     fun getPlayerTierFromSP(): String {
         return getPlayerTierFromSPUseCase.getPlayerTierFromSP(appSharedPreferences)
@@ -45,11 +42,10 @@ class SteamViewModel @Inject constructor(
     private fun getResponseFromOpenDota(steam_user_id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var dbResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steam_user_id)
-
             try {
 
             } catch (e: Exception) {
-                Log.e("TOHA", "getResponseFromOpenDota e:" + e.toString())
+                Log.e("TOHA", "getResponseFromOpenDota e:$e")
             } finally {
 
             }
@@ -60,49 +56,41 @@ class SteamViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            var dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
+            val dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
+            Log.e("TOHADOTA",dotaBuffResponse)
             val index = dotaBuffResponse.lastIndexOf("https://www.dotabuff.com/players/")
             val part = dotaBuffResponse.substring(index)
             val addr = part.substringBefore('"')
             val index2 = addr.lastIndexOf('/')
-            var player_id = addr.substring(index2 + 1)
-            var openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(player_id)
+            val playerId = addr.substring(index2 + 1)
+            val openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(playerId)
 
-            if (openDotaResponse.rank_tier != null) {
-                var rank_tier = openDotaResponse.rank_tier.toString()
-                appSharedPreferences.edit().putString("player_tier", rank_tier).apply()
-                appSharedPreferences.edit().putString("player_id", player_id).apply()
+            val rankTier = openDotaResponse.rank_tier
+            appSharedPreferences.edit().putString("player_tier", rankTier).apply()
+            appSharedPreferences.edit().putString("player_id", playerId).apply()
 
-            } else {
-                appSharedPreferences.edit().putString("player_tier", "undefined")
-                    .apply();
-            }
-
-            var sp_tier = appSharedPreferences.getString("player_tier", "undefined").toString()
-            var sp_heroes_list_last_modified =
+            val spTier = appSharedPreferences.getString("player_tier", "undefined").toString()
+            val spHeroesListLastModified =
                 appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
             try {
-                if (player.steamid != "") {
-
+                if (player.steamid.isNotBlank()) {
                     setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(appSharedPreferences,player.personaname!!)
-                    setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,sp_tier)
+                    setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,spTier)
 
-                    _steam_state.postValue(
+                    _steamState.postValue(
                         SteamState.LoggedIntoSteam(
                             player.steamid,
                             player.avatarmedium!!,
                             player.personaname!!,
-                            sp_tier,
-                            sp_heroes_list_last_modified!!
+                            spTier,
+                            spHeroesListLastModified
                         )
                     )
                 }
             } catch (e: Exception) {
-                _steam_state.postValue(SteamState.ErrorSteamState)
+                _steamState.postValue(SteamState.ErrorSteamState)
             }
-
-
         }
     }
 
@@ -123,20 +111,16 @@ class SteamViewModel @Inject constructor(
 
     private fun loginWithSteam(event: SteamEvent.OnSteamLogin) {
 
-        val user_id = event.steam_user_id
+        val userId = event.steam_user_id
 
         viewModelScope.launch(Dispatchers.IO) {
-
-            var steamResponse = getSteamUserUseCase.getSteamResponseOnId(user_id)
-            var player = steamResponse.response.players[0]
-            player.steamid = user_id
+            val steamResponse = getSteamUserUseCase.getSteamResponseOnId(userId)
+            val player = steamResponse.response.players[0]
+            player.steamid = userId
             getResponseFromOpenDota(player.steamid)
             getResponseFromDotaBuff(player)
-
         }
-
     }
-
 }
 
 

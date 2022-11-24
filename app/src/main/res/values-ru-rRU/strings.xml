@@ -9,7 +9,7 @@
     <string name="role_string">Роль</string>
     <string name="title_attr">Атрибут</string>
     <string name="loading">Загрузка...</string>
-    <string name="heroes_not_found">Герои не найдены...</string>
+    <string name="heroes_not_found">Пожалуйста, добавьте в избранное хотя бы одного героя.</string>
     <string name="error">Ошибка!</string>
     <string name="carry_role">Керри</string>
     <string name="escape_role">Побег</string>
@@ -129,4 +129,5 @@
     <string name="send_name">Имя</string>
     <string name="offer">Привет!\nБлагодарим вас за использование DoHeCo! Если у вас есть замечания, предложения или какие-либо пожелания к работе приложения, пожалуйста, напишите нам об этом!</string>
     <string name="send_offer">Отправить предложение</string>
+    <string name="error_connection">Локальная база данных пуста. Пожалуйста, проверьте подключение к интернету или попробуйте зайти позже.</string>
 </resources>

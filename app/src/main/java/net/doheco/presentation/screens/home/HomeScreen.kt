@@ -44,7 +44,7 @@ fun HomeScreen(
         }
         is HomeState.NoHomeState -> {
             Log.e("TOHARUS", "NoHomeState")
-            MessageView(stringResource(id = R.string.heroes_not_found))
+            MessageView(stringResource(id = R.string.error_connection))
         }
         is HomeState.LoadingHomeState -> {
             Log.e("TOHARUS", "LoadingHomeState")

@@ -8,7 +8,7 @@
     <string name="role_string">Role</string>
     <string name="title_attr">Attr</string>
     <string name="loading">Loading...</string>
-    <string name="heroes_not_found">Heroes not found...</string>
+    <string name="heroes_not_found">Please add at least one hero to your favorites</string>
     <string name="error">Error!</string>
     <string name="carry_role">Carry</string>
     <string name="escape_role">Escape</string>
@@ -128,4 +128,5 @@
     <string name="send_name">Name</string>
     <string name="offer">Hello!\nThank you for using DoHeCo! If you have any comments, suggestions or any wishes for the application, please write to us about it!</string>
     <string name="send_offer">Submit an offer</string>
+    <string name="error_connection">The local database is empty. Please check your internet connection or try again later.</string>
 </resources>

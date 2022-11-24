@@ -173,7 +173,7 @@ class MainActivity() : AppCompatActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Screens.Home.route,
-                        modifier = Modifier.padding(it)
+                        modifier = Modifier.padding(it).background(Color.Black)
                     ) {
                         composable(Screens.Home.route) {
                            // val heroesListviewModel = hiltViewModel<HomeViewModel>()

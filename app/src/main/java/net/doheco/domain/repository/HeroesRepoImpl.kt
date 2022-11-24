@@ -68,7 +68,7 @@ class HeroesRepoImpl @Inject constructor(
     }
 
     suspend fun getMatchesFormApi(steamId: String): List<OpenDotaMatch> {
-        val url = "https://api.opendota.com/api/players/$steamId/matches"
+        val url = "https://api.opendota.com/api/players/$steamId/matches?limit=50"
         try {
             return client.get(url)
         } catch (e: Exception) {

@@ -39,4 +39,10 @@ data class DotaMatch(
     val startTime: Long?,
     @SerializedName("version")
     val version: Long?,
+    @SerializedName("heroIcon")
+    val heroIcon: String,
+    @SerializedName("start_time_formatted")
+    val startTimeFormatted: String,
+    @SerializedName("duration_formatted")
+    val durationFormatted: String,
 )

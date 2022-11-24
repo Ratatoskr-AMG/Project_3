@@ -52,12 +52,16 @@ class HeroesRepoImpl @Inject constructor(
         val URL =
             "https://doheco.net/api/heroStats/?id=" + steamId + "&r=" + (1000000..9999999999).random();
 
+        Log.e("TOHA","URL:"+URL)
+
         try {
             val result: List<Hero> = client.get(URL)
             Log.e("TOHA", "client.get(URL)" + client.get(URL))
             Log.e("TOHA", "client.get(URL)result$result")
+            Log.e("TOHA","URL:norm")
             return result
         } catch (e: Exception) {
+            Log.e("TOHA","URL:error")
             error(e)
             return emptyList()
         }

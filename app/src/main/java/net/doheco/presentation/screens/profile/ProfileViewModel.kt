@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import net.doheco.R
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
+import net.doheco.domain.useCases.heroes.GetHeroByIdUseCase
 import net.doheco.domain.useCases.user.*
 import net.doheco.domain.utils.EventHandler
 import net.doheco.domain.utils.GetResource
@@ -33,7 +34,8 @@ class ProfileViewModel @Inject constructor(
     private val getPlayerIdFromSP: GetPlayerIdFromSP,
     private val addHeroesUserCase: AddHeroesUserCase,
     private val getResource: GetResource,
-    private val matchesUseCase: MatchesUseCase
+    private val matchesUseCase: MatchesUseCase,
+    private val getHeroByIduseCase: GetHeroByIdUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
     private val _profileState: MutableLiveData<ProfileState> = MutableLiveData()
@@ -207,7 +209,7 @@ class ProfileViewModel @Inject constructor(
                     /**
                      * id подставил для теста, потом будем брать с SP
                      */
-                    val matches = matchesUseCase.getMatches("205343070")
+                    val matches = matchesUseCase.getMatches("205343070",getHeroByIduseCase)
                     matchesUseCase.updateFromDb(matches)
                     val matchesFromDb = matchesUseCase.getFromDb()
                     val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(playerIdFromSp)

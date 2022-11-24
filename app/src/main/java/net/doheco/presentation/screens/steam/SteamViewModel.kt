@@ -57,6 +57,7 @@ class SteamViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             val dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
+            Log.e("TOHADOTA",dotaBuffResponse)
             val index = dotaBuffResponse.lastIndexOf("https://www.dotabuff.com/players/")
             val part = dotaBuffResponse.substring(index)
             val addr = part.substringBefore('"')

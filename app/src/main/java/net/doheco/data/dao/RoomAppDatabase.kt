@@ -7,7 +7,7 @@ import net.doheco.domain.model.Favorites
 import net.doheco.domain.model.Hero
 import net.doheco.domain.model.steam.SteamPlayer
 
-@Database(entities = [Hero::class,Favorites::class, SteamPlayer::class, DotaMatch::class], version = 7)
+@Database(entities = [Hero::class,Favorites::class, SteamPlayer::class, DotaMatch::class], version = 11)
 @TypeConverters(HeroesConverterImpl::class)
 abstract class RoomAppDatabase : RoomDatabase() {
     abstract fun heroesDao(): HeroesDao

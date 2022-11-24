@@ -36,8 +36,9 @@ fun RecommendationsView(
     var tierImgAddr = "https://doheco.net/app/img/tier/0.png"
     var tierBlockNum = 0;
     if (player_tier != "undefined") {
-        tierImgAddr = "https://doheco.net/app/img/tier/${player_tier[0]} .png"
+        tierImgAddr = "https://doheco.net/app/img/tier/${player_tier[0]}.png"
         tierBlockNum = player_tier.toInt()
+        Log.e("TOHAIMG",tierImgAddr)
     }
 
     val heroes = heroes.mapNotNull { it as? Hero }

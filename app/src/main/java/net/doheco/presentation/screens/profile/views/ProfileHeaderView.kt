@@ -36,7 +36,8 @@ fun ProfileHeaderView(
     player_tier: String,
     onReloadClick: () -> Unit,
     dialogState: MutableState<Boolean>,
-    logged:Boolean
+    logged:Boolean,
+    onSteamExit: () -> Unit
 ) {
 
     var tierImage by remember { mutableStateOf("https://doheco.net/app/img/tier/0.png") }
@@ -194,6 +195,9 @@ fun ProfileHeaderView(
                                 .width(35.dp)
                                 .height(35.dp)
                                 .border(1.dp, Color(0x880d111c), CircleShape)
+                                .clickable {
+                                    onSteamExit()
+                                }
                         )
                     }
                 } else {

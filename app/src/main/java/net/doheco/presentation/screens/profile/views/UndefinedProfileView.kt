@@ -50,7 +50,15 @@ fun UndefinedProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeaderView(navController, state, viewModel, player_tier,onReloadClick,dialogState,false)
+                ProfileHeaderView(
+                    navController,
+                    state,
+                    viewModel,
+                    player_tier,
+                    onReloadClick,
+                    dialogState,
+                    false
+                ) {}
             }
             /*
             item {

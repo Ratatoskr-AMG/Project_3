@@ -34,11 +34,14 @@ fun ProfileHeaderView(
     viewState: ProfileState,
     viewModel: ProfileViewModel,
     player_tier: String,
+    onReloadClick: () -> Unit,
+    dialogState: MutableState<Boolean>,
+    logged:Boolean
 ) {
 
     var tierImage by remember { mutableStateOf("https://doheco.net/app/img/tier/0.png") }
     var tierDescription = "Tier undefined"
-    lateinit var profileTitle : String
+    lateinit var profileTitle: String
 
     when (viewState) {
         is ProfileState.UndefinedState -> {
@@ -50,7 +53,7 @@ fun ProfileHeaderView(
         else -> {}
     }
 
-    if(player_tier!="undefined") {
+    if (player_tier != "undefined") {
         tierImage =
             "https://doheco.net/app/img/tier/" + player_tier[0] + ".png"
     }
@@ -90,7 +93,7 @@ fun ProfileHeaderView(
     ) {
 
 
-        Row(modifier = Modifier.width(240.dp)) {
+        Row(modifier = Modifier.width(210.dp)) {
             Box(
                 modifier = Modifier
                     .width(70.dp)
@@ -131,31 +134,6 @@ fun ProfileHeaderView(
                 )
             }
 
-
-            /*
-            Box(
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
-                    .clickable {
-                        navController.popBackStack()
-                    }
-                    .border(1.dp, Color(0x880d111c), CircleShape)
-                    .clip(CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-
-                    modifier = Modifier
-                        .width(15.dp)
-                        .height(15.dp),
-                    painter = rememberImagePainter(
-                        R.drawable.ic_back
-                    ),
-                    contentDescription = stringResource(id = R.string.back)
-                )
-            }
-            */
             Box(
                 modifier = Modifier
                     .padding(start = 15.dp)
@@ -172,27 +150,69 @@ fun ProfileHeaderView(
 
             }
         }
-        /*
+
         Box(
             modifier = Modifier.clickable { navController.navigate(Screens.Tier.route) },
             contentAlignment = Alignment.Center
+
         ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(modifier = Modifier.padding(end = 10.dp)) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_synchronize_wh),
+                        contentDescription = tierDescription,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(40.dp)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
+                            .clickable { onReloadClick() }
+                    )
+                }
 
-            Image(
-                painter = rememberImagePainter(tierImage),
-                contentDescription = tierDescription,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, Color(0x880d111c), CircleShape)
-            )
-
+                Box(modifier = Modifier.padding(end = 10.dp)) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_icons8_speech_bubble),
+                        contentDescription = tierDescription,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(40.dp)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
+                            .clickable {
+                                dialogState.value = true
+                            }
+                    )
+                }
+                if (logged) {
+                    Box(modifier = Modifier.padding(start = 5.dp)) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_logout),
+                            contentDescription = tierDescription,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(35.dp)
+                                .height(35.dp)
+                                .border(1.dp, Color(0x880d111c), CircleShape)
+                        )
+                    }
+                } else {
+                    Box(modifier = Modifier) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_icons8_steam),
+                            contentDescription = tierDescription,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(40.dp)
+                                .border(1.dp, Color(0x880d111c), CircleShape)
+                                .clickable {
+                                    navController.navigate(Screens.Steam.route)
+                                }
+                        )
+                    }
+                }
+            }
         }
-        */
-
-
     }
-
 }

@@ -50,8 +50,9 @@ fun UndefinedProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeaderView(navController, state, viewModel, player_tier)
+                ProfileHeaderView(navController, state, viewModel, player_tier,onReloadClick,dialogState,false)
             }
+            /*
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -103,6 +104,7 @@ fun UndefinedProfileView(
                 }
                 Divider(color = Color(0xFF0d111c))
             }
+            */
             item {
                 Box(
                     modifier = Modifier

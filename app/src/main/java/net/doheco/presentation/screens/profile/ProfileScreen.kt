@@ -1,15 +1,11 @@
 package net.doheco.presentation.screens
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -24,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -49,6 +46,12 @@ fun ProfileScreen(
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
 
+    val test = remember {
+        mutableStateOf("")
+    }
+
+    var openUpdateDialog = remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     val playerTier = viewModel.getPlayerTierFromSP()
 
@@ -63,10 +66,21 @@ fun ProfileScreen(
                 viewModel,
                 navController,
                 playerTier,
-                dialogState = openDialog
-
+                dialogState = openDialog,
             ) {
-                viewModel.obtainEvent(ProfileEvent.OnUndefinedProfileUpdate)
+                when  {
+                    "Update data" in state.btnText -> {
+                        Toast.makeText(context, state.btnText, Toast.LENGTH_SHORT).show()
+                        viewModel.obtainEvent(ProfileEvent.OnUndefinedProfileUpdate)
+                    }
+                    "Обновление данных" in state.btnText -> {
+                        Toast.makeText(context, state.btnText, Toast.LENGTH_SHORT).show()
+                        viewModel.obtainEvent(ProfileEvent.OnUndefinedProfileUpdate)
+                    }
+                    else -> {
+                        openUpdateDialog.value = true
+                    }
+                }
             }
 
         }
@@ -96,7 +110,8 @@ fun ProfileScreen(
                     Text(
                         text = stringResource(id = R.string.offer),
                         color = Color.White,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(bottom = 24.dp),
                     )
                     OutlinedTextField(
@@ -117,7 +132,9 @@ fun ProfileScreen(
                         value = messageText,
                         onValueChange = { messageText = it},
                         label = { Text(text = stringResource(id = R.string.message)) },
-                        modifier = Modifier.height(150.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .height(150.dp)
+                            .fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             textColor = Color.White,
                             focusedBorderColor = Color.White,
@@ -166,4 +183,61 @@ fun ProfileScreen(
             }
         )
     }
+
+    if (openUpdateDialog.value) {
+        AlertDialog(
+            modifier = Modifier.fillMaxWidth(),
+            onDismissRequest = {
+                openUpdateDialog.value = false
+            },
+            backgroundColor = Color(0xFF131313),
+            shape = RoundedCornerShape(10.dp),
+            title = {
+                Text(
+                    text = "Ups",
+                    color = Color.White,
+                )
+            },
+            text = {
+                Text(
+                    text = "Text",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            buttons = {
+                Column(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            openUpdateDialog.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFF00821d),
+                            contentColor = Color.White,
+                        )
+                    ) {
+                        Text(text = "Buy")
+                    }
+                    OutlinedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 26.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = Color.White,
+                            backgroundColor = Color(0xFF131313)
+                        ),
+                        onClick = { openUpdateDialog.value = false }
+                    ) {
+                        Text(text = stringResource(id = R.string.close))
+                    }
+
+                }
+            }
+        )
+    }
+
 }

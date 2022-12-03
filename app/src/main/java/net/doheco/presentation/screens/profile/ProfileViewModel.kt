@@ -206,10 +206,8 @@ class ProfileViewModel @Inject constructor(
 
             if (playerIdFromSp != "undefined") {
                 try {
-                    /**
-                     * id подставил для теста, потом будем брать с SP
-                     */
-                    val matches = matchesUseCase.getMatches("205343070",getHeroByIduseCase)
+                    Log.e("RUSLAN", "Player id: $playerIdFromSp")
+                    val matches = matchesUseCase.getMatches(playerIdFromSp ,getHeroByIduseCase)
                     matchesUseCase.updateFromDb(matches)
                     val matchesFromDb = matchesUseCase.getFromDb()
                     val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(playerIdFromSp)

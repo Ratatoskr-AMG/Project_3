@@ -92,13 +92,14 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     private suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
+
+        var UUId = getPlayerIdFromSP.getUUIdFromSP(appSharedPreferences)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.e("DOHECO", "getAllHeroesFromApi")
-                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("init")
+                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(UUId)
                 val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
 
                 if (heroes.isEmpty()) {

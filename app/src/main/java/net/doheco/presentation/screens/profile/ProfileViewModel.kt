@@ -36,11 +36,9 @@ class ProfileViewModel @Inject constructor(
     private val addHeroesUserCase: AddHeroesUserCase,
     private val getResource: GetResource,
     private val matchesUseCase: MatchesUseCase,
-    private val getHeroByIduseCase: GetHeroByIdUseCase
+    private val getHeroByIduseCase: GetHeroByIdUseCase,
+    private val setUUIdToSPUseCase: SetUUIdToSPUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
-
-
-   // private val _profileState = MutableStateFlow(ProfileState.UndefinedState())
 
     private val _profileState: MutableLiveData<ProfileState> = MutableLiveData()
     val profileState: LiveData<ProfileState> = _profileState
@@ -92,9 +90,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private fun tryToSetUUIdByPlayerId(){
+        var PlayerId = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
+        if(!PlayerId.isEmpty()){
+            setUUIdToSPUseCase.SetUUIdToSP(appSharedPreferences,PlayerId)
+        }
+    }
+
     private fun updateHeroesByUndefinedUser() {
 
-        Log.e("TOHA.1", "updateHeroesByUndefinedUser")
 
         appSharedPreferences.edit().putString("heroes_update_status", "wait").apply()
 
@@ -141,6 +145,9 @@ class ProfileViewModel @Inject constructor(
             appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
 
         } else {
+
+
+
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val heroes =

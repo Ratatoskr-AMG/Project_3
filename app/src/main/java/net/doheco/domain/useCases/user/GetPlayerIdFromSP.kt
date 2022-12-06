@@ -12,4 +12,9 @@ class GetPlayerIdFromSP @Inject constructor(
         return appUserRepoImpl.getPlayerIdFromSP(sp)
     }
 
+    fun getUUIdFromSP(sp: SharedPreferences): String {
+        return appUserRepoImpl.getUUIdFromSP(sp)
+    }
+
+
 }

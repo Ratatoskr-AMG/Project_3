@@ -15,7 +15,11 @@ class AppUserRepoImpl @Inject constructor(
 ) {
 
     fun getPlayerIdFromSP(appSharedPreferences: SharedPreferences): String {
-        return appSharedPreferences.getString("player_id", "undefined").toString()
+        return appSharedPreferences.getString("player_id", "").toString()
+    }
+
+    fun getUUIdFromSP(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getString("UUId", "").toString()
     }
 
     fun getPlayerTierFromSP(appSharedPreferences: SharedPreferences): String {
@@ -55,6 +59,10 @@ class AppUserRepoImpl @Inject constructor(
     fun setPlayerSteamNameToSP(appSharedPreferences: SharedPreferences, name: String) {
         appSharedPreferences.edit().putString("player_steam_name", name)
             .apply();
+    }
+
+    fun setUUIdToSP(appSharedPreferences: SharedPreferences, UUId: String) {
+        appSharedPreferences.edit().putString("UUId", UUId).apply();
     }
 
     suspend fun sendFeedback(name: String,text: String): String {

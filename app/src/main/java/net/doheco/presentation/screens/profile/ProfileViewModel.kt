@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import net.doheco.R
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
@@ -37,6 +38,9 @@ class ProfileViewModel @Inject constructor(
     private val matchesUseCase: MatchesUseCase,
     private val getHeroByIduseCase: GetHeroByIdUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
+
+
+   // private val _profileState = MutableStateFlow(ProfileState.UndefinedState())
 
     private val _profileState: MutableLiveData<ProfileState> = MutableLiveData()
     val profileState: LiveData<ProfileState> = _profileState

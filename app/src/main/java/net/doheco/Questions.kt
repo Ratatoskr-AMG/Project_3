@@ -472,4 +472,15 @@ Image(
 */
 
 
+/*
+    fun registerFirebaseEvent() {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1")
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Test")
+        Log.e(
+            "TOHAFB",
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle).toString()
+        )
+    }
 
+ */

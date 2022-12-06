@@ -11,14 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import net.doheco.R
-import net.doheco.presentation.theme.leftBtnHeaderBox
 
 @ExperimentalFoundationApi
 @Composable
@@ -31,17 +28,10 @@ fun EmptyFavoritesListView(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        leftBtnHeaderBox(
-            navController,
-            R.drawable.ic_back,
-            stringResource(id = R.string.title_favorites)
-        )
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                //.background(Color(0x55202020))
-                .background(Color(0x000000))
+                .background(Color.Black)
         ) {
             Text(
                 modifier = Modifier

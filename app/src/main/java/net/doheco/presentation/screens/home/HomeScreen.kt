@@ -48,7 +48,7 @@ fun HomeScreen(
         }
         is HomeState.LoadingHomeState -> {
             Log.e("TOHARUS", "LoadingHomeState")
-            LoadingBlack()
+            LoadingView(text = stringResource(id = R.string.loading))
         }
         is HomeState.ErrorHomeState -> {
             Log.e("TOHARUS", "ErrorHomeState")
@@ -56,17 +56,9 @@ fun HomeScreen(
         }
         else -> {}
     }
-//    LaunchedEffect(key1 = Unit, block = {
-//        Log.e("WHAT", "launchedEffect")
-//        viewModel.getAllHeroesSortByName()
-//        //viewModel.registerFirebaseEvent()
-//    })
-}
-
-@Composable
-fun LoadingBlack() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.Black
-    ) {}
+    LaunchedEffect(key1 = Unit, block = {
+        Log.e("WHAT", "launchedEffect")
+        viewModel.getAllHeroesSortByName()
+        //viewModel.registerFirebaseEvent()
+    })
 }

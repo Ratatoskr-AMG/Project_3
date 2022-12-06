@@ -1,4 +1,4 @@
-package net.doheco.presentation.screens
+package net.doheco.presentation.screens.favorites
 
 import androidx.compose.foundation.*
 import androidx.compose.runtime.Composable

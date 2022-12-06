@@ -44,6 +44,7 @@ import net.doheco.presentation.screens.*
 import net.doheco.presentation.screens.attribute.AttributeViewModel
 import net.doheco.presentation.screens.comparing.ComparingScreen
 import net.doheco.presentation.screens.comparing.ComparingViewModel
+import net.doheco.presentation.screens.favorites.FavoritesScreen
 import net.doheco.presentation.screens.favorites.FavoritesViewModel
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.steam.SteamViewModel

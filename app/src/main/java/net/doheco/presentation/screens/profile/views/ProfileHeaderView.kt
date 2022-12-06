@@ -3,6 +3,8 @@ package net.doheco.presentation.screens.profile.views
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,12 +14,15 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -34,11 +39,15 @@ fun ProfileHeaderView(
     viewState: ProfileState,
     viewModel: ProfileViewModel,
     player_tier: String,
+    onReloadClick: () -> Unit,
+    dialogState: MutableState<Boolean>,
+    logged:Boolean,
+    onSteamExit: () -> Unit
 ) {
 
     var tierImage by remember { mutableStateOf("https://doheco.net/app/img/tier/0.png") }
     var tierDescription = "Tier undefined"
-    lateinit var profileTitle : String
+    lateinit var profileTitle: String
 
     when (viewState) {
         is ProfileState.UndefinedState -> {
@@ -50,7 +59,7 @@ fun ProfileHeaderView(
         else -> {}
     }
 
-    if(player_tier!="undefined") {
+    if (player_tier != "undefined") {
         tierImage =
             "https://doheco.net/app/img/tier/" + player_tier[0] + ".png"
     }
@@ -59,28 +68,6 @@ fun ProfileHeaderView(
 
     Row(
         modifier = Modifier
-            .drawWithContent {
-                drawContent()
-                clipRect { // Not needed if you do not care about painting half stroke outside
-                    val strokeWidth = Stroke.DefaultMiter
-                    val y = size.height // strokeWidth
-                    drawLine(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color(0xFF0d111c),
-                                Color(0xFF0d111c),
-                                Color(0xFF0d111c),
-                                //Color(0xFF000022),
-                                //Color(0xFF000022)
-                            )
-                        ),
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Square,
-                        start = Offset.Zero.copy(y = y),
-                        end = Offset(x = size.width, y = y)
-                    )
-                }
-            }
             .fillMaxWidth()
             .height(140.dp)
             .background(Color.Black)
@@ -89,8 +76,8 @@ fun ProfileHeaderView(
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
-
-        Row(modifier = Modifier.width(240.dp)) {
+        Row(modifier = Modifier.width(210
+            .dp)) {
             Box(
                 modifier = Modifier
                     .width(70.dp)
@@ -102,7 +89,6 @@ fun ProfileHeaderView(
                     .clip(CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
@@ -118,7 +104,6 @@ fun ProfileHeaderView(
                             .height(25.dp)
                     )
                 }
-
                 Image(
                     painter = rememberAsyncImagePainter(tierImage),
                     contentDescription = tierDescription,
@@ -131,68 +116,82 @@ fun ProfileHeaderView(
                 )
             }
 
-
-            /*
-            Box(
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
-                    .clickable {
-                        navController.popBackStack()
-                    }
-                    .border(1.dp, Color(0x880d111c), CircleShape)
-                    .clip(CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-
-                    modifier = Modifier
-                        .width(15.dp)
-                        .height(15.dp),
-                    painter = rememberImagePainter(
-                        R.drawable.ic_back
-                    ),
-                    contentDescription = stringResource(id = R.string.back)
-                )
-            }
-            */
             Box(
                 modifier = Modifier
                     .padding(start = 15.dp)
                     .height(70.dp),
                 contentAlignment = Alignment.Center
             ) {
-
                 Text(
                     profileTitle,
                     color = Color.White,
                     fontSize = 16.sp,
-                    lineHeight = 20.sp
+                    lineHeight = 20.sp,
+                    overflow = TextOverflow.Clip,
+                    maxLines = 1
                 )
-
             }
         }
-        /*
+
         Box(
             modifier = Modifier.clickable { navController.navigate(Screens.Tier.route) },
             contentAlignment = Alignment.Center
+
         ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(modifier = Modifier.padding(5.dp)) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_baseline_refresh_24),
+                        contentDescription = tierDescription,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
+                            .clickable { onReloadClick() }
+                    )
+                }
 
-            Image(
-                painter = rememberImagePainter(tierImage),
-                contentDescription = tierDescription,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, Color(0x880d111c), CircleShape)
-            )
-
+                Box(modifier = Modifier.padding(5.dp)) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_baseline_forward_to_inbox_24),
+                        contentDescription = tierDescription,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .clickable {
+                                dialogState.value = true
+                            }
+                    )
+                }
+                if (logged) {
+                    Box(modifier = Modifier.padding(5.dp)) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_baseline_logout_24),
+                            contentDescription = tierDescription,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .clickable {
+                                    onSteamExit()
+                                },
+                        )
+                    }
+                } else {
+                    Box(modifier = Modifier.padding(5.dp)) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_icons8_steam),
+                            contentDescription = tierDescription,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(24.dp)
+                                .height(24.dp)
+                                .clickable {
+                                    navController.navigate(Screens.Steam.route)
+                                }
+                        )
+                    }
+                }
+            }
         }
-        */
-
-
     }
-
+    Divider(color = Color(0xFF0d111c))
 }

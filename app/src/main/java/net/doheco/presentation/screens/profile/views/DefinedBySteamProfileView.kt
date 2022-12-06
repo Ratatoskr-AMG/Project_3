@@ -70,9 +70,20 @@ fun DefinedBySteamProfileView(
         ) {
 
             stickyHeader {
-                ProfileHeaderView(navController, state, viewModel, player_tier)
+                ProfileHeaderView(
+                    navController,
+                    state,
+                    viewModel,
+                    player_tier,
+                    onReloadClick,
+                    dialogState,
+                    true,
+                    onSteamExit
+                )
             }
+            /*
             item {
+
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -125,6 +136,8 @@ fun DefinedBySteamProfileView(
                 }
                 Divider(color = Color(0xFF0d111c))
             }
+            */
+
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -156,7 +169,10 @@ fun DefinedBySteamProfileView(
             if (state.matchesList != null) {
                 items(state.matchesList!!) { item ->
                     var bgColor = Color(0xFF7E0000)
-                    if (item.radiantWin!! && item.playerSlot!! < 127) {
+                    if (item.radiantWin!! && item.playerSlot!! <= 127) {
+                        bgColor = Color(0xFF007E00)
+                    }
+                    if (!item.radiantWin && item.playerSlot!! > 127) {
                         bgColor = Color(0xFF007E00)
                     }
                     Row(
@@ -174,7 +190,6 @@ fun DefinedBySteamProfileView(
                         ) {
 
 
-
                             Image(
                                 contentDescription = item.matchId.toString(),
                                 painter = loadPicture(
@@ -184,7 +199,7 @@ fun DefinedBySteamProfileView(
                                 modifier = Modifier
                                     .width(60.dp)
                                     .height(35.dp)
-                                    .padding(top = 5.dp, bottom = 5.dp, end=15.dp)
+                                    .padding(top = 5.dp, bottom = 5.dp, end = 15.dp)
 
                             )
 

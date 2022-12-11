@@ -17,4 +17,8 @@ sealed class ProfileState {
         var matchesList: List<DotaMatch>? = emptyList()
     ) : ProfileState()
     object ErrorProfileState : ProfileState()
+    object UpdateHeroesAndMatchesError : ProfileState()
+    data class Init(
+        var player_tier: String = "0",
+    ) : ProfileState()
 }

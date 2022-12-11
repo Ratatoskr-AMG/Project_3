@@ -5,5 +5,6 @@ sealed class ProfileEvent {
     object OnUpdate : ProfileEvent()
     object OnUndefinedProfileUpdate : ProfileEvent()
     object OnDefinedProfileUpdate : ProfileEvent()
+    object OnProfileUpdate : ProfileEvent()
     data class OnSendFeedback(val name: String,val text: String): ProfileEvent()
 }

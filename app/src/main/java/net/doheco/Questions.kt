@@ -18,6 +18,17 @@ class Questions {
 
 /* Задания
 
+    Отдельный экран для загрузки
+    https://stackoverflow.com/questions/50514758/how-to-clear-navigation-stack-after-navigating-to-another-fragment-in-android
+    https://stackoverflow.com/questions/66845899/compose-navigation-remove-previous-composable-from-stack-before-navigating
+navController.navigate(Screens.Login.name) {
+    popUpTo(Screens.Splash.name) {
+        inclusive = true
+    }
+}
+
+
+
     Переделать профиль под новую логику сервера
     Экраны при отсутствии данных
     Иконки вместо кнопок
@@ -25,6 +36,7 @@ class Questions {
     Тестирование
     Сайт
     Публикация
+    Продвижение
 
     KTLINT
     SwiftLINT

@@ -29,6 +29,7 @@ import net.doheco.presentation.screens.profile.models.ProfileEvent
 import net.doheco.presentation.screens.profile.models.ProfileState
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.views.DefinedBySteamProfileView
+import net.doheco.presentation.screens.profile.views.ProfileView
 import net.doheco.presentation.screens.profile.views.UndefinedProfileView
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,8 +55,11 @@ fun ProfileScreen(
 
     val context = LocalContext.current
     val playerTier = viewModel.getPlayerTierFromSP()
+    val viewState = viewModel.profileState.observeAsState(ProfileState.Init())
 
-    val viewState = viewModel.profileState.observeAsState()
+
+
+    /*
 
     when (val state = viewState.value) {
 
@@ -68,6 +72,10 @@ fun ProfileScreen(
                 playerTier,
                 dialogState = openDialog,
             ) {
+                Toast.makeText(context, "Wait...", Toast.LENGTH_SHORT).show()
+                var result = viewModel.obtainEvent(ProfileEvent.OnProfileUpdate)
+
+                /*
                 when  {
                     "Update data" in state.btnText -> {
                         Toast.makeText(context, state.btnText, Toast.LENGTH_SHORT).show()
@@ -81,9 +89,11 @@ fun ProfileScreen(
                         openUpdateDialog.value = true
                     }
                 }
+                */
             }
 
         }
+
         is ProfileState.SteamNameIsDefinedState -> {
             DefinedBySteamProfileView(
                 state,
@@ -97,6 +107,26 @@ fun ProfileScreen(
         }
         else -> {}
     }
+
+*/
+
+    ProfileView(
+        viewState.value,
+        viewModel,
+        navController,
+        playerTier,
+        dialogState = openDialog,
+        onReloadClick = {
+            viewModel.obtainEvent(ProfileEvent.OnUpdate)
+            when (val state = viewState.value) {
+                is ProfileState.SteamNameIsDefinedState -> {
+                    Toast.makeText(context, state.btnText, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        },
+    )
+
     if (openDialog.value) {
         AlertDialog(
             modifier = Modifier.fillMaxWidth(),

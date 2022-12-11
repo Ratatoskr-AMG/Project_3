@@ -7,6 +7,7 @@ import net.doheco.data.dao.HeroesDao
 import net.doheco.data.dao.MatchDao
 import net.doheco.domain.model.DotaMatch
 import net.doheco.domain.model.Hero
+import net.doheco.domain.model.HeroesAndMatchesApiCallResult
 import net.doheco.domain.model.opendota.OpenDotaMatch
 import javax.inject.Inject
 import kotlin.Exception
@@ -77,6 +78,7 @@ class HeroesRepoImpl @Inject constructor(
     }
 
     suspend fun addToDb(list: List<DotaMatch>) {
+        Log.e("APICALL","list:"+list.toString())
         matchDao.insertAll(list)
     }
 

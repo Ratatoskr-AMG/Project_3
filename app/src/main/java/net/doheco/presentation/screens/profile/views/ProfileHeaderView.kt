@@ -47,7 +47,7 @@ fun ProfileHeaderView(
 
     var tierImage by remember { mutableStateOf("https://doheco.net/app/img/tier/0.png") }
     var tierDescription = "Tier undefined"
-    lateinit var profileTitle: String
+    var profileTitle: String = stringResource(id = R.string.title_profile)
 
     when (viewState) {
         is ProfileState.UndefinedState -> {
@@ -56,7 +56,9 @@ fun ProfileHeaderView(
         is ProfileState.SteamNameIsDefinedState -> {
             profileTitle = viewModel.getPlayerSteamNameFromSP()
         }
-        else -> {}
+        else -> {
+
+        }
     }
 
     if (player_tier != "undefined") {

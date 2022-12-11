@@ -14,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.doheco.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
 import net.doheco.domain.useCases.heroes.*
+import net.doheco.domain.useCases.user.GetPlayerIdFromSP
+import net.doheco.domain.useCases.user.SetUUIdToSPUseCase
 import net.doheco.presentation.screens.home.models.HomeState
 import java.util.*
 import javax.inject.Inject
@@ -28,23 +30,24 @@ class HomeViewModel @Inject constructor(
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
     private val addHeroesUserCase: AddHeroesUserCase,
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
+    private val getPlayerIdFromSP: GetPlayerIdFromSP,
     val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
+    val setUUIdToSPUseCase: SetUUIdToSPUseCase,
 ) : AndroidViewModel(Application()) {
+
+    fun setPlayerUUIdToSPIfNeeded(){
+        if(getPlayerIdFromSP.getUUIdFromSP(appSharedPreferences).isEmpty()){
+            var UUId = UUID.randomUUID().toString()
+            setUUIdToSPUseCase.SetUUIdToSP(appSharedPreferences,UUId)
+        }
+    }
 
     private val _heroesListState: MutableLiveData<HomeState> = MutableLiveData<HomeState>()
     val homeState: LiveData<HomeState> = _heroesListState
 
-    fun registerFirebaseEvent() {
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1")
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Test")
-        Log.e(
-            "TOHAFB",
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle).toString()
-        )
-    }
 
     init {
+        setPlayerUUIdToSPIfNeeded()
         getAllHeroesSortByName()
     }
 
@@ -89,13 +92,16 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     private suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
+
+        var UUId = getPlayerIdFromSP.getUUIdFromSP(appSharedPreferences)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.e("DOHECO", "getAllHeroesFromApi")
-                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("init")
+                //HEROES API CALL
+                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(UUId)
+                    //val heroes2 =
                 val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
 
                 if (heroes.isEmpty()) {

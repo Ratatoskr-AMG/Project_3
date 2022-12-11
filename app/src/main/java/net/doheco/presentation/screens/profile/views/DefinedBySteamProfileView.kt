@@ -137,7 +137,7 @@ fun DefinedBySteamProfileView(
                 Divider(color = Color(0xFF0d111c))
             }
             */
-
+            /*
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -165,7 +165,7 @@ fun DefinedBySteamProfileView(
 
                 }
                 Divider(color = Color(0xFF0d111c))
-            }
+            }*/
             if (state.matchesList != null) {
                 items(state.matchesList!!) { item ->
                     var bgColor = Color(0xFF7E0000)

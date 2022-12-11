@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class GetAllHeroesFromOpendotaUseCase @Inject constructor(
     var opendotaRepoImpl: HeroesRepoImpl,
-) {
+){
     suspend fun getAllHeroesFromApi(steamId:String): List<Hero> {
         return calculate(opendotaRepoImpl.getAllHeroesListFromAPI(steamId))
     }

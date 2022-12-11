@@ -3,6 +3,8 @@ package net.doheco.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,9 +13,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.doheco.R
+import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
 import net.doheco.domain.useCases.heroes.GetHeroByIdUseCase
+import net.doheco.domain.useCases.system.ServerApiCallUseCase
 import net.doheco.domain.useCases.user.*
 import net.doheco.domain.utils.EventHandler
 import net.doheco.domain.utils.GetResource
@@ -35,18 +39,23 @@ class ProfileViewModel @Inject constructor(
     private val addHeroesUserCase: AddHeroesUserCase,
     private val getResource: GetResource,
     private val matchesUseCase: MatchesUseCase,
-    private val getHeroByIduseCase: GetHeroByIdUseCase
+    private val getHeroByIdUseCase: GetHeroByIdUseCase,
+    private val setUUIdToSPUseCase: SetUUIdToSPUseCase,
+    private val serverApiCallUseCase: ServerApiCallUseCase
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
-    private val _profileState: MutableLiveData<ProfileState> = MutableLiveData()
+    private val _profileState: MutableLiveData<ProfileState> = MutableLiveData(ProfileState.Init())
     val profileState: LiveData<ProfileState> = _profileState
 
     override fun obtainEvent(event: ProfileEvent) {
-        when (profileState.value) {
+        reduce(event)
+        /*when (profileState.value) {
             is ProfileState.UndefinedState -> reduce(event)
             is ProfileState.SteamNameIsDefinedState -> reduce(event)
             else -> {}
         }
+        */
+
     }
 
     init {
@@ -56,7 +65,7 @@ class ProfileViewModel @Inject constructor(
     private fun reduce(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.OnSteamExit -> exitSteam()
-            is ProfileEvent.OnUpdate -> updateHeroesByDefinedUser()
+            is ProfileEvent.OnUpdate -> updateHeroesAndMatches()
             is ProfileEvent.OnUndefinedProfileUpdate -> updateHeroesByUndefinedUser()
             is ProfileEvent.OnSendFeedback -> sendFeedback(event)
             else -> {}
@@ -88,9 +97,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private fun tryToSetUUIdByPlayerId(){
+        var PlayerId = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
+        if(!PlayerId.isEmpty()){
+            setUUIdToSPUseCase.SetUUIdToSP(appSharedPreferences,PlayerId)
+        }
+    }
+
     private fun updateHeroesByUndefinedUser() {
 
-        Log.e("TOHA.1", "updateHeroesByUndefinedUser")
 
         appSharedPreferences.edit().putString("heroes_update_status", "wait").apply()
 
@@ -137,8 +152,12 @@ class ProfileViewModel @Inject constructor(
             appSharedPreferences.edit().putString("heroes_update_status", "updated").apply()
 
         } else {
+
+
+
             viewModelScope.launch(Dispatchers.IO) {
                 try {
+                    //HEROES API CALL
                     val heroes =
                         getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi("undefined")
                     if (heroes.isEmpty()) {
@@ -183,6 +202,66 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private fun updateHeroesAndMatches() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val playerIdFromSp = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
+
+            try {
+
+                val apiCallResult = serverApiCallUseCase.getHeroesAndMatches(playerIdFromSp)
+
+                if(apiCallResult.result==true) {
+
+                    val matchesList = apiCallResult.matches
+
+                    var matches = matchesList!!.map {
+                        var hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
+                        DotaMatchesConverter.doForward(it, hero)
+                    }
+
+                    matchesUseCase.updateFromDb(matches)
+                    //val matchesFromDb = matchesUseCase.getFromDb()
+                    //_profileState.postValue(ProfileState.HeroesUpdated)
+
+                    _profileState.postValue(
+                        ProfileState.SteamNameIsDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            getHeroesBaseLastModifiedFromSP(),
+                            "Updated",
+                            matchesUseCase.getFromDb()
+                        )
+                    )
+                    Log.e("APICALL",apiCallResult.toString())
+                    Log.e("APICALL",matches.toString())
+                    Log.e("APICALL","result"+apiCallResult.result.toString())
+                    Log.e("APICALL","playerIdFromSp:"+playerIdFromSp.toString())
+
+                }
+                else{
+                    _profileState.postValue(
+                        ProfileState.SteamNameIsDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            getHeroesBaseLastModifiedFromSP(),
+                            "Timeout",
+                            matchesUseCase.getFromDb()
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("APICALL",e.toString())
+                _profileState.postValue(ProfileState.UpdateHeroesAndMatchesError)
+
+            }
+
+
+        }
+
+    }
+
     private fun updateHeroesByDefinedUser() {
 
         appSharedPreferences.edit().putString("heroes_update_status", "wait").apply()
@@ -207,9 +286,10 @@ class ProfileViewModel @Inject constructor(
             if (playerIdFromSp != "undefined") {
                 try {
                     Log.e("RUSLAN", "Player id: $playerIdFromSp")
-                    val matches = matchesUseCase.getMatches(playerIdFromSp ,getHeroByIduseCase)
+                    val matches = matchesUseCase.getMatches(playerIdFromSp ,getHeroByIdUseCase)
                     matchesUseCase.updateFromDb(matches)
                     val matchesFromDb = matchesUseCase.getFromDb()
+                    //HEROES API CALL
                     val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(playerIdFromSp)
                     if (heroes.isEmpty()) {
                         Log.e("TOHA.2", "isEmpty")

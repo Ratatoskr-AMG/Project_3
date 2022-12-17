@@ -1,15 +1,12 @@
 package net.doheco.presentation.screens.profile.views
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,12 +14,9 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
@@ -34,7 +28,7 @@ import net.doheco.presentation.theme.loadPicture
 @ExperimentalFoundationApi
 @Composable
 fun DefinedBySteamProfileView(
-    state: ProfileState.SteamNameIsDefinedState,
+    state: ProfileState.SteamDefinedState,
     viewModel: ProfileViewModel,
     player_tier: String,
     navController: NavController,
@@ -54,7 +48,7 @@ fun DefinedBySteamProfileView(
 
     /*if(updatingDataButtonText=="time"){
         updateText= stringResource(id = R.string.time_block)
-    }*/
+    }
 
     Box(
         modifier = Modifier
@@ -166,8 +160,8 @@ fun DefinedBySteamProfileView(
                 }
                 Divider(color = Color(0xFF0d111c))
             }*/
-            if (state.matchesList != null) {
-                items(state.matchesList!!) { item ->
+            if (state.playerMatchesList != null) {
+                items(state.playerMatchesList!!) { item ->
                     var bgColor = Color(0xFF7E0000)
                     if (item.radiantWin!! && item.playerSlot!! <= 127) {
                         bgColor = Color(0xFF007E00)
@@ -263,5 +257,5 @@ fun DefinedBySteamProfileView(
                 }
             }
         }
-    }
+    }*/
 }

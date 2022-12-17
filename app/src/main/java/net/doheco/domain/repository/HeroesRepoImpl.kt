@@ -62,7 +62,7 @@ class HeroesRepoImpl @Inject constructor(
             Log.e("TOHA","URL:norm")
             return result
         } catch (e: Exception) {
-            Log.e("TOHA","URL:error")
+            Log.e("TOHA","URL:error"+e.toString())
             error(e)
             return emptyList()
         }

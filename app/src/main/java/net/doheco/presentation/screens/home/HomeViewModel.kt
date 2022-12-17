@@ -2,20 +2,18 @@ package net.doheco.presentation.screens.home
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
 import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.ImageResult
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.doheco.domain.useCases.favorites.GetAllFavoriteHeroesUseCase
 import net.doheco.domain.useCases.heroes.*
+import net.doheco.domain.useCases.system.ServerApiCallUseCase
 import net.doheco.domain.useCases.user.GetPlayerIdFromSP
-import net.doheco.domain.useCases.user.SetUUIdToSPUseCase
+import net.doheco.domain.useCases.user.UUIdSPUseCase
 import net.doheco.presentation.screens.home.models.HomeState
 import java.util.*
 import javax.inject.Inject
@@ -32,13 +30,14 @@ class HomeViewModel @Inject constructor(
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
     private val getPlayerIdFromSP: GetPlayerIdFromSP,
     val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
-    val setUUIdToSPUseCase: SetUUIdToSPUseCase,
+    val UUIdSPUseCase: UUIdSPUseCase,
+    val serverApiCallUseCase: ServerApiCallUseCase,
 ) : AndroidViewModel(Application()) {
 
-    fun setPlayerUUIdToSPIfNeeded(){
-        if(getPlayerIdFromSP.getUUIdFromSP(appSharedPreferences).isEmpty()){
+    fun setAppUUIdToSPIfNeeded(){
+        if(UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences).isEmpty()){
             var UUId = UUID.randomUUID().toString()
-            setUUIdToSPUseCase.SetUUIdToSP(appSharedPreferences,UUId)
+            UUIdSPUseCase.SetAppUUIdToSP(appSharedPreferences,UUId)
         }
     }
 
@@ -47,7 +46,7 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        setPlayerUUIdToSPIfNeeded()
+        setAppUUIdToSPIfNeeded()
         getAllHeroesSortByName()
     }
 
@@ -94,17 +93,20 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
 
-        var UUId = getPlayerIdFromSP.getUUIdFromSP(appSharedPreferences)
+        var UUId = UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.e("DOHECO", "getAllHeroesFromApi")
+
+                var apiAnswer = serverApiCallUseCase.getHeroesAndMatches(UUId)
+                Log.e("APICALL","base:"+apiAnswer.toString())
+
                 //HEROES API CALL
-                val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(UUId)
-                    //val heroes2 =
+                val heroes = getAllHeroesFromOpendotaUseCase.calculate(apiAnswer.heroes!!)
                 val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
 
-                if (heroes.isEmpty()) {
+                if (heroes!!.isEmpty()) {
                     Log.e("DOHECO", "heroes isEmpty")
                     _heroesListState.postValue(HomeState.NoHomeState("Empty Heroes from API list"))
                 } else {

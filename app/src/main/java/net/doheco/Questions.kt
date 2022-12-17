@@ -283,7 +283,6 @@ Java Concurrency in Practiсe
     ViewCompat.getWindowInsetsController(window.decorView)
 windowInsetsController!!.hide(WindowInsetsCompat.Type.systemBars())
  */
-
 /* .drawBehind {
     val strokeWidth = density
     val y = size.height - strokeWidth / 1
@@ -482,8 +481,6 @@ Image(
         }
     }
 */
-
-
 /*
     fun registerFirebaseEvent() {
         val bundle = Bundle()
@@ -492,6 +489,145 @@ Image(
         Log.e(
             "TOHAFB",
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle).toString()
+        )
+    }
+
+ */
+/*
+
+private fun updateHeroesByDefinedUser() {
+
+    appSharedPreferences.edit().putString("heroes_update_status", "wait").apply()
+
+    try {
+        _profileState.postValue(
+            ProfileState.SteamNameIsDefinedState(
+                getPlayerTierFromSP(),
+                getPlayerSteamNameFromSP(),
+                getHeroesBaseLastModifiedFromSP(),
+                getUpdateBtnText()
+            )
+        )
+    } catch (e: Exception) {
+        _profileState.postValue(ProfileState.ErrorProfileState)
+    }
+
+    viewModelScope.launch(Dispatchers.IO) {
+
+        var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
+        if (UUId.isEmpty())
+            UUId = UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences)
+
+        try {
+            Log.e("PROFILE", "UUId: $UUId")
+            val matches = matchesUseCase.getMatches(UUId, getHeroByIdUseCase)
+            matchesUseCase.updateFromDb(matches)
+            val matchesFromDb = matchesUseCase.getFromDb()
+            //HEROES API CALL
+            val heroes = getAllHeroesFromOpendotaUseCase.getAllHeroesFromApi(UUId)
+            if (heroes.isEmpty()) {
+                Log.e("TOHA.2", "isEmpty")
+                appSharedPreferences.edit().putString("heroes_update_status", "time")
+                    .apply()
+                try {
+                    _profileState.postValue(
+                        ProfileState.SteamNameIsDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            "time",
+                            getUpdateBtnText(),
+                            matchesFromDb
+                        )
+                    )
+                } catch (e: Exception) {
+                    _profileState.postValue(ProfileState.ErrorProfileState)
+                }
+            } else {
+                Log.e("TOHA.2", "!isEmpty")
+                appSharedPreferences.edit().putString("heroes_update_status", "updated")
+                    .apply()
+                val currTime = Date(System.currentTimeMillis()).time
+                appSharedPreferences.edit()
+                    .putLong("heroes_list_last_modified", currTime)
+                    .apply()
+                addHeroesUserCase.addHeroes(heroes)
+                try {
+                    _profileState.postValue(
+                        ProfileState.SteamNameIsDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            currTime.toString(),
+                            getUpdateBtnText(),
+                            matches
+                        )
+                    )
+                } catch (e: Exception) {
+                    _profileState.postValue(ProfileState.ErrorProfileState)
+                }
+            }
+
+        } catch (e: java.lang.Exception) {
+            Log.e("TOHA", "e:$e")
+            e.printStackTrace()
+        }
+
+    }
+}
+
+private fun tryToSetUUIdByPlayerId() {
+    //var PlayerId = getPlayerIdFromSP.getPlayerIdFromSP(appSharedPreferences)
+
+    //if(!PlayerId.isEmpty()){
+    //    UUIdSPUseCase.SetAppUUIdToSP(appSharedPreferences,PlayerId)
+    //}
+}
+*/
+
+/*
+    private fun getUpdateBtnText(): String {
+
+        var result = ""
+
+        val updateStatus =
+            appSharedPreferences.getString("heroes_update_status", "updated").toString()
+
+        if (updateStatus == "error") {
+            result = getResource.getString(id = R.string.error)
+        }
+
+        if (updateStatus == "wait") {
+            result = getResource.getString(id = R.string.wait)
+        }
+
+        if (updateStatus == "time") {
+            result = if (appSharedPreferences.getString("player_steam_name", "undefined")
+                    .toString() == "undefined"
+            ) {
+                getResource.getString(id = R.string.time_block)
+            } else {
+                getResource.getString(id = R.string.time_block2)
+            }
+        }
+
+        if (updateStatus == "updated") {
+
+            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+            val currUpdateDate = appSharedPreferences.getLong("heroes_list_last_modified", 0)
+            val formatedDateTime = simpleDateFormat.format(currUpdateDate).toString()
+
+            result =
+                getResource.getString(id = R.string.heroes_list_last_modified) + " (" + formatedDateTime + ")"
+        }
+
+        return result
+    }
+
+*/
+
+/*
+    private fun getHeroesBaseLastModifiedFromSP(): String {
+        return getHeroesBaseLastModifiedFromSPUseCase.getHeroesBaseLastModifiedFromSPUseCase(
+            appSharedPreferences
         )
     }
 

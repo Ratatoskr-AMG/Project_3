@@ -49,7 +49,7 @@ fun SteamHeaderView(
 
     when (state) {
         is SteamState.LoggedIntoSteam -> {
-            steamTitle = state.steam_user_name
+            steamTitle = state.steamUserName
         }
         is SteamState.IndefinedState -> {
             steamTitle = stringResource(id = R.string.sign_in_with_steam)

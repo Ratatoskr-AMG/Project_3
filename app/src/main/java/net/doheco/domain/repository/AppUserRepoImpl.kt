@@ -14,12 +14,24 @@ class AppUserRepoImpl @Inject constructor(
     private val httpAppClient: HttpClient
 ) {
 
-    fun getPlayerIdFromSP(appSharedPreferences: SharedPreferences): String {
-        return appSharedPreferences.getString("player_id", "").toString()
+    fun setAppUUIdToSP(appSharedPreferences: SharedPreferences, UUId: String) {
+        appSharedPreferences.edit().putString("AppUUId", UUId).apply();
     }
 
-    fun getUUIdFromSP(appSharedPreferences: SharedPreferences): String {
-        return appSharedPreferences.getString("UUId", "").toString()
+    fun getAppUUIdFromSP(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getString("AppUUId", "").toString()
+    }
+
+    fun setSteamUUIdToSP(appSharedPreferences: SharedPreferences, UUId: String) {
+        appSharedPreferences.edit().putString("SteamUUId", UUId).apply();
+    }
+
+    fun getSteamUUIdFromSP(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getString("SteamUUId", "").toString()
+    }
+
+    fun _old_getPlayerIdFromSP(appSharedPreferences: SharedPreferences): String {
+        return appSharedPreferences.getString("player_id", "").toString()
     }
 
     fun getPlayerTierFromSP(appSharedPreferences: SharedPreferences): String {
@@ -61,9 +73,7 @@ class AppUserRepoImpl @Inject constructor(
             .apply();
     }
 
-    fun setUUIdToSP(appSharedPreferences: SharedPreferences, UUId: String) {
-        appSharedPreferences.edit().putString("UUId", UUId).apply();
-    }
+
 
     suspend fun sendFeedback(name: String,text: String): String {
         val Url = "https://doheco.net/api/feedback/?name="+name+"&text="+text;
@@ -115,6 +125,8 @@ class AppUserRepoImpl @Inject constructor(
 
 
     }
+
+
 
 }
 

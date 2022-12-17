@@ -1,16 +1,26 @@
 package net.doheco.domain.useCases.user
 
 import android.content.SharedPreferences
-import android.util.Log
 import net.doheco.domain.repository.AppUserRepoImpl
 import javax.inject.Inject
 
-class SetUUIdToSPUseCase @Inject constructor(
+class UUIdSPUseCase @Inject constructor(
     var appUserRepoImpl: AppUserRepoImpl,
 ) {
+    fun SetAppUUIdToSP(sp: SharedPreferences, UUId:String) {
+        appUserRepoImpl.setAppUUIdToSP(sp,UUId)
+    }
 
-    fun SetUUIdToSP(sp: SharedPreferences,UUId:String) {
-        appUserRepoImpl.setUUIdToSP(sp,UUId)
+    fun GetAppUUIdFromSP(sp: SharedPreferences) : String {
+        return appUserRepoImpl.getAppUUIdFromSP(sp)
+    }
+
+    fun SetSteamUUIdToSP(sp: SharedPreferences, UUId:String) {
+        appUserRepoImpl.setSteamUUIdToSP(sp,UUId)
+    }
+
+    fun GetSteamUUIdFromSP(sp: SharedPreferences) : String {
+        return appUserRepoImpl.getSteamUUIdFromSP(sp)
     }
 
 }

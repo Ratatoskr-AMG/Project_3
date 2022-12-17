@@ -210,7 +210,7 @@ class MainActivity() : AppCompatActivity() {
                         }
                         composable(Screens.Profile.route) {
                             val profileViewModel = hiltViewModel<ProfileViewModel>()
-                            ProfileScreen(navController, profileViewModel, appSharedPreferences)
+                            ProfileScreen(navController, profileViewModel)
                         }
                         composable(Screens.Steam.route) {
                             val steamViewModel = hiltViewModel<SteamViewModel>()

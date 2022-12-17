@@ -22,7 +22,8 @@ class SteamViewModel @Inject constructor(
     private val getDotaBuffUserUseCase: GetDotaBuffUserUseCase,
     private val getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
     private var setPlayerTierToSPUseCase: SetPlayerTierToSPUseCase,
-    private var setPlayerSteamNameToSPUseCase: SetPlayerSteamNameToSPUseCase
+    private var setPlayerSteamNameToSPUseCase: SetPlayerSteamNameToSPUseCase,
+    private var UUIdSPUseCase: UUIdSPUseCase
 ) : AndroidViewModel(Application()), EventHandler<SteamEvent> {
 
     private val playerTierFromSp =
@@ -57,34 +58,28 @@ class SteamViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             val dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
-            Log.e("TOHADOTA",dotaBuffResponse)
             val index = dotaBuffResponse.lastIndexOf("https://www.dotabuff.com/players/")
             val part = dotaBuffResponse.substring(index)
             val addr = part.substringBefore('"')
             val index2 = addr.lastIndexOf('/')
-            val playerId = addr.substring(index2 + 1)
-            val openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(playerId)
-
+            val steamPlayerId = addr.substring(index2 + 1)
+            val openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steamPlayerId)
             val rankTier = openDotaResponse.rank_tier
             appSharedPreferences.edit().putString("player_tier", rankTier).apply()
-            appSharedPreferences.edit().putString("player_id", playerId).apply()
-
-            val spTier = appSharedPreferences.getString("player_tier", "undefined").toString()
-            val spHeroesListLastModified =
-                appSharedPreferences.getLong("heroes_list_last_modified", 0).toString()
 
             try {
                 if (player.steamid.isNotBlank()) {
+
                     setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(appSharedPreferences,player.personaname!!)
-                    setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,spTier)
+                    setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,rankTier)
+                    UUIdSPUseCase.SetSteamUUIdToSP(appSharedPreferences,steamPlayerId)
 
                     _steamState.postValue(
                         SteamState.LoggedIntoSteam(
-                            player.steamid,
+                            steamPlayerId,
                             player.avatarmedium!!,
                             player.personaname!!,
-                            spTier,
-                            spHeroesListLastModified
+                            rankTier
                         )
                     )
                 }

@@ -1,6 +1,7 @@
 package net.doheco.presentation.screens.profile.views
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,8 @@ import net.doheco.presentation.theme.loadPicture
 @ExperimentalFoundationApi
 @Composable
 fun ProfileView(
+    toast: Toast,
+    context: Context,
     viewState: ProfileState,
     viewModel: ProfileViewModel,
     navController: NavController,
@@ -38,12 +42,12 @@ fun ProfileView(
     dialogState: MutableState<Boolean>,
     onReloadClick: () -> Unit
 ) {
-    var logged=false
+    var logged = false
+    var profileTitle = stringResource(id = R.string.title_profile)
 
-    when (viewState) {
-        is ProfileState.SteamNameIsDefinedState -> {
-            logged=true
-        }
+    if (viewModel.ifSteamLoged()) {
+        logged = true
+        profileTitle = viewModel.getPlayerSteamNameFromSP()
     }
 
     Column(
@@ -53,20 +57,16 @@ fun ProfileView(
     ) {
         ProfileHeaderView(
             navController,
-            viewState,
-            viewModel,
+            profileTitle,
             player_tier,
             onReloadClick,
             dialogState,
             logged,
-        ) {viewModel.obtainEvent(ProfileEvent.OnSteamExit)}
+        ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit) }
 
         when (viewState) {
-
-            is ProfileState.SteamNameIsDefinedState -> {
-                Log.e("TOHA",viewState.matchesList.toString())
-                if (viewState.matchesList != null) {
-
+            is ProfileState.SteamDefinedState -> {
+                if (viewState.playerMatchesList != null) {
                     LazyColumn(
                         state = rememberForeverLazyListState(key = "Profile"),
                         modifier = Modifier
@@ -75,115 +75,133 @@ fun ProfileView(
                             .background(Color(0x000000))
                     ) {
 
-                    items(viewState.matchesList!!) { item ->
-                        var bgColor = Color(0xFF7E0000)
-                        if (item.radiantWin!! && item.playerSlot!! <= 127) {
-                            bgColor = Color(0xFF007E00)
-                        }
-                        if (!item.radiantWin && item.playerSlot!! > 127) {
-                            bgColor = Color(0xFF007E00)
-                        }
-                        Row(
-                            modifier = Modifier
-                                .height(50.dp)
-                                .fillMaxWidth()
-                                .padding(start = 10.dp, end = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxHeight(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-
-
-                                Image(
-                                    contentDescription = item.matchId.toString(),
-                                    painter = loadPicture(
-                                        url = item.heroIcon,
-                                        placeholder = painterResource(id = R.drawable.ic_comparing_gr)
-                                    ),
-                                    modifier = Modifier
-                                        .width(60.dp)
-                                        .height(35.dp)
-                                        .padding(top = 5.dp, bottom = 5.dp, end = 15.dp)
-
-                                )
-
-                                Box(
-                                    modifier = Modifier
-                                        .size(10.dp)
-                                        .clip(CircleShape)
-                                        .background(bgColor)
-                                )
-
-                                Text(
-                                    text = item.startTimeFormatted,
-                                    color = Color.White,
-                                    modifier = Modifier.padding(start = 15.dp)
-                                )
-                                Text(
-                                    text = item.durationFormatted,
-                                    color = Color.White,
-                                    modifier = Modifier.padding(start = 15.dp)
-                                )
+                        items(viewState.playerMatchesList!!) { item ->
+                            var bgColor = Color(0xFF7E0000)
+                            if (item.radiantWin!! && item.playerSlot!! <= 127) {
+                                bgColor = Color(0xFF007E00)
+                            }
+                            if (!item.radiantWin && item.playerSlot!! > 127) {
+                                bgColor = Color(0xFF007E00)
                             }
                             Row(
-                                modifier = Modifier.fillMaxHeight(),
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .fillMaxWidth()
+                                    .padding(start = 10.dp, end = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Box(modifier = Modifier.width(40.dp)) {
-
-                                    Text(
-                                        text = item.kills.toString(),
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.align(Alignment.Center)
-                                    )
-                                }
-                                Box(modifier = Modifier.width(40.dp)) {
-
-                                    Text(
-                                        text = item.deaths.toString(),
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.align(Alignment.Center)
-                                    )
-                                }
-                                Box(
-                                    modifier = Modifier.width(40.dp),
-                                    contentAlignment = Alignment.TopCenter
+                                Row(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
 
+
+                                    Image(
+                                        contentDescription = item.matchId.toString(),
+                                        painter = loadPicture(
+                                            url = item.heroIcon,
+                                            placeholder = painterResource(id = R.drawable.ic_comparing_gr)
+                                        ),
+                                        modifier = Modifier
+                                            .width(60.dp)
+                                            .height(35.dp)
+                                            .padding(top = 5.dp, bottom = 5.dp, end = 15.dp)
+
+                                    )
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(10.dp)
+                                            .clip(CircleShape)
+                                            .background(bgColor)
+                                    )
+
                                     Text(
-                                        text = item.assists.toString(),
+                                        text = item.startTimeFormatted,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.align(Alignment.Center)
+                                        modifier = Modifier.padding(start = 15.dp)
+                                    )
+                                    Text(
+                                        text = item.durationFormatted,
+                                        color = Color.White,
+                                        modifier = Modifier.padding(start = 15.dp)
                                     )
                                 }
+                                Row(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Box(modifier = Modifier.width(40.dp)) {
+
+                                        Text(
+                                            text = item.kills.toString(),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+                                    }
+                                    Box(modifier = Modifier.width(40.dp)) {
+
+                                        Text(
+                                            text = item.deaths.toString(),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+                                    }
+                                    Box(
+                                        modifier = Modifier.width(40.dp),
+                                        contentAlignment = Alignment.TopCenter
+                                    ) {
+
+                                        Text(
+                                            text = item.assists.toString(),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+                                    }
+                                }
                             }
+
+
                         }
-
-
-                    }
                     }
                 }
             }
+            is ProfileState.APICallResultProfileState -> {
+                APICallResultScreenBox(viewState)
+            }
             else -> {
-                screenBox(viewState)
+                initScreenBox(viewState)
             }
         }
-
-
-
     }
 }
 
 @Composable
-fun screenBox(viewState:ProfileState){
+fun initScreenBox(viewState: ProfileState) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(start = 50.dp, end = 50.dp),
+            textAlign = TextAlign.Center,
+            text = stringResource(id = R.string.login_offer),
+            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
+        )
+    }
+}
+
+@Composable
+fun APICallResultScreenBox(viewState: ProfileState.APICallResultProfileState) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -195,7 +213,7 @@ fun screenBox(viewState:ProfileState){
                 .padding(start = 50.dp, end = 50.dp),
             textAlign = TextAlign.Center,
             //text = stringResource(id = R.string.login_offer),
-            text = viewState.toString(),
+            text = viewState.msg.toString(),
             color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }

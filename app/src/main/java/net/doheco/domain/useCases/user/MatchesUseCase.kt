@@ -18,17 +18,14 @@ class MatchesUseCase @Inject constructor(
         }
     }
 
-    suspend fun updateFromDb(list: List<DotaMatch>) {
+    suspend fun updateMatchesDb(list: List<DotaMatch>) {
         heroesRepoImpl.deleteAllMatchesFromDb()
         heroesRepoImpl.addToDb(list)
     }
 
-    suspend fun getFromDb(): List<DotaMatch> {
+    suspend fun getMatchesFromDb(): List<DotaMatch> {
         return  heroesRepoImpl.getFromDb().asReversed()
     }
 
-    suspend fun getMatchesFormId(id: Long): DotaMatch {
-        return heroesRepoImpl.getFromDbInId(id)
-    }
 
 }

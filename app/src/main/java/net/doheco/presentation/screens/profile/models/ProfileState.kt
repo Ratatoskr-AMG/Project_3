@@ -4,21 +4,25 @@ import net.doheco.domain.model.DotaMatch
 import net.doheco.domain.model.opendota.OpenDotaMatch
 
 sealed class ProfileState {
+
     data class UndefinedState(
-        var player_tier: String,
-        var heroes_list_last_modified: String,
-        var btnText: String
+        var playerTier: String = "0",
+        var msg: String = "",
     ) : ProfileState()
-    data class SteamNameIsDefinedState(
-        var player_tier: String,
-        var player_steam_name: String,
-        var heroes_list_last_modified: String,
-        var btnText: String,
-        var matchesList: List<DotaMatch>? = emptyList()
+
+    data class SteamDefinedState(
+        var playerTier: String,
+        var playerSteamName: String,
+        var playerMatchesList: List<DotaMatch>? = emptyList(),
+        var msg: String = ""
     ) : ProfileState()
-    object ErrorProfileState : ProfileState()
-    object UpdateHeroesAndMatchesError : ProfileState()
-    data class Init(
-        var player_tier: String = "0",
+
+    data class  ErrorProfileState(var msg: String = "") : ProfileState()
+
+    data class  APICallResultProfileState(
+        var playerTier: String,
+        var playerSteamName: String,
+        var msg: String = ""
+
     ) : ProfileState()
 }

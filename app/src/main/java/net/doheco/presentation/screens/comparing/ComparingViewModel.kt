@@ -18,6 +18,8 @@ import net.doheco.presentation.screens.comparing.models.ComparingState
 import javax.inject.Inject
 
 @HiltViewModel
+
+
 class ComparingViewModel @Inject constructor(
     appSharedPreferences: SharedPreferences,
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,

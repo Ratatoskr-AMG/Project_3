@@ -69,7 +69,7 @@ class ProfileViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 if (matchesUseCase.getMatchesFromDb().isEmpty()) {
-                    updateHeroesAndMatches()
+                    updateHeroesAndMatches(true)
                 } else {
                     _profileState.postValue(
                         ProfileState.SteamDefinedState(
@@ -84,7 +84,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun updateHeroesAndMatches() {
+    private fun updateHeroesAndMatches(isInit:Boolean = false) {
 
         viewModelScope.launch(Dispatchers.IO) {
             var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
@@ -116,14 +116,24 @@ class ProfileViewModel @Inject constructor(
 
                     matchesUseCase.updateMatchesDb(appDotaMatches)
 
-                    _profileState.postValue(
-                        ProfileState.SteamDefinedState(
-                            getPlayerTierFromSP(),
-                            getPlayerSteamNameFromSP(),
-                            matchesUseCase.getMatchesFromDb(),
-                            "Updated",
+                    if(isInit) {
+                        _profileState.postValue(
+                            ProfileState.SteamDefinedState(
+                                getPlayerTierFromSP(),
+                                getPlayerSteamNameFromSP(),
+                                matchesUseCase.getMatchesFromDb(),
+                                "Updated",
+                            )
                         )
-                    )
+                    }else{
+                        _profileState.postValue(
+                            ProfileState.APICallResultProfileState(
+                                getPlayerTierFromSP(),
+                                getPlayerSteamNameFromSP(),
+                                "Updated!"
+                            )
+                        )
+                    }
                     Log.e("APICALL", apiCallResult.toString())
                     Log.e("APICALL", appDotaMatches.toString())
 
@@ -211,6 +221,7 @@ class ProfileViewModel @Inject constructor(
             is ProfileEvent.OnSteamExit -> exitSteam()
             is ProfileEvent.OnUpdate -> updateHeroesAndMatches()
             is ProfileEvent.OnSendFeedback -> sendFeedback(event)
+            is ProfileEvent.OnAPICallResultScreenBoxClose -> profileInit()
             else -> {}
         }
     }

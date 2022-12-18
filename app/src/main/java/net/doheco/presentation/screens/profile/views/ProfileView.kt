@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -173,7 +175,7 @@ fun ProfileView(
                 }
             }
             is ProfileState.APICallResultProfileState -> {
-                APICallResultScreenBox(viewState)
+                APICallResultScreenBox(viewModel,viewState)
             }
             else -> {
                 initScreenBox(viewState)
@@ -201,20 +203,40 @@ fun initScreenBox(viewState: ProfileState) {
 }
 
 @Composable
-fun APICallResultScreenBox(viewState: ProfileState.APICallResultProfileState) {
+fun APICallResultScreenBox(viewModel:ProfileViewModel,viewState: ProfileState.APICallResultProfileState) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color.Black),
+        contentAlignment = Alignment.Center,
     ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(start = 50.dp, end = 50.dp),
-            textAlign = TextAlign.Center,
-            //text = stringResource(id = R.string.login_offer),
-            text = viewState.msg.toString(),
-            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
-        )
+        Column(
+            modifier = Modifier.padding(horizontal = 24.dp).fillMaxHeight().width(200.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 50.dp, end = 50.dp),
+                textAlign = TextAlign.Center,
+                text = viewState.msg,
+                color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
+            )
+            Button(
+                modifier = Modifier.fillMaxWidth().padding(top=20.dp),
+                onClick = {
+                    viewModel.obtainEvent(ProfileEvent.OnAPICallResultScreenBoxClose)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF00821d),
+                    disabledBackgroundColor = Color(0xFF6a36a3),
+                    contentColor = Color.White,
+                    disabledContentColor = Color.White
+                ),
+
+            ){
+                Text(text = stringResource(id = R.string.close))
+            }
+        }
     }
 }

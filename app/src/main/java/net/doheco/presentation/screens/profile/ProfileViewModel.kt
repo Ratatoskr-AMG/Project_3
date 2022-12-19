@@ -42,7 +42,7 @@ class ProfileViewModel @Inject constructor(
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
     private val _profileState: MutableLiveData<ProfileState> =
-        MutableLiveData(ProfileState.UndefinedState())
+        MutableLiveData(ProfileState.EmptyState())
     val profileState: LiveData<ProfileState> = _profileState
 
     init {

@@ -177,15 +177,20 @@ fun ProfileView(
             is ProfileState.APICallResultProfileState -> {
                 APICallResultScreenBox(viewModel,viewState)
             }
+            is ProfileState.UndefinedState -> {
+                undefinedScreenBox(viewState)
+            }
             else -> {
-                initScreenBox(viewState)
+                emptyScreenBox(viewState)
             }
         }
     }
 }
 
 @Composable
-fun initScreenBox(viewState: ProfileState) {
+fun undefinedScreenBox(viewState: ProfileState) {
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -196,7 +201,7 @@ fun initScreenBox(viewState: ProfileState) {
                 .align(Alignment.Center)
                 .padding(start = 50.dp, end = 50.dp),
             textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.login_offer),
+            text = stringResource(id = R.string.login_offer1),
             color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }
@@ -238,5 +243,16 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel,viewState: ProfileState.AP
                 Text(text = stringResource(id = R.string.close))
             }
         }
+    }
+}
+
+@Composable
+fun emptyScreenBox(viewState: ProfileState) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+
     }
 }

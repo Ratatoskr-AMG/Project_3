@@ -3,7 +3,7 @@
     <string name="title_home">Heroes</string>
     <string name="title_hero">Hero</string>
     <string name="title_favorites">Favorites</string>
-    <string name="title_profile">Profile</string>
+    <string name="title_profile">Personal</string>
     <string name="video_string">Video</string>
     <string name="role_string">Role</string>
     <string name="title_attr">Attr</string>
@@ -108,7 +108,15 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="search">Enter hero name</string>
-    <string name="login_offer">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer">To receive updated data more\n
+        often, please,
+        log in via Steam</string>
+    <string name="login_offer1">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer2">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer3">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer4">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer5">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer6">To receive updated data more often, please, log in via Steam</string>
     <string name="update_time">"Data has been updated "</string>
     <string name="time_block">You can update the data no more than once in a day</string>
     <string name="time_block2">You can update the data no more than once in an hour</string>

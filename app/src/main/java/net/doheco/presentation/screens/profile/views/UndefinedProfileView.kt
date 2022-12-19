@@ -30,7 +30,7 @@ fun UndefinedProfileView(
     dialogState: MutableState<Boolean>,
     onReloadClick: () -> Unit
 ) {
-
+/*
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,4 +61,6 @@ fun UndefinedProfileView(
             )
         }
     }
+
+ */
 }

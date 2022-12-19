@@ -4,7 +4,7 @@
     <string name="title_home">Герои</string>
     <string name="title_hero">Герой</string>
     <string name="title_favorites">Избранное</string>
-    <string name="title_profile">Профиль</string>
+    <string name="title_profile">Личные данные</string>
     <string name="video_string">Видео</string>
     <string name="role_string">Роль</string>
     <string name="title_attr">Атрибут</string>
@@ -110,6 +110,12 @@
     <string name="yes">Да</string>
     <string name="search">Введите имя героя</string>
     <string name="login_offer">Для обновления данных, пожалуйста, авторизуйтесь через Steam</string>
+    <string name="login_offer1">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer2">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer3">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer4">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer5">To receive updated data more often, please, log in via Steam</string>
+    <string name="login_offer6">To receive updated data more often, please, log in via Steam</string>
     <string name="update_time">Данные обновлялись</string>
     <string name="time_block">Обновлять данные можно не чаще одного раза в день</string>
     <string name="time_block2">Обновлять данные можно не чаще чем 1 раз в час</string>

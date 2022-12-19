@@ -12,8 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,8 +34,6 @@ import net.doheco.presentation.theme.loadPicture
 @ExperimentalFoundationApi
 @Composable
 fun ProfileView(
-    toast: Toast,
-    context: Context,
     viewState: ProfileState,
     viewModel: ProfileViewModel,
     navController: NavController,
@@ -51,6 +48,7 @@ fun ProfileView(
         logged = true
         profileTitle = viewModel.getPlayerSteamNameFromSP()
     }
+
 
     Column(
         modifier = Modifier
@@ -175,21 +173,20 @@ fun ProfileView(
                 }
             }
             is ProfileState.APICallResultProfileState -> {
-                APICallResultScreenBox(viewModel,viewState)
+                APICallResultScreenBox(viewModel)
             }
             is ProfileState.UndefinedState -> {
-                undefinedScreenBox(viewState)
+                UndefinedScreenBox(viewState)
             }
             else -> {
-                emptyScreenBox(viewState)
+                EmptyScreenBox(viewState)
             }
         }
     }
 }
 
 @Composable
-fun undefinedScreenBox(viewState: ProfileState) {
-
+fun UndefinedScreenBox(viewState: ProfileState) {
 
     Box(
         modifier = Modifier
@@ -207,8 +204,10 @@ fun undefinedScreenBox(viewState: ProfileState) {
     }
 }
 
+
 @Composable
-fun APICallResultScreenBox(viewModel:ProfileViewModel,viewState: ProfileState.APICallResultProfileState) {
+fun APICallResultScreenBox(viewModel:ProfileViewModel) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -224,7 +223,14 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel,viewState: ProfileState.AP
                 modifier = Modifier
                     .padding(start = 50.dp, end = 50.dp),
                 textAlign = TextAlign.Center,
-                text = viewState.msg,
+                text = "Next update:",
+                color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 50.dp, end = 50.dp),
+                textAlign = TextAlign.Center,
+                text = viewModel.state.value,
                 color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
             )
             Button(
@@ -247,7 +253,7 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel,viewState: ProfileState.AP
 }
 
 @Composable
-fun emptyScreenBox(viewState: ProfileState) {
+fun EmptyScreenBox(viewState: ProfileState) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -255,4 +261,5 @@ fun emptyScreenBox(viewState: ProfileState) {
     ) {
 
     }
+
 }

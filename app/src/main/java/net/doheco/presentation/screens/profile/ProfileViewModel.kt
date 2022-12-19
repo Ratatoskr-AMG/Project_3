@@ -3,12 +3,15 @@ package net.doheco.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
@@ -44,6 +47,8 @@ class ProfileViewModel @Inject constructor(
     private val _profileState: MutableLiveData<ProfileState> =
         MutableLiveData(ProfileState.EmptyState())
     val profileState: LiveData<ProfileState> = _profileState
+
+    val state = mutableStateOf("")
 
     init {
         profileInit()
@@ -143,9 +148,10 @@ class ProfileViewModel @Inject constructor(
                         ProfileState.APICallResultProfileState(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
-                            "Next Update in " + apiCallResult.remain
+                            apiCallResult.remain
                         )
                     )
+                    onStart(apiCallResult.remain)
                 }
 
             } catch (e: Exception) {
@@ -226,7 +232,38 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-
+    private fun onStart(text: String?) {
+        if (text == null) {
+            Log.e("ERROR", "Remain == null")
+        } else {
+            val time = text.split(':').toMutableList()
+            state.value = text
+            viewModelScope.launch {
+                while (text != "00:00:00") {
+                    delay(1000)
+                    when {
+                        time[1] == "00" -> {
+                            time[1] = "59"
+                            time[0] = (time[0].toInt() - 1).toString()
+                            if (time[0].length < 2) time[0] = "0" + time[0]
+                        }
+                        time[2] == "00" -> {
+                            time[2] = "59"
+                            time[1] = (time[1].toInt() - 1).toString()
+                            if (time[1].length < 2) time[1] = "0" + time[1]
+                        }
+                        time[2] != "00" -> {
+                            time[2] = (time[2].toInt() - 1).toString()
+                            if (time[2].length < 2) time[2] = "0" + time[2]
+                        }
+                    }
+                    state.value = "${time[0]}:${time[1]}:${time[2]}"
+                }
+                // Если время кончилось, может добавить какой нибудь текст ?
+                state.value = "You can update!"
+            }
+        }
+    }
 }
 
 

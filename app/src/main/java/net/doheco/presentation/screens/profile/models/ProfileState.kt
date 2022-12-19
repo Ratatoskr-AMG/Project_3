@@ -27,7 +27,7 @@ sealed class ProfileState {
     data class  APICallResultProfileState(
         var playerTier: String,
         var playerSteamName: String,
-        var msg: String = ""
+        var msg: String? = ""
 
     ) : ProfileState()
 }

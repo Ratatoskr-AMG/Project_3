@@ -10,9 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
@@ -48,7 +46,9 @@ class ProfileViewModel @Inject constructor(
         MutableLiveData(ProfileState.EmptyState())
     val profileState: LiveData<ProfileState> = _profileState
 
-    val state = mutableStateOf("")
+    private val state = mutableStateOf("")
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
 
     init {
         profileInit()
@@ -90,6 +90,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun updateHeroesAndMatches(isInit:Boolean = false) {
+        coroutineScope.cancel()
+        coroutineScope = CoroutineScope(Dispatchers.Main)
 
         viewModelScope.launch(Dispatchers.IO) {
             var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
@@ -131,11 +133,12 @@ class ProfileViewModel @Inject constructor(
                             )
                         )
                     }else{
+                        state.value = "Updated!"
                         _profileState.postValue(
                             ProfileState.APICallResultProfileState(
                                 getPlayerTierFromSP(),
                                 getPlayerSteamNameFromSP(),
-                                "Updated!"
+                                state,
                             )
                         )
                     }
@@ -148,7 +151,7 @@ class ProfileViewModel @Inject constructor(
                         ProfileState.APICallResultProfileState(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
-                            apiCallResult.remain
+                            state
                         )
                     )
                     onStart(apiCallResult.remain)
@@ -238,7 +241,7 @@ class ProfileViewModel @Inject constructor(
         } else {
             val time = text.split(':').toMutableList()
             state.value = text
-            viewModelScope.launch {
+           coroutineScope.launch {
                 while (text != "00:00:00") {
                     delay(1000)
                     when {

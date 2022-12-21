@@ -173,7 +173,7 @@ fun ProfileView(
                 }
             }
             is ProfileState.APICallResultProfileState -> {
-                APICallResultScreenBox(viewModel)
+                APICallResultScreenBox(viewModel, viewState)
             }
             is ProfileState.UndefinedState -> {
                 UndefinedScreenBox(viewState)
@@ -206,7 +206,7 @@ fun UndefinedScreenBox(viewState: ProfileState) {
 
 
 @Composable
-fun APICallResultScreenBox(viewModel:ProfileViewModel) {
+fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.APICallResultProfileState) {
 
     Box(
         modifier = Modifier
@@ -230,7 +230,7 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel) {
                 modifier = Modifier
                     .padding(start = 50.dp, end = 50.dp),
                 textAlign = TextAlign.Center,
-                text = viewModel.state.value,
+                text = viewState.msg.value,
                 color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
             )
             Button(

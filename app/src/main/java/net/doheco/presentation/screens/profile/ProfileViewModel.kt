@@ -146,8 +146,6 @@ class ProfileViewModel @Inject constructor(
                     }
                     Log.e("APICALL", apiCallResult.toString())
 
-
-
                 } else {
                     _profileState.postValue(
                         ProfileState.APICallResultProfileState(
@@ -242,8 +240,8 @@ class ProfileViewModel @Inject constructor(
             Log.e("ERROR", "Remain == null")
         } else {
             val time = text.split(':').toMutableList()
-            state.value = text
-           coroutineScope.launch {
+            state.value = "Next update:\n$text"
+            coroutineScope.launch {
                 while (text != "00:00:00") {
                     delay(1000)
                     when {
@@ -262,7 +260,7 @@ class ProfileViewModel @Inject constructor(
                             if (time[2].length < 2) time[2] = "0" + time[2]
                         }
                     }
-                    state.value = "${time[0]}:${time[1]}:${time[2]}"
+                    state.value = "Next update:\n${time[0]}:${time[1]}:${time[2]}"
                 }
                 // Если время кончилось, может добавить какой нибудь текст ?
                 state.value = "You can update!"

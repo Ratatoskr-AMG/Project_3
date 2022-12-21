@@ -223,13 +223,6 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
                 modifier = Modifier
                     .padding(start = 50.dp, end = 50.dp),
                 textAlign = TextAlign.Center,
-                text = "Next update:",
-                color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
-            )
-            Text(
-                modifier = Modifier
-                    .padding(start = 50.dp, end = 50.dp),
-                textAlign = TextAlign.Center,
                 text = viewState.msg.value,
                 color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
             )

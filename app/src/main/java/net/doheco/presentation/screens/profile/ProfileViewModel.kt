@@ -116,12 +116,14 @@ class ProfileViewModel @Inject constructor(
 
                     val openDotaMatchesList = apiCallResult.matches
                     Log.e("APICALL", "openDotaMatchesList:" + openDotaMatchesList.toString())
-                    var appDotaMatches = openDotaMatchesList!!.map {
-                        var hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
-                        DotaMatchesConverter.doForward(it, hero)
+                    if(openDotaMatchesList!=null){
+                        var appDotaMatches = openDotaMatchesList!!.map {
+                            var hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
+                            DotaMatchesConverter.doForward(it, hero)
+                        }
+                        matchesUseCase.updateMatchesDb(appDotaMatches)
+                        Log.e("APICALL", appDotaMatches.toString())
                     }
-
-                    matchesUseCase.updateMatchesDb(appDotaMatches)
 
                     if(isInit) {
                         _profileState.postValue(
@@ -143,7 +145,7 @@ class ProfileViewModel @Inject constructor(
                         )
                     }
                     Log.e("APICALL", apiCallResult.toString())
-                    Log.e("APICALL", appDotaMatches.toString())
+
 
 
                 } else {

@@ -25,8 +25,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-
-
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private var appSharedPreferences: SharedPreferences,

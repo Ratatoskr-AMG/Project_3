@@ -37,41 +37,23 @@ fun ProfileScreen(
     viewModel: ProfileViewModel,
 ) {
 
-    val profileTitle = remember { mutableStateOf(false) }
-    val toastMsg = remember { mutableStateOf("init_msg") }
     val openDialog = remember { mutableStateOf(false) }
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
-    var openUpdateDialog = remember { mutableStateOf(false) }
+    val openUpdateDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
     val playerTier = viewModel.getPlayerTierFromSP()
     val viewState = viewModel.profileState.observeAsState(ProfileState.UndefinedState())
-    var MyToast = Toast(context)
+
 
     ProfileView(
-        MyToast,
-        context,
         viewState.value,
         viewModel,
         navController,
         playerTier,
         dialogState = openDialog,
         onReloadClick = {
-
             viewModel.obtainEvent(ProfileEvent.OnUpdate)
-
-            when (val state = viewState.value) {
-                is ProfileState.SteamDefinedState -> {
-                   // Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
-                }
-                is ProfileState.ErrorProfileState -> {
-                   // Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
-                }
-                is ProfileState.UndefinedState -> {
-                   // Toast.makeText(context, "~"+state.msg, Toast.LENGTH_SHORT).show()
-                }
-            }
-
         },
     )
 

@@ -1,5 +1,6 @@
 package net.doheco.presentation.screens.profile.models
 
+import androidx.compose.runtime.MutableState
 import net.doheco.domain.model.DotaMatch
 import net.doheco.domain.model.opendota.OpenDotaMatch
 
@@ -27,7 +28,7 @@ sealed class ProfileState {
     data class  APICallResultProfileState(
         var playerTier: String,
         var playerSteamName: String,
-        var msg: String = ""
+        var msg: MutableState<String>,
 
     ) : ProfileState()
 }

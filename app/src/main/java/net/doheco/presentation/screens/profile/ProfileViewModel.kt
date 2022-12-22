@@ -3,13 +3,14 @@ package net.doheco.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
@@ -44,6 +45,10 @@ class ProfileViewModel @Inject constructor(
     private val _profileState: MutableLiveData<ProfileState> =
         MutableLiveData(ProfileState.EmptyState())
     val profileState: LiveData<ProfileState> = _profileState
+
+    private val state = mutableStateOf("")
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
 
     init {
         profileInit()
@@ -85,6 +90,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun updateHeroesAndMatches(isInit:Boolean = false) {
+        coroutineScope.cancel()
+        coroutineScope = CoroutineScope(Dispatchers.Main)
 
         viewModelScope.launch(Dispatchers.IO) {
             var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
@@ -109,12 +116,14 @@ class ProfileViewModel @Inject constructor(
 
                     val openDotaMatchesList = apiCallResult.matches
                     Log.e("APICALL", "openDotaMatchesList:" + openDotaMatchesList.toString())
-                    var appDotaMatches = openDotaMatchesList!!.map {
-                        var hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
-                        DotaMatchesConverter.doForward(it, hero)
+                    if(openDotaMatchesList!=null){
+                        var appDotaMatches = openDotaMatchesList!!.map {
+                            var hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
+                            DotaMatchesConverter.doForward(it, hero)
+                        }
+                        matchesUseCase.updateMatchesDb(appDotaMatches)
+                        Log.e("APICALL", appDotaMatches.toString())
                     }
-
-                    matchesUseCase.updateMatchesDb(appDotaMatches)
 
                     if(isInit) {
                         _profileState.postValue(
@@ -126,26 +135,26 @@ class ProfileViewModel @Inject constructor(
                             )
                         )
                     }else{
+                        state.value = "Updated!"
                         _profileState.postValue(
                             ProfileState.APICallResultProfileState(
                                 getPlayerTierFromSP(),
                                 getPlayerSteamNameFromSP(),
-                                "Updated!"
+                                state,
                             )
                         )
                     }
                     Log.e("APICALL", apiCallResult.toString())
-                    Log.e("APICALL", appDotaMatches.toString())
-
 
                 } else {
                     _profileState.postValue(
                         ProfileState.APICallResultProfileState(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
-                            "Next Update in " + apiCallResult.remain
+                            state
                         )
                     )
+                    onStart(apiCallResult.remain)
                 }
 
             } catch (e: Exception) {
@@ -226,7 +235,38 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-
+    private fun onStart(text: String?) {
+        if (text == null) {
+            Log.e("ERROR", "Remain == null")
+        } else {
+            val time = text.split(':').toMutableList()
+            state.value = "Next update:\n$text"
+            coroutineScope.launch {
+                while (text != "00:00:00") {
+                    delay(1000)
+                    when {
+                        time[1] == "00" -> {
+                            time[1] = "59"
+                            time[0] = (time[0].toInt() - 1).toString()
+                            if (time[0].length < 2) time[0] = "0" + time[0]
+                        }
+                        time[2] == "00" -> {
+                            time[2] = "59"
+                            time[1] = (time[1].toInt() - 1).toString()
+                            if (time[1].length < 2) time[1] = "0" + time[1]
+                        }
+                        time[2] != "00" -> {
+                            time[2] = (time[2].toInt() - 1).toString()
+                            if (time[2].length < 2) time[2] = "0" + time[2]
+                        }
+                    }
+                    state.value = "Next update:\n${time[0]}:${time[1]}:${time[2]}"
+                }
+                // Если время кончилось, может добавить какой нибудь текст ?
+                state.value = "You can update!"
+            }
+        }
+    }
 }
 
 

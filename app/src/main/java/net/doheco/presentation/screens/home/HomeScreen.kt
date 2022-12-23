@@ -57,8 +57,6 @@ fun HomeScreen(
         else -> {}
     }
     LaunchedEffect(key1 = Unit, block = {
-        Log.e("WHAT", "launchedEffect")
-        viewModel.getAllHeroesSortByName()
-        //viewModel.registerFirebaseEvent()
+
     })
 }

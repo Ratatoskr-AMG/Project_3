@@ -70,6 +70,8 @@ class SteamViewModel @Inject constructor(
             try {
                 if (player.steamid.isNotBlank()) {
 
+                    Log.e("STEAM:dotaBuffResponse",dotaBuffResponse);
+
                     setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(appSharedPreferences,player.personaname!!)
                     setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,rankTier)
                     UUIdSPUseCase.SetSteamUUIdToSP(appSharedPreferences,steamPlayerId)

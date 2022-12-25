@@ -2,7 +2,10 @@ package net.doheco.presentation.screens.steam.models
 
 sealed class SteamState {
 
-    object ErrorSteamState: SteamState()
+    data class ErrorSteamState(
+        val error: String
+    ): SteamState()
+
     data class IndefinedState(
         val playerTier: String
     ): SteamState()

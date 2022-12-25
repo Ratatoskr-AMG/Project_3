@@ -89,7 +89,9 @@ class SteamViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _steamState.postValue(SteamState.ErrorSteamState)
+                _steamState.postValue(SteamState.ErrorSteamState(
+                    error = e.toString()
+                ))
             }
         }
     }

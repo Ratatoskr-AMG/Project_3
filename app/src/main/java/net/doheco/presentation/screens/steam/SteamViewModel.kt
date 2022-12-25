@@ -66,6 +66,7 @@ class SteamViewModel @Inject constructor(
             val index2 = addr.lastIndexOf('/')
             val steamPlayerId = addr.substring(index2 + 1)
             val openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steamPlayerId)
+            Log.e("STEAM"," - openDotaResponse:"+openDotaResponse);
             val rankTier = openDotaResponse.rank_tier
             appSharedPreferences.edit().putString("player_tier", rankTier).apply()
 
@@ -119,7 +120,7 @@ class SteamViewModel @Inject constructor(
             val steamResponse = getSteamUserUseCase.getSteamResponseOnId(userId)
             val player = steamResponse.response.players[0]
             player.steamid = userId
-            getResponseFromOpenDota(player.steamid)
+            //getResponseFromOpenDota(player.steamid)
             getResponseFromDotaBuff(player)
         }
     }

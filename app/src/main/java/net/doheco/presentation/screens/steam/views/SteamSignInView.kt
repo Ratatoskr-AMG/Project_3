@@ -1,6 +1,7 @@
 package net.doheco.presentation.screens.steam.views
 
 import android.net.Uri
+import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -107,6 +108,7 @@ fun SteamSignInView(
                                                 url: String
                                             ) {
                                                 val Url: Uri = Uri.parse(url)
+                                                Log.e("STEAM:Url",Url.toString());
                                                 if (Url.authority.equals("doheco.net")) {
 
                                                     val userAccountUrl =

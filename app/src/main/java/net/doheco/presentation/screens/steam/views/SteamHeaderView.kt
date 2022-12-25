@@ -54,7 +54,9 @@ fun SteamHeaderView(
         is SteamState.IndefinedState -> {
             steamTitle = stringResource(id = R.string.sign_in_with_steam)
         }
-        else -> {}
+        else -> {
+            steamTitle = "Error" // Добавить текст
+        }
     }
 
     Row(

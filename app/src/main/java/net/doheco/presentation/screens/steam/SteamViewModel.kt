@@ -55,6 +55,8 @@ class SteamViewModel @Inject constructor(
 
     private fun getResponseFromDotaBuff(player: SteamPlayer) {
 
+        Log.e("STEAM"," - getResponseFromDotaBuff");
+
         viewModelScope.launch(Dispatchers.IO) {
 
             val dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
@@ -64,11 +66,15 @@ class SteamViewModel @Inject constructor(
             val index2 = addr.lastIndexOf('/')
             val steamPlayerId = addr.substring(index2 + 1)
             val openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steamPlayerId)
+            Log.e("STEAM"," - openDotaResponse:"+openDotaResponse);
             val rankTier = openDotaResponse.rank_tier
             appSharedPreferences.edit().putString("player_tier", rankTier).apply()
 
             try {
                 if (player.steamid.isNotBlank()) {
+
+                    Log.e("STEAM"," - player:"+player.toString());
+                    Log.e("STEAM"," - dotaBuffResponse:"+dotaBuffResponse);
 
                     setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(appSharedPreferences,player.personaname!!)
                     setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,rankTier)
@@ -84,7 +90,9 @@ class SteamViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _steamState.postValue(SteamState.ErrorSteamState)
+                _steamState.postValue(SteamState.ErrorSteamState(
+                    error = e.toString()
+                ))
             }
         }
     }
@@ -112,7 +120,7 @@ class SteamViewModel @Inject constructor(
             val steamResponse = getSteamUserUseCase.getSteamResponseOnId(userId)
             val player = steamResponse.response.players[0]
             player.steamid = userId
-            getResponseFromOpenDota(player.steamid)
+            //getResponseFromOpenDota(player.steamid)
             getResponseFromDotaBuff(player)
         }
     }

@@ -37,7 +37,7 @@ fun RecommendationsView(
     var tierBlockNum = 0;
     if (player_tier != "undefined") {
         tierImgAddr = "https://doheco.net/app/img/tier/${player_tier[0]}.png"
-        tierBlockNum = player_tier.toInt()
+        tierBlockNum = player_tier[0].toString().toInt()
         Log.e("TOHAIMG",tierImgAddr)
     }
 

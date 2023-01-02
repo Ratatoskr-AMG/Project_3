@@ -55,30 +55,45 @@ class SteamViewModel @Inject constructor(
 
     private fun getResponseFromDotaBuff(player: SteamPlayer) {
 
-        Log.e("STEAM"," - getResponseFromDotaBuff");
+        Log.e("STEAM", " - getResponseFromDotaBuff");
 
         viewModelScope.launch(Dispatchers.IO) {
 
             val dotaBuffResponse = getDotaBuffUserUseCase.getDotabuffResponseOnId(player.steamid)
+            //val isPrivate = dotaBuffResponse.lastIndexOf("fa fa-lock")>0
+            val isPrivate = dotaBuffResponse.contains("fa fa-lock")
+            Log.e("STEAM", "indexPrivate" + isPrivate.toString())
+            if (isPrivate) {
+
+            }
             val index = dotaBuffResponse.lastIndexOf("https://www.dotabuff.com/players/")
             val part = dotaBuffResponse.substring(index)
             val addr = part.substringBefore('"')
             val index2 = addr.lastIndexOf('/')
             val steamPlayerId = addr.substring(index2 + 1)
             val openDotaResponse = getOpenDotaUserUseCase.getOpenDotaResponseOnId(steamPlayerId)
-            Log.e("STEAM"," - openDotaResponse:"+openDotaResponse);
-            val rankTier = openDotaResponse.rank_tier
+            Log.e("STEAM", " - openDotaResponse:" + openDotaResponse);
+            var rankTier = openDotaResponse.rank_tier
+            if (rankTier == null) {
+                rankTier = "0"
+            }
+
             appSharedPreferences.edit().putString("player_tier", rankTier).apply()
 
             try {
-                if (player.steamid.isNotBlank()) {
+                if (player.steamid.isNotBlank() && !isPrivate) {
 
-                    Log.e("STEAM"," - player:"+player.toString());
-                    Log.e("STEAM"," - dotaBuffResponse:"+dotaBuffResponse);
+                    Log.e("STEAM", " - player:" + player.toString());
+                    Log.e("STEAM", " - dotaBuffResponse:" + dotaBuffResponse);
 
-                    setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(appSharedPreferences,player.personaname!!)
-                    setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences,rankTier)
-                    UUIdSPUseCase.SetSteamUUIdToSP(appSharedPreferences,steamPlayerId)
+                    setPlayerSteamNameToSPUseCase.setPlayerSteamNameToSP(
+                        appSharedPreferences,
+                        player.personaname!!
+                    )
+
+                    setPlayerTierToSPUseCase.setPlayerTierToSP(appSharedPreferences, rankTier)
+
+                    UUIdSPUseCase.SetSteamUUIdToSP(appSharedPreferences, steamPlayerId)
 
                     _steamState.postValue(
                         SteamState.LoggedIntoSteam(
@@ -89,11 +104,22 @@ class SteamViewModel @Inject constructor(
                         )
                     )
                 }
+                if (isPrivate) {
+                    _steamState.postValue(
+                        SteamState.ErrorSteamState(
+                            error = "Private"
+                        )
+                    )
+                }
             } catch (e: Exception) {
-                _steamState.postValue(SteamState.ErrorSteamState(
-                    error = e.toString()
-                ))
+                _steamState.postValue(
+                    SteamState.ErrorSteamState(
+                        error = e.toString()
+                    )
+                )
             }
+
+
         }
     }
 

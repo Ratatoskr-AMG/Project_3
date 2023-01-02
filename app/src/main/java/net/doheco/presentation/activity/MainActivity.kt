@@ -54,7 +54,6 @@ import net.doheco.presentation.screens.hero.HeroViewModel
 import net.doheco.presentation.screens.role.RoleViewModel
 import net.doheco.presentation.screens.tiers.TiersScreen
 import net.doheco.presentation.screens.home.HomeViewModel
-import net.doheco.presentation.screens.home.models.HomeState
 import net.doheco.presentation.screens.recommendations.RecommendationsScreen
 import net.doheco.presentation.screens.recommendations.RecommendationsViewModel
 import net.doheco.presentation.screens.steam.SteamScreen
@@ -64,7 +63,8 @@ import net.doheco.presentation.screens.video.VideoViewModel
 class MainActivity() : AppCompatActivity() {
 
     private val APP_SHARED_PREFERENCES_NAME = "app_preferences"
-    private val homeViewModel: HomeViewModel by viewModels()
+
+    private val splashScreenViewModel: SplashScreenViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
@@ -72,13 +72,9 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {
-            var state = true
-            homeViewModel.homeState.observe(
+            splashScreenViewModel.loadState.observe(
                 this@MainActivity
-            ) { if (it != HomeState.LoadingHomeState()) state = false }
-            setKeepOnScreenCondition {
-                state
-            }
+            ) { state -> setKeepOnScreenCondition { state } }
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -86,10 +82,6 @@ class MainActivity() : AppCompatActivity() {
             APP_SHARED_PREFERENCES_NAME,
             Context.MODE_PRIVATE
         )
-
-        val imageLoader = ImageLoader.Builder(this)
-            .crossfade(true)
-            .build()
 
         setContent {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
@@ -99,7 +91,9 @@ class MainActivity() : AppCompatActivity() {
                 val navController = rememberNavController()
                 var bottomNavMenuHeight = 80.dp
                 Scaffold(
-                    modifier = Modifier.navigationBarsPadding().background(Color.Black),
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .background(Color.Black),
                     bottomBar = {
                         BottomNavigation(
                             modifier = Modifier
@@ -174,10 +168,12 @@ class MainActivity() : AppCompatActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Screens.Home.route,
-                        modifier = Modifier.padding(it).background(Color.Black)
+                        modifier = Modifier
+                            .padding(it)
+                            .background(Color.Black)
                     ) {
                         composable(Screens.Home.route) {
-                           // val heroesListviewModel = hiltViewModel<HomeViewModel>()
+                            val homeViewModel = hiltViewModel<HomeViewModel>()
                             HomeScreen(
                                 viewModel = homeViewModel,
                                 navController = navController,

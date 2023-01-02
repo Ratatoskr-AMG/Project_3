@@ -20,52 +20,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private var mFirebaseAnalytics: FirebaseAnalytics,
-    var imageLoader: ImageLoader,
     var appSharedPreferences: SharedPreferences,
     val getAllHeroesSortByNameUseCase: GetAllHeroesSortByNameUseCase,
-    private val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
     val getAllHeroesByAttrUseCase: GetAllHeroesByAttrUseCase,
-    private val addHeroesUserCase: AddHeroesUserCase,
     val getAllFavoriteHeroesUseCase: GetAllFavoriteHeroesUseCase,
-    private val getPlayerIdFromSP: GetPlayerIdFromSP,
-    val getAllHeroesByRoleUseCase: GetAllHeroesByRoleUseCase,
     val UUIdSPUseCase: UUIdSPUseCase,
-    val serverApiCallUseCase: ServerApiCallUseCase,
 ) : AndroidViewModel(Application()) {
 
-    fun setAppUUIdToSPIfNeeded(){
-        if(UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences).isEmpty()){
-            var UUId = UUID.randomUUID().toString()
-            UUIdSPUseCase.SetAppUUIdToSP(appSharedPreferences,UUId)
-        }
-    }
 
-    private val _heroesListState: MutableLiveData<HomeState> = MutableLiveData<HomeState>()
+    private val _heroesListState: MutableLiveData<HomeState> = MutableLiveData<HomeState>(HomeState.LoadingHomeState())
     val homeState: LiveData<HomeState> = _heroesListState
 
 
     init {
-        setAppUUIdToSPIfNeeded()
-        getAllHeroesSortByName()
-    }
-
-    fun getAllHeroesSortByName() {
-        Log.e("WHAT", "get heroes")
-        //_heroesListState.value = HomeState.LoadingHomeState()
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val heroes = getAllHeroesSortByNameUseCase.getAllHeroesSortByName()
-                if (heroes.isEmpty()) {
-                    getAllHeroesFromApi(appSharedPreferences)
-                } else {
-                    getAllHeroesByStrSortByName("")
-                }
-            } catch (e: java.lang.Exception) {
-                Log.e("TOHA", "e:$e")
-                e.printStackTrace()
-            }
-        }
+        getAllHeroesByStrSortByName("")
     }
 
     fun getAllHeroesByStrSortByName(str: String) {
@@ -83,54 +51,15 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 Log.e("TOHA", "e:$e")
-                e.printStackTrace()
-            }
-        }
-    }
-
-
-    private suspend fun getAllHeroesFromApi(appSharedPreferences: SharedPreferences) {
-
-        var UUId = UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences)
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                Log.e("DOHECO", "getAllHeroesFromApi")
-
-                var apiAnswer = serverApiCallUseCase.getHeroesAndMatches(UUId)
-                Log.e("APICALL","base:"+apiAnswer.toString())
-
-                //HEROES API CALL
-                val heroes = getAllHeroesFromOpendotaUseCase.calculate(apiAnswer.heroes!!)
-                val favoriteHeroes = getAllFavoriteHeroesUseCase.getAllFavoriteHeroesUseCase()
-
-                if (heroes!!.isEmpty()) {
-                    Log.e("DOHECO", "heroes isEmpty")
-                    _heroesListState.postValue(HomeState.NoHomeState("Empty Heroes from API list"))
-                } else {
-                    Log.e("DOHECO", "heroes isNotEmpty")
-                    addHeroesUserCase.addHeroes(heroes)
-                    appSharedPreferences.edit()
-                        .putLong("heroes_list_last_modified", Date(System.currentTimeMillis()).time)
-                        .apply()
-                    Log.e("DOHECO", "All heroes updated at:" + Date(System.currentTimeMillis()).time)
-                    _heroesListState.postValue(
-                        HomeState.LoadedHomeState(
-                            heroes = heroes.sortedBy { it.localizedName },
-                            "",
-                            false,
-                            favoriteHeroes
-                        )
+                _heroesListState.postValue(
+                    HomeState.ErrorHomeState(
+                        message = e.toString()
                     )
-                }
-
-            } catch (e: java.lang.Exception) {
+                )
                 e.printStackTrace()
-                _heroesListState.postValue(HomeState.NoHomeState(e.toString()))
             }
         }
     }
-
 }

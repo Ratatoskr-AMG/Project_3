@@ -3,7 +3,6 @@ package net.doheco.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -12,34 +11,27 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import net.doheco.data.converters.DotaMatchesConverter
-import net.doheco.domain.useCases.heroes.AddHeroesUserCase
-import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
+import net.doheco.domain.useCases.heroes.DeleteMatchesUseCase
 import net.doheco.domain.useCases.heroes.GetHeroByIdUseCase
 import net.doheco.domain.useCases.system.ServerApiCallUseCase
 import net.doheco.domain.useCases.user.*
 import net.doheco.domain.utils.EventHandler
-import net.doheco.domain.utils.GetResource
 import net.doheco.presentation.screens.profile.models.ProfileEvent
 import net.doheco.presentation.screens.profile.models.ProfileState
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private var appSharedPreferences: SharedPreferences,
-    private val getHeroesBaseLastModifiedFromSPUseCase: GetHeroesBaseLastModifiedFromSPUseCase,
     private val getPlayerTierFromSPUseCase: GetPlayerTierFromSPUseCase,
     private val getPlayerSteamNameFromSPUseCase: GetPlayerSteamNameFromSPUseCase,
-    private val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
     private val sendFeedbackUseCase: SendFeedbackUseCase,
-    private val getPlayerIdFromSP: GetPlayerIdFromSP,
-    private val addHeroesUserCase: AddHeroesUserCase,
-    private val getResource: GetResource,
     private val matchesUseCase: MatchesUseCase,
     private val getHeroByIdUseCase: GetHeroByIdUseCase,
     private val UUIdSPUseCase: UUIdSPUseCase,
-    private val serverApiCallUseCase: ServerApiCallUseCase
+    private val serverApiCallUseCase: ServerApiCallUseCase,
+    private val deleteMatchesUseCase: DeleteMatchesUseCase,
 ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
     private val _profileState: MutableLiveData<ProfileState> =
@@ -89,7 +81,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun updateHeroesAndMatches(isInit:Boolean = false) {
+    private fun updateHeroesAndMatches(isInit: Boolean = false) {
         coroutineScope.cancel()
         coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -98,7 +90,7 @@ class ProfileViewModel @Inject constructor(
             if (UUId.isEmpty()) {
                 UUId = UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences)
                 Log.e("APICALL", "GetAppUUIdFromSP:" + UUId)
-            }else{
+            } else {
                 Log.e("APICALL", "GetSteamUUIdFromSP:" + UUId)
             }
             try {
@@ -112,49 +104,42 @@ class ProfileViewModel @Inject constructor(
                 Log.e("APICALL", "nextUpDate:" + apiCallResult.nextUpDate)
                 Log.e("APICALL", "lastUpDate:" + apiCallResult.lastUpDate)
 
-                if (apiCallResult.result == true) {
 
-                    val openDotaMatchesList = apiCallResult.matches
-                    Log.e("APICALL", "openDotaMatchesList:" + openDotaMatchesList.toString())
-                    if(openDotaMatchesList!=null){
-                        var appDotaMatches = openDotaMatchesList!!.map {
-                            var hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
-                            DotaMatchesConverter.doForward(it, hero)
-                        }
-                        matchesUseCase.updateMatchesDb(appDotaMatches)
-                        Log.e("APICALL", appDotaMatches.toString())
+                val openDotaMatchesList = apiCallResult.matches
+                Log.e("APICALL", "openDotaMatchesList:" + openDotaMatchesList.toString())
+                if (openDotaMatchesList != null) {
+                    val appDotaMatches = openDotaMatchesList.map {
+                        val hero = getHeroByIdUseCase.GetHeroById(it.heroId.toString())
+                        DotaMatchesConverter.doForward(it, hero)
                     }
+                    matchesUseCase.updateMatchesDb(appDotaMatches)
+                    Log.e("APICALL", appDotaMatches.toString())
+                }
 
-                    if(isInit) {
-                        _profileState.postValue(
-                            ProfileState.SteamDefinedState(
-                                getPlayerTierFromSP(),
-                                getPlayerSteamNameFromSP(),
-                                matchesUseCase.getMatchesFromDb(),
-                                "Updated",
-                            )
+                if (isInit) {
+                    _profileState.postValue(
+                        ProfileState.SteamDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            matchesUseCase.getMatchesFromDb(),
+                            "Updated",
                         )
-                    }else{
-                        state.value = "Updated!"
-                        _profileState.postValue(
-                            ProfileState.APICallResultProfileState(
-                                getPlayerTierFromSP(),
-                                getPlayerSteamNameFromSP(),
-                                state,
-                            )
-                        )
-                    }
-                    Log.e("APICALL", apiCallResult.toString())
-
+                    )
                 } else {
+                    apiCallResult.result?.let { result ->
+                        if (result) {
+                            state.value = "Updated!"
+                        } else {
+                            onStart(apiCallResult.remain)
+                        }
+                    }
                     _profileState.postValue(
                         ProfileState.APICallResultProfileState(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
-                            state
+                            state,
                         )
                     )
-                    onStart(apiCallResult.remain)
                 }
 
             } catch (e: Exception) {
@@ -195,6 +180,7 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                deleteMatchesUseCase.deleteMatches()
                 _profileState.postValue(
                     ProfileState.UndefinedState(
                         spTier!!

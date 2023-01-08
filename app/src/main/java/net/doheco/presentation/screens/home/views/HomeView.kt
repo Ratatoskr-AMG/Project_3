@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -27,19 +26,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.ImageLoader
 import net.doheco.R
 import net.doheco.domain.model.Hero
 import net.doheco.domain.utils.rememberForeverLazyListState
-import net.doheco.presentation.screens.home.HomeViewModel
 import net.doheco.presentation.theme.*
 
 
 @ExperimentalFoundationApi
 @Composable
 fun HomeView(
-    viewModel: HomeViewModel,
-    imageLoader: ImageLoader,
     heroes: List<Any?>,
     favoriteHeroes: List<Any?>,
     onHeroClick: (Hero) -> Unit,
@@ -137,18 +132,9 @@ fun HomeView(
                         modifier = Modifier
                             .padding(top = 20.dp)
                             .focusRequester(focusRequesterTop)
-                            .onFocusChanged {
-                                if (it.isFocused) {
-                                    //keyboardController?.hide()
-                                } else {
-                                }
-                            }
                             .clip(RoundedCornerShape(5.dp))
                             .fillMaxWidth()
                             .background(Color.White),
-                        //keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                        //keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
-
                     )
                 }
             }
@@ -159,11 +145,10 @@ fun HomeView(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         for (column in 0..listColumnsCount) {
-                            var index = column + (row * (listColumnsCount + 1))
+                            val index = column + (row * (listColumnsCount + 1))
                             if (index <= heroes.size - 1) {
-                                //var favoriteFlag = favoriteHeroes.isNotEmpty()
-                                var hero = heroes.get(index)
-                                var favoriteFlag = favoriteHeroes.contains(hero)
+                                val hero = heroes[index]
+                                val favoriteFlag = favoriteHeroes.contains(hero)
                                 heroesListItemBox(onHeroClick,hero,favoriteFlag)
                             } else {
                                 Box(
@@ -178,10 +163,5 @@ fun HomeView(
                 }
             }
         }
-
-
-    }
-    LaunchedEffect(Unit) {
-
     }
 }

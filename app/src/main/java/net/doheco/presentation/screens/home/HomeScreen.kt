@@ -27,11 +27,8 @@ fun HomeScreen(
 ) {
     when (val state = viewModel.homeState.observeAsState().value) {
         is HomeState.LoadedHomeState<*> -> {
-            //splashFun(false)
             Log.e("TOHARUS", "LoadedHomeState")
             HomeView(
-                viewModel,
-                viewModel.imageLoader,
                 state.heroes,
                 state.favoriteHeroes,
                 {
@@ -56,7 +53,4 @@ fun HomeScreen(
         }
         else -> {}
     }
-    LaunchedEffect(key1 = Unit, block = {
-
-    })
 }

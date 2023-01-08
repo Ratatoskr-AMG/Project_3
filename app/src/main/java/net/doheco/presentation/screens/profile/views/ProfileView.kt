@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
+import net.doheco.presentation.base.screens.EmptyScreenBox
 import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileEvent
 import net.doheco.presentation.screens.profile.models.ProfileState
@@ -179,7 +180,7 @@ fun ProfileView(
                 UndefinedScreenBox(viewState)
             }
             else -> {
-                EmptyScreenBox(viewState)
+                EmptyScreenBox()
             }
         }
     }
@@ -187,7 +188,6 @@ fun ProfileView(
 
 @Composable
 fun UndefinedScreenBox(viewState: ProfileState) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -243,16 +243,4 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
             }
         }
     }
-}
-
-@Composable
-fun EmptyScreenBox(viewState: ProfileState) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-
-    }
-
 }

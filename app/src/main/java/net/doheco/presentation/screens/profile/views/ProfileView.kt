@@ -50,7 +50,6 @@ fun ProfileView(
         profileTitle = viewModel.getPlayerSteamNameFromSP()
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,111 +66,7 @@ fun ProfileView(
 
         when (viewState) {
             is ProfileState.SteamDefinedState -> {
-                if (viewState.playerMatchesList != null) {
-                    LazyColumn(
-                        state = rememberForeverLazyListState(key = "Profile"),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            //.background(Color(0x55202020))
-                            .background(Color(0x000000))
-                    ) {
-
-                        items(viewState.playerMatchesList!!) { item ->
-                            var bgColor = Color(0xFF7E0000)
-                            if (item.radiantWin!! && item.playerSlot!! <= 127) {
-                                bgColor = Color(0xFF007E00)
-                            }
-                            if (!item.radiantWin && item.playerSlot!! > 127) {
-                                bgColor = Color(0xFF007E00)
-                            }
-                            Row(
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .fillMaxWidth()
-                                    .padding(start = 10.dp, end = 10.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Row(
-                                    modifier = Modifier.fillMaxHeight(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-
-
-                                    Image(
-                                        contentDescription = item.matchId.toString(),
-                                        painter = loadPicture(
-                                            url = item.heroIcon,
-                                            placeholder = painterResource(id = R.drawable.ic_comparing_gr)
-                                        ),
-                                        modifier = Modifier
-                                            .width(60.dp)
-                                            .height(35.dp)
-                                            .padding(top = 5.dp, bottom = 5.dp, end = 15.dp)
-
-                                    )
-
-                                    Box(
-                                        modifier = Modifier
-                                            .size(10.dp)
-                                            .clip(CircleShape)
-                                            .background(bgColor)
-                                    )
-
-                                    Text(
-                                        text = item.startTimeFormatted,
-                                        color = Color.White,
-                                        modifier = Modifier.padding(start = 15.dp)
-                                    )
-                                    Text(
-                                        text = item.durationFormatted,
-                                        color = Color.White,
-                                        modifier = Modifier.padding(start = 15.dp)
-                                    )
-                                }
-                                Row(
-                                    modifier = Modifier.fillMaxHeight(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Box(modifier = Modifier.width(40.dp)) {
-
-                                        Text(
-                                            text = item.kills.toString(),
-                                            color = Color.White,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.align(Alignment.Center)
-                                        )
-                                    }
-                                    Box(modifier = Modifier.width(40.dp)) {
-
-                                        Text(
-                                            text = item.deaths.toString(),
-                                            color = Color.White,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.align(Alignment.Center)
-                                        )
-                                    }
-                                    Box(
-                                        modifier = Modifier.width(40.dp),
-                                        contentAlignment = Alignment.TopCenter
-                                    ) {
-
-                                        Text(
-                                            text = item.assists.toString(),
-                                            color = Color.White,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.align(Alignment.Center)
-                                        )
-                                    }
-                                }
-                            }
-
-
-                        }
-                    }
-                }
+                SteamDefinedState(viewState)
             }
             is ProfileState.APICallResultProfileState -> {
                 APICallResultScreenBox(viewModel, viewState)
@@ -215,7 +110,10 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp).fillMaxHeight().width(200.dp),
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .fillMaxHeight()
+                .width(200.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -227,7 +125,9 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
                 color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
             )
             Button(
-                modifier = Modifier.fillMaxWidth().padding(top=20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
                 onClick = {
                     viewModel.obtainEvent(ProfileEvent.OnAPICallResultScreenBoxClose)
                 },
@@ -241,6 +141,172 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
             ){
                 Text(text = stringResource(id = R.string.close))
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SteamDefinedState(viewState: ProfileState.SteamDefinedState) {
+    if (viewState.playerMatchesList?.isNotEmpty() == true) {
+        LazyColumn(
+            state = rememberForeverLazyListState(key = "Profile"),
+            modifier = Modifier
+                .fillMaxSize()
+                //.background(Color(0x55202020))
+                .background(Color(0x000000))
+        ) {
+            stickyHeader {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 5.dp, end = 5.dp)
+                        .background(Color.Black),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Row(
+                        modifier = Modifier.width(100.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Box(modifier = Modifier.width(30.dp)) {
+
+                            Text(
+                                text = "K",
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                        Box(modifier = Modifier.width(30.dp)) {
+
+                            Text(
+                                text = "D",
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                        Box(
+                            modifier = Modifier.width(30.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+
+                            Text(
+                                text = "A",
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
+
+            }
+
+            items(viewState.playerMatchesList!!) { item ->
+                var bgColor = Color(0xFF7E0000)
+                if (item.radiantWin!! && item.playerSlot!! <= 127) {
+                    bgColor = Color(0xFF007E00)
+                }
+                if (!item.radiantWin && item.playerSlot!! > 127) {
+                    bgColor = Color(0xFF007E00)
+                }
+                Row(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
+                        .padding(start = 5.dp, end = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier.width(250.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            contentDescription = item.matchId.toString(),
+                            painter = loadPicture(
+                                url = item.heroIcon,
+                                placeholder = painterResource(id = R.drawable.ic_comparing_gr)
+                            ),
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(35.dp)
+                                .padding(top = 5.dp, bottom = 5.dp, end = 10.dp)
+
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .clip(CircleShape)
+                                .background(bgColor)
+                        )
+
+                        Text(
+                            text = item.startTimeFormatted,
+                            color = Color.White,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                        Text(
+                            text = item.durationFormatted,
+                            color = Color.White,
+                            modifier = Modifier
+                                .padding(start = 10.dp)
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.End
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.width(100.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Box(modifier = Modifier.width(30.dp)) {
+
+                            Text(
+                                text = item.kills.toString(),
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                        Box(modifier = Modifier.width(30.dp)) {
+
+                            Text(
+                                text = item.deaths.toString(),
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                        Box(
+                            modifier = Modifier.width(30.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+
+                            Text(
+                                text = item.assists.toString(),
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
+
+
+            }
+        }
+    } else {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = stringResource(R.string.empty_match),
+                color = Color.White)
         }
     }
 }

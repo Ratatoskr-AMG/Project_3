@@ -137,4 +137,5 @@
     <string name="offer">Hello!\nThank you for using DoHeCo! If you have any comments, suggestions or any wishes for the application, please write to us about it!</string>
     <string name="send_offer">Submit an offer</string>
     <string name="error_connection">The local database is empty. Please check your internet connection or try again later.</string>
+    <string name="empty_match">Empty matches history!</string>
 </resources>

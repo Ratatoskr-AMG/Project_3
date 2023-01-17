@@ -30,6 +30,7 @@ class VideoViewModel @Inject constructor(
 
         when (_video_state.value) {
             is VideoState.PlayerState -> reduce(event)
+            else -> {}
         }
     }
 
@@ -38,6 +39,7 @@ class VideoViewModel @Inject constructor(
         when (event) {
             is VideoEvent.OnStamp -> registerStamp(event)
             is VideoEvent.OnStop -> stopPlayer(player)
+            else -> {}
         }
     }
 

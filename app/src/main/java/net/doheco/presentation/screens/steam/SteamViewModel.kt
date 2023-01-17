@@ -128,6 +128,7 @@ class SteamViewModel @Inject constructor(
         when (steamState.value) {
             is SteamState.IndefinedState -> reduce(event)
             is SteamState.LoggedIntoSteam -> reduce(event)
+            else -> {}
         }
     }
 

@@ -92,7 +92,7 @@ fun SteamHeaderView(
     ) {
 
 
-        Row(modifier = Modifier.width(240.dp)) {
+        Row() {
             Box(
                 modifier = Modifier
                     .width(70.dp)
@@ -138,31 +138,25 @@ fun SteamHeaderView(
         }) {
 
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
                 //.padding(top = 7.dp, start = 7.dp)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_comparing_gr),
-                    contentDescription = null,
+                    painter = rememberImagePainter(tierImage),
+                    contentDescription = tierDescription,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp)
+                        .width(70.dp)
+                        .height(70.dp)
+                        .clip(CircleShape)
+                        .border(1.dp, Color(0x880d111c), CircleShape)
                 )
             }
 
-            Image(
-                painter = rememberImagePainter(tierImage),
-                contentDescription = tierDescription,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, Color(0x880d111c), CircleShape)
-            )
+
 
         }
 

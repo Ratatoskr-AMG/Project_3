@@ -153,8 +153,14 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun sendFeedback(event: ProfileEvent.OnSendFeedback) {
+
+        var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
+        if (UUId.isEmpty()) {
+            UUId = UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences)
+        }
+
         val name = event.name
-        val text = event.text
+        val text = event.text+" (UUId: "+UUId+")"
         viewModelScope.launch(Dispatchers.IO) {
             val result = sendFeedbackUseCase.sendFeedbackUseCase(name, text)
             Log.e("TOHA", "result:$result")

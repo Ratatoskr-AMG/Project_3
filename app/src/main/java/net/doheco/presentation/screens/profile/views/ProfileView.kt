@@ -93,7 +93,7 @@ fun UndefinedScreenBox(viewState: ProfileState) {
                 .align(Alignment.Center)
                 .padding(start = 50.dp, end = 50.dp),
             textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.login_offer1),
+            text = stringResource(id = R.string.login_offer),
             color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
         )
     }

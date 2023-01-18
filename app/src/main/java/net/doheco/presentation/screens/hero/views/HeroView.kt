@@ -249,6 +249,23 @@ fun HeroView(
                         ) {
                             items(infoBlocks.size) { id ->
                                 var infoBlockName = infoBlocks[id]
+
+                                var infoBlockNameTitle = stringResource(id = R.string.picks)
+
+                                if(id==1){
+                                    infoBlockNameTitle = stringResource(id = R.string.wins)
+                                }
+                                if(id==2){
+                                    infoBlockNameTitle = stringResource(id = R.string.winrates)
+                                }
+                                if(id==3){
+                                    infoBlockNameTitle = stringResource(id = R.string.properties)
+                                }
+                                if(id==4){
+                                    infoBlockNameTitle = stringResource(id = R.string.roles)
+                                }
+
+
                                 Box(
                                     modifier = Modifier
                                         .padding(top = 0.dp, bottom = 0.dp, start = 0.dp)
@@ -290,7 +307,7 @@ fun HeroView(
                                         Text(
                                             fontSize = 12.sp,
                                             color = textColor,
-                                            text = infoBlockName
+                                            text = infoBlockNameTitle
                                         )
                                     }
 

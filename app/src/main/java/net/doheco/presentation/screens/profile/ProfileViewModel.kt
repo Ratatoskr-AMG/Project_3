@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import net.doheco.R
 import net.doheco.data.converters.DotaMatchesConverter
 import net.doheco.domain.useCases.heroes.DeleteMatchesUseCase
 import net.doheco.domain.useCases.heroes.GetHeroByIdUseCase
@@ -122,7 +124,7 @@ class ProfileViewModel @Inject constructor(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
                             matchesUseCase.getMatchesFromDb(),
-                            "Updated",
+                            "Updated!",
                         )
                     )
                 } else {
@@ -228,6 +230,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun onStart(text: String?) {
+
         if (text == null) {
             Log.e("ERROR", "Remain == null")
         } else {

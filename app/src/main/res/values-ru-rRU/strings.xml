@@ -80,15 +80,15 @@
     <string name="comparing">Сравнение</string>
     <string name="wait">Подождите...</string>
     <string name="recommendations">Рекомендации</string>
-    <string name="top_Pro_wins_to_picks">15 лучших по Коэф. Побед Проф.</string>
-    <string name="top_herald_wins_to_picks">15 лучших по Коэф. Побед Рекрут</string>
-    <string name="top_Guardian_wins_to_picks">15 лучших по Коэф. Побед Страж</string>
-    <string name="top_Crusader_wins_to_picks">15 лучших по Коэф. Побед Рыцарь</string>
-    <string name="top_Archon_wins_to_picks">15 лучших по Коэф. Побед Герой</string>
-    <string name="top_Legend_wins_to_picks">15 лучших по Коэф. Побед Легенда</string>
-    <string name="top_Ancient_wins_to_picks">15 лучших по Коэф. Побед Властелин</string>
-    <string name="top_Divine_wins_to_picks">15 лучших по Коэф. Побед Божество</string>
-    <string name="top_Immortal_wins_to_picks">15 лучших по Коэф. Побед Титан</string>
+    <string name="top_Pro_wins_to_picks">15 лучших по Коэф. Побед (Проф.)</string>
+    <string name="top_herald_wins_to_picks">15 лучших по Коэф. Побед (Рекрут)</string>
+    <string name="top_Guardian_wins_to_picks">15 лучших по Коэф. Побед (Страж)</string>
+    <string name="top_Crusader_wins_to_picks">15 лучших по Коэф. Побед (Рыцарь)</string>
+    <string name="top_Archon_wins_to_picks">15 лучших по Коэф. Побед (Герой)</string>
+    <string name="top_Legend_wins_to_picks">15 лучших по Коэф. Побед (Легенда)</string>
+    <string name="top_Ancient_wins_to_picks">15 лучших по Коэф. Побед (Властелин)</string>
+    <string name="top_Divine_wins_to_picks">15 лучших по Коэф. Побед (Божество)</string>
+    <string name="top_Immortal_wins_to_picks">15 лучших по Коэф. Побед (Титан)</string>
     <string name="top_pro_bans">Первые 15 Проф. запретов</string>
     <string name="top_wins_to_picks">15 лучших по Коэф. Побед</string>
     <string name="all_heroes">Все</string>
@@ -131,4 +131,7 @@
     <string name="send_offer">Отправить предложение</string>
     <string name="error_connection">Локальная база данных пуста. Пожалуйста, проверьте подключение к интернету или попробуйте зайти позже.</string>
     <string name="empty_match">История матчей пуста!</string>
+    <string name="winrates">Коэф. побед</string>
+    <string name="updated">Данные обновлены!</string>
+    <string name="next_update">Следующее обновление:</string>
 </resources>

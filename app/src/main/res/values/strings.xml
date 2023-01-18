@@ -79,15 +79,15 @@
     <string name="comparing">Comparing</string>
     <string name="wait">Wait...</string>
     <string name="recommendations">Recommendations</string>
-    <string name="top_Pro_wins_to_picks">Top-15 Winrate Pro tier</string>
-    <string name="top_herald_wins_to_picks">Top-15 Winrate Herald tier</string>
-    <string name="top_Guardian_wins_to_picks">Top-15 Winrate Guardian tier</string>
-    <string name="top_Crusader_wins_to_picks">Top-15 Winrate Crusader tier</string>
-    <string name="top_Archon_wins_to_picks">Top-15 Winrate Archon tier</string>
-    <string name="top_Legend_wins_to_picks">Top-15 Winrate Legend tier</string>
-    <string name="top_Ancient_wins_to_picks">Top-15 Winrate Ancient tier</string>
-    <string name="top_Divine_wins_to_picks">Top-15 Winrate Divine tier</string>
-    <string name="top_Immortal_wins_to_picks">Top-15 Winrate Immortal tier</string>
+    <string name="top_Pro_wins_to_picks">Top-15 Winrate (Pro)</string>
+    <string name="top_herald_wins_to_picks">Top-15 Winrate (Herald)</string>
+    <string name="top_Guardian_wins_to_picks">Top-15 Winrate (Guardian)</string>
+    <string name="top_Crusader_wins_to_picks">Top-15 Winrate (Crusader)</string>
+    <string name="top_Archon_wins_to_picks">Top-15 Winrate (Archon)</string>
+    <string name="top_Legend_wins_to_picks">Top-15 Winrate (Legend)</string>
+    <string name="top_Ancient_wins_to_picks">Top-15 Winrate (Ancient)</string>
+    <string name="top_Divine_wins_to_picks">Top-15 Winrate (Divine)</string>
+    <string name="top_Immortal_wins_to_picks">Top-15 Winrate (Immortal)</string>
     <string name="top_pro_bans">Top-15 Pro bans</string>
     <string name="top_wins_to_picks">Top-15 Total Winrate</string>
     <string name="all_heroes">All</string>
@@ -105,6 +105,7 @@
     <string name="wins">Wins</string>
     <string name="properties">Properties</string>
     <string name="roles">Roles</string>
+    <string name="winrates">Winrates</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="search">Enter hero name</string>
@@ -132,4 +133,6 @@
     <string name="send_offer">Submit an offer</string>
     <string name="error_connection">The local database is empty. Please check your internet connection or try again later.</string>
     <string name="empty_match">Empty matches history!</string>
+    <string name="updated">Updated!</string>
+    <string name="next_update">Next update:</string>
 </resources>

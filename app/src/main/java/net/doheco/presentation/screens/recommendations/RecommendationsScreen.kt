@@ -31,7 +31,7 @@ fun RecommendationsScreen(
             { navController.navigate(Screens.Tier.route) },
             widthSizeClass
         )
-        is RecommendationsState.LoadingRecommendationsState -> MessageView(stringResource(id = R.string.error_connection))
+        is RecommendationsState.LoadingRecommendationsState -> MessageView(stringResource(id = R.string.wait))
         else -> {}
     }
 

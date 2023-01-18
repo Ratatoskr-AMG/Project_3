@@ -89,7 +89,7 @@ fun ComparingScreen(
                 ) {
                     Text(
 
-                        text = stringResource(id = R.string.error_connection),
+                        text = stringResource(id = R.string.wait),
                         color = Color.White,
                         modifier = Modifier.padding(start = 50.dp, end = 50.dp ),
                         textAlign = TextAlign.Center

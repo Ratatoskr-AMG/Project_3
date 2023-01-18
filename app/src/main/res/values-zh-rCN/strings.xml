@@ -131,4 +131,7 @@
     <string name="send_offer">发送</string>
     <string name="error_connection">本地数据库为空。 请检查您的互联网连接或尝试稍后登录.</string>
     <string name="empty_match">游戏的历史是空的!</string>
+    <string name="winrates">胜率</string>
+    <string name="updated">更新成功!</string>
+    <string name="next_update">下次更新:</string>
 </resources>

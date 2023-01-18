@@ -31,6 +31,7 @@ import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileEvent
 import net.doheco.presentation.screens.profile.models.ProfileState
 import net.doheco.presentation.theme.loadPicture
+import java.util.regex.Pattern
 
 @ExperimentalFoundationApi
 @Composable
@@ -99,9 +100,32 @@ fun UndefinedScreenBox(viewState: ProfileState) {
     }
 }
 
+fun countMatches(string: String, pattern: String): Int {
+    val matcher = Pattern.compile(pattern).matcher(string)
+
+    var count = 0
+    while (matcher.find()) {
+        count++
+    }
+    return count
+}
 
 @Composable
-fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.APICallResultProfileState) {
+fun APICallResultScreenBox(
+    viewModel: ProfileViewModel,
+    viewState: ProfileState.APICallResultProfileState
+) {
+
+    var viewStateMsg = viewState.msg.value
+
+    if (viewStateMsg == "Updated!") {
+        viewStateMsg = stringResource(id = R.string.updated)
+    }else{
+        val count = countMatches(viewStateMsg, "Next update:")
+        viewStateMsg = viewStateMsg.replace("Next update:", stringResource(id = R.string.next_update))
+    }
+
+
 
     Box(
         modifier = Modifier
@@ -121,7 +145,7 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
                 modifier = Modifier
                     .padding(start = 50.dp, end = 50.dp),
                 textAlign = TextAlign.Center,
-                text = viewState.msg.value,
+                text = viewStateMsg,
                 color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
             )
             Button(
@@ -138,7 +162,7 @@ fun APICallResultScreenBox(viewModel:ProfileViewModel, viewState: ProfileState.A
                     disabledContentColor = Color.White
                 ),
 
-            ){
+                ) {
                 Text(text = stringResource(id = R.string.close))
             }
         }
@@ -300,13 +324,16 @@ fun SteamDefinedState(viewState: ProfileState.SteamDefinedState) {
             }
         }
     } else {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = stringResource(R.string.empty_match),
-                color = Color.White)
+            Text(
+                text = stringResource(R.string.empty_match),
+                color = Color.White
+            )
         }
     }
 }

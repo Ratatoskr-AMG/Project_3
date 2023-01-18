@@ -1,5 +1,6 @@
 package net.doheco.presentation.screens.role.views
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -55,9 +56,13 @@ fun RoleListView(
     var tierImgAddr = "https://doheco.net/app/img/tier/0.png"
     var tierBlockNum = 0;
     if (player_tier != "undefined") {
-        tierImgAddr = "https://doheco.net/app/img/tier/$player_tier.png"
-        tierBlockNum = player_tier.toInt()
+        var player_tier_num = player_tier[0]+""
+        tierImgAddr = "https://doheco.net/app/img/tier/$player_tier_num.png"
+        tierBlockNum = player_tier_num.toInt()
     }
+
+    Log.e("TOHAT","tierImgAddr"+tierImgAddr)
+    Log.e("TOHAT","tierBlockNum"+tierBlockNum)
 
     val configuration = LocalConfiguration.current
     val heroes = heroes.mapNotNull { it as? Hero }

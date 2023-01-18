@@ -135,4 +135,6 @@
     <string name="empty_match">Empty matches history!</string>
     <string name="updated">Updated!</string>
     <string name="next_update">Next update:</string>
+    <string name="tnx_for_msg">Thank you!</string>
+
 </resources>

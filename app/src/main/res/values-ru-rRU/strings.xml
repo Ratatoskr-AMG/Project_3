@@ -134,4 +134,5 @@
     <string name="winrates">Коэф. побед</string>
     <string name="updated">Данные обновлены!</string>
     <string name="next_update">Следующее обновление:</string>
+    <string name="tnx_for_msg">Спасибо за отзыв!</string>
 </resources>

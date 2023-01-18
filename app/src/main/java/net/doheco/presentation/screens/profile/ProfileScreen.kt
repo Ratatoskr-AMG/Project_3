@@ -36,7 +36,7 @@ fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel,
 ) {
-
+    var tnx_for_msg = stringResource(id = R.string.tnx_for_msg)
     val openDialog = remember { mutableStateOf(false) }
     var titleText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
@@ -114,7 +114,7 @@ fun ProfileScreen(
                         onClick = {
                             viewModel.obtainEvent(ProfileEvent.OnSendFeedback(titleText,messageText))
                             openDialog.value = false
-                            Toast.makeText(context, "Спасибо за отзыв", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, tnx_for_msg, Toast.LENGTH_SHORT).show()
                         },
                         enabled = titleText.isNotEmpty() && messageText.isNotEmpty(),
                         colors = ButtonDefaults.buttonColors(

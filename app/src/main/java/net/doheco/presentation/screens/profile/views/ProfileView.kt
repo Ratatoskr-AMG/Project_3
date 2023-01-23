@@ -121,8 +121,12 @@ fun APICallResultScreenBox(
     if (viewStateMsg == "Updated!") {
         viewStateMsg = stringResource(id = R.string.updated)
     }else{
-        val count = countMatches(viewStateMsg, "Next update:")
-        viewStateMsg = viewStateMsg.replace("Next update:", stringResource(id = R.string.next_update))
+        if (viewStateMsg == "You can update!") {
+            viewStateMsg = stringResource(id = R.string.you_can_update)
+        }else {
+            val count = countMatches(viewStateMsg, "Next update:")
+            viewStateMsg = viewStateMsg.replace("Next update:", stringResource(id = R.string.next_update))
+        }
     }
 
 

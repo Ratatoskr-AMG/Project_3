@@ -117,7 +117,7 @@ fun HomeView(
                         },
                         singleLine = true,
                         textStyle = LocalTextStyle.current.copy(
-                            color = Color(0x00000000),
+                            color = Color.Black,
                             lineHeight = 220.sp,
                             textDecoration = TextDecoration.None
                         ),

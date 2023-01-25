@@ -44,7 +44,8 @@ fun HomeView(
     favoriteHeroes: List<Any?>,
     onHeroClick: (Hero) -> Unit,
     onHeroSearch: (String) -> Unit,
-    widthSizeClass: WindowWidthSizeClass
+    widthSizeClass: WindowWidthSizeClass,
+    searchStr:String
 ) {
     val heroes = heroes.mapNotNull { it as? Hero }
 
@@ -54,7 +55,7 @@ fun HomeView(
     }
 
     var offsetPosition by remember { mutableStateOf(0f) }
-    var searchState by remember { mutableStateOf(TextFieldValue("", selection = TextRange.Zero)) }
+    var searchState by remember { mutableStateOf(TextFieldValue(searchStr, selection = TextRange.Zero)) }
     val focusRequesterTop = remember { FocusRequester() }
     val scrollState = rememberForeverLazyListState(key = "Home")
     val listColumnsCount = if (widthSizeClass == WindowWidthSizeClass.Expanded ||
@@ -109,6 +110,7 @@ fun HomeView(
                         .background(Color.Transparent)
                 ) {
                     TextField(
+
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Search,

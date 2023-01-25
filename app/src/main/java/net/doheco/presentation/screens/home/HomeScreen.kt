@@ -39,7 +39,8 @@ fun HomeScreen(
                 }, {
                     viewModel.getAllHeroesByStrSortByName(it)
                 },
-                widthSizeClass
+                widthSizeClass,
+                state.searchStr
             )
         }
         is HomeState.NoHomeState -> {

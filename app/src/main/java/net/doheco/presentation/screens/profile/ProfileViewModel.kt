@@ -13,7 +13,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import net.doheco.R
 import net.doheco.data.converters.DotaMatchesConverter
+import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.DeleteMatchesUseCase
+import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
 import net.doheco.domain.useCases.heroes.GetHeroByIdUseCase
 import net.doheco.domain.useCases.system.ServerApiCallUseCase
 import net.doheco.domain.useCases.user.*
@@ -34,7 +36,10 @@ class ProfileViewModel @Inject constructor(
     private val UUIdSPUseCase: UUIdSPUseCase,
     private val serverApiCallUseCase: ServerApiCallUseCase,
     private val deleteMatchesUseCase: DeleteMatchesUseCase,
-) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
+    private val addHeroesUserCase: AddHeroesUserCase,
+    private val getAllHeroesFromOpendotaUseCase: GetAllHeroesFromOpendotaUseCase,
+
+    ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
     private val _profileState: MutableLiveData<ProfileState> =
         MutableLiveData(ProfileState.EmptyState())
@@ -116,6 +121,12 @@ class ProfileViewModel @Inject constructor(
                     }
                     matchesUseCase.updateMatchesDb(appDotaMatches)
                     Log.e("APICALL", appDotaMatches.toString())
+                }
+
+                if(!apiCallResult.heroes!!.isEmpty()){
+                    val heroes = getAllHeroesFromOpendotaUseCase.calculate(apiCallResult.heroes!!)
+                    addHeroesUserCase.addHeroes(heroes)
+                    Log.e("APICALL", "addHeroesUserCase.addHeroes!")
                 }
 
                 if (isInit) {

@@ -39,6 +39,7 @@ class HeroesRepoImpl @Inject constructor(
         Heroes.map { Hero ->
             try {
                 dao.insertHero(Hero)
+                Log.e("APICALL", "dao.insertHero:"+Hero)
             } catch (e: Exception) {
                 Log.e("TOHA", "updateSqliteTable e: " + e.message.toString())
             } finally {

@@ -109,7 +109,9 @@
     <string name="no">Нет</string>
     <string name="yes">Да</string>
     <string name="search">Введите имя героя</string>
-    <string name="login_offer">Для обновления данных, пожалуйста,\nавторизуйтесь через Steam</string>
+    <string name="login_offer">Авторизуйтесь в Steam для загрузки списка ваших матчей*\n\n
+    * Для получения этих данных, в настройках клиента Dota2 в разделе Сообщество\n
+        должна стоять отметка Общедоступная История Матчей</string>
     <string name="update_time">Данные обновлялись</string>
     <string name="time_block">Обновлять данные можно не чаще одного раза в день</string>
     <string name="time_block2">Обновлять данные можно не чаще чем 1 раз в час</string>
@@ -136,4 +138,6 @@
     <string name="next_update">Следующее обновление:</string>
     <string name="tnx_for_msg">Спасибо за отзыв!</string>
     <string name="you_can_update">Можно обновить данные!</string>
+    <string name="private_matches_history_error">Для получения этих данных, в настройках клиента Dota2 в разделе Сообщество\n
+        должна стоять отметка Общедоступная История Матчей</string>
 </resources>

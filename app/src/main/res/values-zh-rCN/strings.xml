@@ -109,7 +109,9 @@
     <string name="no">否</string>
     <string name="yes">同意</string>
     <string name="search">输入英雄的名字</string>
-    <string name="login_offer">要更新您的数据\n请通过Steam登录</string>
+    <string name="login_offer">登录Steam下载您的游戏列表*\n\n
+    *检查"Dota2"客户端设置 检查 "社会" 部分 应该有一个标记 "公开比赛数据"
+    </string>
     <string name="update_time">数据已更新</string>
     <string name="time_block">您可以每天更新数据不超过一次</string>
     <string name="time_block2">您可以每小时更新数据不超过1次</string>
@@ -136,4 +138,5 @@
     <string name="next_update">下次更新:</string>
     <string name="tnx_for_msg">谢谢您的留言!</string>
     <string name="you_can_update">您可以更新数据!</string>
+    <string name="private_matches_history_error">检查"Dota2"客户端设置 检查 "社会" 部分 应该有一个标记 "公开比赛数据"</string>
 </resources>

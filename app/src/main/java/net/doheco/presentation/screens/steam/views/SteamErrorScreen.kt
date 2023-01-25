@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import net.doheco.R
 import net.doheco.presentation.screens.steam.models.SteamState
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -23,6 +25,10 @@ fun ErrorScreen(
     state: SteamState.ErrorSteamState,
     player_tier: String
 ) {
+    var errText= "Error";
+    if(state.error=="Private"){
+        errText= stringResource(id = R.string.private_matches_history_error)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +41,7 @@ fun ErrorScreen(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = state.error,
+                text = errText,
                 color = Color.White,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                 textAlign = TextAlign.Center

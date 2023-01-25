@@ -109,9 +109,9 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="search">Enter hero name</string>
-    <string name="login_offer">To receive updated data more\n
-        often, please,
-        log in via Steam</string>
+    <string name="login_offer">Log in via Steam to download a list of your matches*\n\n
+        * To get this data, in the Dota2 client settings in the Social section
+        should be a mark Expose Public Match Data</string>
     <string name="update_time">"Data has been updated "</string>
     <string name="time_block">You can update the data no more than once in a day</string>
     <string name="time_block2">You can update the data no more than once in an hour</string>
@@ -137,5 +137,7 @@
     <string name="next_update">Next update:</string>
     <string name="tnx_for_msg">Thank you!</string>
     <string name="you_can_update">You can update!</string>
+    <string name="private_matches_history_error">To get this data, in the Dota2 client settings in the Social section
+        should be a mark Expose Public Match Data</string>
 
 </resources>

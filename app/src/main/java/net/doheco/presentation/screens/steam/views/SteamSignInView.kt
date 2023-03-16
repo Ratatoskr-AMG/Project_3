@@ -2,6 +2,7 @@ package net.doheco.presentation.screens.steam.views
 
 import android.net.Uri
 import android.util.Log
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -25,6 +26,7 @@ import androidx.navigation.NavController
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.screens.steam.models.SteamState
 import net.doheco.presentation.theme.BGBox
+
 
 @ExperimentalFoundationApi
 @Composable
@@ -97,11 +99,13 @@ fun SteamSignInView(
                                 "openid.ns=http://specs.openid.net/auth/2.0&" +
                                 "openid.realm=https://" + REALM + "&" +
                                 "openid.return_to=https://" + REALM + "/app/steam_success"
-
+                        Log.e("STEAM",url)
                         BGBox(){
                             AndroidView(
                                 factory = {
                                     WebView(it).apply {
+
+                                        settings.domStorageEnabled = true
                                         webViewClient = object : WebViewClient() {
                                             override fun onPageFinished(
                                                 view: WebView,
@@ -123,6 +127,7 @@ fun SteamSignInView(
                                             }
                                         }
                                         settings.javaScriptEnabled = true
+                                        settings.setDomStorageEnabled(true)
                                         loadUrl(url)
                                         setBackgroundColor(0);
                                     }

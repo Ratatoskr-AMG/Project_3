@@ -118,6 +118,7 @@ fun ProfileHeaderView(
 
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
+                /*
                 Box(modifier = Modifier.padding(5.dp)) {
                     Image(
                         painter = painterResource(R.drawable.ic_baseline_refresh_24),
@@ -130,6 +131,7 @@ fun ProfileHeaderView(
                             .clickable { onReloadClick() }
                     )
                 }
+                */
 
                 Box(modifier = Modifier.padding(5.dp)) {
                     Image(
@@ -142,6 +144,7 @@ fun ProfileHeaderView(
                             }
                     )
                 }
+                /*
                 if (logged) {
                     Box(modifier = Modifier.padding(5.dp)) {
                         Image(
@@ -169,6 +172,8 @@ fun ProfileHeaderView(
                         )
                     }
                 }
+
+                 */
             }
         }
     }

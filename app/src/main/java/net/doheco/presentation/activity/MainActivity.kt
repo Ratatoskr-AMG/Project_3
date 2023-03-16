@@ -229,8 +229,9 @@ class MainActivity() : AppCompatActivity() {
                             ComparingScreen(comparingViewModel, widthSizeClass)
                         }
                         composable(Screens.Recommendations.route) { navBackStack->
+                            val profileViewModel = hiltViewModel<ProfileViewModel>()
                             val recommendationsViewModel = hiltViewModel<RecommendationsViewModel>()
-                            RecommendationsScreen(navController,recommendationsViewModel, widthSizeClass)
+                            RecommendationsScreen(navController,recommendationsViewModel,profileViewModel,widthSizeClass)
                         }
                     }
                 }

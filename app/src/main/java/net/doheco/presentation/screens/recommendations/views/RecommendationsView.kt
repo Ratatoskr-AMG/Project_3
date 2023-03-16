@@ -1,10 +1,10 @@
 package net.doheco.presentation.screens.recommendations.views
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,7 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import net.doheco.R
 import net.doheco.domain.model.Hero
 import net.doheco.domain.utils.rememberForeverLazyListState
@@ -30,7 +33,8 @@ fun RecommendationsView(
     player_tier: String,
     onHeroClick: (Hero) -> Unit,
     onTierImgClick: () -> Unit,
-    widthSizeClass: WindowWidthSizeClass
+    widthSizeClass: WindowWidthSizeClass,
+    onReloadClick: () -> Unit
 ) {
 
     var tierImgAddr = "https://doheco.net/app/img/tier/0.png"
@@ -125,18 +129,45 @@ fun RecommendationsView(
 
     Column {
         appHeaderInner {
-            appHeaderUnderlinedCenterVerticalRow(Arrangement.Start) {
-                appHeaderImageBox {
-                    appHeaderImage(
-                        { onTierImgClick() },
-                        tierImgAddr,
-                        "Tier",
-                        Alignment.Center,
-                        Color(0x880d111c)
+            Row( modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
+                horizontalArrangement=Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically){
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .width(70.dp)
+                            .height(70.dp)
+                    ) {
+                        appHeaderImage(
+                            { onTierImgClick() },
+                            tierImgAddr,
+                            "Tier",
+                            Alignment.Center,
+                            Color(0x880d111c)
+                        )
+                    }
+                    appHeaderLeftImgText(stringResource(id = R.string.recommendations))
+
+                }
+                Box(modifier = Modifier.padding(start = 0.dp, end = 0.dp, top = 45.dp, bottom = 20.dp)) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_baseline_refresh_24),
+                        contentDescription = stringResource(id = R.string.reload),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
+                            .clickable { onReloadClick() }
                     )
                 }
-                appHeaderLeftImgText(stringResource(id = R.string.recommendations))
             }
+
+
+
         }
         Box(
             modifier = Modifier

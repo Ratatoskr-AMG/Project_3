@@ -2,6 +2,7 @@ package net.doheco.presentation.theme
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,13 +10,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -230,6 +229,31 @@ fun BGBox(content: @Composable () -> Unit) {
     }
 
 }
+
+
+fun Modifier.shimmerBackground(shape: Shape = RectangleShape): Modifier = composed {
+    val transition = rememberInfiniteTransition()
+    val translateAnimation by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            tween(durationMillis = 1000, easing = LinearEasing),
+            RepeatMode.Reverse
+        ),
+    )
+    val shimmerColors = listOf(
+        Color.LightGray.copy(alpha = 0.9f),
+        Color.LightGray.copy(alpha = 0.4f),
+    )
+    val brush = Brush.radialGradient(
+        colors = shimmerColors,
+        center = Offset(translateAnimation, translateAnimation),
+        radius = 1000f,
+        tileMode = TileMode.Clamp,
+    )
+    return@composed this.then(background(brush, shape))
+}
+
 
 @Composable
 fun MessageView(text: String) {

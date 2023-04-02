@@ -1,10 +1,15 @@
 package net.doheco.presentation.screens.recommendations
 
 import android.util.Log
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import net.doheco.R
@@ -13,6 +18,7 @@ import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.screens.profile.models.ProfileEvent
 import net.doheco.presentation.screens.recommendations.models.RecommendationsState
 import net.doheco.presentation.screens.recommendations.views.RecommendationsView
+import net.doheco.presentation.screens.recommendations.views.RecommendationsViewLoading
 import net.doheco.presentation.theme.MessageView
 
 
@@ -36,14 +42,18 @@ fun RecommendationsScreen(
             onReloadClick = {
                 recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate)
                 Log.d("META","METAonReloadClick");
-                recommendationsViewModel.getAllHeroes()
+                //recommendationsViewModel.getAllHeroes()
             })
-        is RecommendationsState.LoadingRecommendationsState -> MessageView(stringResource(id = R.string.wait))
+        is RecommendationsState.LoadingRecommendationsState -> RecommendationsViewLoading(profileViewModel){
+            recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate)
+
+        }
         else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {
-        recommendationsViewModel.getAllHeroes()
+        recommendationsViewModel.updateHeroesAndMatches()
         //viewModel.registerFirebaseEvent()
     })
 }
+

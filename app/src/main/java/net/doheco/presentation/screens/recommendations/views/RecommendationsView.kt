@@ -1,18 +1,20 @@
 package net.doheco.presentation.screens.recommendations.views
 
 import android.util.Log
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -23,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import net.doheco.R
 import net.doheco.domain.model.Hero
 import net.doheco.domain.utils.rememberForeverLazyListState
+import net.doheco.presentation.screens.profile.ProfileViewModel
 import net.doheco.presentation.theme.*
+import net.doheco.shimmerBackground
 
 @ExperimentalFoundationApi
 @Composable
@@ -173,6 +177,7 @@ fun RecommendationsView(
             modifier = Modifier
                 .background(Color.Black)
                 .fillMaxSize()
+
         ) {
             LazyColumn(
                 state = scrollState,
@@ -379,5 +384,86 @@ fun RecommendationsView(
 
     }
 }
+
+@Composable
+fun RecommendationsViewLoading(
+    profileViewModel: ProfileViewModel,
+    onReloadClick: () -> Unit,
+
+    ) {
+
+    Column {
+        appHeaderInner {
+            Row( modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
+                horizontalArrangement=Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically){
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = 20.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .width(70.dp)
+                            .height(70.dp)
+                            .shimmerBackground(CircleShape)
+                    )
+                    appHeaderLeftImgText(stringResource(id = R.string.recommendations))
+
+                }
+                Box(modifier = Modifier.padding(start = 0.dp, end = 0.dp, top = 45.dp, bottom = 20.dp)) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_baseline_refresh_24),
+                        contentDescription = stringResource(id = R.string.reload),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                            .border(1.dp, Color(0x880d111c), CircleShape)
+                            .clickable { onReloadClick() }
+                    )
+                }
+            }
+
+
+
+        }
+        Box(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize()
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                //Tier Wins/Picks Block
+                item{
+                    recommendationsTitleBlockLoading()
+                    Box(Modifier.fillMaxWidth().height(170.dp).padding(start=10.dp,end=10.dp,bottom=10.dp).shimmerBackground(
+                        RoundedCornerShape(5.dp)
+                    ))
+                }
+                item{
+                    recommendationsTitleBlockLoading()
+
+                    Box(Modifier.fillMaxWidth().height(170.dp).padding(start=10.dp,end=10.dp,bottom=10.dp).shimmerBackground(
+                        RoundedCornerShape(5.dp)
+                    ))
+                }
+                item{
+                    recommendationsTitleBlockLoading()
+
+                    Box(Modifier.fillMaxWidth().height(170.dp).padding(start=10.dp,end=10.dp,bottom=10.dp).shimmerBackground(
+                        RoundedCornerShape(5.dp)
+                    ))
+                }
+
+            }
+        }
+
+    }
+
+}
+
 
 

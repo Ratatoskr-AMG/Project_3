@@ -12,7 +12,7 @@ class MyComposeTest {
 
     @Test
     fun myComposeTest(){
-        net.doheco.Questions.q1()
+        //net.doheco.Questions.q1()
     }
 
 

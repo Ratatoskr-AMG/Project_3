@@ -389,7 +389,6 @@ fun RecommendationsView(
 fun RecommendationsViewLoading(
     profileViewModel: ProfileViewModel,
     onReloadClick: () -> Unit,
-
     ) {
 
     Column {

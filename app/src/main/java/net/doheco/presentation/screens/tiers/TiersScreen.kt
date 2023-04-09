@@ -36,6 +36,7 @@ fun TiersScreen(
                 navController.popBackStack()
             }
         }
+        else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {

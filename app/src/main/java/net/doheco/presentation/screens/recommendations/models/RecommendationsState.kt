@@ -12,7 +12,8 @@ sealed class RecommendationsState {
     ) : RecommendationsState(){
 
     }
-    class LoadingRecommendationsState() : RecommendationsState()
+    object LoadingRecommendationsState : RecommendationsState()
+    object RefreshingRecommendationsState : RecommendationsState()
     class NoHeroesRecommendationsState(val msg:String) : RecommendationsState()
     data class  ErrorRecommendationsState(var msg: String = "") : RecommendationsState()
 }

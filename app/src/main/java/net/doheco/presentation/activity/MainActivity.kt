@@ -3,6 +3,7 @@ package net.doheco.presentation.activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -61,7 +62,7 @@ import net.doheco.presentation.screens.steam.SteamScreen
 import net.doheco.presentation.screens.video.VideoViewModel
 
 @AndroidEntryPoint
-class MainActivity() : AppCompatActivity() {
+class MainActivity() : ComponentActivity() {
 
     private val APP_SHARED_PREFERENCES_NAME = "app_preferences"
     private val homeViewModel: HomeViewModel by viewModels()

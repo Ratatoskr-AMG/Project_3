@@ -37,6 +37,7 @@ class TiersViewModel @Inject constructor(
         when (tiersState.value) {
             is TiersState.IndefinedState -> reduce(event)
             is TiersState.DefinedState -> reduce(event)
+            else -> {}
         }
     }
 
@@ -85,6 +86,7 @@ class TiersViewModel @Inject constructor(
                         _tiers_state.postValue(TiersState.ErrorTiersState)
                     }
                 }
+                else -> {}
             }
         }
     }

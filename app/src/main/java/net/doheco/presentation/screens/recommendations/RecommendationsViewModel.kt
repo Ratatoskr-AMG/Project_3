@@ -54,7 +54,7 @@ class RecommendationsViewModel @Inject constructor(
     var mFirebaseAnalytics = mFirebaseAnalytics
 
     val _recommendations_state: MutableLiveData<RecommendationsState> =
-        MutableLiveData<RecommendationsState>(RecommendationsState.LoadingRecommendationsState())
+        MutableLiveData<RecommendationsState>(RecommendationsState.LoadingRecommendationsState)
     val recommendationsState: LiveData<RecommendationsState> = _recommendations_state
 
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -70,9 +70,13 @@ class RecommendationsViewModel @Inject constructor(
         }
     }
 
+    fun setRefreshingState(){
+        _recommendations_state.set(RecommendationsState.RefreshingRecommendationsState)
+    }
+
     fun updateHeroesAndMatches(/*isInit: Boolean = false*/) {
 
-        _recommendations_state.set(RecommendationsState.LoadingRecommendationsState())
+        _recommendations_state.set(RecommendationsState.LoadingRecommendationsState)
 
         viewModelScope.launch(Dispatchers.IO) {
 

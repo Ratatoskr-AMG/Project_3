@@ -74,6 +74,7 @@ fun HeroScreen(
         is HeroState.NoHeroState -> MessageView(stringResource(id = R.string.error_connection))
         is HeroState.LoadingHeroState -> LoadingView(stringResource(id = R.string.loading))
         is HeroState.ErrorHeroState -> MessageView(stringResource(id = R.string.error))
+        else -> {}
     }
 
     LaunchedEffect(key1 = Unit, block = {

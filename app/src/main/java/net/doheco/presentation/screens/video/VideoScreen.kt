@@ -32,6 +32,7 @@ fun VideoScreen(
             MessageView("Video Error")
         }
         is VideoState.LoadingState -> LoadingView("Video is loading...")
+        else -> {}
     }
 
     DisposableEffect(key1 = Unit, effect = {
@@ -46,5 +47,6 @@ fun stopPlayer(state: State<VideoState?>) {
         is VideoState.PlayerState -> {
             state.player.setPlayWhenReady(false);
         }
+        else -> {}
     }
 }

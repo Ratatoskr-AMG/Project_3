@@ -36,6 +36,7 @@ class ComparingViewModel @Inject constructor(
     override fun obtainEvent(event: ComparingEvent) {
         when (val currentState = _comparingState.value) {
             is ComparingState.HeroesState -> reduce(event, currentState)
+            else -> {}
         }
     }
 
@@ -49,6 +50,7 @@ class ComparingViewModel @Inject constructor(
                 event.infoBlockName,
             )
 
+            else -> {}
         }
     }
 

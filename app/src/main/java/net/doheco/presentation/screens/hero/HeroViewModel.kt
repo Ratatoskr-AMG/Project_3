@@ -101,6 +101,7 @@ class HeroViewModel @Inject constructor(
     override fun obtainEvent(event: HeroEvent) {
         when (val currentState = _heroState.value) {
             is HeroState.HeroLoadedState -> reduce(event, currentState)
+            else -> {}
         }
     }
 

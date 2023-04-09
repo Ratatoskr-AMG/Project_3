@@ -96,6 +96,9 @@ fun ComparingScreen(
                     )
                 }
          }
+        else -> {
+
+        }
     }
 
     LaunchedEffect(key1 = Unit, block = {

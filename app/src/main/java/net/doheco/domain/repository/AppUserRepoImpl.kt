@@ -112,6 +112,7 @@ class AppUserRepoImpl @Inject constructor(
 
     fun getResponseFromDotaBuff(steam_user_id: String): String {
 
+        //STEAM ALT LOGIN
         val url = URL("https://www.dotabuff.com/players/" + steam_user_id)
         val urlConnection = url.openConnection() as HttpURLConnection
 

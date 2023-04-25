@@ -129,8 +129,10 @@
     <string name="pro_winrates_attr">Pro winrate</string>
     <string name="close">Close</string>
     <string name="send">Send</string>
+    <string name="go">Go</string>
     <string name="message">Message</string>
     <string name="send_name">Name</string>
+    <string name="your_friend_code">Your Friend Code</string>
     <string name="offer">Hello! Thank you for using DoHeCo! If you have any comments, suggestions or any wishes for the application, please write to us about it!</string>
     <string name="send_offer">Submit an offer</string>
     <string name="error_connection">The local database is empty. Please check your internet connection or try again later.</string>

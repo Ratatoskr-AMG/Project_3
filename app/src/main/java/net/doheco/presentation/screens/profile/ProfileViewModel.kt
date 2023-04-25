@@ -3,16 +3,19 @@ package net.doheco.presentation.screens.profile
 import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import net.doheco.R
 import net.doheco.data.converters.DotaMatchesConverter
+import net.doheco.domain.model.DotaMatch
 import net.doheco.domain.useCases.heroes.AddHeroesUserCase
 import net.doheco.domain.useCases.heroes.DeleteMatchesUseCase
 import net.doheco.domain.useCases.heroes.GetAllHeroesFromOpendotaUseCase
@@ -41,13 +44,20 @@ class ProfileViewModel @Inject constructor(
 
     ) : AndroidViewModel(Application()), EventHandler<ProfileEvent> {
 
+
+    /* FLOW */
+
+    private val _profileFlow : MutableStateFlow<ProfileState> = MutableStateFlow(ProfileState.WaitState())
+    val profileFlow = _profileFlow.asStateFlow()
+
+    /* FLOW */
+
     private val _profileState: MutableLiveData<ProfileState> =
         MutableLiveData(ProfileState.EmptyState())
     val profileState: LiveData<ProfileState> = _profileState
 
     private val state = mutableStateOf("")
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
-
 
     init {
         profileInit()
@@ -63,19 +73,43 @@ class ProfileViewModel @Inject constructor(
 
         if (UUId.isEmpty()) {
             viewModelScope.launch {
-                _profileState.postValue(
+               /* _profileState.postValue(
+                    ProfileState.UndefinedState(
+                        getPlayerTierFromSP(),
+                        "",
+                    )
+                )
+
+
+                */
+                _profileFlow.emit(
                     ProfileState.UndefinedState(
                         getPlayerTierFromSP(),
                         "",
                     )
                 )
             }
+
+
+
         } else {
             viewModelScope.launch {
+
                 if (matchesUseCase.getMatchesFromDb().isEmpty()) {
-                    updateHeroesAndMatches(true)
+                    updateHeroesAndMatches(UUId,true)
                 } else {
+                    /*
                     _profileState.postValue(
+                        ProfileState.SteamDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            matchesUseCase.getMatchesFromDb(),
+                            "Welcome",
+                        )
+                    )
+
+                     */
+                    _profileFlow.emit(
                         ProfileState.SteamDefinedState(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
@@ -88,18 +122,22 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun updateHeroesAndMatches(isInit: Boolean = false) {
+    private fun updateHeroesAndMatches(UUId:String,isInit: Boolean = false) {
+
         coroutineScope.cancel()
         coroutineScope = CoroutineScope(Dispatchers.Main)
+        if(UUId!="")UUIdSPUseCase.SetSteamUUIdToSP(appSharedPreferences,UUId)
 
         viewModelScope.launch(Dispatchers.IO) {
-            var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
-            if (UUId.isEmpty()) {
+            //var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
+            //UUId = event.friendCode.toString()
+            /*if (UUId.isEmpty()) {
                 UUId = UUIdSPUseCase.GetAppUUIdFromSP(appSharedPreferences)
                 Log.e("APICALL", "GetAppUUIdFromSP:" + UUId)
             } else {
                 Log.e("APICALL", "GetSteamUUIdFromSP:" + UUId)
             }
+            */
             try {
 
                 val apiCallResult = serverApiCallUseCase.getHeroesAndMatches(UUId)
@@ -130,6 +168,16 @@ class ProfileViewModel @Inject constructor(
                 }
 
                 if (isInit) {
+
+                    _profileFlow.emit(
+                        ProfileState.SteamDefinedState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            matchesUseCase.getMatchesFromDb(),
+                            "Updated!",
+                        )
+                    )
+                    /*
                     _profileState.postValue(
                         ProfileState.SteamDefinedState(
                             getPlayerTierFromSP(),
@@ -138,6 +186,8 @@ class ProfileViewModel @Inject constructor(
                             "Updated!",
                         )
                     )
+
+                     */
                 } else {
                     apiCallResult.result?.let { result ->
                         if (result) {
@@ -146,7 +196,19 @@ class ProfileViewModel @Inject constructor(
                             onStart(apiCallResult.remain)
                         }
                     }
+
+                    /*
                     _profileState.postValue(
+                        ProfileState.APICallResultProfileState(
+                            getPlayerTierFromSP(),
+                            getPlayerSteamNameFromSP(),
+                            state,
+                        )
+                    )
+
+                     */
+
+                    _profileFlow.emit(
                         ProfileState.APICallResultProfileState(
                             getPlayerTierFromSP(),
                             getPlayerSteamNameFromSP(),
@@ -233,7 +295,7 @@ class ProfileViewModel @Inject constructor(
     private fun reduce(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.OnSteamExit -> exitSteam()
-            is ProfileEvent.OnUpdate -> updateHeroesAndMatches()
+            is ProfileEvent.OnUpdate -> updateHeroesAndMatches(event.friendCode.toString())
             is ProfileEvent.OnSendFeedback -> sendFeedback(event)
             is ProfileEvent.OnAPICallResultScreenBoxClose -> profileInit()
             else -> {}

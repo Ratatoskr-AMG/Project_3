@@ -44,7 +44,7 @@ fun ProfileScreen(
     val context = LocalContext.current
     val playerTier = viewModel.getPlayerTierFromSP()
     val viewState = viewModel.profileState.observeAsState(ProfileState.UndefinedState())
-
+    val profileFlow = viewModel.profileFlow.collectAsState()
 
     ProfileView(
         viewState.value,
@@ -52,8 +52,8 @@ fun ProfileScreen(
         navController,
         playerTier,
         dialogState = openDialog,
-        onReloadClick = {
-            viewModel.obtainEvent(ProfileEvent.OnUpdate)
+        onGoClick = { friendCode->
+            viewModel.obtainEvent(ProfileEvent.OnUpdate(friendCode))
         },
     )
 
@@ -200,4 +200,8 @@ fun ProfileScreen(
         )
     }
 
+    LaunchedEffect(key1 = Unit, block = {
+
+
+    })
 }

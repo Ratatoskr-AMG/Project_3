@@ -6,6 +6,8 @@ import net.doheco.domain.model.opendota.OpenDotaMatch
 
 sealed class ProfileState {
 
+    data class WaitState(var msg: String = "" ) : ProfileState()
+
     data class EmptyState(
         var playerTier: String = "0",
         var msg: String = "",

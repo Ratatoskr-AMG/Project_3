@@ -142,4 +142,6 @@
     <string name="you_can_update">您可以更新数据!</string>
     <string name="private_matches_history_error">检查"Dota2"客户端设置 检查 "社会" 部分 应该有一个标记 "公开比赛数据"</string>
     <string name="reload">更新资料</string>
+    <string name="your_friend_code">为朋友准备的代码</string>
+    <string name="go">去吧</string>
 </resources>

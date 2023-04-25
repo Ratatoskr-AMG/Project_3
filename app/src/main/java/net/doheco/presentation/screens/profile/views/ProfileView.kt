@@ -1,7 +1,10 @@
 package net.doheco.presentation.screens.profile.views
 
 import android.content.Context
+import android.os.Build
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,21 +12,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.Flow
 import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.base.screens.EmptyScreenBox
@@ -41,10 +49,11 @@ fun ProfileView(
     navController: NavController,
     player_tier: String,
     dialogState: MutableState<Boolean>,
-    onReloadClick: () -> Unit
+    onGoClick: (friendCode:String) -> Unit
 ) {
     var logged = false
     var profileTitle = stringResource(id = R.string.title_profile)
+    val viewState by viewModel.profileFlow.collectAsStateWithLifecycle()
 
     if (viewModel.ifSteamLoged()) {
         logged = true
@@ -60,20 +69,19 @@ fun ProfileView(
             navController,
             profileTitle,
             player_tier,
-            onReloadClick,
             dialogState,
             logged,
         ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit) }
-
-        when (viewState) {
+        Log.d("TOHA",viewState.toString())
+        when (val screenState = viewState) {
             is ProfileState.SteamDefinedState -> {
-                SteamDefinedState(viewState)
+                SteamDefinedState(screenState,onGoClick)
             }
             is ProfileState.APICallResultProfileState -> {
-                APICallResultScreenBox(viewModel, viewState)
+                APICallResultScreenBox(viewModel, screenState)
             }
             is ProfileState.UndefinedState -> {
-                UndefinedScreenBox(viewState)
+                UndefinedScreenBox(viewState,onGoClick)
             }
             else -> {
                 EmptyScreenBox()
@@ -82,21 +90,86 @@ fun ProfileView(
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
-fun UndefinedScreenBox(viewState: ProfileState) {
-    Box(
+fun UndefinedScreenBox(viewState: ProfileState,onGoClick: (friendCode:String) -> Unit) {
+
+    var friendCode by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        Text(
+        /*
+        Box(
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(start = 50.dp, end = 50.dp),
-            textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.login_offer),
-            color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
-        )
+                .fillMaxWidth()
+                .background(Color.Black)
+        ) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(start = 50.dp, end = 50.dp),
+                textAlign = TextAlign.Center,
+                text = stringResource(id = R.string.login_offer),
+                color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp
+            )
+        }
+        */
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Black)
+        ) {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = friendCode,
+                onValueChange = { value ->
+                    friendCode = value.filter { it.isDigit() }
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                label = { Text(text = stringResource(id = R.string.your_friend_code)) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.White,
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.White,
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.White
+                )
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Black)
+                .height(50.dp)
+                .padding(top = 10.dp)
+        ) {
+            Button(
+                modifier = Modifier.fillMaxSize(),
+                onClick = {
+                    if(friendCode.length!=9) {
+                        Toast.makeText(context, "Incorrect Code", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(context, "Correct Code", Toast.LENGTH_SHORT).show()
+                        onGoClick(friendCode)
+                    }
+                },
+                enabled = friendCode.isNotEmpty()&&friendCode.length==9,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF00821d),
+                    disabledBackgroundColor = Color(0xFF6a36a3),
+                    contentColor = Color.White,
+                    disabledContentColor = Color.White
+                )
+            ) {
+                Text(text = stringResource(id = net.doheco.R.string.go))
+            }
+        }
     }
 }
 
@@ -175,8 +248,9 @@ fun APICallResultScreenBox(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SteamDefinedState(viewState: ProfileState.SteamDefinedState) {
+fun SteamDefinedState(viewState: ProfileState.SteamDefinedState,onGoClick: (friendCode:String) -> Unit) {
     if (viewState.playerMatchesList?.isNotEmpty() == true) {
+
         LazyColumn(
             state = rememberForeverLazyListState(key = "Profile"),
             modifier = Modifier
@@ -328,9 +402,11 @@ fun SteamDefinedState(viewState: ProfileState.SteamDefinedState) {
             }
         }
     } else {
+
+
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
@@ -339,5 +415,7 @@ fun SteamDefinedState(viewState: ProfileState.SteamDefinedState) {
                 color = Color.White
             )
         }
+        UndefinedScreenBox(viewState,onGoClick)
+
     }
 }

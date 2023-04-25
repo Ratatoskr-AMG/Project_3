@@ -37,6 +37,7 @@ fun RecommendationsScreen(
     profileViewModel: ProfileViewModel,
     widthSizeClass: WindowWidthSizeClass
 ) {
+
     val viewState = recommendationsViewModel.recommendationsState.observeAsState()
     val openUpdateDialog = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -44,7 +45,7 @@ fun RecommendationsScreen(
     val refresh: () -> Unit = {
         coroutineScope.launch{
             recommendationsViewModel.setRefreshingState()
-            recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate)
+            recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate())
         }
     }
 
@@ -65,12 +66,12 @@ fun RecommendationsScreen(
                 { navController.navigate(Screens.Tier.route) },
                 widthSizeClass,
                 onReloadClick = {
-                    recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate)
+                    recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate())
                     Log.d("META","METAonReloadClick");
                     //recommendationsViewModel.getAllHeroes()
                 })
             is RecommendationsState.LoadingRecommendationsState -> RecommendationsViewLoading(profileViewModel){
-                recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate)
+                recommendationsViewModel.obtainEvent(ProfileEvent.OnUpdate())
 
             }
             else -> {}

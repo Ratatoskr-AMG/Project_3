@@ -143,4 +143,6 @@
     <string name="reload">Обновить</string>
     <string name="private_matches_history_error">Для получения этих данных, в настройках клиента Dota2 в разделе Сообщество\n
         должна стоять отметка Общедоступная История Матчей</string>
+    <string name="your_friend_code">Код для друга</string>
+    <string name="go">Далее</string>
 </resources>

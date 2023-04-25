@@ -29,7 +29,6 @@ fun ProfileHeaderView(
     navController: NavController,
     profileTitle: String,
     player_tier: String,
-    onReloadClick: () -> Unit,
     dialogState: MutableState<Boolean>,
     logged:Boolean,
     onSteamExit: () -> Unit

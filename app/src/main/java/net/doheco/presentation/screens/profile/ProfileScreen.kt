@@ -1,5 +1,6 @@
 package net.doheco.presentation.screens
 
+import android.content.SharedPreferences
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -35,6 +36,7 @@ import java.util.*
 fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel,
+    appSharedPreferences: SharedPreferences
 ) {
     var tnx_for_msg = stringResource(id = R.string.tnx_for_msg)
     val openDialog = remember { mutableStateOf(false) }
@@ -45,12 +47,14 @@ fun ProfileScreen(
     val playerTier = viewModel.getPlayerTierFromSP()
     val viewState = viewModel.profileState.observeAsState(ProfileState.UndefinedState())
     val profileFlow = viewModel.profileFlow.collectAsState()
+    var UUId = viewModel.getUUID()
 
     ProfileView(
         viewState.value,
         viewModel,
         navController,
         playerTier,
+        UUId,
         dialogState = openDialog,
         onGoClick = { friendCode->
             viewModel.obtainEvent(ProfileEvent.OnUpdate(friendCode))

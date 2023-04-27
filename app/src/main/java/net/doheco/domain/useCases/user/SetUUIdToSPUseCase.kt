@@ -19,7 +19,7 @@ class UUIdSPUseCase @Inject constructor(
         appUserRepoImpl.setSteamUUIdToSP(sp,UUId)
     }
 
-    fun GetSteamUUIdFromSP(sp: SharedPreferences) : String {
+    public fun GetSteamUUIdFromSP(sp: SharedPreferences) : String {
         return appUserRepoImpl.getSteamUUIdFromSP(sp)
     }
 

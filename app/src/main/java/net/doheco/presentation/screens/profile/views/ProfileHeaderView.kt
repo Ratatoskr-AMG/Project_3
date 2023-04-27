@@ -1,5 +1,6 @@
 package net.doheco.presentation.screens.profile.views
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -30,8 +31,10 @@ fun ProfileHeaderView(
     profileTitle: String,
     player_tier: String,
     dialogState: MutableState<Boolean>,
+    UUId: String,
     logged:Boolean,
-    onSteamExit: () -> Unit
+    onExit: () -> Unit,
+    onReload: () -> Unit,
 ) {
 
     var tierImage by remember { mutableStateOf("https://doheco.net/app/img/tier/0.png") }
@@ -117,7 +120,7 @@ fun ProfileHeaderView(
 
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                /*
+                if (logged) {
                 Box(modifier = Modifier.padding(5.dp)) {
                     Image(
                         painter = painterResource(R.drawable.ic_baseline_refresh_24),
@@ -127,10 +130,10 @@ fun ProfileHeaderView(
                             .width(25.dp)
                             .height(25.dp)
                             .border(1.dp, Color(0x880d111c), CircleShape)
-                            .clickable { onReloadClick() }
+                            .clickable { onReload() }
                     )
                 }
-                */
+            }
 
                 Box(modifier = Modifier.padding(5.dp)) {
                     Image(
@@ -143,7 +146,7 @@ fun ProfileHeaderView(
                             }
                     )
                 }
-                /*
+
                 if (logged) {
                     Box(modifier = Modifier.padding(5.dp)) {
                         Image(
@@ -152,11 +155,13 @@ fun ProfileHeaderView(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .clickable {
-                                    onSteamExit()
+                                    onExit()
                                 },
                         )
                     }
-                } else {
+                }
+
+                /*else {
                     Box(modifier = Modifier.padding(5.dp)) {
                         Image(
                             painter = painterResource(R.drawable.ic_icons8_steam),

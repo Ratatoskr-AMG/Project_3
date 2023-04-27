@@ -1,10 +1,7 @@
 package net.doheco.presentation.screens.profile.views
 
-import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,8 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import kotlinx.coroutines.flow.Flow
 import net.doheco.R
 import net.doheco.domain.utils.rememberForeverLazyListState
 import net.doheco.presentation.base.screens.EmptyScreenBox
@@ -48,6 +42,7 @@ fun ProfileView(
     viewModel: ProfileViewModel,
     navController: NavController,
     player_tier: String,
+    UUId: String,
     dialogState: MutableState<Boolean>,
     onGoClick: (friendCode:String) -> Unit
 ) {
@@ -57,7 +52,7 @@ fun ProfileView(
 
     if (viewModel.ifSteamLoged()) {
         logged = true
-        profileTitle = viewModel.getPlayerSteamNameFromSP()
+        //profileTitle = viewModel.getPlayerSteamNameFromSP()
     }
 
     Column(
@@ -70,8 +65,11 @@ fun ProfileView(
             profileTitle,
             player_tier,
             dialogState,
+            UUId,
             logged,
-        ) { viewModel.obtainEvent(ProfileEvent.OnSteamExit) }
+            onExit= { viewModel.obtainEvent(ProfileEvent.OnSteamExit) },
+            onReload = { viewModel.obtainEvent(ProfileEvent.OnUpdate(UUId)) },
+        )
         Log.d("TOHA",viewState.toString())
         when (val screenState = viewState) {
             is ProfileState.SteamDefinedState -> {

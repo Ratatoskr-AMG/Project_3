@@ -68,6 +68,10 @@ class ProfileViewModel @Inject constructor(
         return !UUId.isEmpty()
     }
 
+    fun getUUID():String{
+        return UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
+    }
+
     private fun profileInit() {
         var UUId = UUIdSPUseCase.GetSteamUUIdFromSP(appSharedPreferences)
 
@@ -261,8 +265,15 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                /*
                 deleteMatchesUseCase.deleteMatches()
                 _profileState.postValue(
+                    ProfileState.UndefinedState(
+                        spTier!!
+                    )
+                )*/
+
+                _profileFlow.emit(
                     ProfileState.UndefinedState(
                         spTier!!
                     )

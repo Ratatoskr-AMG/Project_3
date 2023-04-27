@@ -211,7 +211,7 @@ class MainActivity() : ComponentActivity() {
                         }
                         composable(Screens.Profile.route) {
                             val profileViewModel = hiltViewModel<ProfileViewModel>()
-                            ProfileScreen(navController, profileViewModel)
+                            ProfileScreen(navController, profileViewModel,appSharedPreferences)
                         }
                         composable(Screens.Steam.route) {
                             val steamViewModel = hiltViewModel<SteamViewModel>()
